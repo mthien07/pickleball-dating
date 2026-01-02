@@ -73,3 +73,13 @@ coverage/
 
 # TypeScript
 *.tsbuildinfo
+
+# Sensitive files (API keys, service accounts)
+google-services.json
+GoogleService-Info.plist
+google-play-service-account.json
+
+# Build artifacts
+*.apk
+*.aab
+*.ipa
