@@ -42,7 +42,6 @@
       "bundler": "metro"
     },
     "plugins": [
-      "expo-router",
       [
         "expo-image-picker",
         {
