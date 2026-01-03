@@ -7,13 +7,14 @@ import {
   ActivityIndicator,
   SafeAreaView,
   StatusBar,
+  TouchableOpacity,
 } from 'react-native';
 import { createClient } from '@supabase/supabase-js';
 import 'react-native-url-polyfill/auto';
 
-// Supabase configuration from .env
-const SUPABASE_URL = process.env.EXPO_PUBLIC_SUPABASE_URL || 'https://ytwcalyalpnmnqsmoilt.supabase.co';
-const SUPABASE_ANON_KEY = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl0d2NhbHlhbHBubW5xc21vaWx0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjczMDY2MzgsImV4cCI6MjA4Mjg4MjYzOH0.h4izbxyGU07sw6SeBCKI58K4rckjo66-Ow0Ml5u78T0';
+// Supabase configuration - hardcoded for testing
+const SUPABASE_URL = 'https://ytwcalyalpnmnqsmoilt.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl0d2NhbHlhbHBubW5xc21vaWx0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjczMDY2MzgsImV4cCI6MjA4Mjg4MjYzOH0.h4izbxyGU07sw6SeBCKI58K4rckjo66-Ow0Ml5u78T0';
 
 // Initialize Supabase client
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -38,6 +39,7 @@ export default function App() {
   const [courts, setCourts] = useState<Court[]>([]);
   const [coaches, setCoaches] = useState<Coach[]>([]);
   const [connectionStatus, setConnectionStatus] = useState('Đang kết nối...');
+  const [debugInfo, setDebugInfo] = useState<string>('');
 
   useEffect(() => {
     testSupabaseConnection();
@@ -45,42 +47,76 @@ export default function App() {
 
   const testSupabaseConnection = async () => {
     try {
-      setConnectionStatus('Đang test kết nối Supabase...');
+      setConnectionStatus('🔍 Bước 1: Kiểm tra Supabase URL...');
+      setDebugInfo(`URL: ${SUPABASE_URL}\nKey: ${SUPABASE_ANON_KEY.substring(0, 20)}...`);
+
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      setConnectionStatus('🔍 Bước 2: Test kết nối database...');
+
+      // Test basic connection first
+      const { error: healthError } = await supabase
+        .from('courts')
+        .select('count', { count: 'exact', head: true });
+
+      if (healthError) {
+        console.error('Health check error:', healthError);
+        throw new Error(`Database health check failed: ${healthError.message}\nCode: ${healthError.code}\nDetails: ${healthError.details}`);
+      }
+
+      setConnectionStatus('✅ Kết nối database OK! Đang lấy dữ liệu...');
 
       // Test 1: Fetch courts
+      setConnectionStatus('📍 Đang lấy danh sách sân...');
       const { data: courtsData, error: courtsError } = await supabase
         .from('courts')
         .select('id, name, address, rating')
-        .limit(5);
+        .limit(10);
 
       if (courtsError) {
         console.error('Courts error:', courtsError);
-        throw new Error(`Lỗi khi lấy danh sách sân: ${courtsError.message}`);
+        throw new Error(`Lỗi khi lấy sân:\n${courtsError.message}\nCode: ${courtsError.code}\nHint: ${courtsError.hint || 'N/A'}`);
       }
 
+      setCourts(courtsData || []);
+      setConnectionStatus(`✅ Đã lấy ${courtsData?.length || 0} sân!`);
+
       // Test 2: Fetch coaches
+      setConnectionStatus('👨‍🏫 Đang lấy danh sách HLV...');
       const { data: coachesData, error: coachesError } = await supabase
         .from('coaches')
         .select('id, full_name, specialty, rating')
-        .limit(5);
+        .limit(10);
 
       if (coachesError) {
         console.error('Coaches error:', coachesError);
-        throw new Error(`Lỗi khi lấy danh sách HLV: ${coachesError.message}`);
+        throw new Error(`Lỗi khi lấy HLV:\n${coachesError.message}\nCode: ${coachesError.code}`);
       }
 
-      // Success
-      setCourts(courtsData || []);
       setCoaches(coachesData || []);
-      setConnectionStatus('✅ Kết nối thành công!');
+      setConnectionStatus(`✅ Hoàn thành! ${courtsData?.length || 0} sân, ${coachesData?.length || 0} HLV`);
       setError(null);
+
     } catch (err) {
       console.error('Connection error:', err);
-      setError(err instanceof Error ? err.message : 'Lỗi không xác định');
+      const errorMessage = err instanceof Error ? err.message : 'Lỗi không xác định';
+      setError(errorMessage);
       setConnectionStatus('❌ Kết nối thất bại');
+
+      // Add debug info
+      setDebugInfo(prev => prev + `\n\nLỖI:\n${errorMessage}`);
     } finally {
       setLoading(false);
     }
+  };
+
+  const retryConnection = () => {
+    setLoading(true);
+    setError(null);
+    setCourts([]);
+    setCoaches([]);
+    setConnectionStatus('Đang thử lại...');
+    testSupabaseConnection();
   };
 
   return (
@@ -90,7 +126,7 @@ export default function App() {
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.title}>🎾 PickleBall Dating</Text>
-        <Text style={styles.subtitle}>Test Supabase Connection</Text>
+        <Text style={styles.subtitle}>Supabase Connection Test</Text>
       </View>
 
       {/* Connection Status */}
@@ -103,26 +139,48 @@ export default function App() {
         {loading ? (
           <View style={styles.loadingContainer}>
             <ActivityIndicator size="large" color="#FF6B35" />
-            <Text style={styles.loadingText}>Đang tải dữ liệu...</Text>
+            <Text style={styles.loadingText}>Đang kết nối Supabase...</Text>
+            <Text style={styles.debugTextSmall}>{debugInfo}</Text>
           </View>
         ) : error ? (
           <View style={styles.errorContainer}>
-            <Text style={styles.errorTitle}>❌ Lỗi</Text>
+            <Text style={styles.errorTitle}>❌ Lỗi kết nối</Text>
             <Text style={styles.errorText}>{error}</Text>
-            <Text style={styles.errorHint}>
-              Kiểm tra lại:
-              {'\n'}• Supabase URL và API Key trong .env
-              {'\n'}• Đã chạy migrations trong Supabase Dashboard
-              {'\n'}• Tables 'courts' và 'coaches' đã tồn tại
-            </Text>
+
+            <View style={styles.debugContainer}>
+              <Text style={styles.debugTitle}>🔍 Debug Info:</Text>
+              <Text style={styles.debugText}>{debugInfo}</Text>
+            </View>
+
+            <View style={styles.troubleshootContainer}>
+              <Text style={styles.troubleshootTitle}>💡 Kiểm tra:</Text>
+              <Text style={styles.troubleshootText}>
+                1. Đã chạy migrations chưa?{'\n'}
+                   → Vào Supabase Dashboard{'\n'}
+                   → SQL Editor{'\n'}
+                   → Chạy file supabase/ALL_MIGRATIONS.sql
+                {'\n\n'}
+                2. Table 'courts' có tồn tại không?{'\n'}
+                   → Vào Table Editor{'\n'}
+                   → Kiểm tra table 'courts' và 'coaches'
+                {'\n\n'}
+                3. RLS Policies{'\n'}
+                   → Table có RLS enabled?{'\n'}
+                   → Có policy cho anonymous access không?
+              </Text>
+            </View>
+
+            <TouchableOpacity style={styles.retryButton} onPress={retryConnection}>
+              <Text style={styles.retryButtonText}>🔄 Thử lại</Text>
+            </TouchableOpacity>
           </View>
         ) : (
           <>
             {/* Success Message */}
             <View style={styles.successContainer}>
-              <Text style={styles.successTitle}>🎉 Thành công!</Text>
+              <Text style={styles.successTitle}>🎉 Kết nối thành công!</Text>
               <Text style={styles.successText}>
-                App đã kết nối thành công với Supabase!
+                App đã kết nối thành công với Supabase và lấy được dữ liệu!
               </Text>
             </View>
 
@@ -133,7 +191,8 @@ export default function App() {
               </Text>
               {courts.length === 0 ? (
                 <Text style={styles.emptyText}>
-                  Chưa có dữ liệu sân. Chạy migration 004_seed_data.sql để thêm dữ liệu mẫu.
+                  Chưa có dữ liệu sân.{'\n'}
+                  Chạy migration 004_seed_data.sql để thêm dữ liệu mẫu.
                 </Text>
               ) : (
                 courts.map((court) => (
@@ -155,7 +214,8 @@ export default function App() {
               </Text>
               {coaches.length === 0 ? (
                 <Text style={styles.emptyText}>
-                  Chưa có dữ liệu HLV. Chạy migration 004_seed_data.sql để thêm dữ liệu mẫu.
+                  Chưa có dữ liệu HLV.{'\n'}
+                  Chạy migration 004_seed_data.sql để thêm dữ liệu mẫu.
                 </Text>
               ) : (
                 coaches.map((coach) => (
@@ -174,15 +234,19 @@ export default function App() {
             <View style={styles.nextStepsContainer}>
               <Text style={styles.nextStepsTitle}>📋 Bước tiếp theo:</Text>
               <Text style={styles.nextStepsText}>
-                ✅ Supabase đã hoạt động!
-                {'\n'}✅ Database có dữ liệu!
+                ✅ Supabase hoạt động!{'\n'}
+                ✅ Database có {courts.length} sân và {coaches.length} HLV!
                 {'\n\n'}
-                Giờ anh có thể:
-                {'\n'}1. Bắt đầu implement các screens
-                {'\n'}2. Thêm authentication flow
-                {'\n'}3. Build các features chính
+                Giờ có thể:{'\n'}
+                1. Bắt đầu implement screens{'\n'}
+                2. Thêm authentication{'\n'}
+                3. Build features chính
               </Text>
             </View>
+
+            <TouchableOpacity style={styles.retryButton} onPress={retryConnection}>
+              <Text style={styles.retryButtonText}>🔄 Refresh</Text>
+            </TouchableOpacity>
           </>
         )}
       </ScrollView>
@@ -220,7 +284,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#E0E0E0',
   },
   statusText: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '600',
     color: '#2D3748',
     textAlign: 'center',
@@ -241,39 +305,86 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#718096',
   },
+  debugTextSmall: {
+    marginTop: 12,
+    fontSize: 11,
+    color: '#A0AEC0',
+    fontFamily: 'monospace',
+  },
   errorContainer: {
     backgroundColor: '#FFF5F5',
     borderRadius: 12,
     padding: 20,
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: '#FC8181',
   },
   errorTitle: {
     fontSize: 18,
     fontWeight: 'bold',
     color: '#C53030',
-    marginBottom: 8,
+    marginBottom: 12,
   },
   errorText: {
-    fontSize: 14,
-    color: '#C53030',
-    marginBottom: 12,
-    lineHeight: 20,
-  },
-  errorHint: {
     fontSize: 13,
-    color: '#744210',
+    color: '#C53030',
+    marginBottom: 16,
     lineHeight: 20,
-    backgroundColor: '#FFFAF0',
-    padding: 12,
+    fontFamily: 'monospace',
+  },
+  debugContainer: {
+    backgroundColor: '#2D3748',
     borderRadius: 8,
+    padding: 12,
+    marginBottom: 16,
+  },
+  debugTitle: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    color: '#68D391',
+    marginBottom: 8,
+  },
+  debugText: {
+    fontSize: 11,
+    color: '#E2E8F0',
+    fontFamily: 'monospace',
+    lineHeight: 16,
+  },
+  troubleshootContainer: {
+    backgroundColor: '#FFFAF0',
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 16,
+  },
+  troubleshootTitle: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#744210',
+    marginBottom: 8,
+  },
+  troubleshootText: {
+    fontSize: 12,
+    color: '#744210',
+    lineHeight: 18,
+  },
+  retryButton: {
+    backgroundColor: '#FF6B35',
+    borderRadius: 8,
+    paddingVertical: 14,
+    paddingHorizontal: 24,
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  retryButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#FFFFFF',
   },
   successContainer: {
     backgroundColor: '#F0FFF4',
     borderRadius: 12,
     padding: 20,
     marginBottom: 24,
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: '#9AE6B4',
   },
   successTitle: {
@@ -297,7 +408,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   emptyText: {
-    fontSize: 14,
+    fontSize: 13,
     color: '#718096',
     fontStyle: 'italic',
     lineHeight: 20,
@@ -322,7 +433,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   cardSubtitle: {
-    fontSize: 14,
+    fontSize: 13,
     color: '#718096',
     marginBottom: 8,
   },
@@ -335,8 +446,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#EBF8FF',
     borderRadius: 12,
     padding: 20,
-    marginTop: 12,
-    borderWidth: 1,
+    marginBottom: 16,
+    borderWidth: 2,
     borderColor: '#90CDF4',
   },
   nextStepsTitle: {
@@ -346,7 +457,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   nextStepsText: {
-    fontSize: 14,
+    fontSize: 13,
     color: '#2C5282',
     lineHeight: 22,
   },
