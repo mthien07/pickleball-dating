@@ -21,20 +21,23 @@ import React from 'react';
 import {
   View,
   Text,
-  Image,
   StyleSheet,
   TouchableOpacity,
   ViewStyle,
   ImageStyle,
   Dimensions,
 } from 'react-native';
+import { Image } from 'expo-image';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Ionicons } from '@expo/vector-icons';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withSpring,
 } from 'react-native-reanimated';
-import { colors, spacing, typography, borderRadius, shadows } from '../theme/tokens';
-import { User, Court, Match } from '../../data/mockData';
+import { colors, spacing, typography, borderRadius } from '../theme/tokens';
+import { shadows } from '../theme/shadows';
+import { User, Court, Match } from '@data/mockData';
 import { Avatar } from './Avatar';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -48,6 +51,15 @@ export interface ProfileCardProps {
   onLike?: () => void;
   onPass?: () => void;
   onPress?: () => void;
+  onSuperLike?: () => void;
+  onShowProfile?: () => void;
+  showMatchPercentage?: boolean;
+  showOnlineStatus?: boolean;
+  showImageIndicators?: boolean;
+  showInterests?: boolean;
+  showActionButtons?: boolean;
+  currentImageIndex?: number;
+  onImageIndexChange?: (index: number) => void;
 }
 
 export interface CourtCardProps {
@@ -67,11 +79,19 @@ export interface MatchCardProps {
 
 const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
 
-export const ProfileCard: React.FC<ProfileCardProps> = ({
+export const ProfileCard = React.memo<ProfileCardProps>(({
   user,
   onLike,
   onPass,
   onPress,
+  onSuperLike,
+  onShowProfile,
+  showMatchPercentage = false,
+  showOnlineStatus = false,
+  showImageIndicators = false,
+  showInterests = false,
+  showActionButtons = false,
+  currentImageIndex = 0,
 }) => {
   const scale = useSharedValue(1);
 
@@ -89,6 +109,9 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({
 
   const age = new Date().getFullYear() - new Date(user.date_of_birth).getFullYear();
 
+  // Calculate match percentage (mock - would come from backend)
+  const matchPercentage = user.preferences ? 85 : undefined;
+
   return (
     <AnimatedTouchable
       onPress={onPress}
@@ -99,46 +122,178 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({
     >
       {/* Main Photo */}
       <Image
-        source={{ uri: user.avatar_urls[0] }}
+        source={{ uri: user.avatar_urls[currentImageIndex] || user.avatar_urls[0] }}
         style={styles.profileImage}
-        resizeMode="cover"
+        contentFit="cover"
+        transition={200}
+        cachePolicy="memory-disk"
       />
 
-      {/* Gradient Overlay */}
-      <View style={styles.profileGradient} />
+      {/* Top Gradient Overlay (subtle) */}
+      <LinearGradient
+        colors={['rgba(239, 68, 68, 0.3)', 'transparent', 'rgba(249, 115, 22, 0.3)']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.profileTopGradient}
+      />
+
+      {/* Match Percentage Badge */}
+      {showMatchPercentage && matchPercentage && (
+        <LinearGradient
+          colors={['#EF4444', '#F97316']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+          style={styles.matchBadge}
+        >
+          <Text style={styles.matchBadgeText}>Match {matchPercentage}%</Text>
+        </LinearGradient>
+      )}
+
+      {/* Online Status */}
+      {showOnlineStatus && user.is_online && (
+        <View style={styles.onlineStatusBadge}>
+          <View style={styles.onlineDot} />
+          <Text style={styles.onlineText}>Online</Text>
+        </View>
+      )}
+
+      {/* Image Indicators */}
+      {showImageIndicators && user.avatar_urls.length > 1 && (
+        <View style={styles.imageIndicatorsContainer}>
+          {user.avatar_urls.map((_, index) => (
+            <View key={index} style={styles.imageIndicatorTrack}>
+              {index === currentImageIndex && (
+                <LinearGradient
+                  colors={['#EF4444', '#F97316']}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 0 }}
+                  style={styles.imageIndicatorFill}
+                />
+              )}
+            </View>
+          ))}
+        </View>
+      )}
+
+      {/* Bottom Gradient Overlay */}
+      <LinearGradient
+        colors={['transparent', 'transparent', 'rgba(0,0,0,0.8)']}
+        style={styles.profileGradient}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 0, y: 1 }}
+      />
 
       {/* User Info */}
       <View style={styles.profileInfo}>
-        <View style={styles.profileHeader}>
-          <Text style={styles.profileName}>
-            {user.display_name}, {age}
-          </Text>
-          {user.verification.phone_verified && (
-            <Text style={styles.verifiedBadge}>✓</Text>
+        <View style={styles.profileInfoRow}>
+          <View style={styles.profileInfoContent}>
+            {/* Name and Age */}
+            <View style={styles.profileHeader}>
+              <Text style={styles.profileName}>{user.display_name}</Text>
+              <Text style={styles.profileAge}>{age}</Text>
+              {user.verification.phone_verified && (
+                <Text style={styles.verifiedBadge}>✓</Text>
+              )}
+            </View>
+
+            {/* Distance */}
+            {user.preferred_location && (
+              <View style={styles.profileDistance}>
+                <Ionicons name="location" size={16} color="#FFFFFF" />
+                <Text style={styles.profileDistanceText}>
+                  {user.preferred_location.address}
+                </Text>
+              </View>
+            )}
+
+            {/* Bio */}
+            {user.bio && (
+              <Text style={styles.profileBio} numberOfLines={2}>
+                {user.bio}
+              </Text>
+            )}
+
+            {/* Interests */}
+            {showInterests && user.preferences?.interests && (
+              <View style={styles.profileInterests}>
+                {user.preferences.interests.slice(0, 3).map((interest, index) => (
+                  <View key={index} style={styles.interestTag}>
+                    <Text style={styles.interestTagText}>{interest}</Text>
+                  </View>
+                ))}
+              </View>
+            )}
+          </View>
+
+          {/* Info Button */}
+          {onShowProfile && (
+            <TouchableOpacity
+              onPress={onShowProfile}
+              style={styles.profileInfoButton}
+              activeOpacity={0.8}
+            >
+              <Ionicons name="information-circle" size={24} color="#FFFFFF" />
+            </TouchableOpacity>
           )}
         </View>
-
-        <View style={styles.profileMeta}>
-          <Text style={styles.skillBadge}>{user.skill_level}</Text>
-          <Text style={styles.metaText}>•</Text>
-          <Text style={styles.metaText}>{user.preferred_location?.address}</Text>
-        </View>
-
-        {user.bio && (
-          <Text style={styles.profileBio} numberOfLines={2}>
-            {user.bio}
-          </Text>
-        )}
       </View>
+
+      {/* Action Buttons */}
+      {showActionButtons && (
+        <View style={styles.profileActionButtons}>
+          {/* Reject (X) */}
+          {onPass && (
+            <TouchableOpacity
+              onPress={onPass}
+              style={styles.actionButtonReject}
+              activeOpacity={0.8}
+            >
+              <Ionicons name="close" size={32} color="#EF4444" />
+            </TouchableOpacity>
+          )}
+
+          {/* Super Like (Star) */}
+          {onSuperLike && (
+            <TouchableOpacity onPress={onSuperLike} activeOpacity={0.8}>
+              <LinearGradient
+                colors={['#A855F7', '#9333EA']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.actionButtonSuper}
+              >
+                <Ionicons name="star" size={32} color="#FFFFFF" />
+              </LinearGradient>
+            </TouchableOpacity>
+          )}
+
+          {/* Like (Heart) */}
+          {onLike && (
+            <TouchableOpacity onPress={onLike} activeOpacity={0.8}>
+              <LinearGradient
+                colors={['#10B981', '#059669']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.actionButtonLike}
+              >
+                <Ionicons name="heart" size={32} color="#FFFFFF" />
+              </LinearGradient>
+            </TouchableOpacity>
+          )}
+        </View>
+      )}
     </AnimatedTouchable>
   );
-};
+}, (prevProps, nextProps) => {
+  // Only re-render if user.id or currentImageIndex changes
+  return prevProps.user.id === nextProps.user.id &&
+         prevProps.currentImageIndex === nextProps.currentImageIndex;
+});
 
 // ============================================
 // COURT CARD (List Item)
 // ============================================
 
-export const CourtCard: React.FC<CourtCardProps> = ({
+export const CourtCard = React.memo<CourtCardProps>(({
   court,
   onPress,
   onBookPress,
@@ -170,7 +325,9 @@ export const CourtCard: React.FC<CourtCardProps> = ({
         <Image
           source={{ uri: court.images[0] }}
           style={styles.courtImage}
-          resizeMode="cover"
+          contentFit="cover"
+          transition={200}
+          cachePolicy="memory-disk"
         />
         {court.is_partner && (
           <View style={styles.partnerBadge}>
@@ -214,13 +371,16 @@ export const CourtCard: React.FC<CourtCardProps> = ({
       </View>
     </AnimatedTouchable>
   );
-};
+}, (prevProps, nextProps) => {
+  // Only re-render if court.id changes
+  return prevProps.court.id === nextProps.court.id;
+});
 
 // ============================================
 // MATCH CARD (Chat List Item)
 // ============================================
 
-export const MatchCard: React.FC<MatchCardProps> = ({
+export const MatchCard = React.memo<MatchCardProps>(({
   match,
   onPress,
 }) => {
@@ -305,7 +465,11 @@ export const MatchCard: React.FC<MatchCardProps> = ({
       </View>
     </AnimatedTouchable>
   );
-};
+}, (prevProps, nextProps) => {
+  // Only re-render if match.id or unread_count changes
+  return prevProps.match.id === nextProps.match.id &&
+         prevProps.match.unread_count === nextProps.match.unread_count;
+});
 
 // ============================================
 // STYLES
@@ -325,35 +489,139 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
+  profileTopGradient: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 10,
+  },
   profileGradient: {
     position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
-    height: '40%',
-    backgroundColor: 'transparent',
-    backgroundImage: 'linear-gradient(transparent, rgba(0,0,0,0.6))',
+    height: '50%',
+    zIndex: 10,
   },
+
+  // Match Badge
+  matchBadge: {
+    position: 'absolute',
+    top: 24,
+    left: 24,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.2)',
+    zIndex: 20,
+  },
+  matchBadgeText: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+
+  // Online Status
+  onlineStatusBadge: {
+    position: 'absolute',
+    top: 24,
+    right: 24,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 20,
+    zIndex: 20,
+  },
+  onlineDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#10B981',
+  },
+  onlineText: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '500',
+  },
+
+  // Image Indicators
+  imageIndicatorsContainer: {
+    position: 'absolute',
+    top: 96,
+    left: 24,
+    right: 24,
+    flexDirection: 'row',
+    gap: 8,
+    zIndex: 20,
+  },
+  imageIndicatorTrack: {
+    flex: 1,
+    height: 4,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    borderRadius: 2,
+    overflow: 'hidden',
+  },
+  imageIndicatorFill: {
+    width: '100%',
+    height: '100%',
+  },
+
+  // Profile Info
   profileInfo: {
     position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
     padding: spacing.lg,
+    zIndex: 20,
+  },
+  profileInfoRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
+  },
+  profileInfoContent: {
+    flex: 1,
   },
   profileHeader: {
     flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: spacing.xs,
+    alignItems: 'baseline',
+    gap: 8,
+    marginBottom: 8,
   },
   profileName: {
-    ...typography.h2,
+    ...typography.h1,
+    fontSize: 36,
     color: colors.white,
-    marginRight: spacing.xs,
+    fontWeight: '700',
+  },
+  profileAge: {
+    ...typography.h2,
+    fontSize: 32,
+    color: colors.white,
+    fontWeight: '400',
   },
   verifiedBadge: {
     fontSize: 20,
     color: colors.secondary,
+  },
+  profileDistance: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    marginBottom: 12,
+  },
+  profileDistanceText: {
+    ...typography.body,
+    fontSize: 14,
+    color: '#FFFFFF',
+    opacity: 0.9,
   },
   profileMeta: {
     flexDirection: 'row',
@@ -376,7 +644,97 @@ const styles = StyleSheet.create({
   },
   profileBio: {
     ...typography.body,
+    fontSize: 14,
     color: colors.white,
+    opacity: 0.9,
+    lineHeight: 20,
+    marginBottom: 12,
+  },
+  profileInterests: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
+  interestTag: {
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.2)',
+  },
+  interestTagText: {
+    ...typography.bodySmall,
+    fontSize: 12,
+    color: colors.white,
+  },
+
+  // Info Button
+  profileInfoButton: {
+    width: 48,
+    height: 48,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    borderRadius: 24,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  // Action Buttons
+  profileActionButtons: {
+    position: 'absolute',
+    bottom: 96,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 16,
+    paddingHorizontal: 24,
+    zIndex: 30,
+  },
+  actionButtonReject: {
+    width: 64,
+    height: 64,
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    borderRadius: 32,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 12,
+    elevation: 8,
+  },
+  actionButtonSuper: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 12,
+    elevation: 8,
+  },
+  actionButtonLike: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 12,
+    elevation: 8,
   },
 
   // Court Card (List)

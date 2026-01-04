@@ -22,8 +22,10 @@
  */
 
 import React from 'react';
-import { View, Image, Text, StyleSheet, ViewStyle } from 'react-native';
-import { colors, spacing, typography, borderRadius, shadows, avatarSizes } from '../theme/tokens';
+import { View, Text, StyleSheet, ViewStyle } from 'react-native';
+import { Image } from 'expo-image';
+import { colors, spacing, typography, borderRadius, avatarSizes } from '../theme/tokens';
+import { shadows } from '../theme/shadows';
 
 // ============================================
 // TYPES
@@ -102,9 +104,9 @@ export const Avatar: React.FC<AvatarProps> = ({
   // Get background color based on name (consistent color per user)
   const getBackgroundColor = (fullName: string): string => {
     const colors = [
-      '#FF6B35', // Primary
-      '#4ECDC4', // Secondary
-      '#FFD23F', // Accent
+      '#5B9FE3', // Primary
+      '#A8C8E8', // Secondary
+      '#FFD700', // Accent
       '#4CAF50', // Success
       '#2196F3', // Info
       '#9C27B0', // Pro
@@ -127,12 +129,12 @@ export const Avatar: React.FC<AvatarProps> = ({
       height: sizeValue,
       borderRadius: sizeValue / 2,
     },
-    showBorder && {
+    ...(showBorder ? [{
       borderWidth: 2,
       borderColor: borderColor,
-    },
-    style,
-  ];
+    }] : []),
+    ...(style ? [style] : []),
+  ].filter(Boolean);
 
   // Fallback styles
   const fallbackStyles: ViewStyle[] = [
@@ -164,7 +166,9 @@ export const Avatar: React.FC<AvatarProps> = ({
         <Image
           source={{ uri: imageUrl }}
           style={styles.image}
-          resizeMode="cover"
+          contentFit="cover"
+          transition={200}
+          cachePolicy="memory-disk"
         />
       ) : (
         <View style={fallbackStyles}>

@@ -172,30 +172,82 @@ export const Input: React.FC<InputProps> = ({
   // Animation values
   const borderScale = useSharedValue(1);
   const shadowOpacity = useSharedValue(0);
+  const borderColorProgress = useSharedValue(0);
+  const labelScale = useSharedValue(1);
+  const helperOpacity = useSharedValue(0);
 
   // Animated styles
-  const borderAnimatedStyle = useAnimatedStyle(() => ({
-    borderWidth: borderScale.value,
-  }));
+  const borderAnimatedStyle = useAnimatedStyle(() => {
+    // Interpolate border color from neutral to primary
+    const borderColor = error
+      ? colors.error
+      : borderColorProgress.value > 0
+        ? colors.primary
+        : colors.border;
+
+    return {
+      borderWidth: borderScale.value,
+      borderColor,
+    };
+  });
 
   const shadowAnimatedStyle = useAnimatedStyle(() => ({
     shadowOpacity: shadowOpacity.value,
+    shadowColor: error ? colors.error : colors.primary,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 8,
+    elevation: shadowOpacity.value * 10,
   }));
 
-  // Focus handlers
+  const labelAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: labelScale.value }],
+  }));
+
+  const helperAnimatedStyle = useAnimatedStyle(() => ({
+    opacity: helperOpacity.value,
+  }));
+
+  // Focus handlers with enhanced animations
   const handleFocus = () => {
     setIsFocused(true);
-    borderScale.value = withTiming(2, { duration: durations.fast });
-    if (type === 'search') {
-      shadowOpacity.value = withTiming(0.08, { duration: durations.normal });
+
+    // Border animations
+    borderScale.value = withTiming(2, { duration: durations.normal });
+    borderColorProgress.value = withTiming(1, { duration: durations.normal });
+
+    // Shadow animation (subtle glow effect)
+    shadowOpacity.value = withTiming(0.15, { duration: durations.normal });
+
+    // Label scale animation (subtle emphasis)
+    labelScale.value = withTiming(1.02, { duration: durations.fast });
+
+    // Helper text fade in
+    helperOpacity.value = withTiming(1, { duration: durations.normal });
+
+    // Trigger haptic feedback
+    if (!disabled) {
+      require('expo-haptics').impactAsync(
+        require('expo-haptics').ImpactFeedbackStyle.Light
+      );
     }
   };
 
   const handleBlur = () => {
     setIsFocused(false);
-    borderScale.value = withTiming(1, { duration: durations.fast });
-    if (type === 'search') {
-      shadowOpacity.value = withTiming(0, { duration: durations.normal });
+
+    // Reset border animations
+    borderScale.value = withTiming(1, { duration: durations.normal });
+    borderColorProgress.value = withTiming(0, { duration: durations.normal });
+
+    // Reset shadow
+    shadowOpacity.value = withTiming(0, { duration: durations.normal });
+
+    // Reset label scale
+    labelScale.value = withTiming(1, { duration: durations.fast });
+
+    // Keep helper visible if there's error or helperText
+    if (!error && !helperText) {
+      helperOpacity.value = withTiming(0, { duration: durations.fast });
     }
   };
 
@@ -231,22 +283,22 @@ export const Input: React.FC<InputProps> = ({
   // Determine container styles
   const containerStyles: ViewStyle[] = [
     type === 'search' ? styles.searchContainer : styles.textContainer,
-    isFocused && styles.focusedContainer,
-    error && styles.errorContainer,
-    disabled && styles.disabledContainer,
+    ...(isFocused ? [styles.focusedContainer] : []),
+    ...(error ? [styles.errorContainer] : []),
+    ...(disabled ? [styles.disabledContainer] : []),
     borderAnimatedStyle,
-    type === 'search' && shadowAnimatedStyle,
-    containerStyle,
-  ];
+    ...(type === 'search' ? [shadowAnimatedStyle] : []),
+    ...(containerStyle ? [containerStyle] : []),
+  ].filter(Boolean);
 
   // Determine input text styles
   const textStyles: TextStyle[] = [
     styles.input,
-    type === 'search' && styles.searchInput,
-    disabled && styles.disabledText,
-    leadingIcon && styles.inputWithLeadingIcon,
-    inputStyle,
-  ];
+    ...(type === 'search' ? [styles.searchInput] : []),
+    ...(disabled ? [styles.disabledText] : []),
+    ...(leadingIcon ? [styles.inputWithLeadingIcon] : []),
+    ...(inputStyle ? [inputStyle] : []),
+  ].filter(Boolean);
 
   // Render trailing icons/buttons
   const renderTrailingContent = () => {
@@ -505,7 +557,7 @@ export const PasswordInput: React.FC<Omit<InputProps, 'type'>> = (props) => (
  * Text Area
  * Multi-line text input
  */
-export const TextArea: React.FC<Omit<InputProps, 'multiline' | 'numberOfLines'>> = ({
+export const TextArea: React.FC<Omit<InputProps, 'multiline'> & { numberOfLines?: number }> = ({
   numberOfLines = 4,
   ...props
 }) => (

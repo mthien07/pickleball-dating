@@ -5,7 +5,8 @@
  * All tokens follow a consistent naming convention and type-safe structure
  *
  * Usage:
- * import { colors, spacing, typography, borderRadius, shadows } from '@/theme/tokens';
+ * import { colors, spacing, typography, borderRadius } from '@/theme/tokens';
+ * import { shadows } from '@/theme/shadows';
  */
 
 // ============================================
@@ -13,54 +14,59 @@
 // ============================================
 
 export const colors = {
-  // Primary Colors (Energetic Orange)
-  primary: '#FF6B35',
-  primaryDark: '#E55A2B',
-  primaryLight: '#FF8A5C',
+  // Primary Colors (21st.dev Orange Theme)
+  primary: '#F97316',       // Orange-500
+  primaryGradientStart: '#F97316',
+  primaryGradientEnd: '#FB923C', // Orange-400
+  primaryDark: '#EA580C',   // Orange-600
+  primaryLight: '#FDBA74',  // Orange-300
 
-  // Secondary Colors (Teal)
-  secondary: '#4ECDC4',
-  secondaryDark: '#3DB8AF',
+  // Secondary Colors (Green)
+  secondary: '#22C55E',     // Green-500 (Tailwind)
+  secondaryDark: '#16A34A', // Green-600
 
   // Accent Colors
-  accent: '#FFD23F', // Sunny Yellow
+  accent: '#EAB308', // Yellow-500
+  lime: '#84CC16', // Lime-500
+  sportGreen: '#22C55E', // Green-500
 
   // Background Colors
-  background: '#FAFAFA',
-  backgroundDark: '#121212',
-  surface: '#FFFFFF',
-  surfaceDark: '#1E1E1E',
+  background: '#FFFFFF', // Clean White
+  backgroundDark: '#0F172A', // Slate-950
+  surface: '#F8FAFC',    // Slate-50
+  surfaceGlass: 'rgba(255, 255, 255, 0.90)',
+  surfaceDark: '#1E293B', // Slate-800
 
   // Text Colors
-  textPrimary: '#2D2D2D',
-  textSecondary: '#6B6B6B',
-  textTertiary: '#9E9E9E',
+  textPrimary: '#0F172A',   // Slate-950
+  textSecondary: '#64748B', // Slate-500
+  textTertiary: '#94A3B8',  // Slate-400
   textInverse: '#FFFFFF',
 
   // Border Colors
-  border: '#E0E0E0',
-  borderDark: '#2D2D2D',
+  border: '#E2E8F0', // Slate-200
+  borderDark: '#334155', // Slate-700
 
   // Status Colors
-  success: '#4CAF50',
-  error: '#F44336',
-  warning: '#FF9800',
-  info: '#2196F3',
+  success: '#22C55E', // Green-500
+  error: '#EF4444',   // Red-500
+  warning: '#F59E0B', // Amber-500
+  info: '#3B82F6',    // Blue-500
 
   // Skill Level Colors
-  skillBeginner: '#4CAF50',
-  skillIntermediate: '#FF9800',
-  skillAdvanced: '#F44336',
-  skillPro: '#9C27B0',
+  skillBeginner: '#22C55E', // Green
+  skillIntermediate: '#EAB308', // Yellow
+  skillAdvanced: '#F97316', // Orange
+  skillPro: '#EF4444', // Red
 
   // Utility Colors
   black: '#000000',
   white: '#FFFFFF',
 
   // Transparent overlays
-  overlay: 'rgba(0, 0, 0, 0.5)',
-  overlayLight: 'rgba(0, 0, 0, 0.3)',
-  overlayDark: 'rgba(0, 0, 0, 0.7)',
+  overlay: 'rgba(15, 23, 42, 0.5)',
+  overlayLight: 'rgba(15, 23, 42, 0.3)',
+  overlayDark: 'rgba(15, 23, 42, 0.7)',
 } as const;
 
 // ============================================
@@ -165,65 +171,6 @@ export const borderRadius = {
   card: 16,
   profileCard: 24,
   avatar: 9999,
-} as const;
-
-// ============================================
-// SHADOWS
-// ============================================
-
-export const shadows = {
-  // iOS-style shadows
-  sm: {
-    shadowColor: colors.black,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 4,
-    elevation: 2, // Android
-  },
-  md: {
-    shadowColor: colors.black,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.12,
-    shadowRadius: 8,
-    elevation: 4,
-  },
-  lg: {
-    shadowColor: colors.black,
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.16,
-    shadowRadius: 16,
-    elevation: 8,
-  },
-  xl: {
-    shadowColor: colors.black,
-    shadowOffset: { width: 0, height: 12 },
-    shadowOpacity: 0.2,
-    shadowRadius: 24,
-    elevation: 12,
-  },
-
-  // Component-specific shadows
-  button: {
-    shadowColor: colors.primary,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.25,
-    shadowRadius: 12,
-    elevation: 4,
-  },
-  card: {
-    shadowColor: colors.black,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.12,
-    shadowRadius: 12,
-    elevation: 4,
-  },
-  profileCard: {
-    shadowColor: colors.black,
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.12,
-    shadowRadius: 24,
-    elevation: 8,
-  },
 } as const;
 
 // ============================================
@@ -353,15 +300,6 @@ export const iconSizes = {
 // ============================================
 
 /**
- * Get shadow style for platform
- * On iOS: returns shadow properties
- * On Android: returns elevation
- */
-export const getShadow = (shadow: keyof typeof shadows) => {
-  return shadows[shadow];
-};
-
-/**
  * Get responsive font size based on breakpoint
  */
 export const getResponsiveFontSize = (baseFontSize: number, breakpoint: 'mobile' | 'tablet' | 'desktop') => {
@@ -393,7 +331,6 @@ export type Color = typeof colors;
 export type Spacing = typeof spacing;
 export type Typography = typeof typography;
 export type BorderRadius = typeof borderRadius;
-export type Shadow = typeof shadows;
 export type Duration = typeof durations;
 export type Easing = typeof easing;
 export type Opacity = typeof opacity;
@@ -401,24 +338,5 @@ export type ZIndex = typeof zIndex;
 export type AvatarSize = typeof avatarSizes;
 export type IconSize = typeof iconSizes;
 
-// Default export for convenience
-export default {
-  colors,
-  spacing,
-  typography,
-  fontFamily,
-  borderRadius,
-  shadows,
-  touchTargets,
-  breakpoints,
-  durations,
-  easing,
-  opacity,
-  zIndex,
-  avatarSizes,
-  iconSizes,
-  // Utility functions
-  getShadow,
-  getResponsiveFontSize,
-  withOpacity,
-};
+// Default export removed to prevent circular dependency issues
+// Use named imports instead: import { colors, spacing } from '@/theme/tokens';

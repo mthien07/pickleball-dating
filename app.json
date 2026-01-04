@@ -1,7 +1,6 @@
 {
   "expo": {
     "name": "PickleBall Dating",
-    "sdkVersion": "52.0.0",
     "slug": "pickleball-dating",
     "version": "1.0.0",
     "orientation": "portrait",

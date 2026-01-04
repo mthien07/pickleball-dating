@@ -26,19 +26,24 @@ import {
   TextStyle,
   View,
 } from 'react-native';
+import * as Haptics from 'expo-haptics';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withSpring,
   withTiming,
 } from 'react-native-reanimated';
-import { colors, spacing, typography, borderRadius, shadows, durations } from '../theme/tokens';
+import { LinearGradient } from 'expo-linear-gradient';
+import { colors, spacing, typography, borderRadius, durations } from '../theme/tokens';
+import { shadows } from '../theme/shadows';
+import { usePressAnimation, useElevationAnimation } from '../hooks/useAnimations';
+import { GRADIENT_COLORS } from './GradientBackground';
 
 // ============================================
 // TYPES
 // ============================================
 
-export type ButtonVariant = 'primary' | 'secondary' | 'text' | 'icon';
+export type ButtonVariant = 'primary' | 'secondary' | 'text' | 'icon' | 'gradient' | 'elevated';
 export type ButtonSize = 'small' | 'medium' | 'large';
 
 export interface ButtonProps {
@@ -130,39 +135,25 @@ export const Button: React.FC<ButtonProps> = ({
   textStyle,
   accessibilityLabel,
 }) => {
-  // Animation values
-  const scale = useSharedValue(1);
-  const opacity = useSharedValue(1);
+  // Use enhanced animations based on variant
+  const useElevated = variant === 'elevated';
+  const elevationAnim = useElevationAnimation({
+    elevationFrom: 4,
+    elevationTo: 12,
+    scaleFrom: 1,
+    scaleTo: 1.02,
+  });
+  const pressAnim = usePressAnimation({ scaleValue: 0.98 });
 
-  // Animated style
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-    opacity: opacity.value,
-  }));
-
-  // Press handlers with animations
-  const handlePressIn = () => {
-    if (!disabled && !loading) {
-      // Scale down animation
-      scale.value = withSpring(0.98, {
-        damping: 10,
-        stiffness: 400,
-      });
-    }
-  };
-
-  const handlePressOut = () => {
-    if (!disabled && !loading) {
-      // Scale back animation
-      scale.value = withSpring(1, {
-        damping: 10,
-        stiffness: 400,
-      });
-    }
-  };
+  // Choose animation based on variant
+  const { animatedStyle, handlePressIn, handlePressOut } = useElevated
+    ? elevationAnim
+    : pressAnim;
 
   const handlePress = () => {
     if (!disabled && !loading) {
+      // Haptic feedback for better tactile response
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
       onPress();
     }
   };
@@ -172,18 +163,18 @@ export const Button: React.FC<ButtonProps> = ({
     styles.base,
     styles[`${variant}Container`],
     styles[`${size}Container`],
-    fullWidth && styles.fullWidth,
-    disabled && styles.disabledContainer,
-    style,
-  ];
+    ...(fullWidth ? [styles.fullWidth] : []),
+    ...(disabled ? [styles.disabledContainer] : []),
+    ...(style ? [style] : []),
+  ].filter(Boolean);
 
   const labelStyle: TextStyle[] = [
     styles.baseText,
     styles[`${variant}Text`],
     styles[`${size}Text`],
-    disabled && styles.disabledText,
-    textStyle,
-  ];
+    ...(disabled ? [styles.disabledText] : []),
+    ...(textStyle ? [textStyle] : []),
+  ].filter(Boolean);
 
   // Render spinner color based on variant
   const spinnerColor = variant === 'primary' ? colors.white : colors.primary;
@@ -223,11 +214,41 @@ export const Button: React.FC<ButtonProps> = ({
     return <Text style={labelStyle}>{title}</Text>;
   };
 
+  // Render gradient button if variant is 'gradient'
+  if (variant === 'gradient') {
+    return (
+      <AnimatedTouchable
+        onPress={handlePress}
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+        disabled={disabled || loading}
+        activeOpacity={0.8}
+        style={[styles.base, fullWidth && styles.fullWidth, style, animatedStyle]}
+        accessibilityLabel={accessibilityLabel || title}
+        accessibilityRole="button"
+        accessibilityState={{
+          disabled: disabled || loading,
+          busy: loading,
+        }}
+      >
+        <LinearGradient
+          colors={disabled ? ['#D1D5DB', '#9CA3AF'] : GRADIENT_COLORS.primary}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 0 }}
+          style={[styles.gradientContainer, styles[`${size}Container`]]}
+        >
+          {renderContent()}
+        </LinearGradient>
+      </AnimatedTouchable>
+    );
+  }
+
+  // Regular button
   return (
     <AnimatedTouchable
       onPress={handlePress}
-      onPressIn={handlePressIn}
-      onPressOut={handlePressOut}
+      onPressIn={!disabled && !loading ? handlePressIn : undefined}
+      onPressOut={!disabled && !loading ? handlePressOut : undefined}
       disabled={disabled || loading}
       activeOpacity={0.8}
       style={[containerStyle, animatedStyle]}
@@ -296,6 +317,30 @@ const styles = StyleSheet.create({
     padding: spacing.sm,
   },
   iconText: {
+    color: colors.textPrimary,
+  },
+
+  // Variant: Gradient
+  gradientContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 28,
+    shadowColor: '#F97316', // Orange-500
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 12,
+    elevation: 8,
+  },
+  gradientText: {
+    color: colors.white,
+  },
+
+  // Variant: Elevated
+  elevatedContainer: {
+    backgroundColor: colors.surface,
+    ...shadows.elevated,
+  },
+  elevatedText: {
     color: colors.textPrimary,
   },
 
@@ -392,6 +437,22 @@ export const TextButton: React.FC<Omit<ButtonProps, 'variant'>> = (props) => (
  */
 export const IconButton: React.FC<Omit<ButtonProps, 'variant' | 'title'>> = (props) => (
   <Button {...props} variant="icon" />
+);
+
+/**
+ * Gradient Button
+ * Use for high-emphasis CTAs with gradient background (Red to Orange)
+ */
+export const GradientButton: React.FC<Omit<ButtonProps, 'variant'>> = (props) => (
+  <Button {...props} variant="gradient" />
+);
+
+/**
+ * Elevated Button
+ * Use for buttons with dynamic elevation/shadow effects on press
+ */
+export const ElevatedButton: React.FC<Omit<ButtonProps, 'variant'>> = (props) => (
+  <Button {...props} variant="elevated" />
 );
 
 // Default export

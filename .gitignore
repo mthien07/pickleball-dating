@@ -83,3 +83,6 @@ google-play-service-account.json
 *.apk
 *.aab
 *.ipa
+
+# MCP Config
+.claude/claude_desktop_config.json

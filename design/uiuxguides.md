@@ -19,22 +19,23 @@
 
 | Token | Hex | Usage |
 |-------|-----|-------|
-| **Primary** | `#FF6B35` | Main CTAs, active states, brand identity (Energetic Orange) |
-| **Primary Dark** | `#E55A2B` | Hover states, pressed buttons |
-| **Primary Light** | `#FF8A5C` | Backgrounds, subtle accents |
-| **Secondary** | `#4ECDC4` | Secondary actions, sport/activity indicators (Teal) |
-| **Secondary Dark** | `#3DB8AF` | Hover states for secondary elements |
-| **Accent** | `#FFD23F` | Highlights, badges, special features (Sunny Yellow) |
-| **Background** | `#FAFAFA` | App background (light mode) |
+| **Primary** | `#5B9FE3` | Blue Gradient Start, Main CTAs, brand identity |
+| **Primary Gradient End** | `#7CB8F0` | Blue Gradient End, Accents |
+| **Primary Dark** | `#4A85C0` | Hover states, pressed buttons |
+| **Secondary** | `#A8C8E8` | Soft Blue, Category pills, secondary elements |
+| **Secondary Dark** | `#86A6C6` | Hover states for secondary elements |
+| **Accent** | `#FFD700` | Golden Yellow, Ratings, highlights |
+| **Background** | `#B8D4F0` | Sky Blue, Main app background |
 | **Background Dark** | `#121212` | App background (dark mode) |
-| **Surface** | `#FFFFFF` | Cards, modals, bottom sheets |
+| **Surface** | `#FFFFFF` | Cards, input fields, modals |
+| **Surface Glass** | `#FFFFFF` (90% opacity) | Glassmorphic surfaces |
 | **Surface Dark** | `#1E1E1E` | Cards in dark mode |
-| **Text Primary** | `#2D2D2D` | Headings, primary text |
-| **Text Secondary** | `#6B6B6B` | Body text, descriptions |
-| **Text Tertiary** | `#9E9E9E` | Captions, metadata |
+| **Text Primary** | `#1A1A1A` | Dark Gray, Headings, body text |
+| **Text Secondary** | `#666666` | Medium Gray, Subtitles, descriptions |
+| **Text Tertiary** | `#999999` | Light Gray, Placeholders, disabled |
 | **Text Inverse** | `#FFFFFF` | Text on dark backgrounds |
 | **Border** | `#E0E0E0` | Dividers, input borders |
-| **Success** | `#4CAF50` | Confirmations, match success |
+| **Success** | `#4CAF50` | Green, Success states, confirmations |
 | **Error** | `#F44336` | Errors, destructive actions |
 | **Warning** | `#FF9800` | Warnings, alerts |
 | **Info** | `#2196F3` | Informational messages |
@@ -158,14 +159,14 @@
 **Primary Button**:
 ```
 Default:
-  - Background: #FF6B35
+  - Background: #5B9FE3
   - Text: #FFFFFF, 16px Semibold
   - Border Radius: 12px
   - Padding: 16px 24px
   - Shadow: 0px 4px 12px rgba(255, 107, 53, 0.25)
 
 Hover:
-  - Background: #E55A2B
+  - Background: #4A85C0
   - Shadow: 0px 6px 16px rgba(255, 107, 53, 0.35)
 
 Pressed:
@@ -174,8 +175,8 @@ Pressed:
   - Shadow: 0px 2px 8px rgba(255, 107, 53, 0.2)
 
 Focused:
-  - Background: #FF6B35
-  - Border: 2px solid #FFD23F
+  - Background: #5B9FE3
+  - Border: 2px solid #FFD700
   - Shadow: 0px 0px 0px 4px rgba(255, 107, 53, 0.1)
 
 Disabled:
@@ -184,7 +185,7 @@ Disabled:
   - Shadow: None
 
 Loading:
-  - Background: #FF6B35
+  - Background: #5B9FE3
   - Text: #FFFFFF (50% opacity)
   - Spinner: White, centered
 ```
@@ -193,8 +194,8 @@ Loading:
 ```
 Default:
   - Background: Transparent
-  - Border: 2px solid #4ECDC4
-  - Text: #4ECDC4, 16px Semibold
+  - Border: 2px solid #A8C8E8
+  - Text: #A8C8E8, 16px Semibold
   - Border Radius: 12px
   - Padding: 14px 24px (accounts for border)
 
@@ -215,7 +216,7 @@ Disabled:
 ```
 Default:
   - Background: Transparent
-  - Text: #FF6B35, 16px Semibold
+  - Text: #5B9FE3, 16px Semibold
   - Padding: 8px 16px
 
 Hover:
@@ -254,7 +255,7 @@ Default:
   - Placeholder: 16px Regular, #9E9E9E
 
 Focused:
-  - Border: 2px solid #FF6B35
+  - Border: 2px solid #5B9FE3
   - Shadow: 0px 0px 0px 4px rgba(255, 107, 53, 0.08)
 
 Filled (valid):
@@ -372,13 +373,13 @@ Active (online):
 
 ```
 Default:
-  - Background: #FFD23F
+  - Background: #FFD700
   - Text: #2D2D2D, 12px Semibold
   - Padding: 4px 12px
   - Border Radius: 12px (pill)
 
 Verified:
-  - Background: #4ECDC4
+  - Background: #A8C8E8
   - Icon: Checkmark, 12x12px white
   - Text: White
 
@@ -406,8 +407,8 @@ Tab Item:
   - Spacing: Equal distribution
 
 Tab Active:
-  - Icon: #FF6B35
-  - Label: #FF6B35
+  - Icon: #5B9FE3
+  - Label: #5B9FE3
   - Background: rgba(255, 107, 53, 0.08), 24px border radius
 
 Tab Inactive:
@@ -447,7 +448,7 @@ Tab Inactive:
 **Checkbox**:
 ```
   - Border: 2px solid #E0E0E0 (unchecked)
-  - Checked: Background #FF6B35, white checkmark
+  - Checked: Background #5B9FE3, white checkmark
   - Checkmark scale: 0 → 1, 200ms, ease-out with bounce
 ```
 
@@ -583,7 +584,7 @@ Tab Inactive:
 
 ### Keyboard Navigation
 - Tab order: Top to bottom, left to right
-- Focus indicators: 2px solid #FFD23F outline with 4px offset
+- Focus indicators: 2px solid #FFD700 outline with 4px offset
 - Escape key: Close modals/overlays
 
 ### Motion Reduction
@@ -626,8 +627,8 @@ Tab Inactive:
 **Design Tokens File** (`src/theme/tokens.ts`):
 ```typescript
 export const colors = {
-  primary: '#FF6B35',
-  primaryDark: '#E55A2B',
+  primary: '#5B9FE3',
+  primaryDark: '#4A85C0',
   // ... (map all color tokens)
 };
 

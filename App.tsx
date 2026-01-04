@@ -1,43 +1,42 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useEffect } from 'react';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { RootNavigator } from './src/navigation/RootNavigator';
+import Toast from 'react-native-toast-message';
+import { toastConfig } from './src/config/toastConfig';
+import { StatusBar } from 'expo-status-bar';
+import { AuthProvider } from './src/contexts/AuthContext';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import Animated from 'react-native-reanimated';
+import { useAnimation } from './src/hooks/useAnimation';
+
+const queryClient = new QueryClient();
 
 export default function App() {
+  const { animatedStyle, fadeIn, scaleIn } = useAnimation({
+    initialOpacity: 0,
+    initialScale: 0.98,
+  });
+
+  useEffect(() => {
+    // Animate app entry
+    fadeIn(800);
+    scaleIn();
+  }, []);
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>🎾 Hello PickleBall!</Text>
-      <Text style={styles.subtitle}>Test App - Minimal Version</Text>
-      <Text style={styles.info}>
-        Nếu thấy màn hình này = Expo hoạt động OK!
-      </Text>
-    </View>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaProvider>
+        <QueryClientProvider client={queryClient}>
+          <AuthProvider>
+            <StatusBar style="auto" />
+            <Animated.View style={[{ flex: 1 }, animatedStyle]}>
+              <RootNavigator />
+            </Animated.View>
+            <Toast config={toastConfig} />
+          </AuthProvider>
+        </QueryClientProvider>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#FF6B35',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 20,
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-    marginBottom: 10,
-  },
-  subtitle: {
-    fontSize: 18,
-    color: '#FFFFFF',
-    marginBottom: 20,
-  },
-  info: {
-    fontSize: 14,
-    color: '#FFFFFF',
-    textAlign: 'center',
-    backgroundColor: 'rgba(0,0,0,0.2)',
-    padding: 15,
-    borderRadius: 10,
-  },
-});

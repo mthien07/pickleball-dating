@@ -4,9 +4,9 @@ import {
   View,
   Text,
   TouchableOpacity,
-  SafeAreaView,
   ScrollView,
 } from 'react-native';
+import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import { createClient } from '@supabase/supabase-js';
 import 'react-native-url-polyfill/auto';
 
@@ -114,7 +114,8 @@ export default function App() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>🔧 Supabase Debug Test</Text>
       </View>
@@ -130,7 +131,8 @@ export default function App() {
           </Text>
         ))}
       </ScrollView>
-    </SafeAreaView>
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
 

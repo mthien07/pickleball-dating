@@ -45,6 +45,11 @@ export interface User {
     lng: number;
     address: string;
   };
+  preferences?: {
+    interests?: string[];
+    age_range?: { min: number; max: number };
+    distance_km?: number;
+  };
   verification: {
     phone_verified: boolean;
     email_verified: boolean;
