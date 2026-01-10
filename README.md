@@ -238,5 +238,5 @@ Contributions welcome! See [CONTRIBUTING.md](CONTRIBUTING.md)
 <p align="center">
   Made with ❤️ for the Pickleball Community
   <br>
-  🚀 Built with <a href="https://claude.com/claude-code">Claude Code</a>
+  🚀 Built with <a href="https://antigravity.google/">Antigravity</a>, <a href="https://cursor.com/">Cursor</a> & <a href="https://claude.ai/">Claude</a>
 </p>
