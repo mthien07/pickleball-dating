@@ -47,6 +47,7 @@ import { CoachDetailScreen } from '../screens/coach/CoachDetailScreen';
 import { ProfileMeScreen } from '../screens/profile/ProfileMeScreen';
 import { EditProfileScreen } from '../screens/profile/EditProfileScreen';
 import { SettingsScreen } from '../screens/profile/SettingsScreen';
+import { ProfileSetupScreen } from '../screens/auth/ProfileSetupScreen';
 
 // --- Animated Tab Icon Component ---
 interface TabIconProps {
@@ -112,6 +113,7 @@ const ProfileNavigator = () => (
   <ProfileStack.Navigator screenOptions={{ headerShown: false }}>
     <ProfileStack.Screen name="ProfileMe" component={ProfileMeScreen} />
     <ProfileStack.Screen name="EditProfile" component={EditProfileScreen} />
+    <ProfileStack.Screen name="ProfileSetup" component={ProfileSetupScreen} />
     <ProfileStack.Screen name="Settings" component={SettingsScreen} />
     <ProfileStack.Screen name="BookingHistory" component={BookingHistoryScreen} />
     <ProfileStack.Screen name="BookingDetail" component={BookingDetailScreen} />

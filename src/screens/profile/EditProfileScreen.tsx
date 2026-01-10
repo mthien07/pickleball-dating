@@ -1,10 +1,10 @@
 /**
  * EditProfileScreen
  *
- * Edit user profile with image upload support
+ * Edit user profile with image upload - saves to Supabase database
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -25,8 +25,9 @@ import { Button } from '../../components/Button';
 import { colors, spacing, typography, borderRadius } from '../../theme/tokens';
 import { useImagePicker } from '../../hooks/useImagePicker';
 import { uploadProfileImage } from '../../services/storage.service';
+import { updateProfile } from '../../services/api/profile.service';
 import { showSuccess, showError } from '../../services/toast';
-import { MOCK_USERS, CURRENT_USER_ID } from '@data/mockData';
+import { useAuth } from '../../contexts/AuthContext';
 
 // ============================================
 // PHOTO GRID
@@ -81,16 +82,27 @@ const PhotoGrid: React.FC<PhotoGridProps> = ({ photos, onAdd, onRemove, isUpload
 
 export const EditProfileScreen = () => {
   const navigation = useNavigation<any>();
-  const currentUser = MOCK_USERS.find((u) => u.id === CURRENT_USER_ID);
+  const { profile, user, refreshProfile } = useAuth();
 
-  // Form state
-  const [photos, setPhotos] = useState<string[]>(currentUser?.avatar_urls || []);
-  const [name, setName] = useState(currentUser?.display_name || '');
-  const [bio, setBio] = useState(currentUser?.bio || '');
-  const [skillLevel, setSkillLevel] = useState(currentUser?.skill_level || '');
-  const [playStyle, setPlayStyle] = useState(currentUser?.play_style || '');
+  // Form state - initialize from profile
+  const [photos, setPhotos] = useState<string[]>([]);
+  const [name, setName] = useState('');
+  const [bio, setBio] = useState('');
+  const [skillLevel, setSkillLevel] = useState('');
+  const [playStyle, setPlayStyle] = useState('');
   const [isUploading, setIsUploading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+
+  // Initialize form from profile
+  useEffect(() => {
+    if (profile) {
+      setPhotos(profile.avatar_urls || []);
+      setName(profile.display_name || '');
+      setBio(profile.bio || '');
+      setSkillLevel(profile.skill_level || '');
+      setPlayStyle(profile.play_style || '');
+    }
+  }, [profile]);
 
   const { pickImage } = useImagePicker({ allowsEditing: true, aspect: [1, 1] });
 
@@ -106,20 +118,22 @@ export const EditProfileScreen = () => {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 
       try {
-        // Upload to Supabase
-        const uploadResult = await uploadProfileImage(result[0].uri, CURRENT_USER_ID);
+        if (!user?.id) {
+          showError('Vui lòng đăng nhập để tải ảnh');
+          setIsUploading(false);
+          return;
+        }
+        const uploadResult = await uploadProfileImage(result[0].uri, user.id);
 
         if (uploadResult.success && uploadResult.publicUrl) {
           setPhotos((prev) => [...prev, uploadResult.publicUrl!]);
           showSuccess('Tải ảnh thành công!');
         } else {
-          // Fallback to local URI if upload fails
-          setPhotos((prev) => [...prev, result[0].uri]);
-          showError('Lưu local - upload sẽ thử lại sau');
+          showError('Không thể tải ảnh. Vui lòng thử lại.');
         }
       } catch (error) {
-        setPhotos((prev) => [...prev, result[0].uri]);
         console.error('Upload error:', error);
+        showError('Lỗi tải ảnh');
       } finally {
         setIsUploading(false);
       }
@@ -140,12 +154,27 @@ export const EditProfileScreen = () => {
     setIsSaving(true);
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    try {
+      // Update profile in database
+      await updateProfile({
+        displayName: name.trim(),
+        bio: bio.trim(),
+        avatarUrls: photos,
+        skillLevel: skillLevel as any,
+        playStyle: playStyle as any,
+      });
 
-    setIsSaving(false);
-    showSuccess('Đã lưu thay đổi!');
-    navigation.goBack();
+      // Refresh profile in context
+      await refreshProfile();
+
+      showSuccess('Đã lưu thay đổi!');
+      navigation.goBack();
+    } catch (error: any) {
+      console.error('Save error:', error);
+      showError(error.message || 'Không thể lưu. Vui lòng thử lại.');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const skillLevels = [
@@ -221,11 +250,17 @@ export const EditProfileScreen = () => {
               {skillLevels.map((level) => (
                 <TouchableOpacity
                   key={level.id}
-                  style={[styles.optionButton, skillLevel === level.id && styles.optionButtonSelected]}
+                  style={[
+                    styles.optionButton,
+                    skillLevel === level.id && styles.optionButtonSelected,
+                  ]}
                   onPress={() => setSkillLevel(level.id)}
                 >
                   <Text
-                    style={[styles.optionText, skillLevel === level.id && styles.optionTextSelected]}
+                    style={[
+                      styles.optionText,
+                      skillLevel === level.id && styles.optionTextSelected,
+                    ]}
                   >
                     {level.label}
                   </Text>

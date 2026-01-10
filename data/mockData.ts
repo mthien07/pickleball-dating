@@ -197,31 +197,29 @@ export interface Review {
 // Current logged-in user
 export const CURRENT_USER_ID = 'user_me_001';
 
-// Users (Players)
+// Users (Players) - Người miền Tây Việt Nam
 export const MOCK_USERS: User[] = [
   {
     id: CURRENT_USER_ID,
-    display_name: 'John Doe',
+    display_name: 'Nguyễn Văn Minh',
     date_of_birth: '1995-01-15',
     gender: 'male',
     avatar_urls: [
-      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400',
-      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400',
+      'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400',
       'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400',
     ],
-    bio: 'Love playing pickleball! Always up for a competitive match or casual game. Looking to improve my skills and meet new friends.',
+    bio: 'Mê pickleball, hay chơi cuối tuần ở Cần Thơ. Tìm bạn chơi cùng! 🏓',
     skill_level: 'intermediate',
     play_style: 'competitive',
     looking_for: ['opponent', 'dating'],
     availability: {
-      monday: ['morning', 'evening'],
-      wednesday: ['afternoon', 'evening'],
-      friday: ['morning'],
+      saturday: ['morning', 'afternoon'],
+      sunday: ['morning', 'afternoon'],
     },
     preferred_location: {
-      lat: 10.762622,
-      lng: 106.660172,
-      address: 'District 1, HCMC',
+      lat: 10.0452,
+      lng: 105.7469,
+      address: 'Ninh Kiều, Cần Thơ',
     },
     verification: {
       phone_verified: true,
@@ -238,14 +236,14 @@ export const MOCK_USERS: User[] = [
   },
   {
     id: 'user_002',
-    display_name: 'Sarah Chen',
+    display_name: 'Trần Thị Hồng Nhung',
     date_of_birth: '1997-03-22',
     gender: 'female',
     avatar_urls: [
-      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400',
-      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400',
+      'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=400',
+      'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400',
     ],
-    bio: 'Beginner looking to learn and have fun! Weekends are best for me.',
+    bio: 'Cô gái Vĩnh Long yêu thể thao! Mới tập pickleball, muốn tìm bạn chơi vui vẻ 😄',
     skill_level: 'beginner',
     play_style: 'social',
     looking_for: ['doubles_partner', 'dating'],
@@ -254,9 +252,9 @@ export const MOCK_USERS: User[] = [
       sunday: ['afternoon'],
     },
     preferred_location: {
-      lat: 10.8231,
-      lng: 106.6297,
-      address: 'District 2, HCMC',
+      lat: 10.2537,
+      lng: 105.9722,
+      address: 'TP. Vĩnh Long, Vĩnh Long',
     },
     verification: {
       phone_verified: true,
@@ -268,28 +266,31 @@ export const MOCK_USERS: User[] = [
       average_rating: 4.5,
     },
     is_online: true,
-    last_active: new Date(Date.now() - 2 * 60 * 1000).toISOString(), // 2 mins ago
+    last_active: new Date(Date.now() - 2 * 60 * 1000).toISOString(),
     created_at: '2024-02-15T00:00:00Z',
   },
   {
     id: 'user_003',
-    display_name: 'Mike Johnson',
+    display_name: 'Lê Thanh Tùng',
     date_of_birth: '1990-07-10',
     gender: 'male',
-    avatar_urls: ['https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=400'],
-    bio: "Advanced player. Let's have some intense matches!",
+    avatar_urls: [
+      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400',
+      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400',
+    ],
+    bio: 'Dân An Giang chính hiệu! Chơi pickleball 2 năm, thích đấu gay cấn 🔥',
     skill_level: 'advanced',
     play_style: 'competitive',
     looking_for: ['opponent'],
     availability: {
       monday: ['evening'],
-      tuesday: ['evening'],
-      thursday: ['evening'],
+      wednesday: ['evening'],
+      friday: ['evening'],
     },
     preferred_location: {
-      lat: 10.7769,
-      lng: 106.7009,
-      address: 'District 7, HCMC',
+      lat: 10.3864,
+      lng: 105.4352,
+      address: 'TP. Long Xuyên, An Giang',
     },
     verification: {
       phone_verified: true,
@@ -301,20 +302,20 @@ export const MOCK_USERS: User[] = [
       average_rating: 4.9,
     },
     is_online: false,
-    last_active: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(), // 3 hours ago
+    last_active: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(),
     created_at: '2023-11-20T00:00:00Z',
   },
   {
     id: 'user_004',
-    display_name: 'Emily Nguyen',
+    display_name: 'Phạm Ngọc Bích',
     date_of_birth: '1998-11-05',
     gender: 'female',
     avatar_urls: [
-      'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400',
-      'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400',
-      'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=400',
+      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400',
+      'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400',
+      'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400',
     ],
-    bio: 'Pro player. Looking for partners to train with for upcoming tournaments.',
+    bio: 'Pro player đến từ Sóc Trăng 🏆 Đang tìm partner tập luyện cho giải đấu!',
     skill_level: 'pro',
     play_style: 'competitive',
     looking_for: ['opponent', 'doubles_partner'],
@@ -324,9 +325,9 @@ export const MOCK_USERS: User[] = [
       friday: ['morning', 'afternoon'],
     },
     preferred_location: {
-      lat: 10.8142,
-      lng: 106.6438,
-      address: 'Binh Thanh District, HCMC',
+      lat: 9.6025,
+      lng: 105.9739,
+      address: 'TP. Sóc Trăng, Sóc Trăng',
     },
     verification: {
       phone_verified: true,
@@ -343,11 +344,14 @@ export const MOCK_USERS: User[] = [
   },
   {
     id: 'user_005',
-    display_name: 'David Lee',
+    display_name: 'Võ Hoàng Nam',
     date_of_birth: '1992-04-18',
     gender: 'male',
-    avatar_urls: ['https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400'],
-    bio: 'Casual player, just here to have fun and stay active!',
+    avatar_urls: [
+      'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400',
+      'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400',
+    ],
+    bio: 'Anh nông dân Đồng Tháp thích chơi thể thao sau giờ làm 🌾 Chơi vui là chính!',
     skill_level: 'intermediate',
     play_style: 'casual',
     looking_for: ['doubles_partner', 'dating'],
@@ -356,9 +360,9 @@ export const MOCK_USERS: User[] = [
       sunday: ['morning', 'afternoon'],
     },
     preferred_location: {
-      lat: 10.7627,
-      lng: 106.6822,
-      address: 'District 3, HCMC',
+      lat: 10.4554,
+      lng: 105.6882,
+      address: 'TP. Cao Lãnh, Đồng Tháp',
     },
     verification: {
       phone_verified: false,
@@ -398,9 +402,9 @@ export const MOCK_COACHES: Coach[] = [
       email: 'alex.tran@example.com',
     },
     gallery_urls: [
-      'https://images.unsplash.com/photo-uNPt0rRy8I0?w=600&h=400&fit=crop&q=85',
-      'https://images.unsplash.com/photo-kQHa8YGDKag?w=600&h=400&fit=crop&q=85',
-      'https://images.unsplash.com/photo-lXVavaDO0zU?w=600&h=400&fit=crop&q=85',
+      'https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=600&h=400&fit=crop&q=85',
+      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=400&fit=crop&q=85',
+      'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=600&h=400&fit=crop&q=85',
     ],
   },
   {
@@ -423,9 +427,9 @@ export const MOCK_COACHES: Coach[] = [
       phone: '+84 902 345 678',
     },
     gallery_urls: [
-      'https://images.unsplash.com/photo-eBnKgT__Bsg?w=600&h=400&fit=crop&q=85',
-      'https://images.unsplash.com/photo-Bt-oCv_YI3E?w=600&h=400&fit=crop&q=85',
-      'https://images.unsplash.com/photo-4W-8AZbpLSY?w=600&h=400&fit=crop&q=85',
+      'https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?w=600&h=400&fit=crop&q=85',
+      'https://images.unsplash.com/photo-1529926706528-db9e5010cd3e?w=600&h=400&fit=crop&q=85',
+      'https://images.unsplash.com/photo-1526232761682-d26e03ac148e?w=600&h=400&fit=crop&q=85',
     ],
   },
   {
@@ -463,9 +467,9 @@ export const MOCK_COURTS: Court[] = [
       lng: 106.7011,
     },
     images: [
-      'https://images.unsplash.com/photo-uNPt0rRy8I0?w=800&h=600&fit=crop&q=85',
-      'https://images.unsplash.com/photo-kQHa8YGDKag?w=800&h=600&fit=crop&q=85',
-      'https://images.unsplash.com/photo-4W-8AZbpLSY?w=800&h=600&fit=crop&q=85',
+      'https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=800&h=600&fit=crop&q=85',
+      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=600&fit=crop&q=85',
+      'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=800&h=600&fit=crop&q=85',
     ],
     description:
       'Modern indoor facility with 6 professional courts. Air-conditioned, well-lit, and equipped with all amenities.',
@@ -499,9 +503,9 @@ export const MOCK_COURTS: Court[] = [
       lng: 106.8098,
     },
     images: [
-      'https://images.unsplash.com/photo-eBnKgT__Bsg?w=800&h=600&fit=crop&q=85',
-      'https://images.unsplash.com/photo-Bt-oCv_YI3E?w=800&h=600&fit=crop&q=85',
-      'https://images.unsplash.com/photo-fZqOfwe7meU?w=800&h=600&fit=crop&q=85',
+      'https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?w=800&h=600&fit=crop&q=85',
+      'https://images.unsplash.com/photo-1529926706528-db9e5010cd3e?w=800&h=600&fit=crop&q=85',
+      'https://images.unsplash.com/photo-1526232761682-d26e03ac148e?w=800&h=600&fit=crop&q=85',
     ],
     description: 'Beautiful outdoor courts surrounded by nature. Perfect for weekend games.',
     amenities: ['Parking', 'Canteen', 'Equipment Rental'],
@@ -530,9 +534,9 @@ export const MOCK_COURTS: Court[] = [
       lng: 106.6673,
     },
     images: [
-      'https://images.unsplash.com/photo-lXVavaDO0zU?w=800&h=600&fit=crop&q=85',
-      'https://images.unsplash.com/photo-3sSbRisCnmE?w=800&h=600&fit=crop&q=85',
-      'https://images.unsplash.com/photo-rjWfNR_AC5g?w=800&h=600&fit=crop&q=85',
+      'https://images.unsplash.com/photo-1587280501635-68a0e82cd5ff?w=800&h=600&fit=crop&q=85',
+      'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&h=600&fit=crop&q=85',
+      'https://images.unsplash.com/photo-1560185007-5f0bb1866cab?w=800&h=600&fit=crop&q=85',
     ],
     description:
       'Multi-sport complex with dedicated pickleball courts. Great facilities and central location.',
@@ -566,9 +570,9 @@ export const MOCK_COURTS: Court[] = [
       lng: 106.6363,
     },
     images: [
-      'https://images.unsplash.com/photo-IHYoOsWkufQ?w=800&h=600&fit=crop&q=85',
-      'https://images.unsplash.com/photo-lwt4fWTErN8?w=800&h=600&fit=crop&q=85',
-      'https://images.unsplash.com/photo-Zsr07Zr4tzM?w=800&h=600&fit=crop&q=85',
+      'https://images.unsplash.com/photo-1544919982-b61976f0ba43?w=800&h=600&fit=crop&q=85',
+      'https://images.unsplash.com/photo-1519311965067-36d3e5f33d39?w=800&h=600&fit=crop&q=85',
+      'https://images.unsplash.com/photo-1600679472829-3044539ce8ed?w=800&h=600&fit=crop&q=85',
     ],
     description: 'Friendly community court. Open early for morning players.',
     amenities: ['Parking', 'Equipment Rental', 'Canteen'],
@@ -596,11 +600,11 @@ export const MOCK_MATCHES: Match[] = [
     id: 'match_001',
     user_id: CURRENT_USER_ID,
     matched_user_id: 'user_002',
-    matched_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(), // 2 days ago
+    matched_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
     conversation_id: 'conv_001',
     is_new: false,
     last_message: {
-      content: "Hey! Let's play this weekend?",
+      content: 'Cuối tuần này chơi pickleball hông bạn? 🏓',
       sent_at: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
       sender_id: 'user_002',
       type: 'text',
@@ -612,11 +616,11 @@ export const MOCK_MATCHES: Match[] = [
     id: 'match_002',
     user_id: CURRENT_USER_ID,
     matched_user_id: 'user_003',
-    matched_at: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(), // 5 days ago
+    matched_at: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
     conversation_id: 'conv_002',
     is_new: false,
     last_message: {
-      content: 'Great match yesterday!',
+      content: 'Trận hôm qua đỉnh quá! Lần sau đấu tiếp nha 🔥',
       sent_at: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
       sender_id: CURRENT_USER_ID,
       type: 'text',
@@ -628,7 +632,7 @@ export const MOCK_MATCHES: Match[] = [
     id: 'match_003',
     user_id: CURRENT_USER_ID,
     matched_user_id: 'user_004',
-    matched_at: new Date(Date.now() - 30 * 60 * 1000).toISOString(), // 30 mins ago
+    matched_at: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
     conversation_id: 'conv_003',
     is_new: true,
     unread_count: 0,
@@ -638,11 +642,11 @@ export const MOCK_MATCHES: Match[] = [
     id: 'match_004',
     user_id: CURRENT_USER_ID,
     matched_user_id: 'user_005',
-    matched_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days ago
+    matched_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
     conversation_id: 'conv_004',
     is_new: false,
     last_message: {
-      content: 'Thanks for the game!',
+      content: 'Cảm ơn bạn về trận đấu! Chơi vui ghê 😄',
       sent_at: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000).toISOString(),
       sender_id: 'user_005',
       type: 'text',
@@ -681,12 +685,12 @@ export const MOCK_CONVERSATIONS: Conversation[] = [
 ];
 
 export const MOCK_MESSAGES: Message[] = [
-  // Conversation 1 (with Sarah)
+  // Cuộc trò chuyện 1 (với Hồng Nhung - Vĩnh Long)
   {
     id: 'msg_001',
     conversation_id: 'conv_001',
     sender_id: CURRENT_USER_ID,
-    content: 'Hi Sarah! Nice to match with you 😊',
+    content: 'Chào Nhung! Vui ghê vì match được với bạn 😊',
     type: 'text',
     status: 'read',
     created_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
@@ -696,7 +700,7 @@ export const MOCK_MESSAGES: Message[] = [
     id: 'msg_002',
     conversation_id: 'conv_001',
     sender_id: 'user_002',
-    content: 'Hi John! Thanks, excited to play with you!',
+    content: 'Chào anh Minh! Cảm ơn anh, em cũng háo hức muốn chơi lắm!',
     type: 'text',
     status: 'read',
     created_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000 + 10 * 60 * 1000).toISOString(),
@@ -706,7 +710,7 @@ export const MOCK_MESSAGES: Message[] = [
     id: 'msg_003',
     conversation_id: 'conv_001',
     sender_id: CURRENT_USER_ID,
-    content: 'What days work best for you?',
+    content: 'Em rảnh ngày nào hay đó?',
     type: 'text',
     status: 'read',
     created_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000 + 20 * 60 * 1000).toISOString(),
@@ -716,17 +720,17 @@ export const MOCK_MESSAGES: Message[] = [
     id: 'msg_004',
     conversation_id: 'conv_001',
     sender_id: 'user_002',
-    content: "Hey! Let's play this weekend?",
+    content: 'Cuối tuần này chơi pickleball hông bạn? 🏓',
     type: 'text',
     status: 'delivered',
     created_at: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
   },
-  // Conversation 2 (with Mike)
+  // Cuộc trò chuyện 2 (với Thanh Tùng - An Giang)
   {
     id: 'msg_005',
     conversation_id: 'conv_002',
     sender_id: 'user_003',
-    content: 'Ready for an intense match?',
+    content: 'Sẵn sàng đấu gay cấn chưa bạn? 🔥',
     type: 'text',
     status: 'read',
     created_at: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
@@ -736,7 +740,7 @@ export const MOCK_MESSAGES: Message[] = [
     id: 'msg_006',
     conversation_id: 'conv_002',
     sender_id: CURRENT_USER_ID,
-    content: 'Absolutely! When are you free?',
+    content: 'Rồi chứ! Bạn rảnh khi nào?',
     type: 'text',
     status: 'read',
     created_at: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000 + 15 * 60 * 1000).toISOString(),
@@ -746,7 +750,7 @@ export const MOCK_MESSAGES: Message[] = [
     id: 'msg_007',
     conversation_id: 'conv_002',
     sender_id: CURRENT_USER_ID,
-    content: 'Great match yesterday!',
+    content: 'Trận hôm qua đỉnh quá! Lần sau đấu tiếp nha 🔥',
     type: 'text',
     status: 'read',
     created_at: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),

@@ -30,7 +30,8 @@ import { colors, spacing, typography, borderRadius } from '../../theme/tokens';
 import { useImagePicker } from '../../hooks/useImagePicker';
 import { uploadProfileImage } from '../../services/storage.service';
 import { showSuccess, showError } from '../../services/toast';
-import { CURRENT_USER_ID } from '@data/mockData';
+import { useAuth } from '../../contexts/AuthContext';
+import { createProfile } from '../../services/api/profile.service';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const TOTAL_STEPS = 5;
@@ -47,7 +48,12 @@ interface PhotoStepProps {
   isUploading: boolean;
 }
 
-const PhotoStep: React.FC<PhotoStepProps> = ({ photos, onAddPhoto, onRemovePhoto, isUploading }) => (
+const PhotoStep: React.FC<PhotoStepProps> = ({
+  photos,
+  onAddPhoto,
+  onRemovePhoto,
+  isUploading,
+}) => (
   <Animated.View entering={FadeInUp} style={styles.stepContent}>
     <Text style={styles.stepTitle}>Thêm ảnh của bạn</Text>
     <Text style={styles.stepDescription}>
@@ -107,52 +113,77 @@ const BasicInfoStep: React.FC<BasicInfoStepProps> = ({
   onBirthDateChange,
   gender,
   onGenderChange,
-}) => (
-  <Animated.View entering={FadeInUp} style={styles.stepContent}>
-    <Text style={styles.stepTitle}>Thông tin cơ bản</Text>
+}) => {
+  // Auto-format birth date as DD/MM/YYYY
+  const handleBirthDateChange = (text: string) => {
+    // Remove all non-numeric characters
+    const numbersOnly = text.replace(/[^0-9]/g, '');
 
-    <View style={styles.formField}>
-      <Text style={styles.fieldLabel}>Tên hiển thị</Text>
-      <TextInput
-        style={styles.input}
-        value={name}
-        onChangeText={onNameChange}
-        placeholder="Nguyễn Văn A"
-        placeholderTextColor={colors.textTertiary}
-      />
-    </View>
+    // Format as DD/MM/YYYY
+    let formatted = '';
+    if (numbersOnly.length > 0) {
+      formatted = numbersOnly.slice(0, 2);
+    }
+    if (numbersOnly.length > 2) {
+      formatted += '/' + numbersOnly.slice(2, 4);
+    }
+    if (numbersOnly.length > 4) {
+      formatted += '/' + numbersOnly.slice(4, 8);
+    }
 
-    <View style={styles.formField}>
-      <Text style={styles.fieldLabel}>Ngày sinh</Text>
-      <TextInput
-        style={styles.input}
-        value={birthDate}
-        onChangeText={onBirthDateChange}
-        placeholder="DD/MM/YYYY"
-        placeholderTextColor={colors.textTertiary}
-        keyboardType="numeric"
-        maxLength={10}
-      />
-    </View>
+    onBirthDateChange(formatted);
+  };
 
-    <View style={styles.formField}>
-      <Text style={styles.fieldLabel}>Giới tính</Text>
-      <View style={styles.optionRow}>
-        {['Nam', 'Nữ', 'Khác'].map((option) => (
-          <TouchableOpacity
-            key={option}
-            style={[styles.optionButton, gender === option && styles.optionButtonSelected]}
-            onPress={() => onGenderChange(option)}
-          >
-            <Text style={[styles.optionText, gender === option && styles.optionTextSelected]}>
-              {option}
-            </Text>
-          </TouchableOpacity>
-        ))}
+  return (
+    <Animated.View entering={FadeInUp} style={styles.stepContent}>
+      <Text style={styles.stepTitle}>Thông tin cơ bản</Text>
+
+      <View style={styles.formField}>
+        <Text style={styles.fieldLabel}>Tên hiển thị</Text>
+        <TextInput
+          style={styles.input}
+          value={name}
+          onChangeText={onNameChange}
+          placeholder="Nguyễn Văn A"
+          placeholderTextColor={colors.textTertiary}
+        />
       </View>
-    </View>
-  </Animated.View>
-);
+
+      <View style={styles.formField}>
+        <Text style={styles.fieldLabel}>Ngày sinh</Text>
+        <TextInput
+          style={styles.input}
+          value={birthDate}
+          onChangeText={handleBirthDateChange}
+          placeholder="DD/MM/YYYY"
+          placeholderTextColor={colors.textTertiary}
+          keyboardType="numeric"
+          maxLength={10}
+        />
+        <Text style={{ color: colors.textTertiary, fontSize: 12, marginTop: 4 }}>
+          Ví dụ: 15/03/1995
+        </Text>
+      </View>
+
+      <View style={styles.formField}>
+        <Text style={styles.fieldLabel}>Giới tính</Text>
+        <View style={styles.optionRow}>
+          {['Nam', 'Nữ', 'Khác'].map((option) => (
+            <TouchableOpacity
+              key={option}
+              style={[styles.optionButton, gender === option && styles.optionButtonSelected]}
+              onPress={() => onGenderChange(option)}
+            >
+              <Text style={[styles.optionText, gender === option && styles.optionTextSelected]}>
+                {option}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </View>
+    </Animated.View>
+  );
+};
 
 // Step 3: Skill Level
 interface SkillLevelStepProps {
@@ -319,7 +350,9 @@ export const ProfileSetupScreen = () => {
   const [lookingFor, setLookingFor] = useState<string[]>([]);
   const [bio, setBio] = useState('');
   const [isUploading, setIsUploading] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
+  const { user, refreshProfile } = useAuth();
   const { pickImage } = useImagePicker({ allowsEditing: true, aspect: [1, 1] });
 
   const handleAddPhoto = async () => {
@@ -335,7 +368,12 @@ export const ProfileSetupScreen = () => {
 
       try {
         // Upload to Supabase Storage
-        const uploadResult = await uploadProfileImage(result[0].uri, CURRENT_USER_ID);
+        if (!user?.id) {
+          showError('Vui lòng đăng nhập để tải ảnh');
+          setIsUploading(false);
+          return;
+        }
+        const uploadResult = await uploadProfileImage(result[0].uri, user.id);
 
         if (uploadResult.success && uploadResult.publicUrl) {
           setPhotos((prev) => [...prev, uploadResult.publicUrl!]);
@@ -359,14 +397,48 @@ export const ProfileSetupScreen = () => {
     setPhotos((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (currentStep < TOTAL_STEPS - 1) {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
       setCurrentStep((prev) => prev + 1);
     } else {
-      // Complete setup
-      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-      navigation.navigate('MainTabs');
+      // Complete setup - save to database
+      setIsSaving(true);
+      try {
+        // Convert birthDate from DD/MM/YYYY to YYYY-MM-DD
+        const [day, month, year] = birthDate.split('/');
+        const formattedDate = `${year}-${month}-${day}`;
+
+        // Convert gender to database format
+        const genderMap: Record<string, 'male' | 'female' | 'other'> = {
+          Nam: 'male',
+          Nữ: 'female',
+          Khác: 'other',
+        };
+
+        await createProfile({
+          displayName: name,
+          dateOfBirth: formattedDate,
+          gender: genderMap[gender] || 'other',
+          bio: bio,
+          avatarUrls: photos,
+          skillLevel: skillLevel as any,
+          playStyle: playStyle as any,
+          lookingFor: lookingFor as any,
+        });
+
+        // Refresh profile in context
+        await refreshProfile();
+
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+        showSuccess('Tạo hồ sơ thành công!');
+        navigation.navigate('ProfileMe');
+      } catch (error: any) {
+        console.error('Create profile error:', error);
+        showError(error.message || 'Không thể tạo hồ sơ. Vui lòng thử lại.');
+      } finally {
+        setIsSaving(false);
+      }
     }
   };
 

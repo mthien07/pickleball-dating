@@ -1,7 +1,7 @@
 /**
  * ProfileMeScreen
  *
- * Current user's profile view with stats, photos, and navigation to edit/settings
+ * Current user's profile view - loads from Supabase database
  */
 
 import React from 'react';
@@ -13,6 +13,7 @@ import {
   TouchableOpacity,
   Image,
   Dimensions,
+  ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
@@ -22,7 +23,7 @@ import Animated, { FadeInUp, FadeIn } from 'react-native-reanimated';
 import { Avatar } from '../../components/Avatar';
 import { Button } from '../../components/Button';
 import { colors, spacing, typography, borderRadius } from '../../theme/tokens';
-import { MOCK_USERS, CURRENT_USER_ID } from '@data/mockData';
+import { useAuth } from '../../contexts/AuthContext';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -74,17 +75,52 @@ const StatCard: React.FC<StatCardProps> = ({ icon, value, label, delay = 0 }) =>
 
 export const ProfileMeScreen = () => {
   const navigation = useNavigation<any>();
-  const currentUser = MOCK_USERS.find((u) => u.id === CURRENT_USER_ID);
+  const { profile, profileLoading, user } = useAuth();
 
-  if (!currentUser) {
+  // Loading state
+  if (profileLoading) {
     return (
-      <View style={styles.container}>
-        <Text>User not found</Text>
+      <View style={[styles.container, styles.centerContent]}>
+        <ActivityIndicator size="large" color={colors.primary} />
+        <Text style={styles.loadingText}>Đang tải hồ sơ...</Text>
       </View>
     );
   }
 
-  const skillInfo = getSkillLevelLabel(currentUser.skill_level);
+  // No profile yet - show setup prompt
+  if (!profile) {
+    return (
+      <View style={[styles.container, styles.centerContent]}>
+        <SafeAreaView style={styles.safeArea}>
+          <View style={styles.header}>
+            <Text style={styles.headerTitle}>Hồ sơ</Text>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('Settings')}
+              style={styles.iconButton}
+            >
+              <Ionicons name="settings-outline" size={24} color={colors.textPrimary} />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.emptyContainer}>
+            <Ionicons name="person-circle-outline" size={80} color={colors.textTertiary} />
+            <Text style={styles.emptyTitle}>Chưa có hồ sơ</Text>
+            <Text style={styles.emptyText}>
+              {user ? 'Hoàn tất hồ sơ để bắt đầu' : 'Đăng nhập để xem hồ sơ'}
+            </Text>
+            <Button
+              title="Tạo hồ sơ"
+              onPress={() => navigation.navigate('ProfileSetup')}
+              variant="primary"
+              style={{ marginTop: spacing.lg }}
+            />
+          </View>
+        </SafeAreaView>
+      </View>
+    );
+  }
+
+  const skillInfo = getSkillLevelLabel(profile.skill_level);
+  const avatarUrls = profile.avatar_urls || [];
 
   return (
     <View style={styles.container}>
@@ -92,7 +128,10 @@ export const ProfileMeScreen = () => {
         {/* Header */}
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Hồ sơ</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('Settings')} style={styles.iconButton}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Settings')}
+            style={styles.iconButton}
+          >
             <Ionicons name="settings-outline" size={24} color={colors.textPrimary} />
           </TouchableOpacity>
         </View>
@@ -103,8 +142,8 @@ export const ProfileMeScreen = () => {
             <View style={styles.avatarSection}>
               <Avatar
                 size="xl"
-                imageUrl={currentUser.avatar_urls[0]}
-                name={currentUser.display_name}
+                imageUrl={avatarUrls[0]}
+                name={profile.display_name}
                 showBorder
                 borderColor={colors.primary}
               />
@@ -116,33 +155,28 @@ export const ProfileMeScreen = () => {
               </TouchableOpacity>
             </View>
 
-            <Text style={styles.displayName}>{currentUser.display_name}</Text>
+            <Text style={styles.displayName}>{profile.display_name}</Text>
 
             <View style={styles.skillBadge}>
               <View style={[styles.skillDot, { backgroundColor: skillInfo.color }]} />
               <Text style={[styles.skillText, { color: skillInfo.color }]}>{skillInfo.label}</Text>
             </View>
 
-            <Text style={styles.playStyle}>{getPlayStyleLabel(currentUser.play_style)}</Text>
+            <Text style={styles.playStyle}>{getPlayStyleLabel(profile.play_style)}</Text>
           </Animated.View>
 
           {/* Stats */}
           <View style={styles.statsRow}>
-            <StatCard
-              icon="heart"
-              value={currentUser.stats.matches_count}
-              label="Matches"
-              delay={200}
-            />
+            <StatCard icon="heart" value={profile.matches_count || 0} label="Matches" delay={200} />
             <StatCard
               icon="trophy"
-              value={currentUser.stats.games_played}
+              value={profile.games_played || 0}
               label="Trận đấu"
               delay={250}
             />
             <StatCard
               icon="star"
-              value={currentUser.stats.average_rating.toFixed(1)}
+              value={(profile.average_rating || 0).toFixed(1)}
               label="Đánh giá"
               delay={300}
             />
@@ -151,29 +185,27 @@ export const ProfileMeScreen = () => {
           {/* Bio */}
           <Animated.View entering={FadeInUp.delay(350)} style={styles.section}>
             <Text style={styles.sectionTitle}>Giới thiệu</Text>
-            <Text style={styles.bio}>{currentUser.bio || 'Chưa có giới thiệu'}</Text>
+            <Text style={styles.bio}>{profile.bio || 'Chưa có giới thiệu'}</Text>
           </Animated.View>
 
           {/* Photos */}
-          <Animated.View entering={FadeInUp.delay(400)} style={styles.section}>
-            <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>Ảnh</Text>
-              <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}>
-                <Text style={styles.editLink}>Chỉnh sửa</Text>
-              </TouchableOpacity>
-            </View>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              <View style={styles.photoRow}>
-                {currentUser.avatar_urls.map((url, index) => (
-                  <Image
-                    key={index}
-                    source={{ uri: url }}
-                    style={styles.photo}
-                  />
-                ))}
+          {avatarUrls.length > 0 && (
+            <Animated.View entering={FadeInUp.delay(400)} style={styles.section}>
+              <View style={styles.sectionHeader}>
+                <Text style={styles.sectionTitle}>Ảnh</Text>
+                <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}>
+                  <Text style={styles.editLink}>Chỉnh sửa</Text>
+                </TouchableOpacity>
               </View>
-            </ScrollView>
-          </Animated.View>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                <View style={styles.photoRow}>
+                  {avatarUrls.map((url, index) => (
+                    <Image key={index} source={{ uri: url }} style={styles.photo} />
+                  ))}
+                </View>
+              </ScrollView>
+            </Animated.View>
+          )}
 
           {/* Actions */}
           <Animated.View entering={FadeInUp.delay(450)} style={styles.actions}>
@@ -183,12 +215,6 @@ export const ProfileMeScreen = () => {
               variant="primary"
               fullWidth
             />
-            <TouchableOpacity
-              style={styles.linkButton}
-              onPress={() => navigation.navigate('AnimationDemo')}
-            >
-              <Text style={styles.linkText}>Xem Demo Animation</Text>
-            </TouchableOpacity>
           </Animated.View>
 
           <View style={{ height: spacing['2xl'] }} />
@@ -209,6 +235,34 @@ const styles = StyleSheet.create({
   },
   safeArea: {
     flex: 1,
+  },
+  centerContent: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    ...typography.body,
+    color: colors.textSecondary,
+    marginTop: spacing.md,
+  },
+
+  // Empty State
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: spacing.xl,
+  },
+  emptyTitle: {
+    ...typography.h3,
+    color: colors.textPrimary,
+    marginTop: spacing.md,
+  },
+  emptyText: {
+    ...typography.body,
+    color: colors.textSecondary,
+    textAlign: 'center',
+    marginTop: spacing.xs,
   },
 
   // Header
@@ -349,14 +403,6 @@ const styles = StyleSheet.create({
   actions: {
     gap: spacing.md,
     marginTop: spacing.md,
-  },
-  linkButton: {
-    alignItems: 'center',
-    paddingVertical: spacing.sm,
-  },
-  linkText: {
-    ...typography.body,
-    color: colors.primary,
   },
 });
 

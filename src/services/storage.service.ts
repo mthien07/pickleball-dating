@@ -7,13 +7,13 @@
 
 import { supabase } from './supabase';
 import * as ImageManipulator from 'expo-image-manipulator';
-import * as FileSystem from 'expo-file-system';
+import * as FileSystem from 'expo-file-system/legacy';
 
 // ============================================
 // CONFIGURATION
 // ============================================
 
-const BUCKET_NAME = 'avatars';
+const BUCKET_NAME = 'profile-photos';
 const MAX_IMAGE_SIZE = 1024; // Max width/height in pixels
 const COMPRESSION_QUALITY = 0.8;
 

@@ -11,7 +11,7 @@
  */
 
 import React, { useState } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Button } from '../../components/Button';
@@ -64,6 +64,63 @@ export const LoginScreen = () => {
     }
   };
 
+  const handleForgotPassword = () => {
+    if (!email) {
+      Alert.prompt(
+        'Quên mật khẩu',
+        'Nhập email của bạn để nhận link đặt lại mật khẩu:',
+        [
+          { text: 'Hủy', style: 'cancel' },
+          {
+            text: 'Gửi',
+            onPress: async (inputEmail: string | undefined) => {
+              if (!inputEmail) {
+                showError('Vui lòng nhập email');
+                return;
+              }
+              try {
+                const { error } = await supabase.auth.resetPasswordForEmail(inputEmail, {
+                  redirectTo: 'myapp://auth/reset-password',
+                });
+                if (error) {
+                  showError(error.message);
+                } else {
+                  showSuccess('Đã gửi email đặt lại mật khẩu!');
+                }
+              } catch (err) {
+                showError('Không thể gửi email. Vui lòng thử lại.');
+              }
+            },
+          },
+        ],
+        'plain-text',
+        ''
+      );
+    } else {
+      // Nếu đã có email, dùng email đó luôn
+      Alert.alert('Quên mật khẩu', `Gửi link đặt lại mật khẩu đến ${email}?`, [
+        { text: 'Hủy', style: 'cancel' },
+        {
+          text: 'Gửi',
+          onPress: async () => {
+            try {
+              const { error } = await supabase.auth.resetPasswordForEmail(email, {
+                redirectTo: 'myapp://auth/reset-password',
+              });
+              if (error) {
+                showError(error.message);
+              } else {
+                showSuccess('Đã gửi email đặt lại mật khẩu!');
+              }
+            } catch (err) {
+              showError('Không thể gửi email. Vui lòng thử lại.');
+            }
+          },
+        },
+      ]);
+    }
+  };
+
   return (
     <KeyboardView
       style={styles.container}
@@ -102,7 +159,7 @@ export const LoginScreen = () => {
           />
         </View>
 
-        <TouchableOpacity style={styles.forgotPassword}>
+        <TouchableOpacity style={styles.forgotPassword} onPress={handleForgotPassword}>
           <Text style={styles.forgotPasswordText}>Quên mật khẩu?</Text>
         </TouchableOpacity>
 

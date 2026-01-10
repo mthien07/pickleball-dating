@@ -15,6 +15,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   StatusBar,
+  Keyboard,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
@@ -57,13 +58,19 @@ export const ChatScreen = () => {
   const otherUser = match?.matched_user || getUserById(userId);
   const currentUserId = 'current-user'; // Would come from auth context
 
-  // Load messages
+  // Load messages and mark as read
   useEffect(() => {
     if (match?.conversation_id) {
       const conversationMessages = MOCK_MESSAGES.filter(
         (m) => m.conversation_id === match.conversation_id
       ).sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
       setMessages(conversationMessages);
+
+      // Mark messages as read (in real app, call API here)
+      // This updates the local state to show as read
+      if (match.unread_count > 0) {
+        match.unread_count = 0;
+      }
     }
   }, [match]);
 
@@ -93,7 +100,7 @@ export const ChatScreen = () => {
         setIsTyping(false);
         const replyMessage: Message = {
           id: `msg-${Date.now()}-reply`,
-          content: 'Sounds great! When are you free to play? 🎾',
+          content: 'Nghe hay đó! Bạn rảnh lúc nào đi chơi? 🎾',
           type: 'text',
           sender_id: userId,
           status: 'read',
@@ -206,8 +213,8 @@ export const ChatScreen = () => {
         {/* Messages */}
         <KeyboardAvoidingView
           style={styles.keyboardView}
-          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-          keyboardVerticalOffset={0}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
         >
           <FlatList
             ref={flatListRef}

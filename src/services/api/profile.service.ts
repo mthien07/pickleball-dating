@@ -143,6 +143,10 @@ export const getMyProfile = async (): Promise<UserProfile | null> => {
   const { data, error } = await supabase.from('users').select('*').eq('id', user.id).single();
 
   if (error) {
+    // PGRST116: No rows found - user hasn't completed profile setup yet
+    if (error.code === 'PGRST116') {
+      return null;
+    }
     throw error;
   }
 
@@ -177,7 +181,15 @@ export const getUserProfile = async (userId: string): Promise<Partial<UserProfil
     throw error;
   }
 
-  return data;
+  // Transform null to undefined for optional fields
+  if (data) {
+    return {
+      ...data,
+      bio: data.bio ?? undefined,
+    };
+  }
+
+  return null;
 };
 
 /**

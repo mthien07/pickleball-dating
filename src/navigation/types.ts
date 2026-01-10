@@ -39,6 +39,7 @@ export type CourtsStackParamList = {
 export type ProfileStackParamList = {
   ProfileMe: undefined;
   EditProfile: undefined;
+  ProfileSetup: { step?: number };
   Settings: undefined;
   BookingHistory: undefined;
   BookingDetail: { bookingId: string };
