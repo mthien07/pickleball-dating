@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { ArrowLeft, Eye, EyeOff } from "lucide-react";
+import { useState } from 'react';
+import { ArrowLeft, Eye, EyeOff } from 'lucide-react';
 
 interface LoginScreenProps {
   onBack: () => void;
@@ -9,8 +9,8 @@ interface LoginScreenProps {
 
 export function LoginScreen({ onBack, onLogin, onSignUp }: LoginScreenProps) {
   const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,9 +36,7 @@ export function LoginScreen({ onBack, onLogin, onSignUp }: LoginScreenProps) {
           <div className="space-y-6 flex-1">
             {/* Email/Phone */}
             <div>
-              <label className="text-sm text-red-500 mb-2 block">
-                Email hoặc Số điện thoại
-              </label>
+              <label className="text-sm text-red-500 mb-2 block">Email hoặc Số điện thoại</label>
               <input
                 type="text"
                 value={email}
@@ -50,12 +48,10 @@ export function LoginScreen({ onBack, onLogin, onSignUp }: LoginScreenProps) {
 
             {/* Password */}
             <div>
-              <label className="text-sm text-gray-400 mb-2 block">
-                Mật khẩu
-              </label>
+              <label className="text-sm text-gray-400 mb-2 block">Mật khẩu</label>
               <div className="relative">
                 <input
-                  type={showPassword ? "text" : "password"}
+                  type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder=""
@@ -66,21 +62,14 @@ export function LoginScreen({ onBack, onLogin, onSignUp }: LoginScreenProps) {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
                 >
-                  {showPassword ? (
-                    <EyeOff className="w-5 h-5" />
-                  ) : (
-                    <Eye className="w-5 h-5" />
-                  )}
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
             </div>
 
             {/* Forgot password */}
             <div className="text-right">
-              <button
-                type="button"
-                className="text-sm text-red-500 hover:text-red-400"
-              >
+              <button type="button" className="text-sm text-red-500 hover:text-red-400">
                 Quên mật khẩu?
               </button>
             </div>
@@ -97,12 +86,8 @@ export function LoginScreen({ onBack, onLogin, onSignUp }: LoginScreenProps) {
 
             {/* Sign up link */}
             <p className="text-center text-sm text-gray-400">
-              Chưa có tài khoản?{" "}
-              <button
-                type="button"
-                onClick={onSignUp}
-                className="text-red-500 hover:text-red-400"
-              >
+              Chưa có tài khoản?{' '}
+              <button type="button" onClick={onSignUp} className="text-red-500 hover:text-red-400">
                 Đăng ký
               </button>
             </p>

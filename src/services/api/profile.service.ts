@@ -82,12 +82,14 @@ export interface UserProfile {
  * This should be called after successful authentication
  * to complete the user's profile setup.
  */
-export const createProfile = async (
-  params: CreateProfileParams
-): Promise<UserProfile> => {
+export const createProfile = async (params: CreateProfileParams): Promise<UserProfile> => {
   // Get current user ID
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) throw new Error('User not authenticated');
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) {
+    throw new Error('User not authenticated');
+  }
 
   // Prepare location point (if provided)
   let locationPoint = null;
@@ -120,7 +122,9 @@ export const createProfile = async (
     .select()
     .single();
 
-  if (error) throw error;
+  if (error) {
+    throw error;
+  }
 
   return data as UserProfile;
 };
@@ -129,16 +133,18 @@ export const createProfile = async (
  * Get current user's profile
  */
 export const getMyProfile = async (): Promise<UserProfile | null> => {
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return null;
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) {
+    return null;
+  }
 
-  const { data, error } = await supabase
-    .from('users')
-    .select('*')
-    .eq('id', user.id)
-    .single();
+  const { data, error } = await supabase.from('users').select('*').eq('id', user.id).single();
 
-  if (error) throw error;
+  if (error) {
+    throw error;
+  }
 
   return data as UserProfile;
 };
@@ -146,12 +152,11 @@ export const getMyProfile = async (): Promise<UserProfile | null> => {
 /**
  * Get user profile by ID (public profile view)
  */
-export const getUserProfile = async (
-  userId: string
-): Promise<Partial<UserProfile> | null> => {
+export const getUserProfile = async (userId: string): Promise<Partial<UserProfile> | null> => {
   const { data, error } = await supabase
     .from('users')
-    .select(`
+    .select(
+      `
       id,
       display_name,
       avatar_urls,
@@ -163,11 +168,14 @@ export const getUserProfile = async (
       matches_count,
       is_online,
       last_active
-    `)
+    `
+    )
     .eq('id', userId)
     .single();
 
-  if (error) throw error;
+  if (error) {
+    throw error;
+  }
 
   return data;
 };
@@ -175,23 +183,41 @@ export const getUserProfile = async (
 /**
  * Update current user's profile
  */
-export const updateProfile = async (
-  params: UpdateProfileParams
-): Promise<UserProfile> => {
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) throw new Error('User not authenticated');
+export const updateProfile = async (params: UpdateProfileParams): Promise<UserProfile> => {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) {
+    throw new Error('User not authenticated');
+  }
 
   // Prepare update object
   const updates: any = {};
 
-  if (params.displayName) updates.display_name = params.displayName;
-  if (params.bio !== undefined) updates.bio = params.bio;
-  if (params.avatarUrls) updates.avatar_urls = params.avatarUrls;
-  if (params.skillLevel) updates.skill_level = params.skillLevel;
-  if (params.playStyle) updates.play_style = params.playStyle;
-  if (params.lookingFor) updates.looking_for = params.lookingFor;
-  if (params.availability) updates.availability = params.availability;
-  if (params.preferredAddress) updates.preferred_address = params.preferredAddress;
+  if (params.displayName) {
+    updates.display_name = params.displayName;
+  }
+  if (params.bio !== undefined) {
+    updates.bio = params.bio;
+  }
+  if (params.avatarUrls) {
+    updates.avatar_urls = params.avatarUrls;
+  }
+  if (params.skillLevel) {
+    updates.skill_level = params.skillLevel;
+  }
+  if (params.playStyle) {
+    updates.play_style = params.playStyle;
+  }
+  if (params.lookingFor) {
+    updates.looking_for = params.lookingFor;
+  }
+  if (params.availability) {
+    updates.availability = params.availability;
+  }
+  if (params.preferredAddress) {
+    updates.preferred_address = params.preferredAddress;
+  }
 
   // Update location if provided
   if (params.preferredLat && params.preferredLng) {
@@ -205,7 +231,9 @@ export const updateProfile = async (
     .select()
     .single();
 
-  if (error) throw error;
+  if (error) {
+    throw error;
+  }
 
   return data as UserProfile;
 };
@@ -214,8 +242,12 @@ export const updateProfile = async (
  * Update user's online status
  */
 export const updateOnlineStatus = async (isOnline: boolean): Promise<void> => {
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return;
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) {
+    return;
+  }
 
   const { error } = await supabase
     .from('users')
@@ -225,7 +257,9 @@ export const updateOnlineStatus = async (isOnline: boolean): Promise<void> => {
     })
     .eq('id', user.id);
 
-  if (error) throw error;
+  if (error) {
+    throw error;
+  }
 };
 
 // =====================================================
@@ -252,19 +286,19 @@ export const uploadProfilePhoto = async (
   const blob = await response.blob();
 
   // Upload to Supabase Storage
-  const { data, error } = await supabase.storage
-    .from('profile-photos')
-    .upload(filename, blob, {
-      contentType: file.type || 'image/jpeg',
-      upsert: false,
-    });
+  const { data, error } = await supabase.storage.from('profile-photos').upload(filename, blob, {
+    contentType: file.type || 'image/jpeg',
+    upsert: false,
+  });
 
-  if (error) throw error;
+  if (error) {
+    throw error;
+  }
 
   // Get public URL
-  const { data: { publicUrl } } = supabase.storage
-    .from('profile-photos')
-    .getPublicUrl(data.path);
+  const {
+    data: { publicUrl },
+  } = supabase.storage.from('profile-photos').getPublicUrl(data.path);
 
   return publicUrl;
 };
@@ -272,17 +306,16 @@ export const uploadProfilePhoto = async (
 /**
  * Delete profile photo from storage
  */
-export const deleteProfilePhoto = async (
-  photoUrl: string,
-  userId: string
-): Promise<void> => {
+export const deleteProfilePhoto = async (photoUrl: string, userId: string): Promise<void> => {
   // Extract path from URL
   const path = photoUrl.split('/profile-photos/')[1];
-  if (!path) throw new Error('Invalid photo URL');
+  if (!path) {
+    throw new Error('Invalid photo URL');
+  }
 
-  const { error } = await supabase.storage
-    .from('profile-photos')
-    .remove([path]);
+  const { error } = await supabase.storage.from('profile-photos').remove([path]);
 
-  if (error) throw error;
+  if (error) {
+    throw error;
+  }
 };

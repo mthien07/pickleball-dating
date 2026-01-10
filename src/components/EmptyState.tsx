@@ -86,27 +86,16 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
 }) => {
   return (
     <View
-      style={[
-        styles.container,
-        alignment === 'center' ? styles.centered : styles.start,
-        style,
-      ]}
+      style={[styles.container, alignment === 'center' ? styles.centered : styles.start, style]}
     >
       {/* Visual (Image or Icon) */}
       <View style={styles.visualContainer}>
         {image ? (
-          <Image
-            source={image}
-            style={styles.image}
-            contentFit="contain"
-            transition={200}
-          />
+          <Image source={image} style={styles.image} contentFit="contain" transition={200} />
+        ) : typeof icon === 'string' ? (
+          <Text style={styles.iconText}>{icon}</Text>
         ) : (
-          typeof icon === 'string' ? (
-            <Text style={styles.iconText}>{icon}</Text>
-          ) : (
-            icon
-          )
+          icon
         )}
       </View>
 
@@ -117,12 +106,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
       {/* Action Button */}
       {actionLabel && onAction && (
         <View style={styles.actionContainer}>
-          <Button
-            title={actionLabel}
-            onPress={onAction}
-            variant="primary"
-            size="medium"
-          />
+          <Button title={actionLabel} onPress={onAction} variant="primary" size="medium" />
         </View>
       )}
     </View>

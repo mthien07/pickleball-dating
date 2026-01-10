@@ -39,7 +39,7 @@ export const LoginRegisterScreen = () => {
               style={styles.socialButton}
             />
           </SlideIn>
-          
+
           <SlideIn direction="bottom" distance={30}>
             <Button
               title="Continue with Facebook"
@@ -97,10 +97,7 @@ export const LoginRegisterScreen = () => {
         <FadeIn delay={1000} style={styles.footerSection}>
           <Text style={styles.footerText}>
             Already have an account?{' '}
-            <Text 
-              style={styles.signInLink}
-              onPress={() => navigation.navigate('Login')}
-            >
+            <Text style={styles.signInLink} onPress={() => navigation.navigate('Login')}>
               Sign In
             </Text>
           </Text>
@@ -110,9 +107,13 @@ export const LoginRegisterScreen = () => {
         <FadeIn delay={1200} style={styles.legalSection}>
           <Text style={styles.legalText}>
             By continuing, you agree to our{' '}
-            <Text style={styles.link} onPress={() => {}}>Terms</Text>
+            <Text style={styles.link} onPress={() => {}}>
+              Terms
+            </Text>
             {' & '}
-            <Text style={styles.link} onPress={() => {}}>Privacy Policy</Text>
+            <Text style={styles.link} onPress={() => {}}>
+              Privacy Policy
+            </Text>
           </Text>
         </FadeIn>
       </ScrollView>

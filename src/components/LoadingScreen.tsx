@@ -25,7 +25,9 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({
   message,
   overlay = false,
 }) => {
-  if (!visible) return null;
+  if (!visible) {
+    return null;
+  }
 
   const Content = (
     <View style={[styles.container, overlay && styles.overlayContainer]}>
@@ -43,10 +45,10 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({
         */}
         <BlurView intensity={20} style={StyleSheet.absoluteFill}>
           <View style={styles.modalBackground}>
-             <View style={styles.card}>
-               <ActivityIndicator size="large" color={colors.primary} />
-               {message && <Text style={styles.cardMessage}>{message}</Text>}
-             </View>
+            <View style={styles.card}>
+              <ActivityIndicator size="large" color={colors.primary} />
+              {message && <Text style={styles.cardMessage}>{message}</Text>}
+            </View>
           </View>
         </BlurView>
       </Modal>
@@ -98,4 +100,3 @@ const styles = StyleSheet.create({
 });
 
 export default LoadingScreen;
-

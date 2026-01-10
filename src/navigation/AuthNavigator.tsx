@@ -5,7 +5,7 @@ import { LoginRegisterScreen } from '../screens/auth/LoginRegisterScreen';
 import { EmailSignupScreen } from '../screens/auth/EmailSignupScreen';
 import { PhoneSignupScreen } from '../screens/auth/PhoneSignupScreen';
 import { LoginScreen } from '../screens/auth/LoginScreen';
-import { ProfileSetupScreen } from '../screens/placeholders';
+import { ProfileSetupScreen } from '../screens/auth/ProfileSetupScreen';
 import { WelcomeScreen } from '../screens/auth/WelcomeScreen';
 import { OnboardingScreen } from '../screens/auth/OnboardingScreen';
 import SignupScreenDesign from '../screens/auth/SignupScreenDesign';

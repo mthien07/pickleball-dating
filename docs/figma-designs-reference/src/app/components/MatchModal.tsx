@@ -1,5 +1,5 @@
-import { motion } from "motion/react";
-import { Heart, MessageCircle } from "lucide-react";
+import { motion } from 'motion/react';
+import { Heart, MessageCircle } from 'lucide-react';
 
 interface MatchModalProps {
   name: string;
@@ -19,7 +19,7 @@ export function MatchModal({ name, image, onClose, onSendMessage }: MatchModalPr
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        transition={{ delay: 0.2, type: "spring", damping: 15 }}
+        transition={{ delay: 0.2, type: 'spring', damping: 15 }}
         className="text-center max-w-md w-full"
       >
         {/* Hearts animation */}

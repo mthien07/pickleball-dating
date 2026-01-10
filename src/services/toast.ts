@@ -127,7 +127,7 @@ export const ToastMessages = {
   bookingCancelled: () => showInfo('Booking cancelled', 'Cancelled'),
 
   // Match
-  matchSuccess: () => showSuccess('It\'s a match! 🎉', 'New Match'),
+  matchSuccess: () => showSuccess("It's a match! 🎉", 'New Match'),
   unmatchSuccess: () => showInfo('Unmatched successfully', 'Unmatched'),
 
   // Profile

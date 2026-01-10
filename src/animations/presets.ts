@@ -125,10 +125,7 @@ export const scaleOut = () => {
 
 export const scalePop = () => {
   'worklet';
-  return withSequence(
-    withSpring(1.1, springConfig.bouncy),
-    withSpring(1, springConfig.normal)
-  );
+  return withSequence(withSpring(1.1, springConfig.bouncy), withSpring(1, springConfig.normal));
 };
 
 export const scalePress = () => {
@@ -215,10 +212,7 @@ export const shake = () => {
 
 export const pulse = () => {
   'worklet';
-  return withSequence(
-    withTiming(1.05, { duration: 150 }),
-    withTiming(1, { duration: 150 })
-  );
+  return withSequence(withTiming(1.05, { duration: 150 }), withTiming(1, { duration: 150 }));
 };
 
 // ============================================

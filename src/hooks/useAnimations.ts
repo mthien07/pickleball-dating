@@ -11,7 +11,13 @@
  * - Elevation changes
  */
 
-import { useSharedValue, useAnimatedStyle, withSpring, withTiming, Easing } from 'react-native-reanimated';
+import {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+  withTiming,
+  Easing,
+} from 'react-native-reanimated';
 
 // ============================================
 // ANIMATION CONFIGS
@@ -46,10 +52,7 @@ export const TIMING_CONFIG = {
  * </Animated.View>
  * ```
  */
-export const usePressAnimation = (config?: {
-  scaleValue?: number;
-  useSpring?: boolean;
-}) => {
+export const usePressAnimation = (config?: { scaleValue?: number; useSpring?: boolean }) => {
   const scale = useSharedValue(1);
   const { scaleValue = 0.98, useSpring: shouldUseSpring = true } = config || {};
 
@@ -64,9 +67,7 @@ export const usePressAnimation = (config?: {
   };
 
   const handlePressOut = () => {
-    scale.value = shouldUseSpring
-      ? withSpring(1, SPRING_CONFIG)
-      : withTiming(1, TIMING_CONFIG);
+    scale.value = shouldUseSpring ? withSpring(1, SPRING_CONFIG) : withTiming(1, TIMING_CONFIG);
   };
 
   return {
@@ -97,28 +98,41 @@ export const useElevationAnimation = (config?: {
 }) => {
   const elevation = useSharedValue(config?.elevationFrom || 4);
   const scale = useSharedValue(config?.scaleFrom || 1);
+  const translateY = useSharedValue(0); // ANTIGRAVITY: Vertical float
 
-  const {
-    elevationFrom = 4,
-    elevationTo = 12,
-    scaleFrom = 1,
-    scaleTo = 1.02,
-  } = config || {};
+  const { elevationFrom = 4, elevationTo = 12, scaleFrom = 1, scaleTo = 1.02 } = config || {};
 
   const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
+    transform: [
+      { scale: scale.value },
+      { translateY: translateY.value }, // ANTIGRAVITY: Float up/down
+    ],
     elevation: elevation.value,
     shadowOpacity: elevation.value / 20, // Dynamic shadow
+    shadowRadius: elevation.value * 1.5, // ANTIGRAVITY: Bigger shadow when floating
+    shadowOffset: {
+      width: 0,
+      height: elevation.value / 2, // ANTIGRAVITY: Shadow moves with button
+    },
   }));
 
   const handlePressIn = () => {
-    elevation.value = withSpring(elevationTo, SPRING_CONFIG);
+    // ANTIGRAVITY: Button sinks down when pressed
+    elevation.value = withSpring(elevationTo * 1.5, SPRING_CONFIG);
     scale.value = withSpring(scaleTo, SPRING_CONFIG);
+    translateY.value = withSpring(3, SPRING_CONFIG); // Sink down
   };
 
   const handlePressOut = () => {
+    // ANTIGRAVITY: Button floats back up
     elevation.value = withSpring(elevationFrom, SPRING_CONFIG);
     scale.value = withSpring(scaleFrom, SPRING_CONFIG);
+    translateY.value = withSpring(-2, { ...SPRING_CONFIG, damping: 20 }); // Float up with overshoot
+
+    // Return to rest position after brief hover
+    setTimeout(() => {
+      translateY.value = withSpring(0, SPRING_CONFIG);
+    }, 300);
   };
 
   return {
@@ -140,9 +154,7 @@ export const useElevationAnimation = (config?: {
  * const { animatedStyle, fadeIn, fadeOut } = useFadeAnimation();
  * ```
  */
-export const useFadeAnimation = (config?: {
-  initialOpacity?: number;
-}) => {
+export const useFadeAnimation = (config?: { initialOpacity?: number }) => {
   const opacity = useSharedValue(config?.initialOpacity || 0);
 
   const animatedStyle = useAnimatedStyle(() => ({
@@ -287,24 +299,37 @@ export const useSlideAnimation = (direction: 'left' | 'right' | 'up' | 'down' = 
   const translateY = useSharedValue(0);
 
   const animatedStyle = useAnimatedStyle(() => ({
-    transform: [
-      { translateX: translateX.value },
-      { translateY: translateY.value },
-    ],
+    transform: [{ translateX: translateX.value }, { translateY: translateY.value }],
   }));
 
   const slideIn = (distance = 100) => {
-    if (direction === 'left') translateX.value = withSpring(0, SPRING_CONFIG);
-    if (direction === 'right') translateX.value = withSpring(0, SPRING_CONFIG);
-    if (direction === 'up') translateY.value = withSpring(0, SPRING_CONFIG);
-    if (direction === 'down') translateY.value = withSpring(0, SPRING_CONFIG);
+    if (direction === 'left') {
+      translateX.value = withSpring(0, SPRING_CONFIG);
+    }
+    if (direction === 'right') {
+      translateX.value = withSpring(0, SPRING_CONFIG);
+    }
+    if (direction === 'up') {
+      translateY.value = withSpring(0, SPRING_CONFIG);
+    }
+    if (direction === 'down') {
+      translateY.value = withSpring(0, SPRING_CONFIG);
+    }
   };
 
   const slideOut = (distance = 100) => {
-    if (direction === 'left') translateX.value = withSpring(-distance, SPRING_CONFIG);
-    if (direction === 'right') translateX.value = withSpring(distance, SPRING_CONFIG);
-    if (direction === 'up') translateY.value = withSpring(-distance, SPRING_CONFIG);
-    if (direction === 'down') translateY.value = withSpring(distance, SPRING_CONFIG);
+    if (direction === 'left') {
+      translateX.value = withSpring(-distance, SPRING_CONFIG);
+    }
+    if (direction === 'right') {
+      translateX.value = withSpring(distance, SPRING_CONFIG);
+    }
+    if (direction === 'up') {
+      translateY.value = withSpring(-distance, SPRING_CONFIG);
+    }
+    if (direction === 'down') {
+      translateY.value = withSpring(distance, SPRING_CONFIG);
+    }
   };
 
   return {

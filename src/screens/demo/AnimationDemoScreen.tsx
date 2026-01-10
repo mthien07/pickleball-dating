@@ -21,7 +21,12 @@ import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 
 // Components
 import { Button, GradientButton, ElevatedButton } from '../../components/Button';
-import { GradientCard, GradientBadge, GradientOverlay, GRADIENT_COLORS } from '../../components/GradientBackground';
+import {
+  GradientCard,
+  GradientBadge,
+  GradientOverlay,
+  GRADIENT_COLORS,
+} from '../../components/GradientBackground';
 import { spacing, typography, colors } from '../../theme/tokens';
 import { usePressAnimation, useBounceAnimation } from '../../hooks/useAnimations';
 
@@ -41,16 +46,10 @@ export const AnimationDemoScreen = () => {
       <StatusBar style="light" />
 
       {/* Gradient Background */}
-      <LinearGradient
-        colors={['#1a0a0a', '#0a0a0a', '#1a0000']}
-        style={StyleSheet.absoluteFill}
-      />
+      <LinearGradient colors={['#1a0a0a', '#0a0a0a', '#1a0000']} style={StyleSheet.absoluteFill} />
 
       {/* Header */}
-      <Animated.View
-        entering={FadeInDown.duration(600).delay(100)}
-        style={styles.header}
-      >
+      <Animated.View entering={FadeInDown.duration(600).delay(100)} style={styles.header}>
         <LinearGradient
           colors={['rgba(239, 68, 68, 0.1)', 'rgba(249, 115, 22, 0.1)']}
           start={{ x: 0, y: 0 }}
@@ -75,10 +74,7 @@ export const AnimationDemoScreen = () => {
         showsVerticalScrollIndicator={false}
       >
         {/* Hero Section */}
-        <Animated.View
-          entering={FadeInUp.duration(600).delay(200)}
-          style={styles.heroSection}
-        >
+        <Animated.View entering={FadeInUp.duration(600).delay(200)} style={styles.heroSection}>
           <GradientBadge style={styles.heroBadge}>
             <Text style={styles.heroBadgeText}>🎨 Showcase</Text>
           </GradientBadge>
@@ -124,10 +120,7 @@ export const AnimationDemoScreen = () => {
         </Animated.View>
 
         {/* Features Grid */}
-        <Animated.View
-          entering={FadeInUp.duration(600).delay(400)}
-          style={styles.featuresSection}
-        >
+        <Animated.View entering={FadeInUp.duration(600).delay(400)} style={styles.featuresSection}>
           <Text style={styles.sectionTitle}>Tính năng nổi bật</Text>
           <View style={styles.featuresGrid}>
             {features.map((feature, index) => (
@@ -143,10 +136,7 @@ export const AnimationDemoScreen = () => {
         </Animated.View>
 
         {/* Showcase Card */}
-        <Animated.View
-          entering={FadeInUp.duration(600).delay(600)}
-          style={styles.showcaseSection}
-        >
+        <Animated.View entering={FadeInUp.duration(600).delay(600)} style={styles.showcaseSection}>
           <GradientCard variant="medium" style={styles.showcaseCard}>
             <GradientOverlay position="full" intensity="light">
               <View style={styles.showcaseContent}>
@@ -177,10 +167,7 @@ export const AnimationDemoScreen = () => {
         </Animated.View>
 
         {/* Button Variants */}
-        <Animated.View
-          entering={FadeInUp.duration(600).delay(800)}
-          style={styles.buttonsSection}
-        >
+        <Animated.View entering={FadeInUp.duration(600).delay(800)} style={styles.buttonsSection}>
           <Text style={styles.sectionTitle}>Button Variants</Text>
           <View style={styles.buttonsGrid}>
             <Button
@@ -189,16 +176,8 @@ export const AnimationDemoScreen = () => {
               onPress={() => console.log('Primary')}
               fullWidth
             />
-            <GradientButton
-              title="Gradient"
-              onPress={() => console.log('Gradient')}
-              fullWidth
-            />
-            <ElevatedButton
-              title="Elevated"
-              onPress={() => console.log('Elevated')}
-              fullWidth
-            />
+            <GradientButton title="Gradient" onPress={() => console.log('Gradient')} fullWidth />
+            <ElevatedButton title="Elevated" onPress={() => console.log('Elevated')} fullWidth />
             <Button
               title="Secondary"
               variant="secondary"
@@ -225,15 +204,8 @@ const FeatureCard = ({ icon, title, description, delay }: any) => {
   const { animatedStyle, handlePressIn, handlePressOut } = usePressAnimation();
 
   return (
-    <Animated.View
-      entering={FadeInUp.duration(400).delay(delay)}
-      style={styles.featureCard}
-    >
-      <TouchableOpacity
-        onPressIn={handlePressIn}
-        onPressOut={handlePressOut}
-        activeOpacity={0.9}
-      >
+    <Animated.View entering={FadeInUp.duration(400).delay(delay)} style={styles.featureCard}>
+      <TouchableOpacity onPressIn={handlePressIn} onPressOut={handlePressOut} activeOpacity={0.9}>
         <Animated.View style={animatedStyle}>
           <GradientCard variant="subtle" style={styles.featureCardInner}>
             <View style={styles.featureIconContainer}>

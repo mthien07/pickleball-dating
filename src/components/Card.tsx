@@ -30,11 +30,7 @@ import {
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withSpring,
-} from 'react-native-reanimated';
+import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 import { colors, spacing, typography, borderRadius } from '../theme/tokens';
 import { shadows } from '../theme/shadows';
 import { User, Court, Match } from '@data/mockData';
@@ -79,397 +75,397 @@ export interface MatchCardProps {
 
 const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
 
-export const ProfileCard = React.memo<ProfileCardProps>(({
-  user,
-  onLike,
-  onPass,
-  onPress,
-  onSuperLike,
-  onShowProfile,
-  showMatchPercentage = false,
-  showOnlineStatus = false,
-  showImageIndicators = false,
-  showInterests = false,
-  showActionButtons = false,
-  currentImageIndex = 0,
-}) => {
-  const scale = useSharedValue(1);
+export const ProfileCard = React.memo<ProfileCardProps>(
+  ({
+    user,
+    onLike,
+    onPass,
+    onPress,
+    onSuperLike,
+    onShowProfile,
+    showMatchPercentage = false,
+    showOnlineStatus = false,
+    showImageIndicators = false,
+    showInterests = false,
+    showActionButtons = false,
+    currentImageIndex = 0,
+  }) => {
+    const scale = useSharedValue(1);
 
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-  }));
+    const animatedStyle = useAnimatedStyle(() => ({
+      transform: [{ scale: scale.value }],
+    }));
 
-  const handlePressIn = () => {
-    scale.value = withSpring(0.98);
-  };
+    const handlePressIn = () => {
+      scale.value = withSpring(0.98);
+    };
 
-  const handlePressOut = () => {
-    scale.value = withSpring(1);
-  };
+    const handlePressOut = () => {
+      scale.value = withSpring(1);
+    };
 
-  const age = new Date().getFullYear() - new Date(user.date_of_birth).getFullYear();
+    const age = new Date().getFullYear() - new Date(user.date_of_birth).getFullYear();
 
-  // Calculate match percentage (mock - would come from backend)
-  const matchPercentage = user.preferences ? 85 : undefined;
+    // Calculate match percentage (mock - would come from backend)
+    const matchPercentage = user.preferences ? 85 : undefined;
 
-  return (
-    <AnimatedTouchable
-      onPress={onPress}
-      onPressIn={handlePressIn}
-      onPressOut={handlePressOut}
-      activeOpacity={0.95}
-      style={[styles.profileCard, animatedStyle]}
-    >
-      {/* Main Photo */}
-      <Image
-        source={{ uri: user.avatar_urls[currentImageIndex] || user.avatar_urls[0] }}
-        style={styles.profileImage}
-        contentFit="cover"
-        transition={200}
-        cachePolicy="memory-disk"
-      />
+    return (
+      <AnimatedTouchable
+        onPress={onPress}
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+        activeOpacity={0.95}
+        style={[styles.profileCard, animatedStyle]}
+      >
+        {/* Main Photo */}
+        <Image
+          source={{ uri: user.avatar_urls[currentImageIndex] || user.avatar_urls[0] }}
+          style={styles.profileImage}
+          contentFit="cover"
+          transition={200}
+          cachePolicy="memory-disk"
+        />
 
-      {/* Top Gradient Overlay (subtle) */}
-      <LinearGradient
-        colors={['rgba(239, 68, 68, 0.3)', 'transparent', 'rgba(249, 115, 22, 0.3)']}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={styles.profileTopGradient}
-      />
-
-      {/* Match Percentage Badge */}
-      {showMatchPercentage && matchPercentage && (
+        {/* Top Gradient Overlay (subtle) */}
         <LinearGradient
-          colors={['#EF4444', '#F97316']}
+          colors={['rgba(239, 68, 68, 0.3)', 'transparent', 'rgba(249, 115, 22, 0.3)']}
           start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
-          style={styles.matchBadge}
-        >
-          <Text style={styles.matchBadgeText}>Match {matchPercentage}%</Text>
-        </LinearGradient>
-      )}
+          end={{ x: 1, y: 1 }}
+          style={styles.profileTopGradient}
+        />
 
-      {/* Online Status */}
-      {showOnlineStatus && user.is_online && (
-        <View style={styles.onlineStatusBadge}>
-          <View style={styles.onlineDot} />
-          <Text style={styles.onlineText}>Online</Text>
-        </View>
-      )}
+        {/* Match Percentage Badge */}
+        {showMatchPercentage && matchPercentage && (
+          <LinearGradient
+            colors={['#EF4444', '#F97316']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={styles.matchBadge}
+          >
+            <Text style={styles.matchBadgeText}>Match {matchPercentage}%</Text>
+          </LinearGradient>
+        )}
 
-      {/* Image Indicators */}
-      {showImageIndicators && user.avatar_urls.length > 1 && (
-        <View style={styles.imageIndicatorsContainer}>
-          {user.avatar_urls.map((_, index) => (
-            <View key={index} style={styles.imageIndicatorTrack}>
-              {index === currentImageIndex && (
-                <LinearGradient
-                  colors={['#EF4444', '#F97316']}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 0 }}
-                  style={styles.imageIndicatorFill}
-                />
+        {/* Online Status */}
+        {showOnlineStatus && user.is_online && (
+          <View style={styles.onlineStatusBadge}>
+            <View style={styles.onlineDot} />
+            <Text style={styles.onlineText}>Online</Text>
+          </View>
+        )}
+
+        {/* Image Indicators */}
+        {showImageIndicators && user.avatar_urls.length > 1 && (
+          <View style={styles.imageIndicatorsContainer}>
+            {user.avatar_urls.map((_, index) => (
+              <View key={index} style={styles.imageIndicatorTrack}>
+                {index === currentImageIndex && (
+                  <LinearGradient
+                    colors={['#EF4444', '#F97316']}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 0 }}
+                    style={styles.imageIndicatorFill}
+                  />
+                )}
+              </View>
+            ))}
+          </View>
+        )}
+
+        {/* Bottom Gradient Overlay */}
+        <LinearGradient
+          colors={['transparent', 'transparent', 'rgba(0,0,0,0.8)']}
+          style={styles.profileGradient}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 0, y: 1 }}
+        />
+
+        {/* User Info */}
+        <View style={styles.profileInfo}>
+          <View style={styles.profileInfoRow}>
+            <View style={styles.profileInfoContent}>
+              {/* Name and Age */}
+              <View style={styles.profileHeader}>
+                <Text style={styles.profileName}>{user.display_name}</Text>
+                <Text style={styles.profileAge}>{age}</Text>
+                {user.verification.phone_verified && <Text style={styles.verifiedBadge}>✓</Text>}
+              </View>
+
+              {/* Distance */}
+              {user.preferred_location && (
+                <View style={styles.profileDistance}>
+                  <Ionicons name="location" size={16} color="#FFFFFF" />
+                  <Text style={styles.profileDistanceText}>{user.preferred_location.address}</Text>
+                </View>
               )}
-            </View>
-          ))}
-        </View>
-      )}
 
-      {/* Bottom Gradient Overlay */}
-      <LinearGradient
-        colors={['transparent', 'transparent', 'rgba(0,0,0,0.8)']}
-        style={styles.profileGradient}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 0, y: 1 }}
-      />
-
-      {/* User Info */}
-      <View style={styles.profileInfo}>
-        <View style={styles.profileInfoRow}>
-          <View style={styles.profileInfoContent}>
-            {/* Name and Age */}
-            <View style={styles.profileHeader}>
-              <Text style={styles.profileName}>{user.display_name}</Text>
-              <Text style={styles.profileAge}>{age}</Text>
-              {user.verification.phone_verified && (
-                <Text style={styles.verifiedBadge}>✓</Text>
-              )}
-            </View>
-
-            {/* Distance */}
-            {user.preferred_location && (
-              <View style={styles.profileDistance}>
-                <Ionicons name="location" size={16} color="#FFFFFF" />
-                <Text style={styles.profileDistanceText}>
-                  {user.preferred_location.address}
+              {/* Bio */}
+              {user.bio && (
+                <Text style={styles.profileBio} numberOfLines={2}>
+                  {user.bio}
                 </Text>
-              </View>
-            )}
+              )}
 
-            {/* Bio */}
-            {user.bio && (
-              <Text style={styles.profileBio} numberOfLines={2}>
-                {user.bio}
-              </Text>
-            )}
+              {/* Interests */}
+              {showInterests && user.preferences?.interests && (
+                <View style={styles.profileInterests}>
+                  {user.preferences.interests.slice(0, 3).map((interest, index) => (
+                    <View key={index} style={styles.interestTag}>
+                      <Text style={styles.interestTagText}>{interest}</Text>
+                    </View>
+                  ))}
+                </View>
+              )}
+            </View>
 
-            {/* Interests */}
-            {showInterests && user.preferences?.interests && (
-              <View style={styles.profileInterests}>
-                {user.preferences.interests.slice(0, 3).map((interest, index) => (
-                  <View key={index} style={styles.interestTag}>
-                    <Text style={styles.interestTagText}>{interest}</Text>
-                  </View>
-                ))}
-              </View>
+            {/* Info Button */}
+            {onShowProfile && (
+              <TouchableOpacity
+                onPress={onShowProfile}
+                style={styles.profileInfoButton}
+                activeOpacity={0.8}
+              >
+                <Ionicons name="information-circle" size={24} color="#FFFFFF" />
+              </TouchableOpacity>
             )}
           </View>
-
-          {/* Info Button */}
-          {onShowProfile && (
-            <TouchableOpacity
-              onPress={onShowProfile}
-              style={styles.profileInfoButton}
-              activeOpacity={0.8}
-            >
-              <Ionicons name="information-circle" size={24} color="#FFFFFF" />
-            </TouchableOpacity>
-          )}
         </View>
-      </View>
 
-      {/* Action Buttons */}
-      {showActionButtons && (
-        <View style={styles.profileActionButtons}>
-          {/* Reject (X) */}
-          {onPass && (
-            <TouchableOpacity
-              onPress={onPass}
-              style={styles.actionButtonReject}
-              activeOpacity={0.8}
-            >
-              <Ionicons name="close" size={32} color="#EF4444" />
-            </TouchableOpacity>
-          )}
-
-          {/* Super Like (Star) */}
-          {onSuperLike && (
-            <TouchableOpacity onPress={onSuperLike} activeOpacity={0.8}>
-              <LinearGradient
-                colors={['#A855F7', '#9333EA']}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={styles.actionButtonSuper}
+        {/* Action Buttons */}
+        {showActionButtons && (
+          <View style={styles.profileActionButtons}>
+            {/* Reject (X) */}
+            {onPass && (
+              <TouchableOpacity
+                onPress={onPass}
+                style={styles.actionButtonReject}
+                activeOpacity={0.8}
               >
-                <Ionicons name="star" size={32} color="#FFFFFF" />
-              </LinearGradient>
-            </TouchableOpacity>
-          )}
+                <Ionicons name="close" size={32} color="#EF4444" />
+              </TouchableOpacity>
+            )}
 
-          {/* Like (Heart) */}
-          {onLike && (
-            <TouchableOpacity onPress={onLike} activeOpacity={0.8}>
-              <LinearGradient
-                colors={['#10B981', '#059669']}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={styles.actionButtonLike}
-              >
-                <Ionicons name="heart" size={32} color="#FFFFFF" />
-              </LinearGradient>
-            </TouchableOpacity>
-          )}
-        </View>
-      )}
-    </AnimatedTouchable>
-  );
-}, (prevProps, nextProps) => {
-  // Only re-render if user.id or currentImageIndex changes
-  return prevProps.user.id === nextProps.user.id &&
-         prevProps.currentImageIndex === nextProps.currentImageIndex;
-});
+            {/* Super Like (Star) */}
+            {onSuperLike && (
+              <TouchableOpacity onPress={onSuperLike} activeOpacity={0.8}>
+                <LinearGradient
+                  colors={['#A855F7', '#9333EA']}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={styles.actionButtonSuper}
+                >
+                  <Ionicons name="star" size={32} color="#FFFFFF" />
+                </LinearGradient>
+              </TouchableOpacity>
+            )}
+
+            {/* Like (Heart) */}
+            {onLike && (
+              <TouchableOpacity onPress={onLike} activeOpacity={0.8}>
+                <LinearGradient
+                  colors={['#10B981', '#059669']}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={styles.actionButtonLike}
+                >
+                  <Ionicons name="heart" size={32} color="#FFFFFF" />
+                </LinearGradient>
+              </TouchableOpacity>
+            )}
+          </View>
+        )}
+      </AnimatedTouchable>
+    );
+  },
+  (prevProps, nextProps) => {
+    // Only re-render if user.id or currentImageIndex changes
+    return (
+      prevProps.user.id === nextProps.user.id &&
+      prevProps.currentImageIndex === nextProps.currentImageIndex
+    );
+  }
+);
 
 // ============================================
 // COURT CARD (List Item)
 // ============================================
 
-export const CourtCard = React.memo<CourtCardProps>(({
-  court,
-  onPress,
-  onBookPress,
-}) => {
-  const scale = useSharedValue(1);
+export const CourtCard = React.memo<CourtCardProps>(
+  ({ court, onPress, onBookPress }) => {
+    const scale = useSharedValue(1);
 
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-  }));
+    const animatedStyle = useAnimatedStyle(() => ({
+      transform: [{ scale: scale.value }],
+    }));
 
-  const handlePressIn = () => {
-    scale.value = withSpring(0.98);
-  };
+    const handlePressIn = () => {
+      scale.value = withSpring(0.98);
+    };
 
-  const handlePressOut = () => {
-    scale.value = withSpring(1);
-  };
+    const handlePressOut = () => {
+      scale.value = withSpring(1);
+    };
 
-  return (
-    <AnimatedTouchable
-      onPress={onPress}
-      onPressIn={handlePressIn}
-      onPressOut={handlePressOut}
-      activeOpacity={0.95}
-      style={[styles.courtCard, animatedStyle]}
-    >
-      {/* Court Image */}
-      <View style={styles.courtImageContainer}>
-        <Image
-          source={{ uri: court.images[0] }}
-          style={styles.courtImage}
-          contentFit="cover"
-          transition={200}
-          cachePolicy="memory-disk"
-        />
-        {court.is_partner && (
-          <View style={styles.partnerBadge}>
-            <Text style={styles.partnerBadgeText}>Partner</Text>
-          </View>
-        )}
-      </View>
-
-      {/* Court Info */}
-      <View style={styles.courtInfo}>
-        <Text style={styles.courtName} numberOfLines={1}>
-          {court.name}
-        </Text>
-        <Text style={styles.courtAddress} numberOfLines={2}>
-          {court.address}
-        </Text>
-
-        <View style={styles.courtMeta}>
-          <Text style={styles.courtDistance}>📍 {court.distance_km} km</Text>
-          <Text style={styles.courtRating}>
-            ⭐ {court.rating} ({court.review_count})
-          </Text>
-        </View>
-
-        <View style={styles.courtFooter}>
-          <Text style={styles.courtPrice}>
-            {(court.price_per_hour / 1000).toFixed(0)}k VND/giờ
-          </Text>
-          {onBookPress && (
-            <TouchableOpacity
-              onPress={(e) => {
-                e.stopPropagation();
-                onBookPress();
-              }}
-              style={styles.bookButton}
-            >
-              <Text style={styles.bookButtonText}>Đặt ngay</Text>
-            </TouchableOpacity>
+    return (
+      <AnimatedTouchable
+        onPress={onPress}
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+        activeOpacity={0.95}
+        style={[styles.courtCard, animatedStyle]}
+      >
+        {/* Court Image */}
+        <View style={styles.courtImageContainer}>
+          <Image
+            source={{ uri: court.images[0] }}
+            style={styles.courtImage}
+            contentFit="cover"
+            transition={200}
+            cachePolicy="memory-disk"
+          />
+          {court.is_partner && (
+            <View style={styles.partnerBadge}>
+              <Text style={styles.partnerBadgeText}>Partner</Text>
+            </View>
           )}
         </View>
-      </View>
-    </AnimatedTouchable>
-  );
-}, (prevProps, nextProps) => {
-  // Only re-render if court.id changes
-  return prevProps.court.id === nextProps.court.id;
-});
+
+        {/* Court Info */}
+        <View style={styles.courtInfo}>
+          <Text style={styles.courtName} numberOfLines={1}>
+            {court.name}
+          </Text>
+          <Text style={styles.courtAddress} numberOfLines={2}>
+            {court.address}
+          </Text>
+
+          <View style={styles.courtMeta}>
+            <Text style={styles.courtDistance}>📍 {court.distance_km} km</Text>
+            <Text style={styles.courtRating}>
+              ⭐ {court.rating} ({court.review_count})
+            </Text>
+          </View>
+
+          <View style={styles.courtFooter}>
+            <Text style={styles.courtPrice}>
+              {(court.price_per_hour / 1000).toFixed(0)}k VND/giờ
+            </Text>
+            {onBookPress && (
+              <TouchableOpacity
+                onPress={(e) => {
+                  e.stopPropagation();
+                  onBookPress();
+                }}
+                style={styles.bookButton}
+              >
+                <Text style={styles.bookButtonText}>Đặt ngay</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+        </View>
+      </AnimatedTouchable>
+    );
+  },
+  (prevProps, nextProps) => {
+    // Only re-render if court.id changes
+    return prevProps.court.id === nextProps.court.id;
+  }
+);
 
 // ============================================
 // MATCH CARD (Chat List Item)
 // ============================================
 
-export const MatchCard = React.memo<MatchCardProps>(({
-  match,
-  onPress,
-}) => {
-  const scale = useSharedValue(1);
+export const MatchCard = React.memo<MatchCardProps>(
+  ({ match, onPress }) => {
+    const scale = useSharedValue(1);
 
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-  }));
+    const animatedStyle = useAnimatedStyle(() => ({
+      transform: [{ scale: scale.value }],
+    }));
 
-  const handlePressIn = () => {
-    scale.value = withSpring(0.98);
-  };
+    const handlePressIn = () => {
+      scale.value = withSpring(0.98);
+    };
 
-  const handlePressOut = () => {
-    scale.value = withSpring(1);
-  };
+    const handlePressOut = () => {
+      scale.value = withSpring(1);
+    };
 
-  const formatTime = (isoString: string) => {
-    const date = new Date(isoString);
-    const now = new Date();
-    const diffMs = now.getTime() - date.getTime();
-    const diffMins = Math.floor(diffMs / 60000);
-    const diffHours = Math.floor(diffMs / 3600000);
-    const diffDays = Math.floor(diffMs / 86400000);
+    const formatTime = (isoString: string) => {
+      const date = new Date(isoString);
+      const now = new Date();
+      const diffMs = now.getTime() - date.getTime();
+      const diffMins = Math.floor(diffMs / 60000);
+      const diffHours = Math.floor(diffMs / 3600000);
+      const diffDays = Math.floor(diffMs / 86400000);
 
-    if (diffMins < 60) return `${diffMins}m`;
-    if (diffHours < 24) return `${diffHours}h`;
-    if (diffDays < 7) return `${diffDays}d`;
-    return date.toLocaleDateString();
-  };
+      if (diffMins < 60) {
+        return `${diffMins}m`;
+      }
+      if (diffHours < 24) {
+        return `${diffHours}h`;
+      }
+      if (diffDays < 7) {
+        return `${diffDays}d`;
+      }
+      return date.toLocaleDateString();
+    };
 
-  return (
-    <AnimatedTouchable
-      onPress={onPress}
-      onPressIn={handlePressIn}
-      onPressOut={handlePressOut}
-      activeOpacity={0.95}
-      style={[styles.matchCard, animatedStyle]}
-    >
-      {/* Avatar */}
-      <Avatar
-        size="md"
-        imageUrl={match.matched_user.avatar_urls[0]}
-        isOnline={match.matched_user.is_online}
-        name={match.matched_user.display_name}
-      />
+    return (
+      <AnimatedTouchable
+        onPress={onPress}
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+        activeOpacity={0.95}
+        style={[styles.matchCard, animatedStyle]}
+      >
+        {/* Avatar */}
+        <Avatar
+          size="md"
+          imageUrl={match.matched_user.avatar_urls[0]}
+          isOnline={match.matched_user.is_online}
+          name={match.matched_user.display_name}
+        />
 
-      {/* Match Info */}
-      <View style={styles.matchInfo}>
-        <View style={styles.matchHeader}>
-          <Text
-            style={[
-              styles.matchName,
-              match.unread_count > 0 && styles.matchNameUnread,
-            ]}
-            numberOfLines={1}
-          >
-            {match.matched_user.display_name}
-          </Text>
-          {match.last_message && (
-            <Text style={styles.matchTime}>
-              {formatTime(match.last_message.sent_at)}
+        {/* Match Info */}
+        <View style={styles.matchInfo}>
+          <View style={styles.matchHeader}>
+            <Text
+              style={[styles.matchName, match.unread_count > 0 && styles.matchNameUnread]}
+              numberOfLines={1}
+            >
+              {match.matched_user.display_name}
             </Text>
-          )}
-        </View>
+            {match.last_message && (
+              <Text style={styles.matchTime}>{formatTime(match.last_message.sent_at)}</Text>
+            )}
+          </View>
 
-        <View style={styles.matchMessageRow}>
-          <Text
-            style={styles.matchMessage}
-            numberOfLines={1}
-          >
-            {match.last_message?.content || 'New match!'}
-          </Text>
-          {match.unread_count > 0 && (
-            <View style={styles.unreadBadge}>
-              <Text style={styles.unreadBadgeText}>
-                {match.unread_count > 9 ? '9+' : match.unread_count}
-              </Text>
-            </View>
-          )}
+          <View style={styles.matchMessageRow}>
+            <Text style={styles.matchMessage} numberOfLines={1}>
+              {match.last_message?.content || 'New match!'}
+            </Text>
+            {match.unread_count > 0 && (
+              <View style={styles.unreadBadge}>
+                <Text style={styles.unreadBadgeText}>
+                  {match.unread_count > 9 ? '9+' : match.unread_count}
+                </Text>
+              </View>
+            )}
+          </View>
         </View>
-      </View>
-    </AnimatedTouchable>
-  );
-}, (prevProps, nextProps) => {
-  // Only re-render if match.id or unread_count changes
-  return prevProps.match.id === nextProps.match.id &&
-         prevProps.match.unread_count === nextProps.match.unread_count;
-});
+      </AnimatedTouchable>
+    );
+  },
+  (prevProps, nextProps) => {
+    // Only re-render if match.id or unread_count changes
+    return (
+      prevProps.match.id === nextProps.match.id &&
+      prevProps.match.unread_count === nextProps.match.unread_count
+    );
+  }
+);
 
 // ============================================
 // STYLES

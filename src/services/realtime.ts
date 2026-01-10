@@ -147,9 +147,7 @@ export const listenToTyping = (
 /**
  * Track user's presence
  */
-export const trackPresence = async (
-  userId: string
-): Promise<RealtimeChannel> => {
+export const trackPresence = async (userId: string): Promise<RealtimeChannel> => {
   const presenceChannel = supabase.channel('online-users');
 
   presenceChannel.subscribe(async (status) => {

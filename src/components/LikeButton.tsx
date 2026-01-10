@@ -13,8 +13,8 @@
  * ```
  */
 
-import React, { useEffect } from 'react';
-import { TouchableOpacity, StyleSheet, ViewStyle } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { TouchableOpacity, StyleSheet, ViewStyle, View } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -25,6 +25,7 @@ import Animated, {
 import * as Haptics from 'expo-haptics';
 import { colors } from '../theme/tokens';
 import { springConfig } from '../animations/presets';
+import { HeartParticles } from './HeartParticles';
 
 // ============================================
 // TYPES
@@ -83,6 +84,9 @@ export const LikeButton: React.FC<LikeButtonProps> = ({
   // Shared values for animation
   const scale = useSharedValue(1);
 
+  // ANTIGRAVITY: Heart particles burst state
+  const [triggerParticles, setTriggerParticles] = useState(false);
+
   // Trigger animation when active state changes to true
   useEffect(() => {
     if (isActive) {
@@ -91,7 +95,11 @@ export const LikeButton: React.FC<LikeButtonProps> = ({
         withSpring(1.2, springConfig.bouncy),
         withSpring(1, springConfig.bouncy)
       );
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+
+      // ANTIGRAVITY: Trigger heart particles burst!
+      setTriggerParticles(true);
+      setTimeout(() => setTriggerParticles(false), 100);
     }
   }, [isActive]);
 
@@ -102,8 +110,8 @@ export const LikeButton: React.FC<LikeButtonProps> = ({
   const handlePress = () => {
     // Optimistic update should be handled by parent, but we trigger animation here too
     if (!isActive) {
-       // If becoming active, pop
-       scale.value = withSequence(
+      // If becoming active, pop
+      scale.value = withSequence(
         withSpring(0.8, springConfig.stiff),
         withSpring(1.2, springConfig.bouncy),
         withSpring(1, springConfig.normal)
@@ -113,24 +121,29 @@ export const LikeButton: React.FC<LikeButtonProps> = ({
   };
 
   return (
-    <AnimatedTouchableOpacity
-      onPress={handlePress}
-      activeOpacity={0.8}
-      style={[styles.container, { width: size, height: size }, style]}
-    >
-      <AnimatedText
-        style={[
-          styles.icon,
-          {
-            fontSize: size,
-            color: isActive ? activeColor : inactiveColor,
-          },
-          animatedStyle,
-        ]}
+    <View style={[{ width: size * 3, height: size * 3 }, style]}>
+      {/* ANTIGRAVITY: Heart particles burst effect */}
+      <HeartParticles trigger={triggerParticles} count={8} size={size * 0.6} />
+
+      <AnimatedTouchableOpacity
+        onPress={handlePress}
+        activeOpacity={0.8}
+        style={[styles.container, { width: size, height: size }]}
       >
-        {isActive ? '❤️' : '🤍'}
-      </AnimatedText>
-    </AnimatedTouchableOpacity>
+        <AnimatedText
+          style={[
+            styles.icon,
+            {
+              fontSize: size,
+              color: isActive ? activeColor : inactiveColor,
+            },
+            animatedStyle,
+          ]}
+        >
+          {isActive ? '❤️' : '🤍'}
+        </AnimatedText>
+      </AnimatedTouchableOpacity>
+    </View>
   );
 };
 

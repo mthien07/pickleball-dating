@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { ArrowLeft, MapPin, Star, Users, Target } from "lucide-react";
+import { useState } from 'react';
+import { ArrowLeft, MapPin, Star, Users, Target } from 'lucide-react';
 
 interface Opponent {
   id: number;
@@ -19,38 +19,41 @@ interface FindOpponentViewProps {
 const mockOpponents: Opponent[] = [
   {
     id: 1,
-    name: "Minh Tuấn",
+    name: 'Minh Tuấn',
     age: 28,
-    level: "Intermediate",
+    level: 'Intermediate',
     distance: 2,
-    image: "https://images.unsplash.com/photo-1609228579945-4067c8186939?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtYW4lMjBwb3J0cmFpdCUyMGNvbmZpZGVudHxlbnwxfHx8fDE3Njc0MDczMTR8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+    image:
+      'https://images.unsplash.com/photo-1609228579945-4067c8186939?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtYW4lMjBwb3J0cmFpdCUyMGNvbmZpZGVudHxlbnwxfHx8fDE3Njc0MDczMTR8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
     rating: 4.5,
     matchesPlayed: 124,
   },
   {
     id: 2,
-    name: "Phương Anh",
+    name: 'Phương Anh',
     age: 25,
-    level: "Advanced",
+    level: 'Advanced',
     distance: 3,
-    image: "https://images.unsplash.com/photo-1594318223885-20dc4b889f9e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3b21hbiUyMHBvcnRyYWl0JTIwc21pbGV8ZW58MXx8fHwxNzY3Mzc5NzEzfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+    image:
+      'https://images.unsplash.com/photo-1594318223885-20dc4b889f9e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3b21hbiUyMHBvcnRyYWl0JTIwc21pbGV8ZW58MXx8fHwxNzY3Mzc5NzEzfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
     rating: 4.8,
     matchesPlayed: 89,
   },
   {
     id: 3,
-    name: "Hoàng Nam",
+    name: 'Hoàng Nam',
     age: 32,
-    level: "Intermediate",
+    level: 'Intermediate',
     distance: 5,
-    image: "https://images.unsplash.com/flagged/photo-1594170954639-ff95b015b546?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtYW4lMjBzdHlsaXNoJTIwcG9ydHJhaXR8ZW58MXx8fHwxNzY3NDM3NTEwfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+    image:
+      'https://images.unsplash.com/flagged/photo-1594170954639-ff95b015b546?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtYW4lMjBzdHlsaXNoJTIwcG9ydHJhaXR8ZW58MXx8fHwxNzY3NDM3NTEwfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
     rating: 4.3,
     matchesPlayed: 67,
   },
 ];
 
 export function FindOpponentView({ onBack }: FindOpponentViewProps) {
-  const [selectedLevel, setSelectedLevel] = useState<string>("all");
+  const [selectedLevel, setSelectedLevel] = useState<string>('all');
 
   return (
     <div className="flex flex-col h-full bg-[#1a1a1a]">
@@ -69,41 +72,41 @@ export function FindOpponentView({ onBack }: FindOpponentViewProps) {
       <div className="p-4 border-b border-white/10">
         <div className="flex gap-2 overflow-x-auto pb-2">
           <button
-            onClick={() => setSelectedLevel("all")}
+            onClick={() => setSelectedLevel('all')}
             className={`px-4 py-2 rounded-full whitespace-nowrap transition-colors ${
-              selectedLevel === "all"
-                ? "bg-gradient-to-r from-red-500 to-orange-500 text-white"
-                : "bg-white/5 text-gray-400 hover:bg-white/10"
+              selectedLevel === 'all'
+                ? 'bg-gradient-to-r from-red-500 to-orange-500 text-white'
+                : 'bg-white/5 text-gray-400 hover:bg-white/10'
             }`}
           >
             Tất cả
           </button>
           <button
-            onClick={() => setSelectedLevel("beginner")}
+            onClick={() => setSelectedLevel('beginner')}
             className={`px-4 py-2 rounded-full whitespace-nowrap transition-colors ${
-              selectedLevel === "beginner"
-                ? "bg-gradient-to-r from-red-500 to-orange-500 text-white"
-                : "bg-white/5 text-gray-400 hover:bg-white/10"
+              selectedLevel === 'beginner'
+                ? 'bg-gradient-to-r from-red-500 to-orange-500 text-white'
+                : 'bg-white/5 text-gray-400 hover:bg-white/10'
             }`}
           >
             Beginner
           </button>
           <button
-            onClick={() => setSelectedLevel("intermediate")}
+            onClick={() => setSelectedLevel('intermediate')}
             className={`px-4 py-2 rounded-full whitespace-nowrap transition-colors ${
-              selectedLevel === "intermediate"
-                ? "bg-gradient-to-r from-red-500 to-orange-500 text-white"
-                : "bg-white/5 text-gray-400 hover:bg-white/10"
+              selectedLevel === 'intermediate'
+                ? 'bg-gradient-to-r from-red-500 to-orange-500 text-white'
+                : 'bg-white/5 text-gray-400 hover:bg-white/10'
             }`}
           >
             Intermediate
           </button>
           <button
-            onClick={() => setSelectedLevel("advanced")}
+            onClick={() => setSelectedLevel('advanced')}
             className={`px-4 py-2 rounded-full whitespace-nowrap transition-colors ${
-              selectedLevel === "advanced"
-                ? "bg-gradient-to-r from-red-500 to-orange-500 text-white"
-                : "bg-white/5 text-gray-400 hover:bg-white/10"
+              selectedLevel === 'advanced'
+                ? 'bg-gradient-to-r from-red-500 to-orange-500 text-white'
+                : 'bg-white/5 text-gray-400 hover:bg-white/10'
             }`}
           >
             Advanced
@@ -138,9 +141,7 @@ export function FindOpponentView({ onBack }: FindOpponentViewProps) {
                     </h3>
                     <div className="flex items-center gap-1 mt-1">
                       <MapPin className="w-3 h-3 text-gray-400" />
-                      <span className="text-sm text-gray-400">
-                        {opponent.distance} km away
-                      </span>
+                      <span className="text-sm text-gray-400">{opponent.distance} km away</span>
                     </div>
                   </div>
                   <span className="px-3 py-1 bg-gradient-to-r from-red-500/20 to-orange-500/20 border border-red-500/30 text-red-400 text-xs rounded-full">
@@ -155,9 +156,7 @@ export function FindOpponentView({ onBack }: FindOpponentViewProps) {
                   </div>
                   <div className="flex items-center gap-1">
                     <Target className="w-4 h-4 text-green-400" />
-                    <span className="text-gray-300">
-                      {opponent.matchesPlayed} matches
-                    </span>
+                    <span className="text-gray-300">{opponent.matchesPlayed} matches</span>
                   </div>
                 </div>
               </div>

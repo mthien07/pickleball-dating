@@ -10,6 +10,7 @@
 import 'react-native-url-polyfill/auto';
 import { createClient } from '@supabase/supabase-js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import type { Database } from '../types/database.types';
 
 // Environment variables (from .env)
 const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL;
@@ -19,7 +20,7 @@ const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
 if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error(
     'Missing Supabase environment variables. Please check your .env file.\n' +
-    'Required: EXPO_PUBLIC_SUPABASE_URL, EXPO_PUBLIC_SUPABASE_ANON_KEY'
+      'Required: EXPO_PUBLIC_SUPABASE_URL, EXPO_PUBLIC_SUPABASE_ANON_KEY'
   );
 }
 
@@ -31,7 +32,7 @@ if (!supabaseUrl || !supabaseAnonKey) {
  * - Auto-refresh: Automatically refreshes expired tokens
  * - Realtime: Rate-limited to 10 events/second
  */
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
   auth: {
     // Use React Native's AsyncStorage for session persistence
     storage: AsyncStorage,
@@ -59,7 +60,9 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
  * Helper function to check if user is authenticated
  */
 export const isAuthenticated = async (): Promise<boolean> => {
-  const { data: { session } } = await supabase.auth.getSession();
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
   return !!session;
 };
 
@@ -67,7 +70,9 @@ export const isAuthenticated = async (): Promise<boolean> => {
  * Helper function to get current user ID
  */
 export const getCurrentUserId = async (): Promise<string | null> => {
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   return user?.id || null;
 };
 

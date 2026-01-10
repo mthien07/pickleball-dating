@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { motion, useMotionValue, useTransform } from "motion/react";
-import { Heart, X, Gift, MapPin, Info } from "lucide-react";
+import { useState } from 'react';
+import { motion, useMotionValue, useTransform } from 'motion/react';
+import { Heart, X, Gift, MapPin, Info } from 'lucide-react';
 
 interface Profile {
   id: number;
@@ -15,7 +15,7 @@ interface Profile {
 
 interface SwipeCardProps {
   profile: Profile;
-  onSwipe: (direction: "left" | "right") => void;
+  onSwipe: (direction: 'left' | 'right') => void;
   onShowProfile: () => void;
 }
 
@@ -27,18 +27,18 @@ export function SwipeCard({ profile, onSwipe, onShowProfile }: SwipeCardProps) {
 
   const handleDragEnd = (_: any, info: any) => {
     if (Math.abs(info.offset.x) > 100) {
-      const direction = info.offset.x > 0 ? "right" : "left";
+      const direction = info.offset.x > 0 ? 'right' : 'left';
       onSwipe(direction);
     }
   };
 
-  const handleAction = (action: "left" | "right" | "super") => {
-    if (action === "left") {
-      onSwipe("left");
-    } else if (action === "right") {
-      onSwipe("right");
+  const handleAction = (action: 'left' | 'right' | 'super') => {
+    if (action === 'left') {
+      onSwipe('left');
+    } else if (action === 'right') {
+      onSwipe('right');
     } else {
-      onSwipe("right");
+      onSwipe('right');
     }
   };
 
@@ -59,7 +59,7 @@ export function SwipeCard({ profile, onSwipe, onShowProfile }: SwipeCardProps) {
             alt={profile.name}
             className="w-full h-full object-cover"
           />
-          
+
           {/* Match percentage badge */}
           {profile.matchPercentage && (
             <div className="absolute top-6 left-6 bg-gradient-to-r from-red-500 to-orange-500 text-white px-4 py-2 rounded-full z-20 backdrop-blur-sm border border-white/20">
@@ -76,13 +76,10 @@ export function SwipeCard({ profile, onSwipe, onShowProfile }: SwipeCardProps) {
           {/* Image indicators */}
           <div className="absolute top-24 left-0 right-0 flex gap-2 px-6 z-20">
             {profile.images.map((_, index) => (
-              <div
-                key={index}
-                className="flex-1 h-1 bg-white/20 rounded-full overflow-hidden"
-              >
+              <div key={index} className="flex-1 h-1 bg-white/20 rounded-full overflow-hidden">
                 <div
                   className={`h-full bg-gradient-to-r from-red-500 to-orange-500 transition-all ${
-                    index === currentImageIndex ? "w-full" : "w-0"
+                    index === currentImageIndex ? 'w-full' : 'w-0'
                   }`}
                 />
               </div>
@@ -129,19 +126,19 @@ export function SwipeCard({ profile, onSwipe, onShowProfile }: SwipeCardProps) {
         {/* Action buttons overlay */}
         <div className="absolute bottom-24 left-0 right-0 flex justify-center gap-4 px-6 z-30">
           <button
-            onClick={() => handleAction("left")}
+            onClick={() => handleAction('left')}
             className="w-16 h-16 bg-white/90 backdrop-blur-sm rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform border border-white/20"
           >
             <X className="w-8 h-8 text-red-500" />
           </button>
           <button
-            onClick={() => handleAction("super")}
+            onClick={() => handleAction('super')}
             className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 backdrop-blur-sm rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform border border-white/20"
           >
             <Gift className="w-8 h-8 text-white" />
           </button>
           <button
-            onClick={() => handleAction("right")}
+            onClick={() => handleAction('right')}
             className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 backdrop-blur-sm rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform border border-white/20"
           >
             <Heart className="w-8 h-8 text-white" />

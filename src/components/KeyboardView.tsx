@@ -96,9 +96,7 @@ export const KeyboardView: React.FC<KeyboardViewProps> = ({
 
   if (dismissOnTap) {
     return (
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        {content}
-      </TouchableWithoutFeedback>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>{content}</TouchableWithoutFeedback>
     );
   }
 
@@ -112,23 +110,15 @@ export const KeyboardView: React.FC<KeyboardViewProps> = ({
 /**
  * Form View - For forms with multiple inputs
  */
-export const FormView: React.FC<Omit<KeyboardViewProps, 'scrollEnabled' | 'dismissOnTap'>> = (props) => (
-  <KeyboardView
-    {...props}
-    scrollEnabled={true}
-    dismissOnTap={true}
-  />
-);
+export const FormView: React.FC<Omit<KeyboardViewProps, 'scrollEnabled' | 'dismissOnTap'>> = (
+  props
+) => <KeyboardView {...props} scrollEnabled={true} dismissOnTap={true} />;
 
 /**
  * Chat View - For chat screens
  */
 export const ChatView: React.FC<Omit<KeyboardViewProps, 'offset'>> = (props) => (
-  <KeyboardView
-    {...props}
-    offset={Platform.OS === 'ios' ? 90 : 0}
-    dismissOnTap={false}
-  />
+  <KeyboardView {...props} offset={Platform.OS === 'ios' ? 90 : 0} dismissOnTap={false} />
 );
 
 // Default export

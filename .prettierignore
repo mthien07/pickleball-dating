@@ -1,0 +1,13 @@
+node_modules/
+.expo/
+.expo-shared/
+dist/
+build/
+coverage/
+android/
+ios/
+.vscode/
+.idea/
+package-lock.json
+yarn.lock
+*.md

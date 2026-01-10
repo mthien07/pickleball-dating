@@ -111,9 +111,7 @@ export interface UseSwipeGestureReturn {
 // HOOK
 // ============================================
 
-export const useSwipeGesture = (
-  options: UseSwipeGestureOptions = {}
-): UseSwipeGestureReturn => {
+export const useSwipeGesture = (options: UseSwipeGestureOptions = {}): UseSwipeGestureReturn => {
   const {
     onSwipeRight,
     onSwipeLeft,
@@ -205,13 +203,56 @@ export const useSwipeGesture = (
       Extrapolate.CLAMP
     );
 
+    // ANTIGRAVITY FLOATING EFFECTS 🎭
+    // Scale up slightly when dragging (feels like lifting)
+    const scale = interpolate(
+      Math.abs(translateX.value),
+      [0, threshold * 0.5],
+      [1, 1.05],
+      Extrapolate.CLAMP
+    );
+
+    // Shadow elevation when floating
+    const shadowOpacity = interpolate(
+      Math.abs(translateX.value),
+      [0, threshold * 0.5],
+      [0.15, 0.4],
+      Extrapolate.CLAMP
+    );
+
+    const shadowRadius = interpolate(
+      Math.abs(translateX.value),
+      [0, threshold * 0.5],
+      [8, 20],
+      Extrapolate.CLAMP
+    );
+
     return {
       transform: [
         { translateX: translateX.value },
         { translateY: translateY.value },
         { rotate: `${rotate}deg` },
+        { scale }, // Antigravity scale
       ],
       opacity,
+      // Floating shadow effect
+      shadowOpacity,
+      shadowRadius,
+      shadowOffset: {
+        width: 0,
+        height: interpolate(
+          Math.abs(translateX.value),
+          [0, threshold * 0.5],
+          [4, 12],
+          Extrapolate.CLAMP
+        ),
+      },
+      elevation: interpolate(
+        Math.abs(translateX.value),
+        [0, threshold * 0.5],
+        [4, 12],
+        Extrapolate.CLAMP
+      ),
     };
   });
 
@@ -222,26 +263,29 @@ export const useSwipeGesture = (
   }, []);
 
   // Programmatic swipe
-  const swipe = useCallback((direction: 'left' | 'right') => {
-    const dir = direction === 'right' ? 1 : -1;
-    translateX.value = withTiming(dir * SCREEN_WIDTH * 1.5, {
-      duration: 300,
-    });
+  const swipe = useCallback(
+    (direction: 'left' | 'right') => {
+      const dir = direction === 'right' ? 1 : -1;
+      translateX.value = withTiming(dir * SCREEN_WIDTH * 1.5, {
+        duration: 300,
+      });
 
-    if (enableHaptic) {
-      triggerHaptic();
-    }
+      if (enableHaptic) {
+        triggerHaptic();
+      }
 
-    if (direction === 'right' && onSwipeRight) {
-      onSwipeRight();
-    } else if (direction === 'left' && onSwipeLeft) {
-      onSwipeLeft();
-    }
+      if (direction === 'right' && onSwipeRight) {
+        onSwipeRight();
+      } else if (direction === 'left' && onSwipeLeft) {
+        onSwipeLeft();
+      }
 
-    if (onSwipeComplete) {
-      onSwipeComplete();
-    }
-  }, [onSwipeRight, onSwipeLeft, onSwipeComplete, enableHaptic]);
+      if (onSwipeComplete) {
+        onSwipeComplete();
+      }
+    },
+    [onSwipeRight, onSwipeLeft, onSwipeComplete, enableHaptic]
+  );
 
   return {
     gestureHandler,

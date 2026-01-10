@@ -146,9 +146,7 @@ export const Button: React.FC<ButtonProps> = ({
   const pressAnim = usePressAnimation({ scaleValue: 0.98 });
 
   // Choose animation based on variant
-  const { animatedStyle, handlePressIn, handlePressOut } = useElevated
-    ? elevationAnim
-    : pressAnim;
+  const { animatedStyle, handlePressIn, handlePressOut } = useElevated ? elevationAnim : pressAnim;
 
   const handlePress = () => {
     if (!disabled && !loading) {
@@ -185,11 +183,7 @@ export const Button: React.FC<ButtonProps> = ({
       return (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="small" color={spinnerColor} />
-          {title && (
-            <Text style={[...labelStyle, styles.loadingText]}>
-              {title}
-            </Text>
-          )}
+          {title && <Text style={[...labelStyle, styles.loadingText]}>{title}</Text>}
         </View>
       );
     }

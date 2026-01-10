@@ -6,13 +6,24 @@ import Toast from 'react-native-toast-message';
 import { toastConfig } from './src/config/toastConfig';
 import { StatusBar } from 'expo-status-bar';
 import { AuthProvider } from './src/contexts/AuthContext';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ThemeProvider, useTheme } from './src/contexts/ThemeContext';
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import Animated from 'react-native-reanimated';
 import { useAnimation } from './src/hooks/useAnimation';
+import { ErrorBoundary } from './src/components/ErrorBoundary';
+import {
+  queryClient,
+  asyncStoragePersister,
+  invalidateAllOnReconnect,
+} from './src/config/queryClient';
+import { OfflineIndicator, OnlineIndicator } from './src/components/OfflineIndicator';
 
-const queryClient = new QueryClient();
+// Setup auto-invalidation on reconnect
+invalidateAllOnReconnect();
 
-export default function App() {
+// Inner component that uses theme context
+const AppContent = () => {
+  const { isDark } = useTheme();
   const { animatedStyle, fadeIn, scaleIn } = useAnimation({
     initialOpacity: 0,
     initialScale: 0.98,
@@ -25,18 +36,35 @@ export default function App() {
   }, []);
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <SafeAreaProvider>
-        <QueryClientProvider client={queryClient}>
-          <AuthProvider>
-            <StatusBar style="auto" />
-            <Animated.View style={[{ flex: 1 }, animatedStyle]}>
-              <RootNavigator />
-            </Animated.View>
-            <Toast config={toastConfig} />
-          </AuthProvider>
-        </QueryClientProvider>
-      </SafeAreaProvider>
-    </GestureHandlerRootView>
+    <>
+      <StatusBar style={isDark ? 'light' : 'dark'} />
+      <Animated.View style={[{ flex: 1 }, animatedStyle]}>
+        <RootNavigator />
+      </Animated.View>
+      <Toast config={toastConfig} />
+      <OfflineIndicator position="top" />
+      <OnlineIndicator />
+    </>
+  );
+};
+
+export default function App() {
+  return (
+    <ErrorBoundary>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <SafeAreaProvider>
+          <PersistQueryClientProvider
+            client={queryClient}
+            persistOptions={{ persister: asyncStoragePersister }}
+          >
+            <ThemeProvider>
+              <AuthProvider>
+                <AppContent />
+              </AuthProvider>
+            </ThemeProvider>
+          </PersistQueryClientProvider>
+        </SafeAreaProvider>
+      </GestureHandlerRootView>
+    </ErrorBoundary>
   );
 }

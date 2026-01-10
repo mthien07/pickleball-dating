@@ -10,13 +10,7 @@ import {
   StatusBar,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import {
-  ChevronLeft,
-  Building,
-  User,
-  Award,
-  Check,
-} from 'lucide-react-native';
+import { ChevronLeft, Building, User, Award, Check } from 'lucide-react-native';
 import { colors } from '../../theme/tokens';
 import { Input, PasswordInput } from '../../components/Input';
 import { Button } from '../../components/Button';
@@ -44,40 +38,18 @@ const RoleCard = ({
 }) => (
   <TouchableOpacity
     onPress={onPress}
-    style={[
-      styles.roleCard,
-      selected && styles.roleCardSelected,
-    ]}
+    style={[styles.roleCard, selected && styles.roleCardSelected]}
     activeOpacity={0.7}
   >
-    <Icon
-      size={24}
-      color={selected ? COLORS.primary : COLORS.textSecondary}
-    />
-    <Text
-      style={[
-        styles.roleCardText,
-        selected && styles.roleCardTextSelected,
-      ]}
-    >
-      {label}
-    </Text>
+    <Icon size={24} color={selected ? COLORS.primary : COLORS.textSecondary} />
+    <Text style={[styles.roleCardText, selected && styles.roleCardTextSelected]}>{label}</Text>
   </TouchableOpacity>
 );
 
-const Checkbox = ({
-  checked,
-  onPress,
-}: {
-  checked: boolean;
-  onPress: () => void;
-}) => (
+const Checkbox = ({ checked, onPress }: { checked: boolean; onPress: () => void }) => (
   <TouchableOpacity
     onPress={onPress}
-    style={[
-      styles.checkbox,
-      checked && styles.checkboxChecked,
-    ]}
+    style={[styles.checkbox, checked && styles.checkboxChecked]}
     activeOpacity={0.7}
   >
     {checked && <Check size={14} color="#FFFFFF" strokeWidth={3} />}
@@ -102,27 +74,21 @@ export default function SignupScreenDesign({ navigation }: { navigation?: any })
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={COLORS.background} />
-      
+
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation?.goBack()}
-        >
+        <TouchableOpacity style={styles.backButton} onPress={() => navigation?.goBack()}>
           <ChevronLeft size={28} color={COLORS.text} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Đăng ký</Text>
-        <View style={{ width: 28 }} /> 
+        <View style={{ width: 28 }} />
       </View>
 
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={{ flex: 1 }}
       >
-        <ScrollView
-          contentContainerStyle={styles.content}
-          showsVerticalScrollIndicator={false}
-        >
+        <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
           {/* Inputs */}
           <View style={styles.formGroup}>
             <Input
@@ -176,14 +142,10 @@ export default function SignupScreenDesign({ navigation }: { navigation?: any })
 
           {/* Terms */}
           <View style={styles.termsContainer}>
-            <Checkbox
-              checked={agreedToTerms}
-              onPress={() => setAgreedToTerms(!agreedToTerms)}
-            />
+            <Checkbox checked={agreedToTerms} onPress={() => setAgreedToTerms(!agreedToTerms)} />
             <View style={styles.termsTextContainer}>
               <Text style={styles.termsText}>
-                Tôi đồng ý với{' '}
-                <Text style={styles.linkText}>Điều khoản sử dụng</Text>
+                Tôi đồng ý với <Text style={styles.linkText}>Điều khoản sử dụng</Text>
               </Text>
             </View>
           </View>
@@ -262,7 +224,7 @@ const styles = StyleSheet.create({
     padding: 16,
     alignItems: 'center',
     gap: 8,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,

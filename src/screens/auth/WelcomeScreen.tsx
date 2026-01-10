@@ -26,43 +26,42 @@ import { shadows } from '../../theme/shadows';
 const { width } = Dimensions.get('window');
 
 // Custom button component for this screen to match specific design requirements
-const SocialButton = ({ 
-  title, 
-  icon, 
-  onPress, 
-  iconColor, 
+const SocialButton = ({
+  title,
+  icon,
+  onPress,
+  iconColor,
   variant = 'filled',
-  IconComponent = Ionicons
-}: { 
-  title: string; 
-  icon: string; 
-  onPress: () => void; 
+  IconComponent = Ionicons,
+}: {
+  title: string;
+  icon: string;
+  onPress: () => void;
   iconColor?: string;
   variant?: 'filled' | 'outline';
   IconComponent?: any;
 }) => (
   <TouchableOpacity
-      style={[
-      styles.button,
-      variant === 'filled' ? styles.buttonFilled : styles.buttonOutline,
-    ]}
+    style={[styles.button, variant === 'filled' ? styles.buttonFilled : styles.buttonOutline]}
     onPress={onPress}
     activeOpacity={0.8}
   >
     <View style={styles.buttonContent}>
-      <IconComponent 
-        name={icon} 
-        size={20} 
-        color={iconColor || (variant === 'filled' ? colors.textPrimary : colors.primary)} 
+      <IconComponent
+        name={icon}
+        size={20}
+        color={iconColor || (variant === 'filled' ? colors.textPrimary : colors.primary)}
         // Lucide icons use 'color' and 'size' props, Ionicons uses same.
         // For Lucide, we might need to pass props differently if it's a component class, but here we assume it's like Ionicons or we pass the component instance.
         // Actually for Lucide, we usually pass the component itself, not a name string if we want to be type safe, but here we are mixing.
         // Let's adjust the usage below.
       />
-      <Text style={[
-        styles.buttonText, 
-        variant === 'filled' ? styles.buttonTextFilled : styles.buttonTextOutline
-      ]}>
+      <Text
+        style={[
+          styles.buttonText,
+          variant === 'filled' ? styles.buttonTextFilled : styles.buttonTextOutline,
+        ]}
+      >
         {title}
       </Text>
     </View>
@@ -73,7 +72,7 @@ const ActionButton = ({
   title,
   icon: Icon,
   onPress,
-  variant = 'filled'
+  variant = 'filled',
 }: {
   title: string;
   icon: any;
@@ -81,23 +80,22 @@ const ActionButton = ({
   variant?: 'filled' | 'outline';
 }) => (
   <TouchableOpacity
-    style={[
-      styles.button,
-      variant === 'filled' ? styles.buttonFilled : styles.buttonOutline,
-    ]}
+    style={[styles.button, variant === 'filled' ? styles.buttonFilled : styles.buttonOutline]}
     onPress={onPress}
     activeOpacity={0.8}
   >
     <View style={styles.buttonContent}>
-      <Icon 
-        size={20} 
-        color={variant === 'filled' ? colors.textPrimary : colors.primary} 
+      <Icon
+        size={20}
+        color={variant === 'filled' ? colors.textPrimary : colors.primary}
         style={styles.buttonIcon}
       />
-      <Text style={[
-        styles.buttonText, 
-        variant === 'filled' ? styles.buttonTextFilled : styles.buttonTextOutline
-      ]}>
+      <Text
+        style={[
+          styles.buttonText,
+          variant === 'filled' ? styles.buttonTextFilled : styles.buttonTextOutline,
+        ]}
+      >
         {title}
       </Text>
     </View>
@@ -130,18 +128,17 @@ export const WelcomeScreen = () => {
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
-        <SafeAreaView style={styles.safeArea}>
-        
+      <SafeAreaView style={styles.safeArea}>
         {/* Top Branding Section */}
         <View style={styles.header}>
           <View style={styles.logoRow}>
             <View style={styles.logoIconContainer}>
-               {/* Custom Tennis Racket representation using Ionicons for now */}
-               <Ionicons name="tennisball" size={24} color={colors.lime || '#CCFF00'} />
+              {/* Custom Tennis Racket representation using Ionicons for now */}
+              <Ionicons name="tennisball" size={24} color={colors.lime || '#CCFF00'} />
             </View>
             <Text style={styles.appName}>PickleBall Dating</Text>
-              </View>
-            </View>
+          </View>
+        </View>
 
         {/* Main Content */}
         <View style={styles.content}>
@@ -198,15 +195,20 @@ export const WelcomeScreen = () => {
             <Text style={styles.footerText}>Already have an account? </Text>
             <Text style={styles.signInLink}>Sign In</Text>
           </TouchableOpacity>
-          
+
           <Text style={styles.legalText}>
             By continuing, you agree to our{' '}
-            <Text style={styles.legalLink} onPress={() => {}}>Terms</Text>
+            <Text style={styles.legalLink} onPress={() => {}}>
+              Terms
+            </Text>
             {' & '}
-            <Text style={styles.legalLink} onPress={() => {}}>Privacy Policy</Text>.
+            <Text style={styles.legalLink} onPress={() => {}}>
+              Privacy Policy
+            </Text>
+            .
           </Text>
         </View>
-        </SafeAreaView>
+      </SafeAreaView>
     </View>
   );
 };

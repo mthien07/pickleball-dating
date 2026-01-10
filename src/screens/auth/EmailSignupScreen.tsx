@@ -55,48 +55,51 @@ export const EmailSignupScreen = () => {
 
     try {
       // 1. Sign up with Supabase Auth
-      const { data: { user }, error: signUpError } = await supabase.auth.signUp({
+      const {
+        data: { user },
+        error: signUpError,
+      } = await supabase.auth.signUp({
         email,
         password,
         options: {
           data: {
             role: role, // Save role in user metadata
-          }
-        }
+          },
+        },
       });
 
-      if (signUpError) throw signUpError;
+      if (signUpError) {
+        throw signUpError;
+      }
 
       if (user) {
         // 2. Create user profile record in 'users' table
         // We need to provide all REQUIRED fields to avoid DB errors
-        const { error: profileError } = await supabase
-          .from('users')
-          .insert([
-            {
-              id: user.id,
-              email: email,
-              role: role,
-              full_name: '', // Will be updated in profile setup
-              
-              // Required fields by Schema (filling with placeholders)
-              display_name: email.split('@')[0], // Default display name from email
-              date_of_birth: '2000-01-01',      // Placeholder DOB
-              gender: 'other',                  // Placeholder gender
-              skill_level: 'beginner',          // Default skill
-              play_style: 'casual',             // Default play style
-              
-              created_at: new Date().toISOString(),
-            }
-          ]);
+        const { error: profileError } = await supabase.from('users').insert([
+          {
+            id: user.id,
+            email: email,
+            role: role,
+            full_name: '', // Will be updated in profile setup
+
+            // Required fields by Schema (filling with placeholders)
+            display_name: email.split('@')[0], // Default display name from email
+            date_of_birth: '2000-01-01', // Placeholder DOB
+            gender: 'other', // Placeholder gender
+            skill_level: 'beginner', // Default skill
+            play_style: 'casual', // Default play style
+
+            created_at: new Date().toISOString(),
+          },
+        ]);
 
         if (profileError) {
-           // If trigger already created it, we might get a duplicate error, which is fine to ignore or handle
-           console.log('Profile creation note:', profileError.message);
+          // If trigger already created it, we might get a duplicate error, which is fine to ignore or handle
+          console.log('Profile creation note:', profileError.message);
         }
 
         showSuccess('Account created successfully!');
-        
+
         // 3. Navigate to Login (or Auto-login if session is active)
         navigation.navigate('Login');
       }
@@ -110,7 +113,7 @@ export const EmailSignupScreen = () => {
   const RoleCard = ({
     value,
     label,
-    iconName
+    iconName,
   }: {
     value: Role;
     label: string;
@@ -120,17 +123,8 @@ export const EmailSignupScreen = () => {
 
     const CardContent = (
       <View style={[styles.roleCard, isSelected && styles.roleCardSelected]}>
-        <Ionicons
-          name={iconName}
-          size={32}
-          color={isSelected ? '#EF4444' : colors.textPrimary}
-        />
-        <Text style={[
-          styles.roleLabel,
-          isSelected && styles.roleLabelSelected
-        ]}>
-          {label}
-        </Text>
+        <Ionicons name={iconName} size={32} color={isSelected ? '#EF4444' : colors.textPrimary} />
+        <Text style={[styles.roleLabel, isSelected && styles.roleLabelSelected]}>{label}</Text>
       </View>
     );
 
@@ -157,7 +151,11 @@ export const EmailSignupScreen = () => {
   };
 
   return (
-    <KeyboardView style={styles.container} contentContainerStyle={styles.contentContainer} scrollEnabled>
+    <KeyboardView
+      style={styles.container}
+      contentContainerStyle={styles.contentContainer}
+      scrollEnabled
+    >
       {/* Header with circular back button */}
       <View style={styles.header}>
         <View style={styles.headerRow}>
@@ -172,11 +170,7 @@ export const EmailSignupScreen = () => {
         {/* Inputs with gray labels */}
         <View style={styles.inputContainer}>
           <Text style={styles.labelGray}>Email hoặc Số điện thoại</Text>
-          <EmailInput
-            value={email}
-            onChangeText={setEmail}
-            containerStyle={styles.input}
-          />
+          <EmailInput value={email} onChangeText={setEmail} containerStyle={styles.input} />
         </View>
 
         <View style={styles.inputContainer}>

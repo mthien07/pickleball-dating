@@ -26,26 +26,16 @@ const styles = StyleSheet.create({
   },
 });
 
-export const ProfileSetupScreen = PlaceholderScreen;
+// Placeholder screens that haven't been implemented yet
 
-export const HomeSwipeScreen = PlaceholderScreen;
-
-export const MatchesListScreen = PlaceholderScreen;
-export const ChatScreen = PlaceholderScreen;
 export const MatchDetailScreen = PlaceholderScreen;
 export const RatingScreen = PlaceholderScreen;
-
-export const CourtDiscoveryScreen = PlaceholderScreen;
-export const CourtDetailScreen = PlaceholderScreen;
-export const CourtBookingScreen = PlaceholderScreen;
-export const PaymentMethodScreen = PlaceholderScreen;
-export const BookingConfirmationScreen = PlaceholderScreen;
 
 export const ProfileMeScreen = ({ navigation }: any) => (
   <View style={styles.container}>
     <Text style={styles.text}>Profile Me</Text>
-    <Button 
-      title="View Animation Demo" 
+    <Button
+      title="View Animation Demo"
       onPress={() => navigation.navigate('AnimationDemo')}
       style={{ marginTop: 20 }}
     />
@@ -53,7 +43,6 @@ export const ProfileMeScreen = ({ navigation }: any) => (
 );
 
 export const EditProfileScreen = PlaceholderScreen;
-export const SettingsScreen = PlaceholderScreen;
 export const BookingHistoryScreen = PlaceholderScreen;
 export const BookingDetailScreen = PlaceholderScreen;
 export const CoachDetailScreen = PlaceholderScreen;

@@ -1,6 +1,6 @@
-import { motion } from "motion/react";
+import { motion } from 'motion/react';
 
-import { Users, MapPin, Heart } from "lucide-react";
+import { Users, MapPin, Heart } from 'lucide-react';
 
 interface SplashScreenProps {
   onSignUp: () => void;
@@ -19,7 +19,7 @@ export function SplashScreen({ onSignUp, onLogin }: SplashScreenProps) {
         transition={{
           duration: 20,
           repeat: Infinity,
-          ease: "linear",
+          ease: 'linear',
         }}
         className="absolute top-20 left-10 w-64 h-64 bg-gradient-to-br from-red-500/20 to-orange-500/20 rounded-full blur-3xl"
       />
@@ -31,7 +31,7 @@ export function SplashScreen({ onSignUp, onLogin }: SplashScreenProps) {
         transition={{
           duration: 15,
           repeat: Infinity,
-          ease: "linear",
+          ease: 'linear',
         }}
         className="absolute bottom-20 right-10 w-72 h-72 bg-gradient-to-br from-green-500/20 to-emerald-500/20 rounded-full blur-3xl"
       />
@@ -42,7 +42,7 @@ export function SplashScreen({ onSignUp, onLogin }: SplashScreenProps) {
         <motion.div
           initial={{ scale: 0, rotate: -180 }}
           animate={{ scale: 1, rotate: 0 }}
-          transition={{ type: "spring", damping: 15, delay: 0.2 }}
+          transition={{ type: 'spring', damping: 15, delay: 0.2 }}
           className="relative mb-8"
         >
           <div className="w-32 h-32 bg-gradient-to-br from-red-500 to-orange-500 rounded-3xl flex items-center justify-center shadow-2xl relative">

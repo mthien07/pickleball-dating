@@ -51,20 +51,24 @@ export const PhoneSignupScreen = () => {
   };
 
   return (
-    <KeyboardView style={styles.container} contentContainerStyle={styles.contentContainer} scrollEnabled>
+    <KeyboardView
+      style={styles.container}
+      contentContainerStyle={styles.contentContainer}
+      scrollEnabled
+    >
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => step === 'phone' ? navigation.goBack() : setStep('phone')} style={styles.backButton}>
+        <TouchableOpacity
+          onPress={() => (step === 'phone' ? navigation.goBack() : setStep('phone'))}
+          style={styles.backButton}
+        >
           <Text style={styles.backButtonText}>← Back</Text>
         </TouchableOpacity>
-        <Text style={styles.title}>
-          {step === 'phone' ? 'Enter Phone Number' : 'Verify Phone'}
-        </Text>
+        <Text style={styles.title}>{step === 'phone' ? 'Enter Phone Number' : 'Verify Phone'}</Text>
         <Text style={styles.subtitle}>
-          {step === 'phone' 
-            ? 'We will send you a verification code' 
-            : `Enter code sent to ${phone}`
-          }
+          {step === 'phone'
+            ? 'We will send you a verification code'
+            : `Enter code sent to ${phone}`}
         </Text>
       </View>
 

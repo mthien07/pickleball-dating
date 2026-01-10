@@ -41,7 +41,7 @@ export const LoginScreen = () => {
     }
 
     setLoading(true);
-    
+
     try {
       const { error } = await supabase.auth.signInWithPassword({
         email: email,
@@ -65,7 +65,11 @@ export const LoginScreen = () => {
   };
 
   return (
-    <KeyboardView style={styles.container} contentContainerStyle={styles.contentContainer} scrollEnabled>
+    <KeyboardView
+      style={styles.container}
+      contentContainerStyle={styles.contentContainer}
+      scrollEnabled
+    >
       {/* Header with circular back button */}
       <View style={styles.header}>
         <View style={styles.headerRow}>

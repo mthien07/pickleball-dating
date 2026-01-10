@@ -80,11 +80,7 @@ export const GlassView: React.FC<GlassViewProps> = ({
 
   return (
     <View style={[containerStyle, style]}>
-      <BlurView
-        intensity={intensity}
-        tint={tint}
-        style={StyleSheet.absoluteFill}
-      />
+      <BlurView intensity={intensity} tint={tint} style={StyleSheet.absoluteFill} />
       {showGradient && (
         <LinearGradient
           colors={['rgba(255,255,255,0.4)', 'rgba(255,255,255,0.1)']}
@@ -110,4 +106,3 @@ const styles = StyleSheet.create({
 });
 
 export default GlassView;
-

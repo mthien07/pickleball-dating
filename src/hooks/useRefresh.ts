@@ -74,7 +74,9 @@ export const useRefresh = (
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = useCallback(async () => {
-    if (options?.enabled === false) return;
+    if (options?.enabled === false) {
+      return;
+    }
 
     setRefreshing(true);
     try {

@@ -23,7 +23,7 @@ export type MainTabParamList = {
 
 export type MatchesStackParamList = {
   MatchesList: undefined;
-  ChatScreen: { conversationId: string; matchId: string };
+  ChatScreen: { matchId: string; userId: string };
   MatchDetail: { userId: string };
   RatingScreen: { userId: string; matchId: string };
 };

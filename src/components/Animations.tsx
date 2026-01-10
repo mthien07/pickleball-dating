@@ -89,10 +89,7 @@ export const FadeIn: React.FC<AnimationProps> = ({
 
   useEffect(() => {
     if (visible) {
-      opacity.value = withDelay(
-        delay,
-        withTiming(1, { ...timingConfig.normal, duration })
-      );
+      opacity.value = withDelay(delay, withTiming(1, { ...timingConfig.normal, duration }));
     } else {
       opacity.value = withTiming(0, { ...timingConfig.normal, duration });
     }
@@ -102,11 +99,7 @@ export const FadeIn: React.FC<AnimationProps> = ({
     opacity: opacity.value,
   }));
 
-  return (
-    <Animated.View style={[style, animatedStyle]}>
-      {children}
-    </Animated.View>
-  );
+  return <Animated.View style={[style, animatedStyle]}>{children}</Animated.View>;
 };
 
 // ============================================
@@ -135,10 +128,7 @@ export const SlideIn: React.FC<SlideProps> = ({
     if (visible) {
       // Reset to start position if not visible initially (conceptually)
       // For entering:
-      translate.value = withDelay(
-        delay,
-        withSpring(0, springConfig.gentle)
-      );
+      translate.value = withDelay(delay, withSpring(0, springConfig.gentle));
       opacity.value = withDelay(delay, withTiming(1, { ...timingConfig.normal, duration }));
     } else {
       // Exit
@@ -162,11 +152,7 @@ export const SlideIn: React.FC<SlideProps> = ({
     };
   });
 
-  return (
-    <Animated.View style={[style, animatedStyle]}>
-      {children}
-    </Animated.View>
-  );
+  return <Animated.View style={[style, animatedStyle]}>{children}</Animated.View>;
 };
 
 // ============================================
@@ -185,10 +171,7 @@ export const ZoomIn: React.FC<AnimationProps> = ({
 
   useEffect(() => {
     if (visible) {
-      scale.value = withDelay(
-        delay,
-        withSpring(1, springConfig.normal)
-      );
+      scale.value = withDelay(delay, withSpring(1, springConfig.normal));
       opacity.value = withDelay(delay, withTiming(1, { ...timingConfig.normal, duration }));
     } else {
       scale.value = withTiming(0.8, { ...timingConfig.normal, duration });
@@ -201,11 +184,7 @@ export const ZoomIn: React.FC<AnimationProps> = ({
     transform: [{ scale: scale.value }],
   }));
 
-  return (
-    <Animated.View style={[style, animatedStyle]}>
-      {children}
-    </Animated.View>
-  );
+  return <Animated.View style={[style, animatedStyle]}>{children}</Animated.View>;
 };
 
 // ============================================
@@ -229,7 +208,7 @@ export const StaggerContainer: React.FC<StaggerContainerProps> = ({
           // We cast to any to check prop existence safely in JS/TS
           const existingDelay = (child.props as any).delay || 0;
           return React.cloneElement(child, {
-             delay: existingDelay + index * staggerTime,
+            delay: existingDelay + index * staggerTime,
           } as any);
         }
         return child;

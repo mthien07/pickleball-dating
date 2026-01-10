@@ -55,7 +55,10 @@ export interface UseFlatListOptimizationReturn {
   /**
    * getItemLayout function (if itemHeight provided)
    */
-  getItemLayout?: (data: ArrayLike<any> | null | undefined, index: number) => {
+  getItemLayout?: (
+    data: ArrayLike<any> | null | undefined,
+    index: number
+  ) => {
     length: number;
     offset: number;
     index: number;
@@ -95,19 +98,16 @@ export const useFlatListOptimization = <T extends { id: string }>(
   data: T[],
   options: UseFlatListOptimizationOptions = {}
 ): UseFlatListOptimizationReturn => {
-  const {
-    itemHeight,
-    maxToRenderPerBatch = 10,
-    windowSize = 5,
-    initialNumToRender = 10,
-  } = options;
+  const { itemHeight, maxToRenderPerBatch = 10, windowSize = 5, initialNumToRender = 10 } = options;
 
   // Memoize key extractor
   const keyExtractor = useCallback((item: T) => item.id, []);
 
   // Memoize getItemLayout if height provided
   const getItemLayout = useMemo(() => {
-    if (!itemHeight) return undefined;
+    if (!itemHeight) {
+      return undefined;
+    }
 
     return (_data: ArrayLike<T> | null | undefined, index: number) => ({
       length: itemHeight,

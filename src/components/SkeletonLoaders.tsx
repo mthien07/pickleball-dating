@@ -24,12 +24,7 @@ const { width: SCREEN_WIDTH } = Dimensions.get('window');
 export const SkeletonProfileCard = () => {
   return (
     <View style={styles.profileCard}>
-      <Skeleton
-        colorMode="light"
-        width="100%"
-        height="100%"
-        radius={borderRadius.profileCard}
-      />
+      <Skeleton colorMode="light" width="100%" height="100%" radius={borderRadius.profileCard} />
     </View>
   );
 };
@@ -42,49 +37,19 @@ export const SkeletonCourtCard = () => {
   return (
     <View style={styles.courtCard}>
       {/* Image skeleton */}
-      <Skeleton
-        colorMode="light"
-        width={120}
-        height={90}
-        radius={borderRadius.md}
-      />
+      <Skeleton colorMode="light" width={120} height={90} radius={borderRadius.md} />
 
       {/* Content skeleton */}
       <View style={styles.courtInfo}>
-        <Skeleton
-          colorMode="light"
-          width="70%"
-          height={20}
-          radius={4}
-        />
+        <Skeleton colorMode="light" width="70%" height={20} radius={4} />
         <View style={{ height: 6 }} />
-        <Skeleton
-          colorMode="light"
-          width="90%"
-          height={14}
-          radius={4}
-        />
+        <Skeleton colorMode="light" width="90%" height={14} radius={4} />
         <View style={{ height: 6 }} />
-        <Skeleton
-          colorMode="light"
-          width="50%"
-          height={14}
-          radius={4}
-        />
+        <Skeleton colorMode="light" width="50%" height={14} radius={4} />
         <View style={{ height: 8 }} />
         <View style={styles.courtFooter}>
-          <Skeleton
-            colorMode="light"
-            width={80}
-            height={18}
-            radius={4}
-          />
-          <Skeleton
-            colorMode="light"
-            width={70}
-            height={32}
-            radius={borderRadius.sm}
-          />
+          <Skeleton colorMode="light" width={80} height={18} radius={4} />
+          <Skeleton colorMode="light" width={70} height={32} radius={borderRadius.sm} />
         </View>
       </View>
     </View>
@@ -99,36 +64,16 @@ export const SkeletonMatchCard = () => {
   return (
     <View style={styles.matchCard}>
       {/* Avatar skeleton */}
-      <Skeleton
-        colorMode="light"
-        width={56}
-        height={56}
-        radius={28}
-      />
+      <Skeleton colorMode="light" width={56} height={56} radius={28} />
 
       {/* Content skeleton */}
       <View style={styles.matchInfo}>
         <View style={styles.matchHeader}>
-          <Skeleton
-            colorMode="light"
-            width="60%"
-            height={18}
-            radius={4}
-          />
-          <Skeleton
-            colorMode="light"
-            width={40}
-            height={14}
-            radius={4}
-          />
+          <Skeleton colorMode="light" width="60%" height={18} radius={4} />
+          <Skeleton colorMode="light" width={40} height={14} radius={4} />
         </View>
         <View style={{ height: 6 }} />
-        <Skeleton
-          colorMode="light"
-          width="80%"
-          height={14}
-          radius={4}
-        />
+        <Skeleton colorMode="light" width="80%" height={14} radius={4} />
       </View>
     </View>
   );
@@ -143,14 +88,13 @@ interface SkeletonListProps {
   count?: number;
 }
 
-export const SkeletonList: React.FC<SkeletonListProps> = ({
-  type,
-  count = 3
-}) => {
+export const SkeletonList: React.FC<SkeletonListProps> = ({ type, count = 3 }) => {
   const SkeletonComponent =
-    type === 'court' ? SkeletonCourtCard :
-    type === 'match' ? SkeletonMatchCard :
-    SkeletonProfileCard;
+    type === 'court'
+      ? SkeletonCourtCard
+      : type === 'match'
+        ? SkeletonMatchCard
+        : SkeletonProfileCard;
 
   return (
     <View>

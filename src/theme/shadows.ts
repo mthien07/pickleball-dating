@@ -79,4 +79,3 @@ export const getShadow = (shadow: keyof typeof shadows) => {
 export type Shadow = typeof shadows;
 
 export default shadows;
-

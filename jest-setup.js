@@ -1,5 +1,4 @@
-// Setup for @testing-library/react-native
-import '@testing-library/react-native/extend-expect';
+// Setup for React Native testing
 
 // Mock react-native-reanimated
 jest.mock('react-native-reanimated', () => {
@@ -8,8 +7,9 @@ jest.mock('react-native-reanimated', () => {
   return Reanimated;
 });
 
-// Silence the warning: Animated: `useNativeDriver` is not supported
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
+// Silence warnings
+global.__reanimatedWorkletInit = () => {};
+jest.useFakeTimers();
 
 // Mock Supabase (for tests that don't need real connection)
 jest.mock('@supabase/supabase-js', () => ({
@@ -45,9 +45,7 @@ jest.mock('@supabase/supabase-js', () => ({
       channel: jest.fn(() => mockChannel()),
       storage: {
         from: jest.fn(() => ({
-          upload: jest.fn(() =>
-            Promise.resolve({ data: { path: 'mock/path.jpg' }, error: null })
-          ),
+          upload: jest.fn(() => Promise.resolve({ data: { path: 'mock/path.jpg' }, error: null })),
           getPublicUrl: jest.fn(() => ({
             data: { publicUrl: 'https://example.com/mock.jpg' },
             error: null,
@@ -70,9 +68,7 @@ jest.mock('@supabase/supabase-js', () => ({
           Promise.resolve({ data: { url: 'https://example.com/oauth' }, error: null })
         ),
         signOut: jest.fn(() => Promise.resolve({ error: null })),
-        getSession: jest.fn(() =>
-          Promise.resolve({ data: { session: null }, error: null })
-        ),
+        getSession: jest.fn(() => Promise.resolve({ data: { session: null }, error: null })),
         getUser: jest.fn(() =>
           Promise.resolve({ data: { user: { id: 'user-1', email: 'user@test.com' } }, error: null })
         ),

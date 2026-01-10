@@ -6,7 +6,15 @@
  */
 
 import React, { useState, useRef, useCallback } from 'react';
-import { View, StyleSheet, TouchableOpacity, Text, StatusBar, Image, Dimensions } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+  StatusBar,
+  Image,
+  Dimensions,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
@@ -24,20 +32,20 @@ const { width } = Dimensions.get('window');
 export const HomeSwipeScreen = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const swipeCardRef = useRef<SwipeCardRef>(null);
-  
+
   // Get current user
   const currentUser = MOCK_USERS[currentIndex];
   const nextUser = MOCK_USERS[currentIndex + 1];
 
   const handleSwipeLeft = useCallback(() => {
     // Pass logic
-    setCurrentIndex(prev => prev + 1);
+    setCurrentIndex((prev) => prev + 1);
   }, []);
 
   const handleSwipeRight = useCallback(() => {
     // Like logic
     showSuccess(`Liked ${currentUser.display_name}!`);
-    setCurrentIndex(prev => prev + 1);
+    setCurrentIndex((prev) => prev + 1);
   }, [currentUser]);
 
   const handleSuperLike = useCallback(() => {
@@ -52,7 +60,7 @@ export const HomeSwipeScreen = () => {
   if (currentIndex >= MOCK_USERS.length) {
     return (
       <View style={styles.container}>
-         <StatusBar barStyle="dark-content" />
+        <StatusBar barStyle="dark-content" />
         <SafeAreaView style={styles.safeArea}>
           <EmptyState
             title="All Caught Up!"
@@ -73,9 +81,11 @@ export const HomeSwipeScreen = () => {
         {/* Header */}
         <View style={styles.header}>
           <View style={styles.logoContainer}>
-            <Text style={styles.logoText}>pickle<Text style={styles.logoHighlight}>match</Text></Text>
+            <Text style={styles.logoText}>
+              pickle<Text style={styles.logoHighlight}>match</Text>
+            </Text>
           </View>
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.filterButton}
             onPress={() => showInfo('Filters coming soon')}
           >
@@ -111,7 +121,7 @@ export const HomeSwipeScreen = () => {
         {/* Controls */}
         <View style={styles.controlsContainer}>
           {/* Pass */}
-          <TouchableOpacity 
+          <TouchableOpacity
             style={[styles.controlButton, styles.passButton]}
             onPress={() => swipeCardRef.current?.swipe('left')}
             activeOpacity={0.7}
@@ -120,7 +130,7 @@ export const HomeSwipeScreen = () => {
           </TouchableOpacity>
 
           {/* Super Like */}
-          <TouchableOpacity 
+          <TouchableOpacity
             style={[styles.controlButton, styles.superLikeButton]}
             onPress={handleSuperLike}
             activeOpacity={0.7}
@@ -134,7 +144,7 @@ export const HomeSwipeScreen = () => {
           </TouchableOpacity>
 
           {/* Like */}
-          <TouchableOpacity 
+          <TouchableOpacity
             style={[styles.controlButton, styles.likeButton]}
             onPress={() => swipeCardRef.current?.swipe('right')}
             activeOpacity={0.7}
@@ -186,7 +196,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  
+
   // Card Area
   cardContainer: {
     flex: 1,

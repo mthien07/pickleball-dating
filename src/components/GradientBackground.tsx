@@ -45,7 +45,11 @@ export const GRADIENT_COLORS = {
   secondary: ['#22C55E', '#4ADE80'] as const,
 
   // Background gradients
-  bgSubtle: ['rgba(249, 115, 22, 0.05)', 'rgba(34, 197, 94, 0.05)', 'rgba(249, 115, 22, 0.05)'] as const,
+  bgSubtle: [
+    'rgba(249, 115, 22, 0.05)',
+    'rgba(34, 197, 94, 0.05)',
+    'rgba(249, 115, 22, 0.05)',
+  ] as const,
   bgMedium: ['rgba(249, 115, 22, 0.2)', 'rgba(34, 197, 94, 0.2)'] as const,
 };
 
@@ -112,13 +116,20 @@ export const GradientButton: React.FC<GradientButtonProps> = ({
   variant = 'primary',
 }) => {
   const getVariantColors = () => {
-    if (colors) return colors;
+    if (colors) {
+      return colors;
+    }
     switch (variant) {
-      case 'primary': return GRADIENT_COLORS.primary;
-      case 'subtle': return GRADIENT_COLORS.primarySubtle;
-      case 'dark': return GRADIENT_COLORS.primaryDark;
-      case 'light': return GRADIENT_COLORS.primaryLight;
-      default: return GRADIENT_COLORS.primary;
+      case 'primary':
+        return GRADIENT_COLORS.primary;
+      case 'subtle':
+        return GRADIENT_COLORS.primarySubtle;
+      case 'dark':
+        return GRADIENT_COLORS.primaryDark;
+      case 'light':
+        return GRADIENT_COLORS.primaryLight;
+      default:
+        return GRADIENT_COLORS.primary;
     }
   };
   const gradientColors = getVariantColors();
@@ -155,10 +166,13 @@ export const GradientCard: React.FC<GradientCardProps> = ({
   children,
   variant = 'subtle',
 }) => {
-  const gradientColors = colors ||
-    (variant === 'subtle' ? GRADIENT_COLORS.primarySubtle :
-     variant === 'medium' ? GRADIENT_COLORS.bgMedium :
-     GRADIENT_COLORS.primary);
+  const gradientColors =
+    colors ||
+    (variant === 'subtle'
+      ? GRADIENT_COLORS.primarySubtle
+      : variant === 'medium'
+        ? GRADIENT_COLORS.bgMedium
+        : GRADIENT_COLORS.primary);
 
   const { start, end } = GRADIENT_DIRECTIONS[direction];
 
@@ -200,10 +214,7 @@ export const GradientOverlay: React.FC<GradientOverlayProps> = ({
 
     const alpha = alphaMap[intensity];
 
-    return [
-      `rgba(239, 68, 68, ${alpha.from})`,
-      `rgba(249, 115, 22, ${alpha.to})`,
-    ] as const;
+    return [`rgba(239, 68, 68, ${alpha.from})`, `rgba(249, 115, 22, ${alpha.to})`] as const;
   };
 
   const getDirection = () => {

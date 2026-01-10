@@ -108,33 +108,55 @@ export const useAnimation = (options: UseAnimationOptions = {}) => {
   }));
 
   // Animation methods
-  const fadeIn = useCallback((duration?: number) => {
-    opacity.value = withTiming(1, {
-      ...timingConfig.normal,
-      ...(duration && { duration }),
-    }, onComplete ? () => runOnJS(onComplete)() : undefined);
+  const fadeIn = useCallback(
+    (duration?: number) => {
+      opacity.value = withTiming(
+        1,
+        {
+          ...timingConfig.normal,
+          ...(duration && { duration }),
+        },
+        onComplete ? () => runOnJS(onComplete)() : undefined
+      );
 
-    if (enableHaptic) {
-      runOnJS(triggerHaptic)();
-    }
-  }, [enableHaptic, onComplete]);
+      if (enableHaptic) {
+        runOnJS(triggerHaptic)();
+      }
+    },
+    [enableHaptic, onComplete]
+  );
 
-  const fadeOut = useCallback((duration?: number) => {
-    opacity.value = withTiming(0, {
-      ...timingConfig.normal,
-      ...(duration && { duration }),
-    }, onComplete ? () => runOnJS(onComplete)() : undefined);
-  }, [onComplete]);
+  const fadeOut = useCallback(
+    (duration?: number) => {
+      opacity.value = withTiming(
+        0,
+        {
+          ...timingConfig.normal,
+          ...(duration && { duration }),
+        },
+        onComplete ? () => runOnJS(onComplete)() : undefined
+      );
+    },
+    [onComplete]
+  );
 
   const scaleIn = useCallback(() => {
-    scale.value = withSpring(1, springConfig.normal, onComplete ? () => runOnJS(onComplete)() : undefined);
+    scale.value = withSpring(
+      1,
+      springConfig.normal,
+      onComplete ? () => runOnJS(onComplete)() : undefined
+    );
     if (enableHaptic) {
       runOnJS(triggerHaptic)();
     }
   }, [enableHaptic, onComplete]);
 
   const scaleOut = useCallback(() => {
-    scale.value = withSpring(0, springConfig.normal, onComplete ? () => runOnJS(onComplete)() : undefined);
+    scale.value = withSpring(
+      0,
+      springConfig.normal,
+      onComplete ? () => runOnJS(onComplete)() : undefined
+    );
   }, [onComplete]);
 
   const scalePop = useCallback(() => {

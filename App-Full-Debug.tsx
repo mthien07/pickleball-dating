@@ -30,43 +30,43 @@ export default function App() {
     return (
       <SafeAreaProvider>
         <SafeAreaView style={styles.container}>
-        <View style={styles.header}>
-          <Text style={styles.title}>Animations Demo</Text>
-          <Button
-            title="Switch to Components"
-            variant="text"
-            onPress={() => setActiveTab('components')}
-          />
-        </View>
-        <ScrollView contentContainerStyle={styles.content}>
-          <StaggerContainer>
-            <FadeIn style={styles.section}>
-              <Text style={styles.sectionTitle}>Fade In</Text>
-              <View style={styles.box} />
-            </FadeIn>
+          <View style={styles.header}>
+            <Text style={styles.title}>Animations Demo</Text>
+            <Button
+              title="Switch to Components"
+              variant="text"
+              onPress={() => setActiveTab('components')}
+            />
+          </View>
+          <ScrollView contentContainerStyle={styles.content}>
+            <StaggerContainer>
+              <FadeIn style={styles.section}>
+                <Text style={styles.sectionTitle}>Fade In</Text>
+                <View style={styles.box} />
+              </FadeIn>
 
-            <SlideIn direction="left" style={styles.section}>
-              <Text style={styles.sectionTitle}>Slide In (Left)</Text>
-              <View style={[styles.box, { backgroundColor: colors.secondary }]} />
-            </SlideIn>
+              <SlideIn direction="left" style={styles.section}>
+                <Text style={styles.sectionTitle}>Slide In (Left)</Text>
+                <View style={[styles.box, { backgroundColor: colors.secondary }]} />
+              </SlideIn>
 
-            <SlideIn direction="right" delay={200} style={styles.section}>
-              <Text style={styles.sectionTitle}>Slide In (Right)</Text>
-              <View style={[styles.box, { backgroundColor: colors.accent }]} />
-            </SlideIn>
+              <SlideIn direction="right" delay={200} style={styles.section}>
+                <Text style={styles.sectionTitle}>Slide In (Right)</Text>
+                <View style={[styles.box, { backgroundColor: colors.accent }]} />
+              </SlideIn>
 
-            <ZoomIn style={styles.section}>
-              <Text style={styles.sectionTitle}>Zoom In</Text>
-              <View style={[styles.box, { borderRadius: 50, backgroundColor: colors.success }]} />
-            </ZoomIn>
-          </StaggerContainer>
+              <ZoomIn style={styles.section}>
+                <Text style={styles.sectionTitle}>Zoom In</Text>
+                <View style={[styles.box, { borderRadius: 50, backgroundColor: colors.success }]} />
+              </ZoomIn>
+            </StaggerContainer>
 
-          <Button
-            title="Reload Animations"
-            onPress={() => setActiveTab('components')} // Hack to reset
-            style={{ marginTop: 20 }}
-          />
-        </ScrollView>
+            <Button
+              title="Reload Animations"
+              onPress={() => setActiveTab('components')} // Hack to reset
+              style={{ marginTop: 20 }}
+            />
+          </ScrollView>
         </SafeAreaView>
       </SafeAreaProvider>
     );
@@ -75,108 +75,111 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>UI Kit Demo</Text>
-        <Button
-          title="See Animations"
-          variant="text"
-          onPress={() => setActiveTab('animations')}
-        />
-      </View>
-
-      <ScrollView contentContainerStyle={styles.content}>
-        
-        {/* Buttons */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Buttons</Text>
-          <View style={styles.row}>
-            <Button title="Primary" onPress={() => {}} />
-            <Button title="Secondary" variant="secondary" onPress={() => {}} />
-          </View>
-          <View style={styles.row}>
-             <Button title="Loading" loading onPress={() => {}} />
-             <Button title="Disabled" disabled onPress={() => {}} />
-          </View>
-        </View>
-
-        {/* Inputs */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Inputs (Animated)</Text>
-          <Input 
-            label="Username" 
-            placeholder="Type something..." 
-            value={inputValue}
-            onChangeText={setInputValue}
-            clearable
-          />
-          <Input 
-            label="Password" 
-            placeholder="Secret..." 
-            type="password"
-            value="123456" 
-            onChangeText={() => {}}
+        <View style={styles.header}>
+          <Text style={styles.title}>UI Kit Demo</Text>
+          <Button
+            title="See Animations"
+            variant="text"
+            onPress={() => setActiveTab('animations')}
           />
         </View>
 
-        {/* Interactive Elements */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Interactive</Text>
-          <View style={[styles.row, { justifyContent: 'space-around' }]}>
-            <LikeButton isActive={liked} onPress={() => setLiked(!liked)} size={40} />
-            <View>
-              <Text style={{ marginBottom: 5 }}>Progress</Text>
-              <ProgressBar progress={0.7} style={{ width: 150 }} />
+        <ScrollView contentContainerStyle={styles.content}>
+          {/* Buttons */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Buttons</Text>
+            <View style={styles.row}>
+              <Button title="Primary" onPress={() => {}} />
+              <Button title="Secondary" variant="secondary" onPress={() => {}} />
+            </View>
+            <View style={styles.row}>
+              <Button title="Loading" loading onPress={() => {}} />
+              <Button title="Disabled" disabled onPress={() => {}} />
             </View>
           </View>
-        </View>
 
-        {/* Glass Effect */}
-        <View style={styles.section}>
-           <Text style={styles.sectionTitle}>Glass View</Text>
-           <View style={styles.imagePlaceholder}>
-             <Text>Background Image</Text>
-             <GlassView style={styles.glassCard} intensity={80}>
-               <Text style={styles.glassText}>Frosted Glass Overlay</Text>
-               <Button title="Action" size="small" onPress={() => {}} />
-             </GlassView>
-           </View>
-        </View>
+          {/* Inputs */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Inputs (Animated)</Text>
+            <Input
+              label="Username"
+              placeholder="Type something..."
+              value={inputValue}
+              onChangeText={setInputValue}
+              clearable
+            />
+            <Input
+              label="Password"
+              placeholder="Secret..."
+              type="password"
+              value="123456"
+              onChangeText={() => {}}
+            />
+          </View>
 
-        {/* Cards */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Cards</Text>
-          <Text style={styles.subTitle}>Court Card</Text>
-          <CourtCard court={MOCK_COURTS[0]} onPress={() => {}} />
-          
-          <Text style={styles.subTitle}>Match Card</Text>
-          <MatchCard match={MOCK_MATCHES[0]} onPress={() => {}} />
-        </View>
-        
-        {/* Skeletons */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Skeletons</Text>
-          <Button title="Toggle Loading" onPress={toggleLoading} size="small" style={{ marginBottom: 10 }} />
-          {loading ? (
-             <SkeletonList type="court" count={1} />
-          ) : (
-             <Text>Click toggle to see skeletons</Text>
-          )}
-        </View>
+          {/* Interactive Elements */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Interactive</Text>
+            <View style={[styles.row, { justifyContent: 'space-around' }]}>
+              <LikeButton isActive={liked} onPress={() => setLiked(!liked)} size={40} />
+              <View>
+                <Text style={{ marginBottom: 5 }}>Progress</Text>
+                <ProgressBar progress={0.7} style={{ width: 150 }} />
+              </View>
+            </View>
+          </View>
 
-        {/* Empty State */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Empty State</Text>
-          <EmptyState 
-            title="No Matches" 
-            message="Keep swiping to find your partner!" 
-            icon="💔"
-            actionLabel="Start Swiping"
-            onAction={() => {}}
-            style={{ padding: 0 }}
-          />
-        </View>
+          {/* Glass Effect */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Glass View</Text>
+            <View style={styles.imagePlaceholder}>
+              <Text>Background Image</Text>
+              <GlassView style={styles.glassCard} intensity={80}>
+                <Text style={styles.glassText}>Frosted Glass Overlay</Text>
+                <Button title="Action" size="small" onPress={() => {}} />
+              </GlassView>
+            </View>
+          </View>
 
-      </ScrollView>
+          {/* Cards */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Cards</Text>
+            <Text style={styles.subTitle}>Court Card</Text>
+            <CourtCard court={MOCK_COURTS[0]} onPress={() => {}} />
+
+            <Text style={styles.subTitle}>Match Card</Text>
+            <MatchCard match={MOCK_MATCHES[0]} onPress={() => {}} />
+          </View>
+
+          {/* Skeletons */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Skeletons</Text>
+            <Button
+              title="Toggle Loading"
+              onPress={toggleLoading}
+              size="small"
+              style={{ marginBottom: 10 }}
+            />
+            {loading ? (
+              <SkeletonList type="court" count={1} />
+            ) : (
+              <Text>Click toggle to see skeletons</Text>
+            )}
+          </View>
+
+          {/* Empty State */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Empty State</Text>
+            <EmptyState
+              title="No Matches"
+              message="Keep swiping to find your partner!"
+              icon="💔"
+              actionLabel="Start Swiping"
+              onAction={() => {}}
+              style={{ padding: 0 }}
+            />
+          </View>
+        </ScrollView>
       </SafeAreaView>
     </SafeAreaProvider>
   );

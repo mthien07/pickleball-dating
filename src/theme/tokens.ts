@@ -15,14 +15,14 @@
 
 export const colors = {
   // Primary Colors (21st.dev Orange Theme)
-  primary: '#F97316',       // Orange-500
+  primary: '#F97316', // Orange-500
   primaryGradientStart: '#F97316',
   primaryGradientEnd: '#FB923C', // Orange-400
-  primaryDark: '#EA580C',   // Orange-600
-  primaryLight: '#FDBA74',  // Orange-300
+  primaryDark: '#EA580C', // Orange-600
+  primaryLight: '#FDBA74', // Orange-300
 
   // Secondary Colors (Green)
-  secondary: '#22C55E',     // Green-500 (Tailwind)
+  secondary: '#22C55E', // Green-500 (Tailwind)
   secondaryDark: '#16A34A', // Green-600
 
   // Accent Colors
@@ -33,14 +33,14 @@ export const colors = {
   // Background Colors
   background: '#FFFFFF', // Clean White
   backgroundDark: '#0F172A', // Slate-950
-  surface: '#F8FAFC',    // Slate-50
+  surface: '#F8FAFC', // Slate-50
   surfaceGlass: 'rgba(255, 255, 255, 0.90)',
   surfaceDark: '#1E293B', // Slate-800
 
   // Text Colors
-  textPrimary: '#0F172A',   // Slate-950
+  textPrimary: '#0F172A', // Slate-950
   textSecondary: '#64748B', // Slate-500
-  textTertiary: '#94A3B8',  // Slate-400
+  textTertiary: '#94A3B8', // Slate-400
   textInverse: '#FFFFFF',
 
   // Border Colors
@@ -49,9 +49,9 @@ export const colors = {
 
   // Status Colors
   success: '#22C55E', // Green-500
-  error: '#EF4444',   // Red-500
+  error: '#EF4444', // Red-500
   warning: '#F59E0B', // Amber-500
-  info: '#3B82F6',    // Blue-500
+  info: '#3B82F6', // Blue-500
 
   // Skill Level Colors
   skillBeginner: '#22C55E', // Green
@@ -74,11 +74,11 @@ export const colors = {
 // ============================================
 
 export const spacing = {
-  xs: 4,   // Tight spacing, icon padding
-  sm: 8,   // Compact lists, small gaps
-  md: 16,  // Standard component padding
-  lg: 24,  // Section spacing
-  xl: 32,  // Major section breaks
+  xs: 4, // Tight spacing, icon padding
+  sm: 8, // Compact lists, small gaps
+  md: 16, // Standard component padding
+  lg: 24, // Section spacing
+  xl: 32, // Major section breaks
   '2xl': 48, // Screen-level spacing
 } as const;
 
@@ -276,10 +276,10 @@ export const zIndex = {
 // ============================================
 
 export const avatarSizes = {
-  xs: 32,  // Group members
-  sm: 48,  // Chat list
-  md: 56,  // Match list
-  lg: 80,  // Profile preview
+  xs: 32, // Group members
+  sm: 48, // Chat list
+  md: 56, // Match list
+  lg: 80, // Profile preview
   xl: 120, // Full profile
 } as const;
 
@@ -302,7 +302,10 @@ export const iconSizes = {
 /**
  * Get responsive font size based on breakpoint
  */
-export const getResponsiveFontSize = (baseFontSize: number, breakpoint: 'mobile' | 'tablet' | 'desktop') => {
+export const getResponsiveFontSize = (
+  baseFontSize: number,
+  breakpoint: 'mobile' | 'tablet' | 'desktop'
+) => {
   const multipliers = {
     mobile: 1,
     tablet: 1.1,

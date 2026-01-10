@@ -18,6 +18,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 
@@ -25,6 +26,9 @@ import { colors, spacing, typography, borderRadius } from '../../theme/tokens';
 import { shadows } from '../../theme/shadows';
 import { MOCK_COURTS } from '@data/mockData';
 import { showInfo } from '../../services/toast';
+import { CourtsStackParamList } from '../../navigation/types';
+
+type CourtDiscoveryNavigationProp = StackNavigationProp<CourtsStackParamList, 'CourtDiscovery'>;
 
 // ============================================
 // HELPER COMPONENTS
@@ -55,25 +59,19 @@ interface CourtCardProps {
 }
 
 const CourtCard = ({ court, onPress, onBook }: CourtCardProps) => {
-  const imageUrl = court.images && court.images.length > 0 
-    ? court.images[0] 
-    : 'https://images.unsplash.com/photo-1622163642998-1ea32b0bbc67?w=800&h=600&fit=crop';
-    
-  const priceDisplay = court.price_per_hour 
+  const imageUrl =
+    court.images && court.images.length > 0
+      ? court.images[0]
+      : 'https://images.unsplash.com/photo-1622163642998-1ea32b0bbc67?w=800&h=600&fit=crop';
+
+  const priceDisplay = court.price_per_hour
     ? `${(court.price_per_hour / 1000).toFixed(0)}k/hr`
     : court.price || '$15/hr';
 
   return (
-    <TouchableOpacity
-      activeOpacity={0.9}
-      onPress={onPress}
-      style={styles.card}
-    >
+    <TouchableOpacity activeOpacity={0.9} onPress={onPress} style={styles.card}>
       <View style={styles.cardImageContainer}>
-        <Image
-          source={{ uri: imageUrl }}
-          style={styles.cardImage}
-        />
+        <Image source={{ uri: imageUrl }} style={styles.cardImage} />
         <View style={styles.priceBadge}>
           <Text style={styles.priceText}>{priceDisplay}</Text>
         </View>
@@ -81,7 +79,9 @@ const CourtCard = ({ court, onPress, onBook }: CourtCardProps) => {
 
       <View style={styles.cardContent}>
         <View style={styles.cardHeader}>
-          <Text style={styles.cardTitle} numberOfLines={1}>{court.name}</Text>
+          <Text style={styles.cardTitle} numberOfLines={1}>
+            {court.name}
+          </Text>
           <View style={styles.distanceBadge}>
             <Ionicons name="navigate" size={12} color={colors.primary} />
             <Text style={styles.distanceText}>{court.distance || '1.2 km'}</Text>
@@ -90,12 +90,14 @@ const CourtCard = ({ court, onPress, onBook }: CourtCardProps) => {
 
         <View style={styles.locationContainer}>
           <Ionicons name="location-outline" size={14} color={colors.textSecondary} />
-          <Text style={styles.locationText} numberOfLines={1}>{court.address || court.location}</Text>
+          <Text style={styles.locationText} numberOfLines={1}>
+            {court.address || court.location}
+          </Text>
         </View>
 
         <View style={styles.cardFooter}>
           <StarRating rating={court.rating} count={court.reviews || court.review_count || 0} />
-          
+
           <TouchableOpacity style={styles.bookButton} onPress={onBook}>
             <Text style={styles.bookButtonText}>Book Now</Text>
           </TouchableOpacity>
@@ -110,7 +112,7 @@ const CourtCard = ({ court, onPress, onBook }: CourtCardProps) => {
 // ============================================
 
 export const CourtDiscoveryScreen = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<CourtDiscoveryNavigationProp>();
   const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
   const [query, setQuery] = useState('');
   const [courts, setCourts] = useState<any[]>([]);
@@ -128,9 +130,10 @@ export const CourtDiscoveryScreen = () => {
     }, 1000);
   };
 
-  const filteredCourts = courts.filter(court =>
-    court.name.toLowerCase().includes(query.toLowerCase()) ||
-    (court.address && court.address.toLowerCase().includes(query.toLowerCase()))
+  const filteredCourts = courts.filter(
+    (court) =>
+      court.name.toLowerCase().includes(query.toLowerCase()) ||
+      (court.address && court.address.toLowerCase().includes(query.toLowerCase()))
   );
 
   const handleBook = (courtId: string) => {
@@ -141,27 +144,36 @@ export const CourtDiscoveryScreen = () => {
   const renderHeader = () => (
     <View style={styles.headerContainer}>
       <Text style={styles.screenTitle}>Find Courts 🏟️</Text>
-      
+
       {/* View Toggle */}
       <View style={styles.toggleContainer}>
         <TouchableOpacity
           style={[styles.toggleButton, viewMode === 'list' && styles.toggleButtonActive]}
           onPress={() => setViewMode('list')}
         >
-          <Text style={[styles.toggleText, viewMode === 'list' && styles.toggleTextActive]}>List</Text>
+          <Text style={[styles.toggleText, viewMode === 'list' && styles.toggleTextActive]}>
+            List
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.toggleButton, viewMode === 'map' && styles.toggleButtonActive]}
           onPress={() => setViewMode('map')}
         >
-          <Text style={[styles.toggleText, viewMode === 'map' && styles.toggleTextActive]}>Map</Text>
+          <Text style={[styles.toggleText, viewMode === 'map' && styles.toggleTextActive]}>
+            Map
+          </Text>
         </TouchableOpacity>
       </View>
 
       {/* Search Bar */}
       <View style={styles.searchContainer}>
         <View style={styles.searchInputWrapper}>
-          <Ionicons name="search" size={20} color={colors.textSecondary} style={styles.searchIcon} />
+          <Ionicons
+            name="search"
+            size={20}
+            color={colors.textSecondary}
+            style={styles.searchIcon}
+          />
           <TextInput
             style={styles.searchInput}
             placeholder="Search courts..."
@@ -182,7 +194,7 @@ export const CourtDiscoveryScreen = () => {
       <StatusBar barStyle="dark-content" />
       <SafeAreaView edges={['top']} style={styles.safeArea}>
         {renderHeader()}
-        
+
         <View style={styles.contentContainer}>
           {viewMode === 'list' ? (
             <FlatList

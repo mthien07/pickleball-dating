@@ -1,5 +1,4 @@
-import { ArrowLeft, MapPin, Clock, Star, Phone } from "lucide-react";
-
+import { ArrowLeft, MapPin, Clock, Star, Phone } from 'lucide-react';
 
 interface Court {
   id: number;
@@ -19,33 +18,33 @@ interface CourtFinderViewProps {
 const mockCourts: Court[] = [
   {
     id: 1,
-    name: "Sân Pickleball Thảo Điền",
-    address: "123 Đường Xuân Thủy, Thảo Điền, Quận 2",
+    name: 'Sân Pickleball Thảo Điền',
+    address: '123 Đường Xuân Thủy, Thảo Điền, Quận 2',
     distance: 1.5,
     rating: 4.8,
-    openTime: "06:00 - 22:00",
-    priceRange: "150k - 300k/h",
-    image: "https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=400",
+    openTime: '06:00 - 22:00',
+    priceRange: '150k - 300k/h',
+    image: 'https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=400',
   },
   {
     id: 2,
-    name: "Sân Pickleball Phú Nhuận",
-    address: "456 Phan Xích Long, Phú Nhuận",
+    name: 'Sân Pickleball Phú Nhuận',
+    address: '456 Phan Xích Long, Phú Nhuận',
     distance: 3.2,
     rating: 4.5,
-    openTime: "05:30 - 23:00",
-    priceRange: "120k - 250k/h",
-    image: "https://images.unsplash.com/photo-1622163642998-1ea32b0bbc67?w=400",
+    openTime: '05:30 - 23:00',
+    priceRange: '120k - 250k/h',
+    image: 'https://images.unsplash.com/photo-1622163642998-1ea32b0bbc67?w=400',
   },
   {
     id: 3,
-    name: "CLB Pickleball Sài Gòn",
-    address: "789 Võ Văn Tần, Quận 3",
+    name: 'CLB Pickleball Sài Gòn',
+    address: '789 Võ Văn Tần, Quận 3',
     distance: 5.0,
     rating: 4.9,
-    openTime: "24/7",
-    priceRange: "200k - 400k/h",
-    image: "https://images.unsplash.com/photo-1587280501635-68a0e82cd5ff?w=400",
+    openTime: '24/7',
+    priceRange: '200k - 400k/h',
+    image: 'https://images.unsplash.com/photo-1587280501635-68a0e82cd5ff?w=400',
   },
 ];
 
@@ -84,19 +83,13 @@ export function CourtFinderView({ onBack }: CourtFinderViewProps) {
           >
             {/* Court image */}
             <div className="relative h-40">
-              <img
-                src={court.image}
-                alt={court.name}
-                className="w-full h-full object-cover"
-              />
+              <img src={court.image} alt={court.name} className="w-full h-full object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
               <div className="absolute bottom-3 left-3 right-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1 bg-black/40 backdrop-blur-sm px-2 py-1 rounded-full">
                     <MapPin className="w-3 h-3 text-white" />
-                    <span className="text-xs text-white">
-                      {court.distance} km
-                    </span>
+                    <span className="text-xs text-white">{court.distance} km</span>
                   </div>
                   <div className="flex items-center gap-1 bg-black/40 backdrop-blur-sm px-2 py-1 rounded-full">
                     <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />

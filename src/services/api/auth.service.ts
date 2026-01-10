@@ -67,7 +67,9 @@ export const signUpWithEmail = async ({
     },
   });
 
-  if (error) throw error;
+  if (error) {
+    throw error;
+  }
 
   return {
     user: data.user,
@@ -87,7 +89,9 @@ export const signInWithEmail = async ({
     password,
   });
 
-  if (error) throw error;
+  if (error) {
+    throw error;
+  }
 
   return {
     user: data.user,
@@ -102,30 +106,29 @@ export const signInWithEmail = async ({
 /**
  * Request OTP code via SMS
  */
-export const requestPhoneOtp = async ({
-  phone,
-}: SignInWithPhoneParams): Promise<void> => {
+export const requestPhoneOtp = async ({ phone }: SignInWithPhoneParams): Promise<void> => {
   const { error } = await supabase.auth.signInWithOtp({
     phone,
   });
 
-  if (error) throw error;
+  if (error) {
+    throw error;
+  }
 };
 
 /**
  * Verify OTP code and sign in
  */
-export const verifyPhoneOtp = async ({
-  phone,
-  token,
-}: VerifyOtpParams): Promise<AuthResponse> => {
+export const verifyPhoneOtp = async ({ phone, token }: VerifyOtpParams): Promise<AuthResponse> => {
   const { data, error } = await supabase.auth.verifyOtp({
     phone,
     token,
     type: 'sms',
   });
 
-  if (error) throw error;
+  if (error) {
+    throw error;
+  }
 
   return {
     user: data.user,
@@ -152,7 +155,9 @@ export const signInWithGoogle = async (): Promise<{ url: string | null }> => {
     },
   });
 
-  if (error) throw error;
+  if (error) {
+    throw error;
+  }
 
   return { url: data.url };
 };
@@ -168,7 +173,9 @@ export const signInWithFacebook = async (): Promise<{ url: string | null }> => {
     },
   });
 
-  if (error) throw error;
+  if (error) {
+    throw error;
+  }
 
   return { url: data.url };
 };
@@ -184,7 +191,9 @@ export const signInWithApple = async (): Promise<{ url: string | null }> => {
     },
   });
 
-  if (error) throw error;
+  if (error) {
+    throw error;
+  }
 
   return { url: data.url };
 };
@@ -214,20 +223,20 @@ export const getCurrentUser = async (): Promise<User | null> => {
  */
 export const signOut = async (): Promise<void> => {
   const { error } = await supabase.auth.signOut();
-  if (error) throw error;
+  if (error) {
+    throw error;
+  }
 };
 
 /**
  * Listen to auth state changes
  */
-export const onAuthStateChange = (
-  callback: (event: string, session: Session | null) => void
-) => {
-  const { data: { subscription } } = supabase.auth.onAuthStateChange(
-    (event, session) => {
-      callback(event, session);
-    }
-  );
+export const onAuthStateChange = (callback: (event: string, session: Session | null) => void) => {
+  const {
+    data: { subscription },
+  } = supabase.auth.onAuthStateChange((event, session) => {
+    callback(event, session);
+  });
 
   // Return unsubscribe function
   return () => {
@@ -247,7 +256,9 @@ export const resetPasswordForEmail = async (email: string): Promise<void> => {
     redirectTo: 'myapp://auth/reset-password',
   });
 
-  if (error) throw error;
+  if (error) {
+    throw error;
+  }
 };
 
 /**
@@ -258,20 +269,22 @@ export const updatePassword = async (newPassword: string): Promise<void> => {
     password: newPassword,
   });
 
-  if (error) throw error;
+  if (error) {
+    throw error;
+  }
 };
 
 /**
  * Update user metadata
  */
-export const updateUserMetadata = async (
-  metadata: Record<string, any>
-): Promise<User | null> => {
+export const updateUserMetadata = async (metadata: Record<string, any>): Promise<User | null> => {
   const { data, error } = await supabase.auth.updateUser({
     data: metadata,
   });
 
-  if (error) throw error;
+  if (error) {
+    throw error;
+  }
 
   return data.user;
 };

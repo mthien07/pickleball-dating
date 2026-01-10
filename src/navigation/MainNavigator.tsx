@@ -1,8 +1,16 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
-import { Text } from 'react-native';
-import { colors } from '../theme/tokens';
+import { Ionicons } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+  withTiming,
+} from 'react-native-reanimated';
+import { colors, spacing, iconSizes } from '../theme/tokens';
+import { shadows } from '../theme/shadows';
 import {
   MainTabParamList,
   MatchesStackParamList,
@@ -16,28 +24,65 @@ import { CourtDiscoveryScreen } from '../screens/discovery/CourtDiscoveryScreen'
 import { CoachDirectoryScreen } from '../screens/coach/CoachDirectoryScreen';
 import { AnimationDemoScreen } from '../screens/demo/AnimationDemoScreen';
 
-// Placeholders for now
-import {
-  MatchesListScreen,
-  ChatScreen,
-  MatchDetailScreen,
-  RatingScreen,
-  CourtDetailScreen,
-  CourtBookingScreen,
-  PaymentMethodScreen,
-  BookingConfirmationScreen,
-  ProfileMeScreen,
-  EditProfileScreen,
-  SettingsScreen,
-  BookingHistoryScreen,
-  BookingDetailScreen,
-  CoachDetailScreen,
-} from '../screens/placeholders';
+// Matches Screens
+import { MatchesListScreen } from '../screens/matches/MatchesListScreen';
+import { ChatScreen } from '../screens/matches/ChatScreen';
+import { MatchDetailScreen } from '../screens/matches/MatchDetailScreen';
+import { RatingScreen } from '../screens/matches/RatingScreen';
 
-// --- Tab Icons (Simple Text for now, replace with Icons later) ---
-const TabIcon = ({ name, color, focused }: { name: string; color: string; focused: boolean }) => (
-  <Text style={{ color, fontSize: 24 }}>{name}</Text>
-);
+// Court Screens
+import { CourtDetailScreen } from '../screens/court/CourtDetailScreen';
+import { BookingScreen } from '../screens/court/BookingScreen';
+import { PaymentScreen } from '../screens/court/PaymentScreen';
+import { BookingConfirmationScreen } from '../screens/court/BookingConfirmationScreen';
+
+// Booking Screens
+import { BookingHistoryScreen } from '../screens/booking/BookingHistoryScreen';
+import { BookingDetailScreen } from '../screens/booking/BookingDetailScreen';
+
+// Coach Screens
+import { CoachDetailScreen } from '../screens/coach/CoachDetailScreen';
+
+// Profile Screens
+import { ProfileMeScreen } from '../screens/profile/ProfileMeScreen';
+import { EditProfileScreen } from '../screens/profile/EditProfileScreen';
+import { SettingsScreen } from '../screens/profile/SettingsScreen';
+
+// --- Animated Tab Icon Component ---
+interface TabIconProps {
+  name: keyof typeof Ionicons.glyphMap;
+  color: string;
+  focused: boolean;
+  size?: number;
+}
+
+const TabIcon = ({ name, color, focused, size = iconSizes.md }: TabIconProps) => {
+  const scale = useSharedValue(focused ? 1.1 : 0.9);
+  const opacity = useSharedValue(focused ? 1 : 0.6);
+
+  React.useEffect(() => {
+    if (focused) {
+      scale.value = withSpring(1.1, { damping: 15, stiffness: 300 });
+      opacity.value = withTiming(1, { duration: 200 });
+    } else {
+      scale.value = withSpring(0.9, { damping: 15, stiffness: 300 });
+      opacity.value = withTiming(0.6, { duration: 200 });
+    }
+  }, [focused, scale, opacity]);
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ scale: scale.value }],
+      opacity: opacity.value,
+    };
+  });
+
+  return (
+    <Animated.View style={animatedStyle}>
+      <Ionicons name={name} size={size} color={color} />
+    </Animated.View>
+  );
+};
 
 // --- Stacks for each Tab ---
 
@@ -56,8 +101,8 @@ const CourtsNavigator = () => (
   <CourtsStack.Navigator screenOptions={{ headerShown: false }}>
     <CourtsStack.Screen name="CourtDiscovery" component={CourtDiscoveryScreen} />
     <CourtsStack.Screen name="CourtDetail" component={CourtDetailScreen} />
-    <CourtsStack.Screen name="CourtBooking" component={CourtBookingScreen} />
-    <CourtsStack.Screen name="PaymentMethod" component={PaymentMethodScreen} />
+    <CourtsStack.Screen name="CourtBooking" component={BookingScreen} />
+    <CourtsStack.Screen name="PaymentMethod" component={PaymentScreen} />
     <CourtsStack.Screen name="BookingConfirmation" component={BookingConfirmationScreen} />
   </CourtsStack.Navigator>
 );
@@ -81,6 +126,8 @@ const ProfileNavigator = () => (
 const Tab = createBottomTabNavigator<MainTabParamList>();
 
 export const MainNavigator = () => {
+  const insets = useSafeAreaInsets();
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -89,15 +136,22 @@ export const MainNavigator = () => {
         tabBarInactiveTintColor: colors.textTertiary,
         tabBarStyle: {
           backgroundColor: colors.surface,
-          borderTopColor: colors.border,
-          height: 60,
-          paddingBottom: 10,
-          paddingTop: 10,
+          borderTopWidth: 0,
+          height: 64 + insets.bottom,
+          paddingBottom: Math.max(insets.bottom, spacing.sm),
+          paddingTop: spacing.sm,
+          ...shadows.elevated,
+          elevation: 8,
         },
         tabBarLabelStyle: {
-          fontSize: 10,
+          fontSize: 11,
           fontWeight: '600',
+          marginTop: spacing.xs,
         },
+        tabBarItemStyle: {
+          paddingVertical: spacing.xs,
+        },
+        tabBarHideOnKeyboard: true,
       }}
     >
       <Tab.Screen
@@ -105,7 +159,9 @@ export const MainNavigator = () => {
         component={HomeSwipeScreen}
         options={{
           tabBarLabel: 'Home',
-          tabBarIcon: ({ color, focused }) => <TabIcon name="❤️" color={color} focused={focused} />,
+          tabBarIcon: ({ color, focused }) => (
+            <TabIcon name={focused ? 'heart' : 'heart-outline'} color={color} focused={focused} />
+          ),
         }}
       />
       <Tab.Screen
@@ -113,7 +169,13 @@ export const MainNavigator = () => {
         component={MatchesNavigator}
         options={{
           tabBarLabel: 'Matches',
-          tabBarIcon: ({ color, focused }) => <TabIcon name="💬" color={color} focused={focused} />,
+          tabBarIcon: ({ color, focused }) => (
+            <TabIcon
+              name={focused ? 'chatbubbles' : 'chatbubbles-outline'}
+              color={color}
+              focused={focused}
+            />
+          ),
         }}
       />
       <Tab.Screen
@@ -121,7 +183,13 @@ export const MainNavigator = () => {
         component={CourtsNavigator}
         options={{
           tabBarLabel: 'Courts',
-          tabBarIcon: ({ color, focused }) => <TabIcon name="🎾" color={color} focused={focused} />,
+          tabBarIcon: ({ color, focused }) => (
+            <TabIcon
+              name={focused ? 'location' : 'location-outline'}
+              color={color}
+              focused={focused}
+            />
+          ),
         }}
       />
       <Tab.Screen
@@ -129,7 +197,9 @@ export const MainNavigator = () => {
         component={ProfileNavigator}
         options={{
           tabBarLabel: 'Profile',
-          tabBarIcon: ({ color, focused }) => <TabIcon name="👤" color={color} focused={focused} />,
+          tabBarIcon: ({ color, focused }) => (
+            <TabIcon name={focused ? 'person' : 'person-outline'} color={color} focused={focused} />
+          ),
         }}
       />
     </Tab.Navigator>

@@ -1,5 +1,16 @@
-import { X, MapPin, Heart, Star, UtensilsCrossed, Book, Plane, Palette, Coffee, Waves } from "lucide-react";
-import { motion } from "motion/react";
+import {
+  X,
+  MapPin,
+  Heart,
+  Star,
+  UtensilsCrossed,
+  Book,
+  Plane,
+  Palette,
+  Coffee,
+  Waves,
+} from 'lucide-react';
+import { motion } from 'motion/react';
 
 interface Profile {
   id: number;
@@ -19,14 +30,14 @@ interface ProfileModalProps {
 }
 
 const interestIcons: { [key: string]: any } = {
-  "Travel": Plane,
-  "Food": UtensilsCrossed,
-  "Photography": Palette,
-  "Books": Book,
-  "Coffee": Coffee,
-  "Beach Time": Waves,
-  "Digital Art": Palette,
-  "Street Food": UtensilsCrossed,
+  Travel: Plane,
+  Food: UtensilsCrossed,
+  Photography: Palette,
+  Books: Book,
+  Coffee: Coffee,
+  'Beach Time': Waves,
+  'Digital Art': Palette,
+  'Street Food': UtensilsCrossed,
 };
 
 export function ProfileModal({ profile, onClose, onLike }: ProfileModalProps) {
@@ -39,17 +50,19 @@ export function ProfileModal({ profile, onClose, onLike }: ProfileModalProps) {
       onClick={onClose}
     >
       <motion.div
-        initial={{ y: "100%" }}
+        initial={{ y: '100%' }}
         animate={{ y: 0 }}
-        exit={{ y: "100%" }}
-        transition={{ type: "spring", damping: 25, stiffness: 300 }}
+        exit={{ y: '100%' }}
+        transition={{ type: 'spring', damping: 25, stiffness: 300 }}
         className="bg-[#1a1a1a] w-full md:w-[600px] md:max-h-[90vh] rounded-t-3xl md:rounded-3xl overflow-hidden border border-white/10"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div className="sticky top-0 bg-[#1a1a1a]/95 backdrop-blur-sm border-b border-white/10 p-4 flex justify-between items-center z-10">
           <div className="flex items-center gap-3">
-            <h2 className="text-xl text-white">{profile.name}, {profile.age}</h2>
+            <h2 className="text-xl text-white">
+              {profile.name}, {profile.age}
+            </h2>
             <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
           </div>
           <button

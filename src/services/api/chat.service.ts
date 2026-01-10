@@ -37,7 +37,9 @@ export const getConversationMessages = async (
     .order('created_at', { ascending: false })
     .range(offset, offset + limit - 1);
 
-  if (error) throw error;
+  if (error) {
+    throw error;
+  }
 
   return data as Message[];
 };
@@ -49,8 +51,12 @@ export const sendTextMessage = async (
   conversationId: string,
   content: string
 ): Promise<Message> => {
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) throw new Error('User not authenticated');
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) {
+    throw new Error('User not authenticated');
+  }
 
   const { data, error } = await supabase
     .from('messages')
@@ -64,7 +70,9 @@ export const sendTextMessage = async (
     .select()
     .single();
 
-  if (error) throw error;
+  if (error) {
+    throw error;
+  }
 
   return data as Message;
 };
@@ -76,8 +84,12 @@ export const sendImageMessage = async (
   conversationId: string,
   imageUrl: string
 ): Promise<Message> => {
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) throw new Error('User not authenticated');
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) {
+    throw new Error('User not authenticated');
+  }
 
   const { data, error } = await supabase
     .from('messages')
@@ -91,7 +103,9 @@ export const sendImageMessage = async (
     .select()
     .single();
 
-  if (error) throw error;
+  if (error) {
+    throw error;
+  }
 
   return data as Message;
 };
@@ -99,14 +113,14 @@ export const sendImageMessage = async (
 /**
  * Mark messages as read
  */
-export const markMessagesRead = async (
-  conversationId: string
-): Promise<number> => {
+export const markMessagesRead = async (conversationId: string): Promise<number> => {
   const { data, error } = await supabase.rpc('mark_messages_read', {
     conversation_id_param: conversationId,
   });
 
-  if (error) throw error;
+  if (error) {
+    throw error;
+  }
 
   return data as number;
 };
@@ -115,8 +129,12 @@ export const markMessagesRead = async (
  * Get unread message count
  */
 export const getUnreadCount = async (): Promise<number> => {
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return 0;
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) {
+    return 0;
+  }
 
   const { count, error } = await supabase
     .from('messages')
@@ -124,7 +142,9 @@ export const getUnreadCount = async (): Promise<number> => {
     .neq('sender_id', user.id)
     .eq('status', 'sent');
 
-  if (error) throw error;
+  if (error) {
+    throw error;
+  }
 
   return count || 0;
 };

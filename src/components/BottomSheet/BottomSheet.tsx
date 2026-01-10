@@ -119,58 +119,59 @@ const CustomHandle: React.FC<BottomSheetHandleProps> = (props) => {
 // COMPONENT
 // ============================================
 
-export const BottomSheet = forwardRef<BottomSheetRef, BottomSheetProps>(({
-  children,
-  snapPoints = ['50%', '90%'],
-  initialSnapIndex = 0,
-  enablePanDownToClose = true,
-  enableBackdrop = true,
-  backgroundColor = colors.surface,
-  onChange,
-  onClose,
-}, ref) => {
-  // Memoize snap points
-  const memoizedSnapPoints = useMemo(() => snapPoints, [snapPoints]);
+export const BottomSheet = forwardRef<BottomSheetRef, BottomSheetProps>(
+  (
+    {
+      children,
+      snapPoints = ['50%', '90%'],
+      initialSnapIndex = 0,
+      enablePanDownToClose = true,
+      enableBackdrop = true,
+      backgroundColor = colors.surface,
+      onChange,
+      onClose,
+    },
+    ref
+  ) => {
+    // Memoize snap points
+    const memoizedSnapPoints = useMemo(() => snapPoints, [snapPoints]);
 
-  // Backdrop component
-  const renderBackdrop = useCallback(
-    (props: BottomSheetBackdropProps) =>
-      enableBackdrop ? (
-        <BottomSheetBackdrop
-          {...props}
-          appearsOnIndex={0}
-          disappearsOnIndex={-1}
-          opacity={0.5}
-        />
-      ) : null,
-    [enableBackdrop]
-  );
+    // Backdrop component
+    const renderBackdrop = useCallback(
+      (props: BottomSheetBackdropProps) =>
+        enableBackdrop ? (
+          <BottomSheetBackdrop {...props} appearsOnIndex={0} disappearsOnIndex={-1} opacity={0.5} />
+        ) : null,
+      [enableBackdrop]
+    );
 
-  // Handle change
-  const handleChange = useCallback((index: number) => {
-    if (index === -1 && onClose) {
-      onClose();
-    }
-    onChange?.(index);
-  }, [onChange, onClose]);
+    // Handle change
+    const handleChange = useCallback(
+      (index: number) => {
+        if (index === -1 && onClose) {
+          onClose();
+        }
+        onChange?.(index);
+      },
+      [onChange, onClose]
+    );
 
-  return (
-    <GorhomBottomSheet
-      ref={ref as any}
-      index={initialSnapIndex}
-      snapPoints={memoizedSnapPoints}
-      enablePanDownToClose={enablePanDownToClose}
-      backdropComponent={renderBackdrop}
-      handleComponent={CustomHandle}
-      backgroundStyle={{ backgroundColor }}
-      onChange={handleChange}
-    >
-      <View style={styles.contentContainer}>
-        {children}
-      </View>
-    </GorhomBottomSheet>
-  );
-});
+    return (
+      <GorhomBottomSheet
+        ref={ref as any}
+        index={initialSnapIndex}
+        snapPoints={memoizedSnapPoints}
+        enablePanDownToClose={enablePanDownToClose}
+        backdropComponent={renderBackdrop}
+        handleComponent={CustomHandle}
+        backgroundStyle={{ backgroundColor }}
+        onChange={handleChange}
+      >
+        <View style={styles.contentContainer}>{children}</View>
+      </GorhomBottomSheet>
+    );
+  }
+);
 
 BottomSheet.displayName = 'BottomSheet';
 

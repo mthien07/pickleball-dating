@@ -1,4 +1,4 @@
-import { Settings, MapPin, Heart } from "lucide-react";
+import { Settings, MapPin, Heart } from 'lucide-react';
 
 interface ProfileViewProps {
   onBack: () => void;
@@ -9,10 +9,7 @@ export function ProfileView({ onBack }: ProfileViewProps) {
     <div className="flex flex-col h-full bg-[#1a1a1a] overflow-y-auto">
       {/* Header */}
       <div className="sticky top-0 bg-[#1a1a1a]/95 backdrop-blur-sm border-b border-white/10 p-4 flex justify-between items-center z-10">
-        <button
-          onClick={onBack}
-          className="text-red-500"
-        >
+        <button onClick={onBack} className="text-red-500">
           Done
         </button>
         <h1 className="text-xl text-white">Edit Profile</h1>
@@ -64,7 +61,7 @@ export function ProfileView({ onBack }: ProfileViewProps) {
         <div>
           <label className="text-sm text-gray-400 mb-2 block">Interests</label>
           <div className="flex flex-wrap gap-2">
-            {["Travel", "Food", "Photography", "Hiking", "Music", "Art"].map((interest) => (
+            {['Travel', 'Food', 'Photography', 'Hiking', 'Music', 'Art'].map((interest) => (
               <button
                 key={interest}
                 className="px-4 py-2 bg-gradient-to-r from-red-500/20 to-orange-500/20 text-red-400 border border-red-500/30 rounded-full hover:from-red-500/30 hover:to-orange-500/30 transition-colors"

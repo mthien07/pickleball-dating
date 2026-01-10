@@ -46,21 +46,16 @@ interface CoachCardProps {
 
 const CoachCard = ({ coach, onPress, onBook }: CoachCardProps) => {
   return (
-    <TouchableOpacity
-      activeOpacity={0.95}
-      onPress={onPress}
-      style={styles.card}
-    >
+    <TouchableOpacity activeOpacity={0.95} onPress={onPress} style={styles.card}>
       <View style={styles.cardContent}>
         {/* Header: Avatar & Main Info */}
         <View style={styles.cardHeader}>
-          <Image
-            source={{ uri: coach.avatar_url }}
-            style={styles.avatar}
-          />
+          <Image source={{ uri: coach.avatar_url }} style={styles.avatar} />
           <View style={styles.headerInfo}>
             <View style={styles.nameRow}>
-              <Text style={styles.name} numberOfLines={1}>{coach.display_name}</Text>
+              <Text style={styles.name} numberOfLines={1}>
+                {coach.display_name}
+              </Text>
               <Ionicons name="checkmark-circle" size={18} color={colors.primary} />
             </View>
             <RatingBadge rating={coach.rating} count={coach.review_count} />
@@ -78,7 +73,9 @@ const CoachCard = ({ coach, onPress, onBook }: CoachCardProps) => {
           </View>
           <View style={styles.detailItem}>
             <Text style={styles.detailLabel}>Location</Text>
-            <Text style={styles.detailValue} numberOfLines={1}>{coach.location.address}</Text>
+            <Text style={styles.detailValue} numberOfLines={1}>
+              {coach.location.address}
+            </Text>
           </View>
         </View>
 
@@ -90,8 +87,8 @@ const CoachCard = ({ coach, onPress, onBook }: CoachCardProps) => {
               {(coach.hourly_rate / 1000).toFixed(0)}k <Text style={styles.currency}>VND</Text>
             </Text>
           </View>
-          
-          <TouchableOpacity 
+
+          <TouchableOpacity
             style={styles.bookButton}
             onPress={(e) => {
               e.stopPropagation(); // Prevent card press
@@ -128,9 +125,10 @@ export const CoachDirectoryScreen = () => {
     loadData();
   }, []);
 
-  const filteredCoaches = coaches.filter(coach => 
-    coach.display_name.toLowerCase().includes(query.toLowerCase()) ||
-    coach.location.address.toLowerCase().includes(query.toLowerCase())
+  const filteredCoaches = coaches.filter(
+    (coach) =>
+      coach.display_name.toLowerCase().includes(query.toLowerCase()) ||
+      coach.location.address.toLowerCase().includes(query.toLowerCase())
   );
 
   const handleBook = (coachId: string) => {
@@ -142,11 +140,14 @@ export const CoachDirectoryScreen = () => {
     <View style={styles.headerContainer}>
       <View style={styles.titleRow}>
         <Text style={styles.screenTitle}>Find a Coach 🧢</Text>
-        <TouchableOpacity style={styles.filterButton} onPress={() => showInfo('Filters coming soon')}>
+        <TouchableOpacity
+          style={styles.filterButton}
+          onPress={() => showInfo('Filters coming soon')}
+        >
           <Ionicons name="options-outline" size={24} color={colors.textPrimary} />
         </TouchableOpacity>
       </View>
-      
+
       {/* Search Bar */}
       <View style={styles.searchContainer}>
         <Ionicons name="search" size={20} color={colors.textSecondary} style={styles.searchIcon} />
@@ -166,7 +167,7 @@ export const CoachDirectoryScreen = () => {
       <StatusBar barStyle="dark-content" />
       <SafeAreaView edges={['top']} style={styles.safeArea}>
         {renderHeader()}
-        
+
         <FlatList
           data={filteredCoaches}
           renderItem={({ item }) => (
@@ -196,15 +197,6 @@ export const CoachDirectoryScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background, // Match other screens (light blue-ish) or white? User asked for "Clean white background" but "consistent with Find Court" (which uses colors.background)
-    // Actually, CourtDiscoveryScreen uses colors.background which is #B8D4F0 (Sky Blue) in tokens.ts, BUT the user request said "clean white background".
-    // I will stick to colors.background for consistency with CourtDiscoveryScreen as requested "consistent with...", OR override if they explicitly said "clean white".
-    // "consistent with the visual style of my existing Find Court and Home pages: clean white background" -> This implies I might have changed Home/Court to white in previous steps or they perceive it as white-ish. 
-    // Checking HomeSwipeScreen: backgroundColor: '#FFFFFF'.
-    // Checking CourtDiscoveryScreen: backgroundColor: colors.background. 
-    // I will use colors.background for the outer container but perhaps the cards are on a white list background? 
-    // Let's check HomeSwipeScreen again. It has backgroundColor: '#FFFFFF' explicitly set in the last edit.
-    // I will use '#FFFFFF' (White) to match the explicit request "clean white background".
     backgroundColor: '#FFFFFF',
   },
   safeArea: {
@@ -389,4 +381,3 @@ const styles = StyleSheet.create({
     marginTop: spacing.md,
   },
 });
-

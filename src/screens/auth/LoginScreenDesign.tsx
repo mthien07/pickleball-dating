@@ -29,7 +29,7 @@ const COLORS = {
 export default function LoginScreenDesign({ navigation }: { navigation?: any }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  
+
   const isFormValid = email.trim() !== '' && password.trim() !== '';
 
   const handleLogin = () => {
@@ -37,23 +37,20 @@ export default function LoginScreenDesign({ navigation }: { navigation?: any }) 
     console.log('Login', { email, password });
     // After successful login, navigation should be handled by AuthContext state change usually
     // But if testing navigation:
-    // navigation.navigate('Main'); 
+    // navigation.navigate('Main');
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={COLORS.background} />
-      
+
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation?.goBack()}
-        >
+        <TouchableOpacity style={styles.backButton} onPress={() => navigation?.goBack()}>
           <ChevronLeft size={28} color={COLORS.text} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Đăng nhập</Text>
-        <View style={{ width: 28 }} /> 
+        <View style={{ width: 28 }} />
       </View>
 
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -81,7 +78,7 @@ export default function LoginScreenDesign({ navigation }: { navigation?: any }) 
                   value={password}
                   onChangeText={setPassword}
                 />
-                <TouchableOpacity 
+                <TouchableOpacity
                   style={styles.forgotPassword}
                   onPress={() => console.log('Forgot Password')}
                 >
@@ -103,8 +100,8 @@ export default function LoginScreenDesign({ navigation }: { navigation?: any }) 
               <View style={styles.footer}>
                 <Text style={styles.footerText}>
                   Chưa có tài khoản?{' '}
-                  <Text 
-                    style={styles.linkText} 
+                  <Text
+                    style={styles.linkText}
                     onPress={() => navigation?.navigate('SignupDesign')}
                   >
                     Đăng ký
@@ -176,4 +173,3 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
 });
-

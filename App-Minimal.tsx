@@ -6,9 +6,7 @@ export default function App() {
     <View style={styles.container}>
       <Text style={styles.title}>🎾 Hello PickleBall!</Text>
       <Text style={styles.subtitle}>Test App - Minimal Version</Text>
-      <Text style={styles.info}>
-        Nếu thấy màn hình này = Expo hoạt động OK!
-      </Text>
+      <Text style={styles.info}>Nếu thấy màn hình này = Expo hoạt động OK!</Text>
     </View>
   );
 }

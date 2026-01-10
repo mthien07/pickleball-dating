@@ -129,10 +129,14 @@ export const Avatar: React.FC<AvatarProps> = ({
       height: sizeValue,
       borderRadius: sizeValue / 2,
     },
-    ...(showBorder ? [{
-      borderWidth: 2,
-      borderColor: borderColor,
-    }] : []),
+    ...(showBorder
+      ? [
+          {
+            borderWidth: 2,
+            borderColor: borderColor,
+          },
+        ]
+      : []),
     ...(style ? [style] : []),
   ].filter(Boolean);
 
@@ -187,9 +191,7 @@ export const Avatar: React.FC<AvatarProps> = ({
       )}
 
       {/* Online status indicator */}
-      {isOnline !== undefined && (
-        <View style={statusStyles} />
-      )}
+      {isOnline !== undefined && <View style={statusStyles} />}
     </View>
   );
 };

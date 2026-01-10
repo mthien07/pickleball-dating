@@ -1,12 +1,12 @@
-import { useState } from "react";
-import { ArrowLeft, Eye, EyeOff, Building, Users, GraduationCap } from "lucide-react";
+import { useState } from 'react';
+import { ArrowLeft, Eye, EyeOff, Building, Users, GraduationCap } from 'lucide-react';
 
 interface SignUpScreenProps {
   onBack: () => void;
   onSignUp: () => void;
 }
 
-type UserRole = "owner" | "player" | "coach" | null;
+type UserRole = 'owner' | 'player' | 'coach' | null;
 
 export function SignUpScreen({ onBack, onSignUp }: SignUpScreenProps) {
   const [showPassword, setShowPassword] = useState(false);
@@ -37,9 +37,7 @@ export function SignUpScreen({ onBack, onSignUp }: SignUpScreenProps) {
         <form onSubmit={handleSubmit} className="flex-1 px-6 py-6 space-y-6">
           {/* Email/Phone */}
           <div>
-            <label className="text-sm text-gray-400 mb-2 block">
-              Email hoặc Số điện thoại
-            </label>
+            <label className="text-sm text-gray-400 mb-2 block">Email hoặc Số điện thoại</label>
             <input
               type="text"
               placeholder=""
@@ -52,7 +50,7 @@ export function SignUpScreen({ onBack, onSignUp }: SignUpScreenProps) {
             <label className="text-sm text-gray-400 mb-2 block">Mật khẩu</label>
             <div className="relative">
               <input
-                type={showPassword ? "text" : "password"}
+                type={showPassword ? 'text' : 'password'}
                 placeholder=""
                 className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg outline-none focus:border-red-500 transition-colors text-white pr-12"
               />
@@ -61,23 +59,17 @@ export function SignUpScreen({ onBack, onSignUp }: SignUpScreenProps) {
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
               >
-                {showPassword ? (
-                  <EyeOff className="w-5 h-5" />
-                ) : (
-                  <Eye className="w-5 h-5" />
-                )}
+                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
               </button>
             </div>
           </div>
 
           {/* Confirm Password */}
           <div>
-            <label className="text-sm text-gray-400 mb-2 block">
-              Xác nhận mật khẩu
-            </label>
+            <label className="text-sm text-gray-400 mb-2 block">Xác nhận mật khẩu</label>
             <div className="relative">
               <input
-                type={showConfirmPassword ? "text" : "password"}
+                type={showConfirmPassword ? 'text' : 'password'}
                 placeholder=""
                 className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg outline-none focus:border-red-500 transition-colors text-white pr-12"
               />
@@ -86,11 +78,7 @@ export function SignUpScreen({ onBack, onSignUp }: SignUpScreenProps) {
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
               >
-                {showConfirmPassword ? (
-                  <EyeOff className="w-5 h-5" />
-                ) : (
-                  <Eye className="w-5 h-5" />
-                )}
+                {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
               </button>
             </div>
           </div>
@@ -101,11 +89,11 @@ export function SignUpScreen({ onBack, onSignUp }: SignUpScreenProps) {
             <div className="grid grid-cols-3 gap-3">
               <button
                 type="button"
-                onClick={() => setSelectedRole("owner")}
+                onClick={() => setSelectedRole('owner')}
                 className={`flex flex-col items-center gap-2 p-4 rounded-xl border transition-all ${
-                  selectedRole === "owner"
-                    ? "bg-gradient-to-br from-red-500/20 to-orange-500/20 border-red-500"
-                    : "bg-white/5 border-white/10 hover:bg-white/10"
+                  selectedRole === 'owner'
+                    ? 'bg-gradient-to-br from-red-500/20 to-orange-500/20 border-red-500'
+                    : 'bg-white/5 border-white/10 hover:bg-white/10'
                 }`}
               >
                 <Building className="w-8 h-8" />
@@ -113,11 +101,11 @@ export function SignUpScreen({ onBack, onSignUp }: SignUpScreenProps) {
               </button>
               <button
                 type="button"
-                onClick={() => setSelectedRole("player")}
+                onClick={() => setSelectedRole('player')}
                 className={`flex flex-col items-center gap-2 p-4 rounded-xl border transition-all ${
-                  selectedRole === "player"
-                    ? "bg-gradient-to-br from-red-500/20 to-orange-500/20 border-red-500"
-                    : "bg-white/5 border-white/10 hover:bg-white/10"
+                  selectedRole === 'player'
+                    ? 'bg-gradient-to-br from-red-500/20 to-orange-500/20 border-red-500'
+                    : 'bg-white/5 border-white/10 hover:bg-white/10'
                 }`}
               >
                 <Users className="w-8 h-8" />
@@ -125,11 +113,11 @@ export function SignUpScreen({ onBack, onSignUp }: SignUpScreenProps) {
               </button>
               <button
                 type="button"
-                onClick={() => setSelectedRole("coach")}
+                onClick={() => setSelectedRole('coach')}
                 className={`flex flex-col items-center gap-2 p-4 rounded-xl border transition-all ${
-                  selectedRole === "coach"
-                    ? "bg-gradient-to-br from-red-500/20 to-orange-500/20 border-red-500"
-                    : "bg-white/5 border-white/10 hover:bg-white/10"
+                  selectedRole === 'coach'
+                    ? 'bg-gradient-to-br from-red-500/20 to-orange-500/20 border-red-500'
+                    : 'bg-white/5 border-white/10 hover:bg-white/10'
                 }`}
               >
                 <GraduationCap className="w-8 h-8" />
@@ -148,8 +136,7 @@ export function SignUpScreen({ onBack, onSignUp }: SignUpScreenProps) {
               className="mt-1 w-4 h-4 rounded border-white/20 bg-white/5 checked:bg-red-500"
             />
             <label htmlFor="terms" className="text-sm text-gray-400 flex-1">
-              Tôi đồng ý với{" "}
-              <span className="text-red-500">Điều khoản sử dụng</span>
+              Tôi đồng ý với <span className="text-red-500">Điều khoản sử dụng</span>
             </label>
           </div>
 
@@ -164,12 +151,8 @@ export function SignUpScreen({ onBack, onSignUp }: SignUpScreenProps) {
 
           {/* Login link */}
           <p className="text-center text-sm text-gray-400">
-            Đã có tài khoản?{" "}
-            <button
-              type="button"
-              onClick={onBack}
-              className="text-red-500 hover:text-red-400"
-            >
+            Đã có tài khoản?{' '}
+            <button type="button" onClick={onBack} className="text-red-500 hover:text-red-400">
               Đăng nhập
             </button>
           </p>

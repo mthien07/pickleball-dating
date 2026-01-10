@@ -6,13 +6,7 @@
  */
 
 import React, { useState, useRef } from 'react';
-import {
-  View,
-  Text,
-  ScrollView,
-  StyleSheet,
-  Alert,
-} from 'react-native';
+import { View, Text, ScrollView, StyleSheet, Alert } from 'react-native';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
@@ -92,245 +86,202 @@ export default function App() {
       <GestureHandlerRootView style={{ flex: 1 }}>
         <BottomSheetModalProvider>
           <SafeAreaView style={styles.container}>
-          <ScrollView
-            style={styles.scrollView}
-            contentContainerStyle={styles.content}
-            showsVerticalScrollIndicator={false}
-          >
-            {/* Header */}
-            <View style={styles.section}>
-              <Text style={styles.title}>🎾 UI Kit Demo</Text>
-              <Text style={styles.subtitle}>PickleBall Dating App Components</Text>
-            </View>
-
-            {/* Buttons */}
-            <Section title="Buttons">
-              <PrimaryButton
-                title="Primary Button"
-                onPress={() => {
-                  scalePop();
-                  showSuccess('Button pressed!');
-                }}
-                fullWidth
-              />
-              <SecondaryButton
-                title="Secondary Button"
-                onPress={() => showInfo('Secondary action')}
-                fullWidth
-              />
-              <Button
-                title="Loading Button"
-                onPress={() => {}}
-                loading={true}
-                fullWidth
-              />
-              <Button
-                title="Disabled Button"
-                onPress={() => {}}
-                disabled={true}
-                fullWidth
-              />
-            </Section>
-
-            {/* Inputs */}
-            <Section title="Inputs">
-              <SearchInput
-                value={searchQuery}
-                onChangeText={setSearchQuery}
-                placeholder="Search courts..."
-                clearable
-              />
-              <Input
-                label="Email"
-                type="email"
-                value=""
-                onChangeText={() => {}}
-                placeholder="your@email.com"
-                helperText="We'll never share your email"
-              />
-              <PasswordInput
-                label="Password"
-                value={password}
-                onChangeText={setPassword}
-                placeholder="Enter password"
-                error={password.length > 0 && password.length < 8 ? 'Min 8 characters' : ''}
-              />
-            </Section>
-
-            {/* Avatars */}
-            <Section title="Avatars">
-              <View style={styles.row}>
-                <Avatar
-                  size="xs"
-                  name="John Doe"
-                  imageUrl={MOCK_USERS[0].avatar_urls[0]}
-                />
-                <Avatar
-                  size="sm"
-                  name="Jane Smith"
-                  imageUrl={MOCK_USERS[1].avatar_urls[0]}
-                  isOnline={true}
-                />
-                <Avatar
-                  size="md"
-                  name="Mike Chen"
-                  imageUrl={MOCK_USERS[2].avatar_urls[0]}
-                  isOnline={true}
-                />
-                <Avatar
-                  size="lg"
-                  name="Sarah Lee"
-                  imageUrl={MOCK_USERS[3].avatar_urls[0]}
-                />
-                <Avatar
-                  size="xl"
-                  name="No Image"
-                  isOnline={false}
-                />
+            <ScrollView
+              style={styles.scrollView}
+              contentContainerStyle={styles.content}
+              showsVerticalScrollIndicator={false}
+            >
+              {/* Header */}
+              <View style={styles.section}>
+                <Text style={styles.title}>🎾 UI Kit Demo</Text>
+                <Text style={styles.subtitle}>PickleBall Dating App Components</Text>
               </View>
-            </Section>
 
-            {/* Progress Bars */}
-            <Section title="Progress Bars">
-              <ProgressBar progress={progress} height={12} />
-              <View style={styles.buttonRow}>
-                <Button title="-10%" onPress={decreaseProgress} size="small" />
-                <Button title="+10%" onPress={increaseProgress} size="small" />
-              </View>
-              {/* <Text style={styles.sectionSubtitle}>Skill Levels:</Text>
+              {/* Buttons */}
+              <Section title="Buttons">
+                <PrimaryButton
+                  title="Primary Button"
+                  onPress={() => {
+                    scalePop();
+                    showSuccess('Button pressed!');
+                  }}
+                  fullWidth
+                />
+                <SecondaryButton
+                  title="Secondary Button"
+                  onPress={() => showInfo('Secondary action')}
+                  fullWidth
+                />
+                <Button title="Loading Button" onPress={() => {}} loading={true} fullWidth />
+                <Button title="Disabled Button" onPress={() => {}} disabled={true} fullWidth />
+              </Section>
+
+              {/* Inputs */}
+              <Section title="Inputs">
+                <SearchInput
+                  value={searchQuery}
+                  onChangeText={setSearchQuery}
+                  placeholder="Search courts..."
+                  clearable
+                />
+                <Input
+                  label="Email"
+                  type="email"
+                  value=""
+                  onChangeText={() => {}}
+                  placeholder="your@email.com"
+                  helperText="We'll never share your email"
+                />
+                <PasswordInput
+                  label="Password"
+                  value={password}
+                  onChangeText={setPassword}
+                  placeholder="Enter password"
+                  error={password.length > 0 && password.length < 8 ? 'Min 8 characters' : ''}
+                />
+              </Section>
+
+              {/* Avatars */}
+              <Section title="Avatars">
+                <View style={styles.row}>
+                  <Avatar size="xs" name="John Doe" imageUrl={MOCK_USERS[0].avatar_urls[0]} />
+                  <Avatar
+                    size="sm"
+                    name="Jane Smith"
+                    imageUrl={MOCK_USERS[1].avatar_urls[0]}
+                    isOnline={true}
+                  />
+                  <Avatar
+                    size="md"
+                    name="Mike Chen"
+                    imageUrl={MOCK_USERS[2].avatar_urls[0]}
+                    isOnline={true}
+                  />
+                  <Avatar size="lg" name="Sarah Lee" imageUrl={MOCK_USERS[3].avatar_urls[0]} />
+                  <Avatar size="xl" name="No Image" isOnline={false} />
+                </View>
+              </Section>
+
+              {/* Progress Bars */}
+              <Section title="Progress Bars">
+                <ProgressBar progress={progress} height={12} />
+                <View style={styles.buttonRow}>
+                  <Button title="-10%" onPress={decreaseProgress} size="small" />
+                  <Button title="+10%" onPress={increaseProgress} size="small" />
+                </View>
+                {/* <Text style={styles.sectionSubtitle}>Skill Levels:</Text>
               <SkillProgress level="beginner" />
               <SkillProgress level="intermediate" />
               <SkillProgress level="advanced" />
               <SkillProgress level="pro" /> */}
-            </Section>
+              </Section>
 
-            {/* Cards */}
-            <Section title="Cards">
-              {showSkeletons ? (
-                <>
-                  <SkeletonCourtCard />
-                  <SkeletonProfileCard />
-                </>
-              ) : (
-                <>
-                  <CourtCard
-                    court={MOCK_COURTS[0]}
-                    onPress={() => Alert.alert('Court pressed')}
-                    onBookPress={() => Alert.alert('Book pressed')}
-                  />
-                  <MatchCard
-                    match={MOCK_MATCHES[0]}
-                    onPress={() => Alert.alert('Match pressed')}
-                  />
-                </>
-              )}
-              <Button
-                title={showSkeletons ? 'Show Cards' : 'Show Skeletons'}
-                onPress={toggleSkeletons}
-                variant="secondary"
-                fullWidth
-              />
-            </Section>
-
-            {/* Swipe Card */}
-            <Section title="Swipe Card">
-              <View style={styles.swipeContainer}>
-                <SwipeCard
-                  ref={swipeCardRef}
-                  user={MOCK_USERS[0]}
-                  onLike={() => showSuccess('Liked! 💚')}
-                  onPass={() => showInfo('Passed')}
-                  onSwipeComplete={() => console.log('Swipe complete')}
-                />
-              </View>
-              <View style={styles.buttonRow}>
+              {/* Cards */}
+              <Section title="Cards">
+                {showSkeletons ? (
+                  <>
+                    <SkeletonCourtCard />
+                    <SkeletonProfileCard />
+                  </>
+                ) : (
+                  <>
+                    <CourtCard
+                      court={MOCK_COURTS[0]}
+                      onPress={() => Alert.alert('Court pressed')}
+                      onBookPress={() => Alert.alert('Book pressed')}
+                    />
+                    <MatchCard
+                      match={MOCK_MATCHES[0]}
+                      onPress={() => Alert.alert('Match pressed')}
+                    />
+                  </>
+                )}
                 <Button
-                  title="👎 Pass"
-                  onPress={handlePass}
+                  title={showSkeletons ? 'Show Cards' : 'Show Skeletons'}
+                  onPress={toggleSkeletons}
                   variant="secondary"
+                  fullWidth
                 />
+              </Section>
+
+              {/* Swipe Card */}
+              <Section title="Swipe Card">
+                <View style={styles.swipeContainer}>
+                  <SwipeCard
+                    ref={swipeCardRef}
+                    user={MOCK_USERS[0]}
+                    onLike={() => showSuccess('Liked! 💚')}
+                    onPass={() => showInfo('Passed')}
+                    onSwipeComplete={() => console.log('Swipe complete')}
+                  />
+                </View>
+                <View style={styles.buttonRow}>
+                  <Button title="👎 Pass" onPress={handlePass} variant="secondary" />
+                  <Button title="💚 Like" onPress={handleLike} variant="primary" />
+                </View>
+              </Section>
+
+              {/* Empty States */}
+              <Section title="Empty States">
+                <EmptyState
+                  title="No Courts Found"
+                  message="We couldn't find any courts in your area"
+                  icon="🎾"
+                  actionLabel="Retry"
+                  onAction={() => showInfo('Retrying...')}
+                />
+              </Section>
+
+              {/* Toast Notifications */}
+              <Section title="Toast Notifications">
                 <Button
-                  title="💚 Like"
-                  onPress={handleLike}
+                  title="Success Toast"
+                  onPress={() => ToastMessages.bookingSuccess()}
                   variant="primary"
+                  fullWidth
                 />
-              </View>
-            </Section>
+                <Button title="Error Toast" onPress={handleError} variant="secondary" fullWidth />
+                <Button
+                  title="Info Toast"
+                  onPress={() => showInfo('This is an info message', 'Info')}
+                  variant="text"
+                  fullWidth
+                />
+              </Section>
 
-            {/* Empty States */}
-            <Section title="Empty States">
-              <EmptyState
-                title="No Courts Found"
-                message="We couldn't find any courts in your area"
-                icon="🎾"
-                actionLabel="Retry"
-                onAction={() => showInfo('Retrying...')}
-              />
-            </Section>
+              {/* Bottom Sheet */}
+              <Section title="Bottom Sheet">
+                <Button title="Open Bottom Sheet" onPress={open} fullWidth />
+              </Section>
 
-            {/* Toast Notifications */}
-            <Section title="Toast Notifications">
-              <Button
-                title="Success Toast"
-                onPress={() => ToastMessages.bookingSuccess()}
-                variant="primary"
-                fullWidth
-              />
-              <Button
-                title="Error Toast"
-                onPress={handleError}
-                variant="secondary"
-                fullWidth
-              />
-              <Button
-                title="Info Toast"
-                onPress={() => showInfo('This is an info message', 'Info')}
-                variant="text"
-                fullWidth
-              />
-            </Section>
+              {/* Spacer */}
+              <View style={{ height: 50 }} />
+            </ScrollView>
 
             {/* Bottom Sheet */}
-            <Section title="Bottom Sheet">
-              <Button
-                title="Open Bottom Sheet"
-                onPress={open}
-                fullWidth
-              />
-            </Section>
+            <BottomSheet ref={bottomSheetRef} snapPoints={['40%', '80%']} enablePanDownToClose>
+              <View style={styles.bottomSheetContent}>
+                <Text style={styles.bottomSheetTitle}>Filter Courts</Text>
+                <Input
+                  label="Max Distance (km)"
+                  value=""
+                  onChangeText={() => {}}
+                  placeholder="10"
+                  type="number"
+                />
+                <Button
+                  title="Apply Filters"
+                  onPress={() => {
+                    close();
+                    showSuccess('Filters applied!');
+                  }}
+                  fullWidth
+                />
+              </View>
+            </BottomSheet>
 
-            {/* Spacer */}
-            <View style={{ height: 50 }} />
-          </ScrollView>
-
-          {/* Bottom Sheet */}
-          <BottomSheet
-            ref={bottomSheetRef}
-            snapPoints={['40%', '80%']}
-            enablePanDownToClose
-          >
-            <View style={styles.bottomSheetContent}>
-              <Text style={styles.bottomSheetTitle}>Filter Courts</Text>
-              <Input
-                label="Max Distance (km)"
-                value=""
-                onChangeText={() => {}}
-                placeholder="10"
-                type="number"
-              />
-              <Button
-                title="Apply Filters"
-                onPress={() => {
-                  close();
-                  showSuccess('Filters applied!');
-                }}
-                fullWidth
-              />
-            </View>
-          </BottomSheet>
-
-          {/* Toast */}
-          <Toast config={toastConfig} />
+            {/* Toast */}
+            <Toast config={toastConfig} />
           </SafeAreaView>
         </BottomSheetModalProvider>
       </GestureHandlerRootView>
@@ -339,10 +290,7 @@ export default function App() {
 }
 
 // Section Component
-const Section: React.FC<{ title: string; children: React.ReactNode }> = ({
-  title,
-  children,
-}) => (
+const Section: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => (
   <View style={styles.section}>
     <Text style={styles.sectionTitle}>{title}</Text>
     {children}

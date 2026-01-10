@@ -42,7 +42,7 @@ const AnimatedBlob = ({
   right,
   colors: gradientColors,
   duration,
-  initialRotate = 0
+  initialRotate = 0,
 }: {
   top?: number;
   bottom?: number;
@@ -76,10 +76,7 @@ const AnimatedBlob = ({
   }, []);
 
   const animatedStyle = useAnimatedStyle(() => ({
-    transform: [
-      { rotate: `${rotation.value}deg` },
-      { scale: scale.value },
-    ],
+    transform: [{ rotate: `${rotation.value}deg` }, { scale: scale.value }],
   }));
 
   return (
@@ -159,10 +156,7 @@ const FloatingCard = ({
   }, []);
 
   const animatedStyle = useAnimatedStyle(() => ({
-    transform: [
-      { rotate: `${rotation}deg` },
-      { translateY: floatY.value },
-    ],
+    transform: [{ rotate: `${rotation}deg` }, { translateY: floatY.value }],
   }));
 
   return (
@@ -173,21 +167,17 @@ const FloatingCard = ({
         contentFit="cover"
         transition={200}
       />
-      <LinearGradient
-        colors={['transparent', 'rgba(0,0,0,0.7)']}
-        style={styles.cardGradient}
-      />
+      <LinearGradient colors={['transparent', 'rgba(0,0,0,0.7)']} style={styles.cardGradient} />
       {name && (
         <View style={styles.cardInfo}>
-          <Text style={styles.cardName}>{name}, {age}</Text>
+          <Text style={styles.cardName}>
+            {name}, {age}
+          </Text>
         </View>
       )}
       {showLike && (
         <View style={styles.cardLikeIcon}>
-          <LinearGradient
-            colors={['#EF4444', '#F97316']}
-            style={styles.likeIconGradient}
-          >
+          <LinearGradient colors={['#EF4444', '#F97316']} style={styles.likeIconGradient}>
             <Ionicons name="heart" size={16} color="#FFFFFF" />
           </LinearGradient>
         </View>
@@ -201,10 +191,7 @@ export const OnboardingScreen = () => {
 
   return (
     <View style={styles.container}>
-      <LinearGradient
-        colors={['#1a1a1a', '#2a1a1a', '#1a1a1a']}
-        style={styles.background}
-      >
+      <LinearGradient colors={['#1a1a1a', '#2a1a1a', '#1a1a1a']} style={styles.background}>
         {/* Animated Blobs */}
         <AnimatedBlob
           top={80}

@@ -1,5 +1,5 @@
-import { motion } from "motion/react";
-import { Heart, ChevronRight } from "lucide-react";
+import { motion } from 'motion/react';
+import { Heart, ChevronRight } from 'lucide-react';
 
 interface OnboardingScreenProps {
   onGetStarted: () => void;
@@ -17,7 +17,7 @@ export function OnboardingScreen({ onGetStarted }: OnboardingScreenProps) {
         transition={{
           duration: 20,
           repeat: Infinity,
-          ease: "linear",
+          ease: 'linear',
         }}
         className="absolute top-20 left-10 w-64 h-64 bg-gradient-to-br from-red-500/20 to-orange-500/20 rounded-full blur-3xl"
       />
@@ -29,7 +29,7 @@ export function OnboardingScreen({ onGetStarted }: OnboardingScreenProps) {
         transition={{
           duration: 15,
           repeat: Infinity,
-          ease: "linear",
+          ease: 'linear',
         }}
         className="absolute bottom-20 right-10 w-72 h-72 bg-gradient-to-br from-orange-500/20 to-red-500/20 rounded-full blur-3xl"
       />
@@ -38,7 +38,7 @@ export function OnboardingScreen({ onGetStarted }: OnboardingScreenProps) {
       <motion.div
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
-        transition={{ type: "spring", damping: 10 }}
+        transition={{ type: 'spring', damping: 10 }}
         className="mb-12"
       >
         <div className="relative">
@@ -64,7 +64,7 @@ export function OnboardingScreen({ onGetStarted }: OnboardingScreenProps) {
         <div className="text-5xl">
           <span className="bg-gradient-to-r from-red-500 to-orange-500 bg-clip-text text-transparent">
             Perfect
-          </span>{" "}
+          </span>{' '}
           Match
         </div>
       </motion.h1>
@@ -95,7 +95,7 @@ export function OnboardingScreen({ onGetStarted }: OnboardingScreenProps) {
             y: [0, -5, 0],
           }}
           transition={{
-            y: { duration: 3, repeat: Infinity, ease: "easeInOut" },
+            y: { duration: 3, repeat: Infinity, ease: 'easeInOut' },
           }}
           className="absolute top-0 left-8 w-56 h-80 rounded-3xl overflow-hidden shadow-2xl border-4 border-white/10"
         >
@@ -116,7 +116,7 @@ export function OnboardingScreen({ onGetStarted }: OnboardingScreenProps) {
             y: [0, 5, 0],
           }}
           transition={{
-            y: { duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.5 },
+            y: { duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 0.5 },
           }}
           className="absolute top-8 right-8 w-56 h-80 rounded-3xl overflow-hidden shadow-2xl border-4 border-white/10"
         >

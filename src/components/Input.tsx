@@ -28,11 +28,7 @@ import {
   TextInputProps,
   TouchableOpacity,
 } from 'react-native';
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-} from 'react-native-reanimated';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { colors, spacing, typography, borderRadius, durations } from '../theme/tokens';
 
 // ============================================
@@ -226,9 +222,7 @@ export const Input: React.FC<InputProps> = ({
 
     // Trigger haptic feedback
     if (!disabled) {
-      require('expo-haptics').impactAsync(
-        require('expo-haptics').ImpactFeedbackStyle.Light
-      );
+      require('expo-haptics').impactAsync(require('expo-haptics').ImpactFeedbackStyle.Light);
     }
   };
 
@@ -276,7 +270,9 @@ export const Input: React.FC<InputProps> = ({
 
   // Determine auto-capitalize
   const getAutoCapitalize = (): TextInputProps['autoCapitalize'] => {
-    if (type === 'email') return 'none';
+    if (type === 'email') {
+      return 'none';
+    }
     return 'sentences';
   };
 
@@ -328,20 +324,12 @@ export const Input: React.FC<InputProps> = ({
   return (
     <View style={styles.wrapper}>
       {/* Label */}
-      {label && (
-        <Text style={[styles.label, error && styles.errorLabel]}>
-          {label}
-        </Text>
-      )}
+      {label && <Text style={[styles.label, error && styles.errorLabel]}>{label}</Text>}
 
       {/* Input Container */}
       <AnimatedView style={containerStyles}>
         {/* Leading Icon */}
-        {leadingIcon && (
-          <View style={styles.leadingIconContainer}>
-            {leadingIcon}
-          </View>
-        )}
+        {leadingIcon && <View style={styles.leadingIconContainer}>{leadingIcon}</View>}
 
         {/* Text Input */}
         <TextInput
@@ -546,11 +534,7 @@ export const EmailInput: React.FC<Omit<InputProps, 'type'>> = (props) => (
  * Pre-configured for password entry with show/hide toggle
  */
 export const PasswordInput: React.FC<Omit<InputProps, 'type'>> = (props) => (
-  <Input
-    {...props}
-    type="password"
-    placeholder="Enter password"
-  />
+  <Input {...props} type="password" placeholder="Enter password" />
 );
 
 /**
@@ -560,13 +544,7 @@ export const PasswordInput: React.FC<Omit<InputProps, 'type'>> = (props) => (
 export const TextArea: React.FC<Omit<InputProps, 'multiline'> & { numberOfLines?: number }> = ({
   numberOfLines = 4,
   ...props
-}) => (
-  <Input
-    {...props}
-    multiline
-    numberOfLines={numberOfLines}
-  />
-);
+}) => <Input {...props} multiline numberOfLines={numberOfLines} />;
 
 // Default export
 export default Input;

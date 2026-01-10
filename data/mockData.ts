@@ -276,10 +276,8 @@ export const MOCK_USERS: User[] = [
     display_name: 'Mike Johnson',
     date_of_birth: '1990-07-10',
     gender: 'male',
-    avatar_urls: [
-      'https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=400',
-    ],
-    bio: 'Advanced player. Let\'s have some intense matches!',
+    avatar_urls: ['https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=400'],
+    bio: "Advanced player. Let's have some intense matches!",
     skill_level: 'advanced',
     play_style: 'competitive',
     looking_for: ['opponent'],
@@ -348,9 +346,7 @@ export const MOCK_USERS: User[] = [
     display_name: 'David Lee',
     date_of_birth: '1992-04-18',
     gender: 'male',
-    avatar_urls: [
-      'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400',
-    ],
+    avatar_urls: ['https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400'],
     bio: 'Casual player, just here to have fun and stay active!',
     skill_level: 'intermediate',
     play_style: 'casual',
@@ -402,8 +398,9 @@ export const MOCK_COACHES: Coach[] = [
       email: 'alex.tran@example.com',
     },
     gallery_urls: [
-      'https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=400',
-      'https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=400',
+      'https://images.unsplash.com/photo-uNPt0rRy8I0?w=600&h=400&fit=crop&q=85',
+      'https://images.unsplash.com/photo-kQHa8YGDKag?w=600&h=400&fit=crop&q=85',
+      'https://images.unsplash.com/photo-lXVavaDO0zU?w=600&h=400&fit=crop&q=85',
     ],
   },
   {
@@ -426,14 +423,16 @@ export const MOCK_COACHES: Coach[] = [
       phone: '+84 902 345 678',
     },
     gallery_urls: [
-      'https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?w=400',
+      'https://images.unsplash.com/photo-eBnKgT__Bsg?w=600&h=400&fit=crop&q=85',
+      'https://images.unsplash.com/photo-Bt-oCv_YI3E?w=600&h=400&fit=crop&q=85',
+      'https://images.unsplash.com/photo-4W-8AZbpLSY?w=600&h=400&fit=crop&q=85',
     ],
   },
   {
     id: 'coach_003',
     display_name: 'Coach Tom Wilson',
     avatar_url: 'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=400',
-    bio: 'Patient and friendly coach for beginners. Let\'s learn the basics together!',
+    bio: "Patient and friendly coach for beginners. Let's learn the basics together!",
     experience_years: 5,
     certifications: ['IPTPA Certified'],
     skill_level: 'advanced',
@@ -464,11 +463,12 @@ export const MOCK_COURTS: Court[] = [
       lng: 106.7011,
     },
     images: [
-      'https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=800',
-      'https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=800',
-      'https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?w=800',
+      'https://images.unsplash.com/photo-uNPt0rRy8I0?w=800&h=600&fit=crop&q=85',
+      'https://images.unsplash.com/photo-kQHa8YGDKag?w=800&h=600&fit=crop&q=85',
+      'https://images.unsplash.com/photo-4W-8AZbpLSY?w=800&h=600&fit=crop&q=85',
     ],
-    description: 'Modern indoor facility with 6 professional courts. Air-conditioned, well-lit, and equipped with all amenities.',
+    description:
+      'Modern indoor facility with 6 professional courts. Air-conditioned, well-lit, and equipped with all amenities.',
     amenities: ['Parking', 'Locker', 'Canteen', 'Equipment Rental', 'Showers', 'Wi-Fi'],
     price_per_hour: 200000,
     price_range: {
@@ -499,7 +499,9 @@ export const MOCK_COURTS: Court[] = [
       lng: 106.8098,
     },
     images: [
-      'https://images.unsplash.com/photo-1583726832940-d61ed5d86853?w=800',
+      'https://images.unsplash.com/photo-eBnKgT__Bsg?w=800&h=600&fit=crop&q=85',
+      'https://images.unsplash.com/photo-Bt-oCv_YI3E?w=800&h=600&fit=crop&q=85',
+      'https://images.unsplash.com/photo-fZqOfwe7meU?w=800&h=600&fit=crop&q=85',
     ],
     description: 'Beautiful outdoor courts surrounded by nature. Perfect for weekend games.',
     amenities: ['Parking', 'Canteen', 'Equipment Rental'],
@@ -528,10 +530,12 @@ export const MOCK_COURTS: Court[] = [
       lng: 106.6673,
     },
     images: [
-      'https://images.unsplash.com/photo-1622547748225-3fc4abd2cca0?w=800',
-      'https://images.unsplash.com/photo-1519766304924-4f23c46e2c86?w=800',
+      'https://images.unsplash.com/photo-lXVavaDO0zU?w=800&h=600&fit=crop&q=85',
+      'https://images.unsplash.com/photo-3sSbRisCnmE?w=800&h=600&fit=crop&q=85',
+      'https://images.unsplash.com/photo-rjWfNR_AC5g?w=800&h=600&fit=crop&q=85',
     ],
-    description: 'Multi-sport complex with dedicated pickleball courts. Great facilities and central location.',
+    description:
+      'Multi-sport complex with dedicated pickleball courts. Great facilities and central location.',
     amenities: ['Parking', 'Locker', 'Showers', 'Equipment Rental', 'Pro Shop'],
     price_per_hour: 180000,
     price_range: {
@@ -562,7 +566,9 @@ export const MOCK_COURTS: Court[] = [
       lng: 106.6363,
     },
     images: [
-      'https://images.unsplash.com/photo-1519766304924-4f23c46e2c86?w=800',
+      'https://images.unsplash.com/photo-IHYoOsWkufQ?w=800&h=600&fit=crop&q=85',
+      'https://images.unsplash.com/photo-lwt4fWTErN8?w=800&h=600&fit=crop&q=85',
+      'https://images.unsplash.com/photo-Zsr07Zr4tzM?w=800&h=600&fit=crop&q=85',
     ],
     description: 'Friendly community court. Open early for morning players.',
     amenities: ['Parking', 'Equipment Rental', 'Canteen'],
@@ -594,13 +600,13 @@ export const MOCK_MATCHES: Match[] = [
     conversation_id: 'conv_001',
     is_new: false,
     last_message: {
-      content: 'Hey! Let\'s play this weekend?',
+      content: "Hey! Let's play this weekend?",
       sent_at: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
       sender_id: 'user_002',
       type: 'text',
     },
     unread_count: 3,
-    matched_user: MOCK_USERS.find(u => u.id === 'user_002')!,
+    matched_user: MOCK_USERS.find((u) => u.id === 'user_002')!,
   },
   {
     id: 'match_002',
@@ -616,7 +622,7 @@ export const MOCK_MATCHES: Match[] = [
       type: 'text',
     },
     unread_count: 0,
-    matched_user: MOCK_USERS.find(u => u.id === 'user_003')!,
+    matched_user: MOCK_USERS.find((u) => u.id === 'user_003')!,
   },
   {
     id: 'match_003',
@@ -626,7 +632,7 @@ export const MOCK_MATCHES: Match[] = [
     conversation_id: 'conv_003',
     is_new: true,
     unread_count: 0,
-    matched_user: MOCK_USERS.find(u => u.id === 'user_004')!,
+    matched_user: MOCK_USERS.find((u) => u.id === 'user_004')!,
   },
   {
     id: 'match_004',
@@ -642,7 +648,7 @@ export const MOCK_MATCHES: Match[] = [
       type: 'text',
     },
     unread_count: 1,
-    matched_user: MOCK_USERS.find(u => u.id === 'user_005')!,
+    matched_user: MOCK_USERS.find((u) => u.id === 'user_005')!,
   },
 ];
 
@@ -710,7 +716,7 @@ export const MOCK_MESSAGES: Message[] = [
     id: 'msg_004',
     conversation_id: 'conv_001',
     sender_id: 'user_002',
-    content: 'Hey! Let\'s play this weekend?',
+    content: "Hey! Let's play this weekend?",
     type: 'text',
     status: 'delivered',
     created_at: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
@@ -766,7 +772,7 @@ export const MOCK_BOOKINGS: Booking[] = [
     payment_method: 'credit_card',
     qr_code: 'QR_CODE_DATA_PLACEHOLDER',
     created_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-    court: MOCK_COURTS.find(c => c.id === 'court_001')!,
+    court: MOCK_COURTS.find((c) => c.id === 'court_001')!,
   },
   {
     id: 'booking_002',
@@ -775,14 +781,12 @@ export const MOCK_BOOKINGS: Booking[] = [
     date: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 7 days ago
     start_time: '08:00',
     end_time: '09:00',
-    slots: [
-      { start_time: '08:00', end_time: '09:00', price: 120000 },
-    ],
+    slots: [{ start_time: '08:00', end_time: '09:00', price: 120000 }],
     total_amount: 120000,
     status: 'completed',
     payment_method: 'momo',
     created_at: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
-    court: MOCK_COURTS.find(c => c.id === 'court_002')!,
+    court: MOCK_COURTS.find((c) => c.id === 'court_002')!,
   },
   {
     id: 'booking_003',
@@ -799,7 +803,7 @@ export const MOCK_BOOKINGS: Booking[] = [
     status: 'completed',
     payment_method: 'zalopay',
     created_at: new Date(Date.now() - 16 * 24 * 60 * 60 * 1000).toISOString(),
-    court: MOCK_COURTS.find(c => c.id === 'court_003')!,
+    court: MOCK_COURTS.find((c) => c.id === 'court_003')!,
   },
 ];
 
@@ -857,38 +861,38 @@ export const MOCK_REVIEWS: Review[] = [
 
 // Helper functions to get data
 export const getUserById = (userId: string): User | undefined => {
-  return MOCK_USERS.find(user => user.id === userId);
+  return MOCK_USERS.find((user) => user.id === userId);
 };
 
 export const getCourtById = (courtId: string): Court | undefined => {
-  return MOCK_COURTS.find(court => court.id === courtId);
+  return MOCK_COURTS.find((court) => court.id === courtId);
 };
 
 export const getMatchById = (matchId: string): Match | undefined => {
-  return MOCK_MATCHES.find(match => match.id === matchId);
+  return MOCK_MATCHES.find((match) => match.id === matchId);
 };
 
 export const getMessagesByConversation = (conversationId: string): Message[] => {
-  return MOCK_MESSAGES.filter(msg => msg.conversation_id === conversationId);
+  return MOCK_MESSAGES.filter((msg) => msg.conversation_id === conversationId);
 };
 
 export const getBookingsByUserId = (userId: string): Booking[] => {
-  return MOCK_BOOKINGS.filter(booking => booking.user_id === userId);
+  return MOCK_BOOKINGS.filter((booking) => booking.user_id === userId);
 };
 
 export const getReviewsByCourtId = (courtId: string): Review[] => {
-  return MOCK_REVIEWS.filter(review => review.court_id === courtId);
+  return MOCK_REVIEWS.filter((review) => review.court_id === courtId);
 };
 
 export const getCurrentUser = (): User => {
-  return MOCK_USERS.find(user => user.id === CURRENT_USER_ID)!;
+  return MOCK_USERS.find((user) => user.id === CURRENT_USER_ID)!;
 };
 
 // Generate swipe profiles (users that current user hasn't matched with yet)
 export const getSwipeProfiles = (): User[] => {
-  const matchedUserIds = MOCK_MATCHES.map(m => m.matched_user_id);
+  const matchedUserIds = MOCK_MATCHES.map((m) => m.matched_user_id);
   return MOCK_USERS.filter(
-    user => user.id !== CURRENT_USER_ID && !matchedUserIds.includes(user.id)
+    (user) => user.id !== CURRENT_USER_ID && !matchedUserIds.includes(user.id)
   );
 };
 
@@ -913,10 +917,18 @@ export const formatRelativeTime = (isoString: string): string => {
   const diffHours = Math.floor(diffMs / 3600000);
   const diffDays = Math.floor(diffMs / 86400000);
 
-  if (diffMins < 1) return 'Now';
-  if (diffMins < 60) return `${diffMins}m ago`;
-  if (diffHours < 24) return `${diffHours}h ago`;
-  if (diffDays === 1) return 'Yesterday';
+  if (diffMins < 1) {
+    return 'Now';
+  }
+  if (diffMins < 60) {
+    return `${diffMins}m ago`;
+  }
+  if (diffHours < 24) {
+    return `${diffHours}h ago`;
+  }
+  if (diffDays === 1) {
+    return 'Yesterday';
+  }
   if (diffDays < 7) {
     const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     return days[date.getDay()];

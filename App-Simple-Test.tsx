@@ -1,17 +1,12 @@
 import React, { useState } from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-  TouchableOpacity,
-  ScrollView,
-} from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import { createClient } from '@supabase/supabase-js';
 import 'react-native-url-polyfill/auto';
 
 const SUPABASE_URL = 'https://ytwcalyalpnmnqsmoilt.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl0d2NhbHlhbHBubW5xc21vaWx0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjczMDY2MzgsImV4cCI6MjA4Mjg4MjYzOH0.h4izbxyGU07sw6SeBCKI58K4rckjo66-Ow0Ml5u78T0';
+const SUPABASE_ANON_KEY =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl0d2NhbHlhbHBubW5xc21vaWx0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjczMDY2MzgsImV4cCI6MjA4Mjg4MjYzOH0.h4izbxyGU07sw6SeBCKI58K4rckjo66-Ow0Ml5u78T0';
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -19,7 +14,7 @@ export default function App() {
   const [log, setLog] = useState<string[]>(['App started']);
 
   const addLog = (message: string) => {
-    setLog(prev => [...prev, `${new Date().toLocaleTimeString()}: ${message}`]);
+    setLog((prev) => [...prev, `${new Date().toLocaleTimeString()}: ${message}`]);
   };
 
   const testConnection = async () => {
@@ -48,9 +43,9 @@ export default function App() {
         const testUrl = `${SUPABASE_URL}/rest/v1/`;
         const testResponse = await fetch(testUrl, {
           headers: {
-            'apikey': SUPABASE_ANON_KEY,
-            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-          }
+            apikey: SUPABASE_ANON_KEY,
+            Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+          },
         });
         addLog(`✅ REST API response: ${testResponse.status}`);
         const text = await testResponse.text();
@@ -89,10 +84,7 @@ export default function App() {
       addLog('--- TEST 4: Query coaches table ---');
 
       try {
-        const { data, error, status } = await supabase
-          .from('coaches')
-          .select('*')
-          .limit(1);
+        const { data, error, status } = await supabase.from('coaches').select('*').limit(1);
 
         addLog(`Status: ${status}`);
 
@@ -107,7 +99,6 @@ export default function App() {
 
       addLog('');
       addLog('=== TEST HOÀN THÀNH ===');
-
     } catch (error) {
       addLog(`❌ FATAL ERROR: ${error}`);
     }
@@ -116,21 +107,21 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>🔧 Supabase Debug Test</Text>
-      </View>
+        <View style={styles.header}>
+          <Text style={styles.title}>🔧 Supabase Debug Test</Text>
+        </View>
 
-      <TouchableOpacity style={styles.button} onPress={testConnection}>
-        <Text style={styles.buttonText}>🚀 CHẠY TEST</Text>
-      </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={testConnection}>
+          <Text style={styles.buttonText}>🚀 CHẠY TEST</Text>
+        </TouchableOpacity>
 
-      <ScrollView style={styles.logContainer}>
-        {log.map((line, index) => (
-          <Text key={index} style={styles.logText}>
-            {line}
-          </Text>
-        ))}
-      </ScrollView>
+        <ScrollView style={styles.logContainer}>
+          {log.map((line, index) => (
+            <Text key={index} style={styles.logText}>
+              {line}
+            </Text>
+          ))}
+        </ScrollView>
       </SafeAreaView>
     </SafeAreaProvider>
   );
