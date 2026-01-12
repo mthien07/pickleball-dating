@@ -20,7 +20,7 @@
 - ⭐ **Rating & Review** - Đánh giá sân và người chơi
 - 🔔 **Push Notifications** - Thông báo match, tin nhắn, booking
 - 🗺️ **Geo-spatial Search** - Tìm sân và người chơi gần vị trí của bạn
-- 🔐 **Multi-Auth** - Email, Phone OTP, Google, Facebook, Apple login
+- 🔐 **Multi-Auth** - Email, Phone OTP
 
 ---
 
@@ -28,7 +28,7 @@
 
 | Layer | Technology | Version |
 |-------|-----------|---------|
-| **Mobile** | React Native (Expo) | SDK 52 |
+| **Mobile** | React Native (Expo) | SDK 54 |
 | **Language** | TypeScript | 5.x |
 | **Backend** | Supabase | Latest |
 | **Database** | PostgreSQL + PostGIS | 15+ |
