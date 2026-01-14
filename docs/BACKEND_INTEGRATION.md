@@ -232,54 +232,101 @@ const ChatScreen = ({ conversationId }) => {
 
 ## 5. Authentication Flow
 
-### 5.1 Protect Routes
+### 5.1 AuthContext Architecture
+
+Authentication is managed centrally via `AuthContext` with the following responsibilities:
+
+**File**: `src/contexts/AuthContext.tsx`
 
 ```typescript
-// navigation/RootNavigator.tsx
-import { useEffect, useState } from 'react';
-import { supabase } from '@/services/supabase';
+interface AuthContextType {
+  isAuthenticated: boolean;      // Auth state (true/false)
+  isLoading: boolean;            // Initial auth check in progress
+  user: User | null;             // Supabase user object
+  session: Session | null;       // Auth session
+  profile: UserProfile | null;   // User profile from DB
+  profileLoading: boolean;       // Profile fetch in progress
+  profileError: Error | null;    // Profile load errors
+  logout: () => Promise<void>;
+  refreshProfile: () => Promise<void>;
+}
+```
 
+**Key Design Pattern**: Profile loading is **non-blocking** to enable immediate navigation after auth. Profile errors are tracked separately via `profileError` state.
+
+### 5.2 Authentication Flow with Navigation
+
+```typescript
+// 1. App startup - check session
 const RootNavigator = () => {
-  const [session, setSession] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const { isAuthenticated, isLoading } = useAuth();
 
-  useEffect(() => {
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setLoading(false);
-    });
+  if (isLoading) return <SplashScreen />;  // Session check in progress
+  return isAuthenticated ? <MainNavigator /> : <AuthNavigator />;
+};
 
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        setSession(session);
-      }
-    );
+// 2. During session check
+useEffect(() => {
+  // Get initial session when app loads
+  supabase.auth.getSession().then(({ data: { session } }) => {
+    setAuthState(session);  // Sets isAuthenticated and isLoading
 
-    return () => subscription.unsubscribe();
-  }, []);
+    // Load profile in background (non-blocking)
+    if (session) {
+      loadProfile().catch(err => console.error(err));
+    }
+  });
 
-  if (loading) return <SplashScreen />;
+  // Listen for auth changes
+  supabase.auth.onAuthStateChange(async (event, session) => {
+    setAuthState(session);
+    if (session) {
+      loadProfile().catch(err => console.error(err));
+    }
+  });
+}, []);
 
-  return session ? <MainNavigator /> : <AuthNavigator />;
+// 3. Components can check profile status
+const MyScreen = () => {
+  const { profile, profileLoading, profileError } = useAuth();
+
+  if (profileLoading) return <Skeleton />;
+  if (profileError) return <ErrorMessage error={profileError} />;
+  return <ProfileView user={profile} />;
 };
 ```
 
-### 5.2 Profile Completion Check
+### 5.3 Profile Completion Check
+
+After login, screens should check profile completion status:
 
 ```typescript
-// After login, check if profile is complete
-const checkProfileComplete = async () => {
-  const profile = await getMyProfile();
+// In profile-dependent screens
+const { profile, profileError } = useAuth();
 
-  if (!profile || !profile.profile_complete) {
-    navigation.navigate('ProfileSetup');
-  } else {
-    navigation.navigate('Home');
-  }
-};
+if (profileError) {
+  // Surface error via UI
+  Alert.alert('Profile Load Failed', profileError.message);
+}
+
+if (!profile?.profile_complete) {
+  // Navigate to profile setup if needed
+  navigation.navigate('ProfileSetup');
+}
 ```
+
+### 5.4 Helper Functions
+
+**setAuthState()** - DRY pattern for setting authentication state:
+- Sets session, user, isAuthenticated, isLoading based on session param
+- Clears profile data when logging out
+- Reduces code duplication across effect hooks
+
+**loadProfile()** - Non-blocking background profile fetch:
+- Called after session established
+- Sets profileLoading state for UI feedback
+- Surfaces profileError if fetch fails
+- Does not block navigation or app functionality
 
 ---
 

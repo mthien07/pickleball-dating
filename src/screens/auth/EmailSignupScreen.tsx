@@ -12,7 +12,7 @@
  */
 
 import React, { useState } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { AuthStackParamList } from '../../navigation/types';
@@ -42,11 +42,38 @@ export const EmailSignupScreen = () => {
   const [agreed, setAgreed] = useState(false);
 
   const handleSignup = async () => {
+    // Validation
     if (!email || !password || !confirmPassword || !role || !agreed) {
       showError('Please fill in all fields');
       return;
     }
+
+    // Check if input is a phone number
+    const phoneRegex = /^[0-9+]{9,15}$/;
+    if (phoneRegex.test(email.replace(/\s/g, ''))) {
+      const msg = 'Đây là màn hình đăng ký bằng Email. Vui lòng sử dụng Email hợp lệ.';
+      if (Platform.OS === 'web') {
+        window.alert(msg);
+      }
+      showError(msg);
+      return;
+    }
+
+    // Basic email validation
+    if (!email.includes('@') || !email.includes('.')) {
+      const msg = 'Email không hợp lệ (thiếu @ hoặc .)';
+      if (Platform.OS === 'web') {
+        window.alert(msg);
+      }
+      showError(msg);
+      return;
+    }
+
     if (password !== confirmPassword) {
+      const msg = 'Mật khẩu không khớp';
+      if (Platform.OS === 'web') {
+        window.alert(msg);
+      }
       showError('Passwords do not match');
       return;
     }
@@ -55,10 +82,7 @@ export const EmailSignupScreen = () => {
 
     try {
       // 1. Sign up with Supabase Auth
-      const {
-        data: { user },
-        error: signUpError,
-      } = await supabase.auth.signUp({
+      const { data, error: signUpError } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -72,8 +96,12 @@ export const EmailSignupScreen = () => {
         throw signUpError;
       }
 
+      const user = data?.user;
+      const session = data?.session;
+
       if (user) {
         // 2. Create user profile record in 'users' table
+
         // We need to provide all REQUIRED fields to avoid DB errors
         const { error: profileError } = await supabase.from('users').insert([
           {
@@ -81,30 +109,38 @@ export const EmailSignupScreen = () => {
             email: email,
             role: role,
             full_name: '', // Will be updated in profile setup
-
-            // Required fields by Schema (filling with placeholders)
-            display_name: email.split('@')[0], // Default display name from email
-            date_of_birth: '2000-01-01', // Placeholder DOB
-            gender: 'other', // Placeholder gender
-            skill_level: 'beginner', // Default skill
-            play_style: 'casual', // Default play style
-
+            // Required fields by Schema
+            display_name: email.split('@')[0],
+            date_of_birth: '2000-01-01',
+            gender: 'other',
+            skill_level: 'beginner',
+            play_style: 'casual',
             created_at: new Date().toISOString(),
           },
         ]);
 
         if (profileError) {
-          // If trigger already created it, we might get a duplicate error, which is fine to ignore or handle
           console.log('Profile creation note:', profileError.message);
         }
 
-        showSuccess('Account created successfully!');
-
-        // 3. Navigate to Login (or Auto-login if session is active)
-        navigation.navigate('Login');
+        // 3. Handle post-signup navigation
+        if (session) {
+          // Session exists = Email confirmation is OFF or auto-confirmed
+          // AuthContext will automatically detect session via onAuthStateChange
+          // and navigate to Main screen
+          showSuccess('Account created successfully!');
+          // Don't navigate - let AuthContext handle it
+        } else {
+          // No session = Email confirmation is required
+          showSuccess('Đăng ký thành công! Vui lòng kiểm tra email để xác thực tài khoản.');
+          // Navigate to login after email confirmation
+          navigation.navigate('Login');
+        }
       }
     } catch (error: any) {
-      showError(error.message || 'Signup failed');
+      const errorMsg = error.message || 'Signup failed';
+      console.error('Signup error:', error);
+      showError(errorMsg);
     } finally {
       setLoading(false);
     }
@@ -162,14 +198,14 @@ export const EmailSignupScreen = () => {
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
             <Ionicons name="arrow-back" size={20} color={colors.textPrimary} />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Đăng ký</Text>
+          <Text style={styles.headerTitle}>Đăng ký bằng Email</Text>
         </View>
       </View>
 
       <View style={styles.form}>
         {/* Inputs with gray labels */}
         <View style={styles.inputContainer}>
-          <Text style={styles.labelGray}>Email hoặc Số điện thoại</Text>
+          <Text style={styles.labelGray}>Email</Text>
           <EmailInput value={email} onChangeText={setEmail} containerStyle={styles.input} />
         </View>
 

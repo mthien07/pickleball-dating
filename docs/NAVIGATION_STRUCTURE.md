@@ -213,25 +213,21 @@ Coach Directory → Coach Detail → Chat with Coach
 
 ### Authentication Guard
 ```typescript
-// Check if user is authenticated
-const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+// Implemented via AuthContext
+const { isAuthenticated, isLoading } = useAuth();
 
-// Redirect to login if not authenticated
-if (!isAuthenticated && protectedRoute) {
-  navigation.replace('Login');
-}
+// RootNavigator checks auth state and renders appropriate stack
+if (isLoading) return <SplashScreen />;
+return isAuthenticated ? <MainNavigator /> : <AuthNavigator />;
 ```
 
 ### Profile Completion Guard
-```typescript
-// Check if profile is complete
-const isProfileComplete = useSelector(state => state.user.profile_complete);
+Handled post-login in screens. After user authenticates:
+- `profileLoading` tracks profile fetch status
+- `profileError` provides feedback if profile load fails
+- Components can check profile completion status
 
-// Redirect to profile setup if incomplete
-if (isAuthenticated && !isProfileComplete) {
-  navigation.replace('ProfileSetup');
-}
-```
+**Key Implementation Detail**: Profile loading is non-blocking to allow immediate navigation to main app after auth success. Profile errors are surfaced via `profileError` state for UI feedback.
 
 ---
 
