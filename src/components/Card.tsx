@@ -1,46 +1,17 @@
-/**
- * Card Component
- *
- * Versatile card component with multiple variants for different use cases.
- * Implements design system from design/uiuxguides.md
- *
- * Variants:
- * - ProfileCard: For swipe cards (dating profiles)
- * - CourtCard: For court listings
- * - MatchCard: For chat/match lists
- *
- * Usage:
- * ```tsx
- * <ProfileCard user={user} onLike={handleLike} onPass={handlePass} />
- * <CourtCard court={court} onPress={handlePress} />
- * <MatchCard match={match} onPress={handlePress} />
- * ```
- */
-
 import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  ViewStyle,
-  ImageStyle,
-  Dimensions,
-} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
-import { colors, spacing, typography, borderRadius } from '../theme/tokens';
+import { colors, spacing, typography, borderRadius, fontFamily } from '../theme/tokens';
 import { shadows } from '../theme/shadows';
+import { CARD_MAX_WIDTH, CARD_ASPECT_RATIO } from '../theme/breakpoints';
 import { User, Court, Match } from '@data/mockData';
 import { Avatar } from './Avatar';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
-
-// ============================================
-// TYPES
-// ============================================
+const DEFAULT_CARD_WIDTH = Math.min(SCREEN_WIDTH * 0.9, CARD_MAX_WIDTH);
 
 export interface ProfileCardProps {
   user: User;
@@ -56,6 +27,8 @@ export interface ProfileCardProps {
   showActionButtons?: boolean;
   currentImageIndex?: number;
   onImageIndexChange?: (index: number) => void;
+  /** Card width - pass from parent for responsive sizing */
+  cardWidth?: number;
 }
 
 export interface CourtCardProps {
@@ -68,10 +41,6 @@ export interface MatchCardProps {
   match: Match;
   onPress?: () => void;
 }
-
-// ============================================
-// PROFILE CARD (Swipe Card)
-// ============================================
 
 const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
 
@@ -89,7 +58,10 @@ export const ProfileCard = React.memo<ProfileCardProps>(
     showInterests = false,
     showActionButtons = false,
     currentImageIndex = 0,
+    cardWidth,
   }) => {
+    // Use passed width or default
+    const width = cardWidth || DEFAULT_CARD_WIDTH;
     const scale = useSharedValue(1);
 
     const animatedStyle = useAnimatedStyle(() => ({
@@ -109,35 +81,41 @@ export const ProfileCard = React.memo<ProfileCardProps>(
     // Calculate match percentage (mock - would come from backend)
     const matchPercentage = user.preferences ? 85 : undefined;
 
+    // Dynamic card style with responsive width
+    // Uses matchCard shadow (Rose glow) for dating vibe - Vibrant Sport theme
+    const cardStyle = {
+      width,
+      aspectRatio: CARD_ASPECT_RATIO,
+      backgroundColor: colors.surface,
+      borderRadius: borderRadius.profileCard,
+      ...shadows.matchCard, // Rose shadow for dating/match cards
+      overflow: 'hidden' as const,
+    };
+
     return (
       <AnimatedTouchable
         onPress={onPress}
         onPressIn={handlePressIn}
         onPressOut={handlePressOut}
         activeOpacity={0.95}
-        style={[styles.profileCard, animatedStyle]}
+        style={[cardStyle, animatedStyle]}
       >
-        {/* Main Photo */}
+        {/* Main Photo - Focus on face (top center) */}
         <Image
           source={{ uri: user.avatar_urls[currentImageIndex] || user.avatar_urls[0] }}
           style={styles.profileImage}
           contentFit="cover"
+          contentPosition="top center"
           transition={200}
           cachePolicy="memory-disk"
         />
 
-        {/* Top Gradient Overlay (subtle) */}
-        <LinearGradient
-          colors={['rgba(239, 68, 68, 0.3)', 'transparent', 'rgba(249, 115, 22, 0.3)']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={styles.profileTopGradient}
-        />
+        {/* Top Gradient Overlay - removed for cleaner look */}
 
-        {/* Match Percentage Badge */}
+        {/* Match Percentage Badge - Updated to new design system colors */}
         {showMatchPercentage && matchPercentage && (
           <LinearGradient
-            colors={['#EF4444', '#F97316']}
+            colors={[colors.accent, colors.accentLight || '#FB7185']}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.matchBadge}
@@ -154,14 +132,14 @@ export const ProfileCard = React.memo<ProfileCardProps>(
           </View>
         )}
 
-        {/* Image Indicators */}
+        {/* Image Indicators - Updated to primary blue */}
         {showImageIndicators && user.avatar_urls.length > 1 && (
           <View style={styles.imageIndicatorsContainer}>
             {user.avatar_urls.map((_, index) => (
               <View key={index} style={styles.imageIndicatorTrack}>
                 {index === currentImageIndex && (
                   <LinearGradient
-                    colors={['#EF4444', '#F97316']}
+                    colors={[colors.primary, colors.primaryLight]}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 0 }}
                     style={styles.imageIndicatorFill}
@@ -172,9 +150,9 @@ export const ProfileCard = React.memo<ProfileCardProps>(
           </View>
         )}
 
-        {/* Bottom Gradient Overlay */}
+        {/* Bottom Gradient Overlay - Cleaner, less aggressive */}
         <LinearGradient
-          colors={['transparent', 'transparent', 'rgba(0,0,0,0.8)']}
+          colors={['transparent', 'rgba(0,0,0,0.1)', 'rgba(0,0,0,0.7)']}
           style={styles.profileGradient}
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 1 }}
@@ -194,7 +172,7 @@ export const ProfileCard = React.memo<ProfileCardProps>(
               {/* Distance */}
               {user.preferred_location && (
                 <View style={styles.profileDistance}>
-                  <Ionicons name="location" size={16} color="#FFFFFF" />
+                  <Ionicons name="location" size={16} color={colors.white} />
                   <Text style={styles.profileDistanceText}>{user.preferred_location.address}</Text>
                 </View>
               )}
@@ -225,13 +203,13 @@ export const ProfileCard = React.memo<ProfileCardProps>(
                 style={styles.profileInfoButton}
                 activeOpacity={0.8}
               >
-                <Ionicons name="information-circle" size={24} color="#FFFFFF" />
+                <Ionicons name="information-circle" size={24} color={colors.white} />
               </TouchableOpacity>
             )}
           </View>
         </View>
 
-        {/* Action Buttons */}
+        {/* Action Buttons - Modern colored gradients */}
         {showActionButtons && (
           <View style={styles.profileActionButtons}>
             {/* Reject (X) */}
@@ -241,34 +219,34 @@ export const ProfileCard = React.memo<ProfileCardProps>(
                 style={styles.actionButtonReject}
                 activeOpacity={0.8}
               >
-                <Ionicons name="close" size={32} color="#EF4444" />
+                <Ionicons name="close" size={28} color={colors.error} />
               </TouchableOpacity>
             )}
 
-            {/* Super Like (Star) */}
+            {/* Super Like (Star) - Orange gradient */}
             {onSuperLike && (
               <TouchableOpacity onPress={onSuperLike} activeOpacity={0.8}>
                 <LinearGradient
-                  colors={['#A855F7', '#9333EA']}
+                  colors={[colors.primary, colors.primaryDark]}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 1 }}
                   style={styles.actionButtonSuper}
                 >
-                  <Ionicons name="star" size={32} color="#FFFFFF" />
+                  <Ionicons name="star" size={28} color={colors.white} />
                 </LinearGradient>
               </TouchableOpacity>
             )}
 
-            {/* Like (Heart) */}
+            {/* Like (Heart) - Green gradient */}
             {onLike && (
               <TouchableOpacity onPress={onLike} activeOpacity={0.8}>
                 <LinearGradient
-                  colors={['#10B981', '#059669']}
+                  colors={[colors.secondary, colors.secondaryDark]}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 1 }}
                   style={styles.actionButtonLike}
                 >
-                  <Ionicons name="heart" size={32} color="#FFFFFF" />
+                  <Ionicons name="heart" size={28} color={colors.white} />
                 </LinearGradient>
               </TouchableOpacity>
             )}
@@ -278,17 +256,15 @@ export const ProfileCard = React.memo<ProfileCardProps>(
     );
   },
   (prevProps, nextProps) => {
-    // Only re-render if user.id or currentImageIndex changes
+    // Only re-render if user.id, currentImageIndex, or cardWidth changes
     return (
       prevProps.user.id === nextProps.user.id &&
-      prevProps.currentImageIndex === nextProps.currentImageIndex
+      prevProps.currentImageIndex === nextProps.currentImageIndex &&
+      prevProps.cardWidth === nextProps.cardWidth
     );
   }
 );
-
-// ============================================
-// COURT CARD (List Item)
-// ============================================
+ProfileCard.displayName = 'ProfileCard';
 
 export const CourtCard = React.memo<CourtCardProps>(
   ({ court, onPress, onBookPress }) => {
@@ -371,10 +347,7 @@ export const CourtCard = React.memo<CourtCardProps>(
     return prevProps.court.id === nextProps.court.id;
   }
 );
-
-// ============================================
-// MATCH CARD (Chat List Item)
-// ============================================
+CourtCard.displayName = 'CourtCard';
 
 export const MatchCard = React.memo<MatchCardProps>(
   ({ match, onPress }) => {
@@ -466,100 +439,78 @@ export const MatchCard = React.memo<MatchCardProps>(
     );
   }
 );
-
-// ============================================
-// STYLES
-// ============================================
+MatchCard.displayName = 'MatchCard';
 
 const styles = StyleSheet.create({
-  // Profile Card (Swipe)
-  profileCard: {
-    width: SCREEN_WIDTH * 0.9,
-    aspectRatio: 3 / 4,
-    backgroundColor: colors.surface,
-    borderRadius: borderRadius.profileCard,
-    ...shadows.profileCard,
-    overflow: 'hidden',
-  },
+  // Profile Card - Modern glassmorphism
   profileImage: {
     width: '100%',
     height: '100%',
-  },
-  profileTopGradient: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    zIndex: 10,
   },
   profileGradient: {
     position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
-    height: '50%',
+    height: '45%',
     zIndex: 10,
   },
-
-  // Match Badge
   matchBadge: {
     position: 'absolute',
-    top: 24,
-    left: 24,
-    paddingHorizontal: 16,
+    top: 20,
+    left: 20,
+    paddingHorizontal: 14,
     paddingVertical: 8,
-    borderRadius: 20,
+    borderRadius: 24, // More rounded - bento style
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+    borderColor: 'rgba(255, 255, 255, 0.25)',
     zIndex: 20,
   },
   matchBadgeText: {
-    color: '#FFFFFF',
-    fontSize: 14,
-    fontWeight: '600',
+    color: colors.white,
+    fontSize: 13,
+    fontWeight: '700',
+    letterSpacing: 0.3,
   },
-
-  // Online Status
   onlineStatusBadge: {
     position: 'absolute',
-    top: 24,
-    right: 24,
+    top: 20,
+    right: 20,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    gap: 6,
+    backgroundColor: 'rgba(255, 255, 255, 0.25)', // Glassmorphism effect
     paddingHorizontal: 12,
-    paddingVertical: 8,
+    paddingVertical: 6,
     borderRadius: 20,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.18)',
     zIndex: 20,
   },
   onlineDot: {
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: '#10B981',
+    backgroundColor: colors.secondary, // Green for online
   },
   onlineText: {
-    color: '#FFFFFF',
-    fontSize: 14,
-    fontWeight: '500',
+    color: colors.white,
+    fontSize: 13,
+    fontWeight: '600',
   },
-
-  // Image Indicators
   imageIndicatorsContainer: {
     position: 'absolute',
-    top: 96,
-    left: 24,
-    right: 24,
+    top: 80,
+    left: 20,
+    right: 20,
     flexDirection: 'row',
-    gap: 8,
+    gap: 6,
     zIndex: 20,
   },
   imageIndicatorTrack: {
     flex: 1,
-    height: 4,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    height: 3,
+    backgroundColor: 'rgba(255, 255, 255, 0.25)',
     borderRadius: 2,
     overflow: 'hidden',
   },
@@ -567,14 +518,12 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-
-  // Profile Info
   profileInfo: {
     position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
-    padding: spacing.lg,
+    padding: 20,
     zIndex: 20,
   },
   profileInfoRow: {
@@ -588,74 +537,57 @@ const styles = StyleSheet.create({
   profileHeader: {
     flexDirection: 'row',
     alignItems: 'baseline',
-    gap: 8,
-    marginBottom: 8,
+    gap: 10,
+    marginBottom: 6,
   },
   profileName: {
-    ...typography.h1,
-    fontSize: 36,
+    ...typography.h2,
+    fontSize: 26,
     color: colors.white,
     fontWeight: '700',
+    letterSpacing: -0.3,
+    fontFamily: fontFamily.heading,
   },
   profileAge: {
-    ...typography.h2,
-    fontSize: 32,
+    ...typography.h3,
+    fontSize: 22,
     color: colors.white,
-    fontWeight: '400',
+    fontWeight: '300', // Lighter weight for modern look
   },
   verifiedBadge: {
-    fontSize: 20,
-    color: colors.secondary,
+    fontSize: 18,
+    color: colors.secondary, // Green checkmark
   },
   profileDistance: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    marginBottom: 12,
+    marginBottom: 10,
   },
   profileDistanceText: {
     ...typography.body,
     fontSize: 14,
-    color: '#FFFFFF',
-    opacity: 0.9,
-  },
-  profileMeta: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: spacing.sm,
-  },
-  skillBadge: {
-    ...typography.label,
     color: colors.white,
-    backgroundColor: colors.primary,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: 4,
-    borderRadius: borderRadius.sm,
-    textTransform: 'capitalize',
-  },
-  metaText: {
-    ...typography.body,
-    color: colors.white,
-    marginHorizontal: spacing.xs,
+    opacity: 0.85,
   },
   profileBio: {
     ...typography.body,
     fontSize: 14,
     color: colors.white,
-    opacity: 0.9,
+    opacity: 0.85,
     lineHeight: 20,
-    marginBottom: 12,
+    marginBottom: 10,
   },
   profileInterests: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 8,
+    gap: 6,
   },
   interestTag: {
     paddingHorizontal: 12,
-    paddingVertical: 4,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    borderRadius: 16,
+    paddingVertical: 5,
+    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    borderRadius: 20, // Pill shape
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.2)',
   },
@@ -663,92 +595,89 @@ const styles = StyleSheet.create({
     ...typography.bodySmall,
     fontSize: 12,
     color: colors.white,
+    fontWeight: '500',
   },
-
-  // Info Button
   profileInfoButton: {
-    width: 48,
-    height: 48,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    borderRadius: 24,
+    width: 44,
+    height: 44,
+    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    borderRadius: 22,
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+    borderColor: 'rgba(255, 255, 255, 0.25)',
     justifyContent: 'center',
     alignItems: 'center',
   },
-
-  // Action Buttons
   profileActionButtons: {
     position: 'absolute',
-    bottom: 96,
+    bottom: 88,
     left: 0,
     right: 0,
     flexDirection: 'row',
     justifyContent: 'center',
-    gap: 16,
-    paddingHorizontal: 24,
+    gap: 14,
+    paddingHorizontal: 20,
     zIndex: 30,
   },
+  // Modern action buttons with colored shadows
   actionButtonReject: {
-    width: 64,
-    height: 64,
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-    borderRadius: 32,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+    width: 60,
+    height: 60,
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    borderRadius: 30,
+    borderWidth: 0,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#000',
+    shadowColor: colors.error,
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
+    shadowOpacity: 0.25,
     shadowRadius: 12,
-    elevation: 8,
+    elevation: 6,
   },
   actionButtonSuper: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    borderWidth: 0,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 12,
+    shadowColor: colors.primary, // Orange glow
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.4,
+    shadowRadius: 16,
     elevation: 8,
   },
   actionButtonLike: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    borderWidth: 0,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 12,
+    shadowColor: colors.secondary, // Green glow
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.4,
+    shadowRadius: 16,
     elevation: 8,
   },
 
-  // Court Card (List)
+  // Court Card - Bento style with green shadow
   courtCard: {
     flexDirection: 'row',
     backgroundColor: colors.surface,
-    borderRadius: borderRadius.card,
-    ...shadows.card,
-    padding: spacing.sm + 4,
+    borderRadius: borderRadius.bentoCard, // 24px - bento style
+    ...shadows.courtCard,
+    padding: 14,
     marginBottom: spacing.md,
+    borderWidth: 1,
+    borderColor: colors.border,
   },
   courtImageContainer: {
     position: 'relative',
-    width: 120,
-    height: 90,
-    borderRadius: borderRadius.md,
+    width: 110,
+    height: 85,
+    borderRadius: borderRadius.md, // 16px
     overflow: 'hidden',
-    marginRight: spacing.sm + 4,
+    marginRight: 14,
   },
   courtImage: {
     width: '100%',
@@ -756,17 +685,18 @@ const styles = StyleSheet.create({
   },
   partnerBadge: {
     position: 'absolute',
-    top: spacing.xs,
-    right: spacing.xs,
-    backgroundColor: colors.success,
-    paddingHorizontal: spacing.xs,
-    paddingVertical: 2,
-    borderRadius: 4,
+    top: 6,
+    right: 6,
+    backgroundColor: colors.secondary, // Green
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 8,
   },
   partnerBadgeText: {
     ...typography.bodySmall,
     color: colors.white,
     fontSize: 10,
+    fontWeight: '700',
   },
   courtInfo: {
     flex: 1,
@@ -775,18 +705,20 @@ const styles = StyleSheet.create({
   courtName: {
     ...typography.h4,
     color: colors.textPrimary,
-    marginBottom: 4,
+    marginBottom: 3,
+    fontWeight: '600',
+    fontFamily: fontFamily.bodySemiBold,
   },
   courtAddress: {
     ...typography.bodySmall,
     color: colors.textSecondary,
-    marginBottom: spacing.xs,
+    marginBottom: 6,
   },
   courtMeta: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: spacing.sm,
-    marginBottom: spacing.xs,
+    gap: 10,
+    marginBottom: 6,
   },
   courtDistance: {
     ...typography.bodySmall,
@@ -803,51 +735,62 @@ const styles = StyleSheet.create({
   },
   courtPrice: {
     ...typography.h4,
-    color: colors.primary,
+    color: colors.primary, // Blue
+    fontWeight: '700',
+    fontFamily: fontFamily.heading,
   },
   bookButton: {
-    backgroundColor: colors.primary,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.xs,
-    borderRadius: borderRadius.sm,
+    backgroundColor: colors.primary, // Blue
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 12, // More rounded
+    ...shadows.button,
   },
   bookButtonText: {
     ...typography.button,
-    fontSize: 14,
+    fontSize: 13,
     color: colors.white,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    fontFamily: fontFamily.heading,
   },
 
-  // Match Card (Chat List)
+  // Match Card - Rose shadow for dating vibe
   matchCard: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: colors.surface,
     paddingHorizontal: spacing.md,
-    paddingVertical: spacing.md,
+    paddingVertical: 14,
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
+    ...shadows.matchCard,
   },
   matchInfo: {
     flex: 1,
-    marginLeft: spacing.sm + 4,
+    marginLeft: 14,
   },
   matchHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 4,
+    marginBottom: 3,
   },
   matchName: {
     ...typography.bodyLarge,
     color: colors.textPrimary,
     flex: 1,
+    fontWeight: '500',
+    fontFamily: fontFamily.bodyMedium,
   },
   matchNameUnread: {
-    fontWeight: '600',
+    fontWeight: '700',
+    fontFamily: fontFamily.heading,
   },
   matchTime: {
     ...typography.bodySmall,
     color: colors.textTertiary,
+    fontSize: 12,
   },
   matchMessageRow: {
     flexDirection: 'row',
@@ -860,18 +803,19 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   unreadBadge: {
-    backgroundColor: colors.primary,
+    backgroundColor: colors.accent, // Rose for CTA
     borderRadius: borderRadius.full,
-    width: 20,
-    height: 20,
+    width: 22,
+    height: 22,
     justifyContent: 'center',
     alignItems: 'center',
     marginLeft: spacing.sm,
   },
   unreadBadgeText: {
     ...typography.label,
-    fontSize: 10,
+    fontSize: 11,
     color: colors.white,
+    fontWeight: '700',
   },
 });
 

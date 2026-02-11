@@ -10,63 +10,86 @@
  */
 
 // ============================================
-// COLOR PALETTE
+// COLOR PALETTE - SPORTS DATING BLUE + ROSE
+// Primary: Electric Blue (energetic, sporty, trustworthy)
+// Accent: Rose (dating/match, romantic, engaging)
+// Style: Vibrant & Block-based + Motion-Driven
+// Based on: design/design-system.md
 // ============================================
 
 export const colors = {
-  // Primary Colors (21st.dev Orange Theme)
-  primary: '#F97316', // Orange-500
-  primaryGradientStart: '#F97316',
-  primaryGradientEnd: '#FB923C', // Orange-400
-  primaryDark: '#EA580C', // Orange-600
-  primaryLight: '#FDBA74', // Orange-300
+  // Primary Colors (Electric Blue - energetic, sporty)
+  primary: '#2563EB', // Blue-600
+  primaryGradientStart: '#2563EB',
+  primaryGradientEnd: '#60A5FA', // Blue-400
+  primaryDark: '#1D4ED8', // Blue-700
+  primaryLight: '#60A5FA', // Blue-400
 
-  // Secondary Colors (Green)
-  secondary: '#22C55E', // Green-500 (Tailwind)
-  secondaryDark: '#16A34A', // Green-600
+  // Secondary Colors (Emerald Green - courts, nature, success)
+  secondary: '#10B981', // Emerald-500
+  secondaryDark: '#059669', // Emerald-600
+  secondaryLight: '#34D399', // Emerald-400
 
-  // Accent Colors
-  accent: '#EAB308', // Yellow-500
-  lime: '#84CC16', // Lime-500
-  sportGreen: '#22C55E', // Green-500
+  // Accent Colors (Rose - dating/match feel, CTA)
+  accent: '#F43F5E', // Rose-500 - CTA color
+  accentLight: '#FB7185', // Rose-400
+  accentDark: '#E11D48', // Rose-600
 
-  // Background Colors
-  background: '#FFFFFF', // Clean White
-  backgroundDark: '#0F172A', // Slate-950
-  surface: '#F8FAFC', // Slate-50
-  surfaceGlass: 'rgba(255, 255, 255, 0.90)',
+  // Vibrant Sport Colors
+  lime: '#84CC16', // Lime-500 - Energy, vitality
+  sportGreen: '#10B981', // Emerald-500 - Courts, success
+  electric: '#8B5CF6', // Violet-500 - Premium, special
+  energyOrange: '#F97316', // Orange-500 - Energy, excitement
+  neonYellow: '#FACC15', // Yellow-400 - Highlight, attention
+
+  // Background Colors - Clean, modern
+  background: '#F8FAFC', // Slate-50
+  backgroundDark: '#0F172A', // Slate-900
+  surface: '#FFFFFF', // Pure White
+  surfaceGlass: 'rgba(255, 255, 255, 0.72)', // Glass effect
+  surfaceGlassDark: 'rgba(15, 23, 42, 0.72)', // Dark glass
   surfaceDark: '#1E293B', // Slate-800
 
+  // Bento card backgrounds
+  bentoLight: '#EFF6FF', // Blue-50
+  bentoDark: '#1E3A8A', // Blue-900
+
   // Text Colors
-  textPrimary: '#0F172A', // Slate-950
-  textSecondary: '#64748B', // Slate-500
+  textPrimary: '#0F172A', // Slate-900
+  textSecondary: '#475569', // Slate-600
   textTertiary: '#94A3B8', // Slate-400
-  textInverse: '#FFFFFF',
+  textInverse: '#F8FAFC', // Slate-50
 
   // Border Colors
   border: '#E2E8F0', // Slate-200
   borderDark: '#334155', // Slate-700
+  borderGlass: 'rgba(226, 232, 240, 0.5)', // Slate-200/50
 
   // Status Colors
-  success: '#22C55E', // Green-500
+  success: '#10B981', // Emerald-500
   error: '#EF4444', // Red-500
   warning: '#F59E0B', // Amber-500
-  info: '#3B82F6', // Blue-500
+  info: '#38BDF8', // Sky-400
 
   // Skill Level Colors
-  skillBeginner: '#22C55E', // Green
-  skillIntermediate: '#EAB308', // Yellow
-  skillAdvanced: '#F97316', // Orange
-  skillPro: '#EF4444', // Red
+  skillBeginner: '#10B981', // Emerald-500
+  skillIntermediate: '#F59E0B', // Amber-500
+  skillAdvanced: '#2563EB', // Blue-600
+  skillPro: '#F43F5E', // Rose-500
 
   // Utility Colors
   black: '#000000',
   white: '#FFFFFF',
 
   // Transparent overlays
-  overlay: 'rgba(15, 23, 42, 0.5)',
-  overlayLight: 'rgba(15, 23, 42, 0.3)',
-  overlayDark: 'rgba(15, 23, 42, 0.7)',
+  overlay: 'rgba(15, 23, 42, 0.4)', // Slate-900
+  overlayLight: 'rgba(15, 23, 42, 0.2)',
+  overlayDark: 'rgba(15, 23, 42, 0.6)',
+
+  // Glassmorphism specific
+  glassBg: 'rgba(255, 255, 255, 0.6)',
+  glassBorder: 'rgba(226, 232, 240, 0.5)', // Slate-200/50
+  glassShadow: 'rgba(37, 99, 235, 0.15)', // Blue-600/15
 } as const;
 
 // ============================================
@@ -87,50 +110,64 @@ export const spacing = {
 // ============================================
 
 export const typography = {
-  // Headings
-  h1: {
-    fontSize: 32,
+  // Headings - Large type for Vibrant Sport style (32px+)
+  hero: {
+    fontSize: 48,
     fontWeight: '700' as const,
-    lineHeight: 40,
+    lineHeight: 52,
+    letterSpacing: -1,
+    fontFamily: 'BarlowCondensed-Bold',
+  },
+  h1: {
+    fontSize: 36,
+    fontWeight: '700' as const,
+    lineHeight: 42,
     letterSpacing: -0.5,
+    fontFamily: 'Barlow-Bold',
   },
   h2: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: '700' as const,
-    lineHeight: 32,
+    lineHeight: 34,
     letterSpacing: -0.5,
+    fontFamily: 'Barlow-Bold',
   },
   h3: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: '600' as const,
     lineHeight: 28,
-    letterSpacing: -0.5,
+    letterSpacing: -0.3,
+    fontFamily: 'Barlow-SemiBold',
   },
   h4: {
     fontSize: 18,
     fontWeight: '600' as const,
     lineHeight: 24,
-    letterSpacing: -0.5,
+    letterSpacing: -0.2,
+    fontFamily: 'Barlow-SemiBold',
   },
 
   // Body Text
   bodyLarge: {
-    fontSize: 16,
+    fontSize: 17,
     fontWeight: '400' as const,
-    lineHeight: 24,
+    lineHeight: 26,
     letterSpacing: 0,
+    fontFamily: 'Barlow-Regular',
   },
   body: {
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: '400' as const,
-    lineHeight: 20,
+    lineHeight: 22,
     letterSpacing: 0,
+    fontFamily: 'Barlow-Regular',
   },
   bodySmall: {
-    fontSize: 12,
+    fontSize: 13,
     fontWeight: '400' as const,
     lineHeight: 18,
     letterSpacing: 0,
+    fontFamily: 'Barlow-Regular',
   },
 
   // Special
@@ -138,39 +175,68 @@ export const typography = {
     fontSize: 16,
     fontWeight: '600' as const,
     lineHeight: 24,
-    letterSpacing: 0,
+    letterSpacing: 0.5,
+    fontFamily: 'Barlow-SemiBold',
+    textTransform: 'uppercase' as const,
+  },
+  buttonSmall: {
+    fontSize: 14,
+    fontWeight: '600' as const,
+    lineHeight: 20,
+    letterSpacing: 0.3,
+    fontFamily: 'Barlow-SemiBold',
   },
   label: {
     fontSize: 12,
     fontWeight: '500' as const,
     lineHeight: 16,
+    letterSpacing: 0.8,
+    fontFamily: 'Barlow-Medium',
+    textTransform: 'uppercase' as const,
+  },
+  caption: {
+    fontSize: 11,
+    fontWeight: '500' as const,
+    lineHeight: 14,
     letterSpacing: 0.5,
+    fontFamily: 'Barlow-Medium',
   },
 } as const;
 
-// Font Families
+// Font Families (Barlow - athletic, energetic, sports)
+// Google Fonts: https://fonts.google.com/share?selection.family=Barlow+Condensed:wght@400;500;600;700|Barlow:wght@300;400;500;600;700
 export const fontFamily = {
-  primary: 'Inter',
+  heading: 'Barlow-Bold', // Athletic condensed headings
+  headingCondensed: 'BarlowCondensed-Bold', // Extra impact for large titles
+  body: 'Barlow-Regular', // Clean body text
+  bodyMedium: 'Barlow-Medium', // Emphasis
+  bodySemiBold: 'Barlow-SemiBold', // Strong emphasis
+  primary: 'Barlow-Regular', // Default
   fallback: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
 } as const;
 
 // ============================================
-// BORDER RADIUS
+// BORDER RADIUS - Modern larger radius for 2024-2026
 // ============================================
 
 export const borderRadius = {
-  sm: 8,
-  md: 12,
-  lg: 16,
-  xl: 24,
+  xs: 6, // Subtle rounding
+  sm: 12, // Increased from 8
+  md: 16, // Increased from 12
+  lg: 20, // Increased from 16
+  xl: 28, // Increased from 24
+  '2xl': 32, // New - for bento cards
+  '3xl': 40, // New - for large cards
   full: 9999, // For circular elements
 
-  // Component-specific
-  button: 12,
-  input: 12,
-  card: 16,
-  profileCard: 24,
+  // Component-specific - more rounded for modern look
+  button: 16, // Increased from 12
+  input: 14, // Increased from 12
+  card: 20, // Increased from 16 - bento style
+  profileCard: 28, // Increased from 24
   avatar: 9999,
+  bentoCard: 24, // New - for bento grid cards
+  glass: 20, // New - for glass elements
 } as const;
 
 // ============================================

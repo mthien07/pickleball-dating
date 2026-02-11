@@ -1,22 +1,4 @@
-/**
- * Button Component
- *
- * A versatile button component with multiple variants and states.
- * Implements design system from design/uiuxguides.md
- * Uses React Native Reanimated v4 for smooth animations
- *
- * Usage:
- * ```tsx
- * <Button
- *   variant="primary"
- *   title="Continue"
- *   onPress={handlePress}
- *   loading={isLoading}
- * />
- * ```
- */
-
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   TouchableOpacity,
   Text,
@@ -25,99 +7,32 @@ import {
   ViewStyle,
   TextStyle,
   View,
+  Platform,
 } from 'react-native';
-import * as Haptics from 'expo-haptics';
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withSpring,
-  withTiming,
-} from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
-import { colors, spacing, typography, borderRadius, durations } from '../theme/tokens';
+import { colors, spacing, typography, borderRadius } from '../theme/tokens';
 import { shadows } from '../theme/shadows';
 import { usePressAnimation, useElevationAnimation } from '../hooks/useAnimations';
 import { GRADIENT_COLORS } from './GradientBackground';
-
-// ============================================
-// TYPES
-// ============================================
 
 export type ButtonVariant = 'primary' | 'secondary' | 'text' | 'icon' | 'gradient' | 'elevated';
 export type ButtonSize = 'small' | 'medium' | 'large';
 
 export interface ButtonProps {
-  /**
-   * Button text label
-   */
   title?: string;
-
-  /**
-   * Press handler
-   */
   onPress: () => void;
-
-  /**
-   * Button variant
-   * @default 'primary'
-   */
   variant?: ButtonVariant;
-
-  /**
-   * Button size
-   * @default 'medium'
-   */
   size?: ButtonSize;
-
-  /**
-   * Disabled state
-   * @default false
-   */
   disabled?: boolean;
-
-  /**
-   * Loading state - shows spinner
-   * @default false
-   */
   loading?: boolean;
-
-  /**
-   * Icon component (optional)
-   * Can be used with or without title
-   */
   icon?: React.ReactNode;
-
-  /**
-   * Icon position relative to text
-   * @default 'left'
-   */
   iconPosition?: 'left' | 'right';
-
-  /**
-   * Full width button
-   * @default false
-   */
   fullWidth?: boolean;
-
-  /**
-   * Custom style override
-   */
   style?: ViewStyle;
-
-  /**
-   * Custom text style override
-   */
   textStyle?: TextStyle;
-
-  /**
-   * Accessibility label
-   */
   accessibilityLabel?: string;
 }
-
-// ============================================
-// COMPONENT
-// ============================================
 
 const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
 
@@ -150,29 +65,41 @@ export const Button: React.FC<ButtonProps> = ({
 
   const handlePress = () => {
     if (!disabled && !loading) {
-      // Haptic feedback for better tactile response
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      // Haptic feedback - skip on web
+      if (Platform.OS !== 'web') {
+        try {
+          require('expo-haptics').impactAsync(require('expo-haptics').ImpactFeedbackStyle.Light);
+        } catch {}
+      }
       onPress();
     }
   };
 
-  // Determine styles based on variant and state
-  const containerStyle: ViewStyle[] = [
-    styles.base,
-    styles[`${variant}Container`],
-    styles[`${size}Container`],
-    ...(fullWidth ? [styles.fullWidth] : []),
-    ...(disabled ? [styles.disabledContainer] : []),
-    ...(style ? [style] : []),
-  ].filter(Boolean);
+  // Memoize computed styles for performance optimization
+  const containerStyle = useMemo<ViewStyle[]>(
+    () =>
+      [
+        styles.base,
+        styles[`${variant}Container`],
+        styles[`${size}Container`],
+        fullWidth && styles.fullWidth,
+        disabled && styles.disabledContainer,
+        style,
+      ].filter(Boolean) as ViewStyle[],
+    [variant, size, fullWidth, disabled, style]
+  );
 
-  const labelStyle: TextStyle[] = [
-    styles.baseText,
-    styles[`${variant}Text`],
-    styles[`${size}Text`],
-    ...(disabled ? [styles.disabledText] : []),
-    ...(textStyle ? [textStyle] : []),
-  ].filter(Boolean);
+  const labelStyle = useMemo<TextStyle[]>(
+    () =>
+      [
+        styles.baseText,
+        styles[`${variant}Text`],
+        styles[`${size}Text`],
+        disabled && styles.disabledText,
+        textStyle,
+      ].filter(Boolean) as TextStyle[],
+    [variant, size, disabled, textStyle]
+  );
 
   // Render spinner color based on variant
   const spinnerColor = variant === 'primary' ? colors.white : colors.primary;
@@ -258,117 +185,127 @@ export const Button: React.FC<ButtonProps> = ({
   );
 };
 
-// ============================================
-// STYLES
-// ============================================
-
 const styles = StyleSheet.create({
-  // Base styles
+  // Base styles - Modern 2024
   base: {
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: borderRadius.button,
+    borderRadius: borderRadius.button, // 16px - more rounded
   },
 
   baseText: {
     ...typography.button,
     textAlign: 'center',
+    fontWeight: '600',
+    fontFamily: 'Barlow-SemiBold',
   },
 
-  // Variant: Primary
+  // Variant: Primary - Blue with glow
   primaryContainer: {
     backgroundColor: colors.primary,
     ...shadows.button,
   },
   primaryText: {
     color: colors.white,
+    textTransform: 'uppercase',
   },
 
-  // Variant: Secondary
+  // Variant: Secondary - Green outline
   secondaryContainer: {
     backgroundColor: 'transparent',
     borderWidth: 2,
-    borderColor: colors.secondary,
+    borderColor: colors.secondary, // Green
+    ...shadows.buttonSecondary,
   },
   secondaryText: {
     color: colors.secondary,
+    fontWeight: '600',
+    textTransform: 'uppercase',
   },
 
-  // Variant: Text (Tertiary)
+  // Variant: Text (Tertiary) - Clean, no bg
   textContainer: {
     backgroundColor: 'transparent',
   },
   textText: {
-    color: colors.primary,
+    color: colors.primary, // Orange
   },
 
-  // Variant: Icon
+  // Variant: Icon - Glassmorphism style
   iconContainer: {
-    backgroundColor: 'transparent',
+    backgroundColor: colors.surfaceGlass,
     borderRadius: borderRadius.full,
-    width: 48,
-    height: 48,
+    width: 52,
+    height: 52,
     padding: spacing.sm,
+    borderWidth: 1,
+    borderColor: colors.borderGlass,
   },
   iconText: {
     color: colors.textPrimary,
   },
 
-  // Variant: Gradient
+  // Variant: Gradient - Blue to Rose sport gradient
   gradientContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 28,
-    shadowColor: '#F97316', // Orange-500
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 12,
-    elevation: 8,
+    borderRadius: 20, // Modern rounded
+    ...shadows.button,
   },
   gradientText: {
     color: colors.white,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    fontFamily: 'Barlow-Bold',
   },
 
-  // Variant: Elevated
+  // Variant: Elevated - Neomorphism style
   elevatedContainer: {
     backgroundColor: colors.surface,
-    ...shadows.elevated,
+    ...shadows.neoLight,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.8)',
   },
   elevatedText: {
     color: colors.textPrimary,
   },
 
-  // Sizes
+  // Sizes - slightly larger for modern touch targets
   smallContainer: {
-    paddingVertical: spacing.sm,
-    paddingHorizontal: spacing.md,
+    paddingVertical: 10,
+    paddingHorizontal: 18,
   },
   smallText: {
     fontSize: 14,
+    fontFamily: 'Barlow-SemiBold',
   },
 
   mediumContainer: {
-    paddingVertical: spacing.md,
-    paddingHorizontal: spacing.lg,
+    paddingVertical: 14,
+    paddingHorizontal: 24,
   },
   mediumText: {
     fontSize: 16,
+    fontFamily: 'Barlow-SemiBold',
   },
 
   largeContainer: {
     paddingVertical: 18,
-    paddingHorizontal: spacing.xl,
+    paddingHorizontal: 32,
   },
   largeText: {
     fontSize: 18,
+    fontWeight: '700',
+    fontFamily: 'Barlow-Bold',
   },
 
-  // States
+  // States - softer disabled
   disabledContainer: {
     backgroundColor: colors.border,
     shadowOpacity: 0,
     elevation: 0,
     borderColor: colors.border,
+    opacity: 0.6,
   },
   disabledText: {
     color: colors.textTertiary,
@@ -386,146 +323,39 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
   },
   loadingText: {
-    opacity: 0.5,
+    opacity: 0.6,
   },
 
   // Icon with text
   contentWithIcon: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: spacing.sm,
+    gap: 10, // Slightly more space
   },
 });
 
-// ============================================
-// COMPONENT VARIATIONS EXAMPLES
-// ============================================
-
-/**
- * Primary Button (Default)
- * Use for main CTAs
- */
 export const PrimaryButton: React.FC<Omit<ButtonProps, 'variant'>> = (props) => (
   <Button {...props} variant="primary" />
 );
 
-/**
- * Secondary Button
- * Use for secondary actions
- */
 export const SecondaryButton: React.FC<Omit<ButtonProps, 'variant'>> = (props) => (
   <Button {...props} variant="secondary" />
 );
 
-/**
- * Text Button
- * Use for tertiary actions or inline links
- */
 export const TextButton: React.FC<Omit<ButtonProps, 'variant'>> = (props) => (
   <Button {...props} variant="text" />
 );
 
-/**
- * Icon Button
- * Use for icon-only actions (no text label)
- */
 export const IconButton: React.FC<Omit<ButtonProps, 'variant' | 'title'>> = (props) => (
   <Button {...props} variant="icon" />
 );
 
-/**
- * Gradient Button
- * Use for high-emphasis CTAs with gradient background (Red to Orange)
- */
 export const GradientButton: React.FC<Omit<ButtonProps, 'variant'>> = (props) => (
   <Button {...props} variant="gradient" />
 );
 
-/**
- * Elevated Button
- * Use for buttons with dynamic elevation/shadow effects on press
- */
 export const ElevatedButton: React.FC<Omit<ButtonProps, 'variant'>> = (props) => (
   <Button {...props} variant="elevated" />
 );
 
-// Default export
 export default Button;
-
-// ============================================
-// USAGE EXAMPLES
-// ============================================
-
-/*
-// Basic usage
-<Button
-  title="Continue"
-  onPress={() => console.log('Pressed')}
-/>
-
-// Primary button (default)
-<Button
-  variant="primary"
-  title="Match Now"
-  onPress={handleMatch}
-  fullWidth
-/>
-
-// Secondary button
-<Button
-  variant="secondary"
-  title="Skip"
-  onPress={handleSkip}
-/>
-
-// Text button
-<Button
-  variant="text"
-  title="Learn More"
-  onPress={handleLearnMore}
-/>
-
-// Loading state
-<Button
-  title="Booking..."
-  loading={isBooking}
-  onPress={handleBook}
-/>
-
-// Disabled state
-<Button
-  title="Submit"
-  disabled={!isValid}
-  onPress={handleSubmit}
-/>
-
-// With icon
-<Button
-  title="Send Message"
-  icon={<MessageIcon />}
-  iconPosition="left"
-  onPress={handleSend}
-/>
-
-// Icon-only button
-<Button
-  icon={<HeartIcon />}
-  variant="icon"
-  onPress={handleLike}
-/>
-
-// Full-width button
-<Button
-  title="Continue to Payment"
-  onPress={handlePayment}
-  fullWidth
-/>
-
-// Custom styling
-<Button
-  title="Custom"
-  onPress={handleCustom}
-  style={{ marginTop: 20 }}
-  textStyle={{ fontSize: 18 }}
-/>
-*/

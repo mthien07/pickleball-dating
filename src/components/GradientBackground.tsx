@@ -1,61 +1,64 @@
-/**
- * Gradient Background Components
- *
- * Reusable gradient wrappers với màu theme của app (Red-Orange)
- * Converted from web gradient patterns
- *
- * Usage:
- * ```tsx
- * <GradientButton onPress={handlePress}>
- *   <Text>Click me</Text>
- * </GradientButton>
- *
- * <GradientCard>
- *   <Text>Content</Text>
- * </GradientCard>
- * ```
- */
-
 import React from 'react';
 import { View, StyleSheet, ViewStyle } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated from 'react-native-reanimated';
-
-// ============================================
-// GRADIENT COLORS (21st.dev Orange/Green Theme)
-// ============================================
+import { colors } from '../theme/tokens';
 
 export const GRADIENT_COLORS = {
-  // Primary gradient: Orange-500 to Orange-400
-  primary: ['#F97316', '#FB923C'] as const,
+  // Primary gradient: Electric Blue (Vibrant Sport)
+  primary: [colors.primaryGradientStart, colors.primaryGradientEnd] as const, // Blue-600 to Blue-400
 
-  // Reversed: Orange-400 to Orange-500
-  primaryReverse: ['#FB923C', '#F97316'] as const,
+  // Reversed Blue
+  primaryReverse: [colors.primaryGradientEnd, colors.primaryGradientStart] as const,
 
-  // Subtle gradient with transparency (Orange)
-  primarySubtle: ['rgba(249, 115, 22, 0.1)', 'rgba(251, 146, 60, 0.1)'] as const,
+  // Subtle blue gradient with transparency
+  primarySubtle: ['rgba(37, 99, 235, 0.08)', 'rgba(96, 165, 250, 0.08)'] as const,
 
-  // Dark gradient (Orange-600 to Orange-700)
-  primaryDark: ['#EA580C', '#C2410C'] as const,
+  // Dark blue gradient
+  primaryDark: [colors.primaryDark, '#1E40AF'] as const, // Blue-700 to Blue-800
 
-  // Light gradient (Orange-300 to Orange-200)
-  primaryLight: ['#FDBA74', '#FED7AA'] as const,
+  // Light blue gradient (soft sky)
+  primaryLight: ['#DBEAFE', '#EFF6FF'] as const, // Blue-100 to Blue-50
 
-  // Secondary gradient (Green-500 to Green-400)
-  secondary: ['#22C55E', '#4ADE80'] as const,
+  // Secondary gradient: Emerald Green
+  secondary: [colors.secondary, colors.secondaryLight] as const, // Emerald-500 to Emerald-400
 
-  // Background gradients
+  // Green subtle
+  secondarySubtle: ['rgba(16, 185, 129, 0.08)', 'rgba(52, 211, 153, 0.08)'] as const,
+
+  // Accent gradient (Rose - for like/match actions)
+  accent: [colors.accent, colors.accentLight] as const, // Rose-500 to Rose-400
+
+  // Accent subtle
+  accentSubtle: ['rgba(244, 63, 94, 0.1)', 'rgba(251, 113, 133, 0.1)'] as const,
+
+  // Vibrant sport gradient: Blue to Rose (brand combo)
+  sport: ['#2563EB', '#F43F5E'] as const, // Blue to Rose
+  sportSubtle: ['rgba(37, 99, 235, 0.1)', 'rgba(244, 63, 94, 0.1)'] as const,
+
+  // Energy gradient (vibrant, energetic)
+  sunset: ['#2563EB', '#8B5CF6', '#F43F5E'] as const,
+
+  // Fresh gradient (sporty, active)
+  fresh: ['#60A5FA', '#34D399', '#10B981'] as const,
+
+  // Background gradients - vibrant sport glassmorphism
   bgSubtle: [
-    'rgba(249, 115, 22, 0.05)',
-    'rgba(34, 197, 94, 0.05)',
-    'rgba(249, 115, 22, 0.05)',
+    'rgba(37, 99, 235, 0.03)',
+    'rgba(16, 185, 129, 0.03)',
+    'rgba(244, 63, 94, 0.03)',
   ] as const,
-  bgMedium: ['rgba(249, 115, 22, 0.2)', 'rgba(34, 197, 94, 0.2)'] as const,
-};
+  bgMedium: ['rgba(37, 99, 235, 0.12)', 'rgba(244, 63, 94, 0.12)'] as const,
 
-// ============================================
-// GRADIENT DIRECTIONS
-// ============================================
+  // Glassmorphism backgrounds
+  glass: ['rgba(255, 255, 255, 0.8)', 'rgba(255, 255, 255, 0.6)'] as const,
+  glassDark: ['rgba(29, 78, 216, 0.8)', 'rgba(29, 78, 216, 0.6)'] as const,
+
+  // Bento card gradients - vibrant sport pastel
+  bentoWarm: ['#FEE2E2', '#FEF2F2'] as const, // Rose-100 to Rose-50
+  bentoCool: ['#DBEAFE', '#EFF6FF'] as const, // Blue-100 to Blue-50
+  bentoNeutral: ['#D1FAE5', '#ECFDF5'] as const, // Emerald-100 to Emerald-50
+};
 
 export const GRADIENT_DIRECTIONS = {
   horizontal: { start: { x: 0, y: 0 }, end: { x: 1, y: 0 } },
@@ -64,10 +67,6 @@ export const GRADIENT_DIRECTIONS = {
   diagonalReverse: { start: { x: 1, y: 0 }, end: { x: 0, y: 1 } },
   radial: { start: { x: 0.5, y: 0.5 }, end: { x: 1, y: 1 } },
 };
-
-// ============================================
-// GRADIENT VIEW
-// ============================================
 
 interface GradientViewProps {
   colors?: readonly [string, string, ...string[]];
@@ -108,6 +107,13 @@ interface GradientButtonProps {
   variant?: 'primary' | 'subtle' | 'dark' | 'light';
 }
 
+const BUTTON_VARIANT_COLORS = {
+  primary: GRADIENT_COLORS.primary,
+  subtle: GRADIENT_COLORS.primarySubtle,
+  dark: GRADIENT_COLORS.primaryDark,
+  light: GRADIENT_COLORS.primaryLight,
+} as const;
+
 export const GradientButton: React.FC<GradientButtonProps> = ({
   colors,
   direction = 'horizontal',
@@ -115,24 +121,7 @@ export const GradientButton: React.FC<GradientButtonProps> = ({
   children,
   variant = 'primary',
 }) => {
-  const getVariantColors = () => {
-    if (colors) {
-      return colors;
-    }
-    switch (variant) {
-      case 'primary':
-        return GRADIENT_COLORS.primary;
-      case 'subtle':
-        return GRADIENT_COLORS.primarySubtle;
-      case 'dark':
-        return GRADIENT_COLORS.primaryDark;
-      case 'light':
-        return GRADIENT_COLORS.primaryLight;
-      default:
-        return GRADIENT_COLORS.primary;
-    }
-  };
-  const gradientColors = getVariantColors();
+  const gradientColors = colors || BUTTON_VARIANT_COLORS[variant];
   const { start, end } = GRADIENT_DIRECTIONS[direction];
 
   return (
@@ -146,10 +135,6 @@ export const GradientButton: React.FC<GradientButtonProps> = ({
     </LinearGradient>
   );
 };
-
-// ============================================
-// GRADIENT CARD
-// ============================================
 
 interface GradientCardProps {
   colors?: readonly [string, string, ...string[]];
@@ -188,10 +173,6 @@ export const GradientCard: React.FC<GradientCardProps> = ({
   );
 };
 
-// ============================================
-// GRADIENT OVERLAY
-// ============================================
-
 interface GradientOverlayProps {
   position?: 'top' | 'bottom' | 'left' | 'right' | 'full';
   intensity?: 'light' | 'medium' | 'heavy';
@@ -214,7 +195,8 @@ export const GradientOverlay: React.FC<GradientOverlayProps> = ({
 
     const alpha = alphaMap[intensity];
 
-    return [`rgba(239, 68, 68, ${alpha.from})`, `rgba(249, 115, 22, ${alpha.to})`] as const;
+    // Updated to Blue gradient for vibrant sport feel
+    return [`rgba(37, 99, 235, ${alpha.from})`, `rgba(96, 165, 250, ${alpha.to})`] as const;
   };
 
   const getDirection = () => {
@@ -249,10 +231,6 @@ export const GradientOverlay: React.FC<GradientOverlayProps> = ({
   );
 };
 
-// ============================================
-// ANIMATED GRADIENT VIEW
-// ============================================
-
 interface AnimatedGradientViewProps {
   colors?: readonly [string, string, ...string[]];
   direction?: keyof typeof GRADIENT_DIRECTIONS;
@@ -282,10 +260,6 @@ export const AnimatedGradientView: React.FC<AnimatedGradientViewProps> = ({
   );
 };
 
-// ============================================
-// GRADIENT BADGE
-// ============================================
-
 interface GradientBadgeProps {
   colors?: readonly [string, string, ...string[]];
   style?: ViewStyle;
@@ -309,31 +283,27 @@ export const GradientBadge: React.FC<GradientBadgeProps> = ({
   );
 };
 
-// ============================================
-// STYLES
-// ============================================
-
 const styles = StyleSheet.create({
   gradientContainer: {
     flex: 1,
   },
   gradientButton: {
-    paddingHorizontal: 24,
-    paddingVertical: 12,
-    borderRadius: 28,
+    paddingHorizontal: 28,
+    paddingVertical: 14,
+    borderRadius: 20, // Modern rounded
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#F97316', // Orange-500
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 12,
-    elevation: 8,
+    shadowColor: '#2563EB', // Blue-600
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.35,
+    shadowRadius: 16,
+    elevation: 6,
   },
   gradientCard: {
-    padding: 16,
-    borderRadius: 16,
+    padding: 20,
+    borderRadius: 24, // Bento style
     borderWidth: 1,
-    borderColor: 'rgba(249, 115, 22, 0.2)', // Orange-500/20
+    borderColor: 'rgba(37, 99, 235, 0.12)', // Blue-600/12
   },
   overlayContainer: {
     position: 'relative',
@@ -346,16 +316,12 @@ const styles = StyleSheet.create({
     bottom: 0,
   },
   gradientBadge: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 16,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 20, // More rounded
     alignSelf: 'flex-start',
   },
 });
-
-// ============================================
-// EXPORTS
-// ============================================
 
 export default {
   GradientView,

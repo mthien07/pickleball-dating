@@ -27,8 +27,10 @@ import {
   TextStyle,
   TextInputProps,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
+import { Eye, EyeOff, X, Search } from 'lucide-react-native';
 import { colors, spacing, typography, borderRadius, durations } from '../theme/tokens';
 
 // ============================================
@@ -139,9 +141,126 @@ export interface InputProps extends Omit<TextInputProps, 'style'> {
 // COMPONENT
 // ============================================
 
-const AnimatedView = Animated.createAnimatedComponent(View);
+const isWeb = Platform.OS === 'web';
 
-export const Input: React.FC<InputProps> = ({
+// Simple Web Input - no animations, no Reanimated
+const WebInput: React.FC<InputProps> = ({
+  type = 'text',
+  value,
+  onChangeText,
+  placeholder,
+  label,
+  helperText,
+  error,
+  disabled = false,
+  leadingIcon,
+  trailingIcon,
+  clearable = false,
+  multiline = false,
+  numberOfLines = 1,
+  maxLength,
+  showCounter = false,
+  containerStyle,
+  inputStyle,
+  onClear,
+  ...textInputProps
+}) => {
+  const [isFocused, setIsFocused] = useState(false);
+  const [isSecureText, setIsSecureText] = useState(type === 'password');
+
+  const getKeyboardType = (): TextInputProps['keyboardType'] => {
+    switch (type) {
+      case 'email':
+        return 'email-address';
+      case 'number':
+        return 'numeric';
+      default:
+        return 'default';
+    }
+  };
+
+  return (
+    <View style={styles.wrapper}>
+      {label && <Text style={[styles.label, error && styles.errorLabel]}>{label}</Text>}
+      <View
+        style={[
+          styles.textContainer,
+          isFocused && styles.focusedContainer,
+          error && styles.errorContainer,
+          disabled && styles.disabledContainer,
+          containerStyle,
+        ]}
+      >
+        {leadingIcon && <View style={styles.leadingIconContainer}>{leadingIcon}</View>}
+        <TextInput
+          value={value}
+          onChangeText={onChangeText}
+          placeholder={placeholder}
+          placeholderTextColor={colors.textTertiary}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+          editable={!disabled}
+          multiline={multiline}
+          numberOfLines={multiline ? numberOfLines : 1}
+          maxLength={maxLength}
+          keyboardType={getKeyboardType()}
+          autoCapitalize={type === 'email' ? 'none' : 'sentences'}
+          secureTextEntry={isSecureText}
+          style={[
+            styles.input,
+            disabled && styles.disabledText,
+            inputStyle,
+            { outline: 'none' } as any,
+          ]}
+          {...textInputProps}
+        />
+        {type === 'password' && (
+          <TouchableOpacity
+            onPress={() => setIsSecureText(!isSecureText)}
+            style={styles.iconContainer}
+          >
+            {isSecureText ? (
+              <Eye size={20} color={colors.textSecondary} strokeWidth={2} />
+            ) : (
+              <EyeOff size={20} color={colors.textSecondary} strokeWidth={2} />
+            )}
+          </TouchableOpacity>
+        )}
+        {clearable && value.length > 0 && !disabled && type !== 'password' && (
+          <TouchableOpacity
+            onPress={() => {
+              onChangeText('');
+              onClear?.();
+            }}
+            style={styles.iconContainer}
+          >
+            <X size={18} color={colors.textSecondary} strokeWidth={2} />
+          </TouchableOpacity>
+        )}
+        {trailingIcon && type !== 'password' && (
+          <View style={styles.iconContainer}>{trailingIcon}</View>
+        )}
+      </View>
+      <View style={styles.bottomRow}>
+        <View style={styles.helperTextContainer}>
+          {error ? (
+            <Text style={styles.errorText}>{error}</Text>
+          ) : helperText ? (
+            <Text style={styles.helperText}>{helperText}</Text>
+          ) : null}
+        </View>
+        {showCounter && maxLength && (
+          <Text style={styles.counter}>
+            {value.length}/{maxLength}
+          </Text>
+        )}
+      </View>
+    </View>
+  );
+};
+
+// Native Input with animations
+const NativeInput: React.FC<InputProps> = ({
   type = 'text',
   value,
   onChangeText,
@@ -172,19 +291,13 @@ export const Input: React.FC<InputProps> = ({
   const labelScale = useSharedValue(1);
   const helperOpacity = useSharedValue(0);
 
-  // Animated styles
   const borderAnimatedStyle = useAnimatedStyle(() => {
-    // Interpolate border color from neutral to primary
     const borderColor = error
       ? colors.error
       : borderColorProgress.value > 0
         ? colors.primary
         : colors.border;
-
-    return {
-      borderWidth: borderScale.value,
-      borderColor,
-    };
+    return { borderWidth: borderScale.value, borderColor };
   });
 
   const shadowAnimatedStyle = useAnimatedStyle(() => ({
@@ -195,68 +308,31 @@ export const Input: React.FC<InputProps> = ({
     elevation: shadowOpacity.value * 10,
   }));
 
-  const labelAnimatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: labelScale.value }],
-  }));
-
-  const helperAnimatedStyle = useAnimatedStyle(() => ({
-    opacity: helperOpacity.value,
-  }));
-
-  // Focus handlers with enhanced animations
   const handleFocus = () => {
     setIsFocused(true);
-
-    // Border animations
     borderScale.value = withTiming(2, { duration: durations.normal });
     borderColorProgress.value = withTiming(1, { duration: durations.normal });
-
-    // Shadow animation (subtle glow effect)
     shadowOpacity.value = withTiming(0.15, { duration: durations.normal });
-
-    // Label scale animation (subtle emphasis)
     labelScale.value = withTiming(1.02, { duration: durations.fast });
-
-    // Helper text fade in
     helperOpacity.value = withTiming(1, { duration: durations.normal });
-
-    // Trigger haptic feedback
     if (!disabled) {
-      require('expo-haptics').impactAsync(require('expo-haptics').ImpactFeedbackStyle.Light);
+      try {
+        require('expo-haptics').impactAsync(require('expo-haptics').ImpactFeedbackStyle.Light);
+      } catch {}
     }
   };
 
   const handleBlur = () => {
     setIsFocused(false);
-
-    // Reset border animations
     borderScale.value = withTiming(1, { duration: durations.normal });
     borderColorProgress.value = withTiming(0, { duration: durations.normal });
-
-    // Reset shadow
     shadowOpacity.value = withTiming(0, { duration: durations.normal });
-
-    // Reset label scale
     labelScale.value = withTiming(1, { duration: durations.fast });
-
-    // Keep helper visible if there's error or helperText
     if (!error && !helperText) {
       helperOpacity.value = withTiming(0, { duration: durations.fast });
     }
   };
 
-  // Clear handler
-  const handleClear = () => {
-    onChangeText('');
-    onClear?.();
-  };
-
-  // Toggle password visibility
-  const toggleSecureText = () => {
-    setIsSecureText(!isSecureText);
-  };
-
-  // Determine keyboard type
   const getKeyboardType = (): TextInputProps['keyboardType'] => {
     switch (type) {
       case 'email':
@@ -268,70 +344,23 @@ export const Input: React.FC<InputProps> = ({
     }
   };
 
-  // Determine auto-capitalize
-  const getAutoCapitalize = (): TextInputProps['autoCapitalize'] => {
-    if (type === 'email') {
-      return 'none';
-    }
-    return 'sentences';
-  };
-
-  // Determine container styles
-  const containerStyles: ViewStyle[] = [
-    type === 'search' ? styles.searchContainer : styles.textContainer,
-    ...(isFocused ? [styles.focusedContainer] : []),
-    ...(error ? [styles.errorContainer] : []),
-    ...(disabled ? [styles.disabledContainer] : []),
-    borderAnimatedStyle,
-    ...(type === 'search' ? [shadowAnimatedStyle] : []),
-    ...(containerStyle ? [containerStyle] : []),
-  ].filter(Boolean);
-
-  // Determine input text styles
-  const textStyles: TextStyle[] = [
-    styles.input,
-    ...(type === 'search' ? [styles.searchInput] : []),
-    ...(disabled ? [styles.disabledText] : []),
-    ...(leadingIcon ? [styles.inputWithLeadingIcon] : []),
-    ...(inputStyle ? [inputStyle] : []),
-  ].filter(Boolean);
-
-  // Render trailing icons/buttons
-  const renderTrailingContent = () => {
-    if (type === 'password') {
-      return (
-        <TouchableOpacity onPress={toggleSecureText} style={styles.iconContainer}>
-          <Text style={styles.iconText}>{isSecureText ? '👁️' : '🙈'}</Text>
-        </TouchableOpacity>
-      );
-    }
-
-    if (clearable && value.length > 0 && !disabled) {
-      return (
-        <TouchableOpacity onPress={handleClear} style={styles.iconContainer}>
-          <Text style={styles.iconText}>✕</Text>
-        </TouchableOpacity>
-      );
-    }
-
-    if (trailingIcon) {
-      return <View style={styles.iconContainer}>{trailingIcon}</View>;
-    }
-
-    return null;
-  };
+  const AnimatedView = Animated.createAnimatedComponent(View);
 
   return (
     <View style={styles.wrapper}>
-      {/* Label */}
       {label && <Text style={[styles.label, error && styles.errorLabel]}>{label}</Text>}
-
-      {/* Input Container */}
-      <AnimatedView style={containerStyles}>
-        {/* Leading Icon */}
+      <AnimatedView
+        style={[
+          type === 'search' ? styles.searchContainer : styles.textContainer,
+          isFocused && styles.focusedContainer,
+          error && styles.errorContainer,
+          disabled && styles.disabledContainer,
+          borderAnimatedStyle,
+          type === 'search' && shadowAnimatedStyle,
+          containerStyle,
+        ]}
+      >
         {leadingIcon && <View style={styles.leadingIconContainer}>{leadingIcon}</View>}
-
-        {/* Text Input */}
         <TextInput
           value={value}
           onChangeText={onChangeText}
@@ -340,22 +369,48 @@ export const Input: React.FC<InputProps> = ({
           onFocus={handleFocus}
           onBlur={handleBlur}
           editable={!disabled}
-          selectTextOnFocus={!disabled}
           multiline={multiline}
           numberOfLines={multiline ? numberOfLines : 1}
           maxLength={maxLength}
           keyboardType={getKeyboardType()}
-          autoCapitalize={getAutoCapitalize()}
+          autoCapitalize={type === 'email' ? 'none' : 'sentences'}
           secureTextEntry={isSecureText}
-          style={textStyles}
+          style={[
+            styles.input,
+            type === 'search' ? styles.searchInput : null,
+            disabled ? styles.disabledText : null,
+            leadingIcon ? styles.inputWithLeadingIcon : null,
+            inputStyle,
+          ]}
           {...textInputProps}
         />
-
-        {/* Trailing Content */}
-        {renderTrailingContent()}
+        {type === 'password' && (
+          <TouchableOpacity
+            onPress={() => setIsSecureText(!isSecureText)}
+            style={styles.iconContainer}
+          >
+            {isSecureText ? (
+              <Eye size={20} color={colors.textSecondary} strokeWidth={2} />
+            ) : (
+              <EyeOff size={20} color={colors.textSecondary} strokeWidth={2} />
+            )}
+          </TouchableOpacity>
+        )}
+        {clearable && value.length > 0 && !disabled && type !== 'password' && (
+          <TouchableOpacity
+            onPress={() => {
+              onChangeText('');
+              onClear?.();
+            }}
+            style={styles.iconContainer}
+          >
+            <X size={18} color={colors.textSecondary} strokeWidth={2} />
+          </TouchableOpacity>
+        )}
+        {trailingIcon && type !== 'password' && (
+          <View style={styles.iconContainer}>{trailingIcon}</View>
+        )}
       </AnimatedView>
-
-      {/* Helper Text / Error Message / Counter */}
       <View style={styles.bottomRow}>
         <View style={styles.helperTextContainer}>
           {error ? (
@@ -364,7 +419,6 @@ export const Input: React.FC<InputProps> = ({
             <Text style={styles.helperText}>{helperText}</Text>
           ) : null}
         </View>
-
         {showCounter && maxLength && (
           <Text style={styles.counter}>
             {value.length}/{maxLength}
@@ -374,6 +428,9 @@ export const Input: React.FC<InputProps> = ({
     </View>
   );
 };
+
+// Export correct component based on platform
+export const Input: React.FC<InputProps> = isWeb ? WebInput : NativeInput;
 
 // ============================================
 // STYLES
@@ -468,9 +525,6 @@ const styles = StyleSheet.create({
     marginLeft: spacing.sm,
     padding: spacing.xs,
   },
-  iconText: {
-    fontSize: 20,
-  },
 
   // Bottom row (helper text + counter)
   bottomRow: {
@@ -511,7 +565,7 @@ export const SearchInput: React.FC<Omit<InputProps, 'type'>> = (props) => (
     {...props}
     type="search"
     clearable
-    leadingIcon={<Text style={{ fontSize: 20 }}>🔍</Text>}
+    leadingIcon={<Search size={20} color={colors.textSecondary} strokeWidth={2} />}
   />
 );
 

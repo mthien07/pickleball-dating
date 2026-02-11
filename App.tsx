@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { RootNavigator } from './src/navigation/RootNavigator';
@@ -17,6 +17,13 @@ import {
   invalidateAllOnReconnect,
 } from './src/config/queryClient';
 import { OfflineIndicator, OnlineIndicator } from './src/components/OfflineIndicator';
+import { useFonts } from 'expo-font';
+import * as SplashScreen from 'expo-splash-screen';
+import { View, ActivityIndicator } from 'react-native';
+import { colors } from './src/theme/tokens';
+
+// Keep splash screen visible while loading fonts
+SplashScreen.preventAutoHideAsync();
 
 // Setup auto-invalidation on reconnect
 invalidateAllOnReconnect();
@@ -49,9 +56,41 @@ const AppContent = () => {
 };
 
 export default function App() {
+  // Load Barlow fonts for Vibrant Sport style
+  const [fontsLoaded] = useFonts({
+    'Barlow-Regular': require('./assets/fonts/Barlow-Regular.ttf'),
+    'Barlow-Medium': require('./assets/fonts/Barlow-Medium.ttf'),
+    'Barlow-SemiBold': require('./assets/fonts/Barlow-SemiBold.ttf'),
+    'Barlow-Bold': require('./assets/fonts/Barlow-Bold.ttf'),
+    'BarlowCondensed-SemiBold': require('./assets/fonts/BarlowCondensed-SemiBold.ttf'),
+    'BarlowCondensed-Bold': require('./assets/fonts/BarlowCondensed-Bold.ttf'),
+  });
+
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  // Show loading while fonts are loading
+  if (!fontsLoaded) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: colors.background,
+        }}
+      >
+        <ActivityIndicator size="large" color={colors.primary} />
+      </View>
+    );
+  }
+
   return (
     <ErrorBoundary>
-      <GestureHandlerRootView style={{ flex: 1 }}>
+      <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutRootView}>
         <SafeAreaProvider>
           <PersistQueryClientProvider
             client={queryClient}
