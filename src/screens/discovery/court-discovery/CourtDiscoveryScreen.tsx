@@ -2,7 +2,7 @@
  * Court Discovery Screen - Find and book pickleball courts
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { View, FlatList, TouchableOpacity, Text, TextInput, StatusBar } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
@@ -32,15 +32,42 @@ export const CourtDiscoveryScreen = () => {
     }, 1000);
   }, []);
 
-  const filteredCourts = courts.filter(
-    (court) =>
-      court.name.toLowerCase().includes(query.toLowerCase()) ||
-      (court.address && court.address.toLowerCase().includes(query.toLowerCase()))
+  // Memoize filtered list - avoids re-running filter on every render
+  const filteredCourts = useMemo(
+    () =>
+      courts.filter(
+        (court) =>
+          court.name.toLowerCase().includes(query.toLowerCase()) ||
+          (court.address && court.address.toLowerCase().includes(query.toLowerCase()))
+      ),
+    [courts, query]
   );
 
-  const handleBook = (courtId: string) => {
-    navigation.navigate('CourtBooking', { courtId });
-  };
+  const handleBook = useCallback(
+    (courtId: string) => {
+      navigation.navigate('CourtBooking', { courtId });
+    },
+    [navigation]
+  );
+
+  const handleCourtPress = useCallback(
+    (courtId: string) => {
+      navigation.navigate('CourtDetail', { courtId });
+    },
+    [navigation]
+  );
+
+  // Stable renderItem - prevents CourtCard memo from being defeated by inline arrows
+  const renderItem = useCallback(
+    ({ item }: { item: any }) => (
+      <CourtCard
+        court={item}
+        onPress={() => handleCourtPress(item.id)}
+        onBook={() => handleBook(item.id)}
+      />
+    ),
+    [handleCourtPress, handleBook]
+  );
 
   const renderHeader = () => (
     <View style={styles.headerContainer}>
@@ -98,13 +125,7 @@ export const CourtDiscoveryScreen = () => {
           {viewMode === 'list' ? (
             <FlatList
               data={filteredCourts}
-              renderItem={({ item }) => (
-                <CourtCard
-                  court={item}
-                  onPress={() => navigation.navigate('CourtDetail', { courtId: item.id })}
-                  onBook={() => handleBook(item.id)}
-                />
-              )}
+              renderItem={renderItem}
               keyExtractor={(item) => item.id}
               contentContainerStyle={styles.listContent}
               showsVerticalScrollIndicator={false}

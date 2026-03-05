@@ -2,7 +2,7 @@
  * BookingHistoryScreen - List of user's bookings with tabs: Upcoming, Completed, Cancelled
  */
 
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, RefreshControl } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
@@ -36,15 +36,17 @@ export const BookingHistoryScreen = () => {
   const [activeTab, setActiveTab] = useState('upcoming');
   const [refreshing, setRefreshing] = useState(false);
 
-  const filteredBookings = MOCK_BOOKINGS.filter(
-    (booking) => booking.status === STATUS_MAP[activeTab]
+  // Memoize filtered list - avoids re-filtering on every render
+  const filteredBookings = useMemo(
+    () => MOCK_BOOKINGS.filter((booking) => booking.status === STATUS_MAP[activeTab]),
+    [activeTab]
   );
 
-  const onRefresh = async () => {
+  const onRefresh = useCallback(async () => {
     setRefreshing(true);
     await new Promise((resolve) => setTimeout(resolve, 1000));
     setRefreshing(false);
-  };
+  }, []);
 
   return (
     <View style={styles.container}>

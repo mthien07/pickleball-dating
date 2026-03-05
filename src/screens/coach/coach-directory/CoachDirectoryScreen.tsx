@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { View, FlatList, TouchableOpacity, Text, TextInput, StatusBar } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
@@ -26,15 +26,28 @@ export const CoachDirectoryScreen = () => {
     }, 500);
   }, []);
 
-  const filteredCoaches = coaches.filter(
-    (coach) =>
-      coach.display_name.toLowerCase().includes(query.toLowerCase()) ||
-      coach.location.address.toLowerCase().includes(query.toLowerCase())
+  // Memoize filtered list - avoids re-running filter on every render
+  const filteredCoaches = useMemo(
+    () =>
+      coaches.filter(
+        (coach) =>
+          coach.display_name.toLowerCase().includes(query.toLowerCase()) ||
+          coach.location.address.toLowerCase().includes(query.toLowerCase())
+      ),
+    [coaches, query]
   );
 
-  const handleBook = (coachId: string) => {
+  const handleBook = useCallback((coachId: string) => {
     showInfo('Booking flow starting...');
-  };
+  }, []);
+
+  // Stable renderItem - prevents CoachCard memo from being defeated by inline arrows
+  const renderItem = useCallback(
+    ({ item }: { item: Coach }) => (
+      <CoachCard coach={item} onPress={() => {}} onBook={() => handleBook(item.id)} />
+    ),
+    [handleBook]
+  );
 
   const renderHeader = () => (
     <View style={[styles.headerContainer, { backgroundColor: themeColors.background }]}>
@@ -69,9 +82,7 @@ export const CoachDirectoryScreen = () => {
 
         <FlatList
           data={filteredCoaches}
-          renderItem={({ item }) => (
-            <CoachCard coach={item} onPress={() => {}} onBook={() => handleBook(item.id)} />
-          )}
+          renderItem={renderItem}
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator={false}

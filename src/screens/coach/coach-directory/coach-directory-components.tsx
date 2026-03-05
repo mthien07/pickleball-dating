@@ -3,7 +3,8 @@
  */
 
 import React from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
+import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 
 import { colors } from '../../../theme/tokens';
@@ -36,7 +37,12 @@ export const CoachCard = React.memo(({ coach, onPress, onBook }: CoachCardProps)
   <TouchableOpacity activeOpacity={0.95} onPress={onPress} style={styles.card}>
     <View style={styles.cardContent}>
       <View style={styles.cardHeader}>
-        <Image source={{ uri: coach.avatar_url }} style={styles.avatar} />
+        <Image
+          source={{ uri: coach.avatar_url }}
+          style={styles.avatar}
+          cachePolicy="memory-disk"
+          contentFit="cover"
+        />
         <View style={styles.headerInfo}>
           <View style={styles.nameRow}>
             <Text style={styles.name} numberOfLines={1}>

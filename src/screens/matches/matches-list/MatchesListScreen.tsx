@@ -5,7 +5,7 @@
  * and minimal conversation list design
  */
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import {
   View,
   Text,
@@ -30,56 +30,77 @@ export const MatchesListScreen = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
-  const newMatches = MOCK_MATCHES.filter((m) => !m.last_message);
-  const conversations = MOCK_MATCHES.filter((m) => m.last_message);
+  // Memoize derived lists - avoids re-filtering every render
+  const newMatches = useMemo(() => MOCK_MATCHES.filter((m) => !m.last_message), []);
+  const conversations = useMemo(() => MOCK_MATCHES.filter((m) => m.last_message), []);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     setTimeout(() => setRefreshing(false), 800);
   }, []);
 
-  const handleMatchPress = (match: Match) => {
-    navigation.navigate('ChatScreen', { matchId: match.id, userId: match.matched_user_id });
-  };
+  const handleMatchPress = useCallback(
+    (match: Match) => {
+      navigation.navigate('ChatScreen', { matchId: match.id, userId: match.matched_user_id });
+    },
+    [navigation]
+  );
 
-  const renderHeader = () => (
-    <>
-      {/* Search Bar - Instagram style */}
-      <View style={styles.searchContainer}>
-        <View style={styles.searchBar}>
-          <Ionicons name="search" size={16} color={colors.textTertiary} />
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Tìm kiếm"
-            placeholderTextColor={colors.textTertiary}
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-          />
+  // Stable renderItem callbacks so memoized list items don't re-render
+  const renderStoryItem = useCallback(
+    ({ item, index }: { item: Match; index: number }) => (
+      <StoryMatchItem match={item} index={index} onPress={() => handleMatchPress(item)} />
+    ),
+    [handleMatchPress]
+  );
+
+  const renderConversationItem = useCallback(
+    ({ item, index }: { item: Match; index: number }) => (
+      <ConversationItem match={item} index={index} onPress={() => handleMatchPress(item)} />
+    ),
+    [handleMatchPress]
+  );
+
+  // Stable ListHeaderComponent - avoids FlatList header remounting on every render
+  const renderHeader = useCallback(
+    () => (
+      <>
+        {/* Search Bar - Instagram style */}
+        <View style={styles.searchContainer}>
+          <View style={styles.searchBar}>
+            <Ionicons name="search" size={16} color={colors.textTertiary} />
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Tìm kiếm"
+              placeholderTextColor={colors.textTertiary}
+              value={searchQuery}
+              onChangeText={setSearchQuery}
+            />
+          </View>
         </View>
-      </View>
 
-      {/* Stories/New Matches Section */}
-      {newMatches.length > 0 && (
-        <View style={styles.storiesSection}>
-          <FlatList
-            horizontal
-            data={newMatches}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item, index }) => (
-              <StoryMatchItem match={item} index={index} onPress={() => handleMatchPress(item)} />
-            )}
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.storiesList}
-          />
+        {/* Stories/New Matches Section */}
+        {newMatches.length > 0 && (
+          <View style={styles.storiesSection}>
+            <FlatList
+              horizontal
+              data={newMatches}
+              keyExtractor={(item) => item.id}
+              renderItem={renderStoryItem}
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.storiesList}
+            />
+          </View>
+        )}
+
+        {/* Tin Nhắn header */}
+        <View style={styles.messagesHeader}>
+          <Text style={styles.messagesTitle}>Tin nhắn</Text>
+          <Text style={styles.requestsLink}>Yêu cầu</Text>
         </View>
-      )}
-
-      {/* Tin Nhắn header */}
-      <View style={styles.messagesHeader}>
-        <Text style={styles.messagesTitle}>Tin nhắn</Text>
-        <Text style={styles.requestsLink}>Yêu cầu</Text>
-      </View>
-    </>
+      </>
+    ),
+    [searchQuery, newMatches, renderStoryItem]
   );
 
   if (MOCK_MATCHES.length === 0) {
@@ -125,9 +146,7 @@ export const MatchesListScreen = () => {
         <FlatList
           data={conversations}
           keyExtractor={(item) => item.id}
-          renderItem={({ item, index }) => (
-            <ConversationItem match={item} index={index} onPress={() => handleMatchPress(item)} />
-          )}
+          renderItem={renderConversationItem}
           ListHeaderComponent={renderHeader}
           contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator={false}

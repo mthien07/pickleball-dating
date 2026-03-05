@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View, Text, ScrollView } from 'react-native';
 import { styles } from './time-slot-styles';
 import { TimeSlotItem } from './TimeSlotItem';
@@ -20,25 +20,17 @@ export interface TimeSlotPickerProps {
 
 const getHour = (slot: TimeSlot) => parseInt(slot.startTime.split(':')[0], 10);
 
-export const TimeSlotPicker: React.FC<TimeSlotPickerProps> = ({
-  slots,
-  selectedSlotIds,
-  onSlotSelect,
-}) => {
-  const morningSlots = slots.filter((s) => {
-    const h = getHour(s);
-    return h >= 6 && h < 12;
-  });
-  const afternoonSlots = slots.filter((s) => {
-    const h = getHour(s);
-    return h >= 12 && h < 18;
-  });
-  const eveningSlots = slots.filter((s) => {
-    const h = getHour(s);
-    return h >= 18 && h < 22;
-  });
+interface SlotSectionProps {
+  title: string;
+  sectionSlots: TimeSlot[];
+  startIndex: number;
+  selectedSlotIds: string[];
+  onSlotSelect: (slotId: string) => void;
+}
 
-  const renderSection = (title: string, sectionSlots: TimeSlot[], startIndex: number) => {
+/** Memoized section to avoid re-rendering unaffected time periods */
+const SlotSection = React.memo(
+  ({ title, sectionSlots, startIndex, selectedSlotIds, onSlotSelect }: SlotSectionProps) => {
     if (sectionSlots.length === 0) {
       return null;
     }
@@ -58,13 +50,67 @@ export const TimeSlotPicker: React.FC<TimeSlotPickerProps> = ({
         </View>
       </View>
     );
-  };
+  }
+);
+
+SlotSection.displayName = 'SlotSection';
+
+export const TimeSlotPicker: React.FC<TimeSlotPickerProps> = ({
+  slots,
+  selectedSlotIds,
+  onSlotSelect,
+}) => {
+  // Memoize slot groups - avoids re-filtering on every render
+  const morningSlots = useMemo(
+    () =>
+      slots.filter((s) => {
+        const h = getHour(s);
+        return h >= 6 && h < 12;
+      }),
+    [slots]
+  );
+
+  const afternoonSlots = useMemo(
+    () =>
+      slots.filter((s) => {
+        const h = getHour(s);
+        return h >= 12 && h < 18;
+      }),
+    [slots]
+  );
+
+  const eveningSlots = useMemo(
+    () =>
+      slots.filter((s) => {
+        const h = getHour(s);
+        return h >= 18 && h < 22;
+      }),
+    [slots]
+  );
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      {renderSection('🌅 Buổi sáng', morningSlots, 0)}
-      {renderSection('☀️ Buổi chiều', afternoonSlots, morningSlots.length)}
-      {renderSection('🌙 Buổi tối', eveningSlots, morningSlots.length + afternoonSlots.length)}
+      <SlotSection
+        title="🌅 Buổi sáng"
+        sectionSlots={morningSlots}
+        startIndex={0}
+        selectedSlotIds={selectedSlotIds}
+        onSlotSelect={onSlotSelect}
+      />
+      <SlotSection
+        title="☀️ Buổi chiều"
+        sectionSlots={afternoonSlots}
+        startIndex={morningSlots.length}
+        selectedSlotIds={selectedSlotIds}
+        onSlotSelect={onSlotSelect}
+      />
+      <SlotSection
+        title="🌙 Buổi tối"
+        sectionSlots={eveningSlots}
+        startIndex={morningSlots.length + afternoonSlots.length}
+        selectedSlotIds={selectedSlotIds}
+        onSlotSelect={onSlotSelect}
+      />
 
       <View style={styles.legend}>
         <View style={styles.legendItem}>

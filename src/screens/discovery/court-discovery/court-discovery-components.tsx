@@ -3,7 +3,8 @@
  */
 
 import React from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
+import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 
@@ -53,7 +54,12 @@ export const CourtCard = React.memo(({ court, onPress, onBook }: CourtCardProps)
   return (
     <TouchableOpacity activeOpacity={0.9} onPress={onPress} style={styles.card}>
       <View style={styles.cardImageContainer}>
-        <Image source={{ uri: imageUrl }} style={styles.cardImage} />
+        <Image
+          source={{ uri: imageUrl }}
+          style={styles.cardImage}
+          cachePolicy="memory-disk"
+          contentFit="cover"
+        />
         <View style={styles.priceBadge}>
           <Text style={styles.priceText}>{priceDisplay}</Text>
         </View>

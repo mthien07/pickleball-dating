@@ -14,18 +14,16 @@ export interface RatingCategoryProps {
   delay?: number;
 }
 
-export const RatingCategory: React.FC<RatingCategoryProps> = ({
-  icon,
-  label,
-  value,
-  onChange,
-  delay = 0,
-}) => (
-  <Animated.View entering={FadeInUp.delay(delay)} style={styles.categoryCard}>
-    <View style={styles.categoryHeader}>
-      <Ionicons name={icon as any} size={24} color={colors.primary} />
-      <Text style={styles.categoryLabel}>{label}</Text>
-    </View>
-    <StarRating value={value} onChange={onChange} size={28} />
-  </Animated.View>
+export const RatingCategory: React.FC<RatingCategoryProps> = React.memo(
+  ({ icon, label, value, onChange, delay = 0 }) => (
+    <Animated.View entering={FadeInUp.delay(delay)} style={styles.categoryCard}>
+      <View style={styles.categoryHeader}>
+        <Ionicons name={icon as any} size={24} color={colors.primary} />
+        <Text style={styles.categoryLabel}>{label}</Text>
+      </View>
+      <StarRating value={value} onChange={onChange} size={28} />
+    </Animated.View>
+  )
 );
+
+RatingCategory.displayName = 'RatingCategory';
