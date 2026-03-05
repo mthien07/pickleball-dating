@@ -24,13 +24,13 @@ export const styles = StyleSheet.create({
   },
 });
 
-/** Consistent avatar colors derived from name hash */
+/** Consistent avatar colors — blue + rose palette */
 export const AVATAR_COLORS = [
-  '#5B9FE3',
-  '#A8C8E8',
-  '#FFD700',
-  '#4CAF50',
-  '#2196F3',
-  '#9C27B0',
-  '#FF9800',
+  '#2563EB', // Blue-600 (primary)
+  '#60A5FA', // Blue-400 (primaryLight)
+  '#F43F5E', // Rose-500 (accent)
+  '#FB7185', // Rose-400 (accentLight)
+  '#1D4ED8', // Blue-700 (primaryDark)
+  '#3B82F6', // Blue-500
+  '#E11D48', // Rose-600 (accentDark)
 ];

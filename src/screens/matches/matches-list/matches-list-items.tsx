@@ -23,7 +23,11 @@ export const StoryMatchItem = React.memo<StoryMatchItemProps>(({ match, index, o
   <Animated.View entering={FadeInRight.delay(index * 80).duration(250)}>
     <TouchableOpacity style={styles.storyItem} onPress={onPress} activeOpacity={0.7}>
       <LinearGradient
-        colors={match.is_new ? ['#F43F5E', '#2563EB', '#10B981'] : ['#E2E8F0', '#E2E8F0']}
+        colors={
+          match.is_new
+            ? [colors.accent, colors.primary, colors.primaryLight]
+            : [colors.border, colors.border]
+        }
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={styles.storyRing}
