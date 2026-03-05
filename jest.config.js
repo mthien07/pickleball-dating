@@ -5,6 +5,8 @@ module.exports = {
   transformIgnorePatterns: [
     'node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg)',
   ],
+  // Loại trừ thư mục skills/tools trùng lặp gây xung đột jest-haste-map
+  modulePathIgnorePatterns: ['<rootDir>/.claude/skills/', '<rootDir>/.opencode/'],
   collectCoverageFrom: [
     '**/*.{ts,tsx}',
     '!**/coverage/**',
