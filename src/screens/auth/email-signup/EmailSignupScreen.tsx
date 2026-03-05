@@ -1,0 +1,116 @@
+/**
+ * EmailSignupScreen
+ *
+ * Orchestrator for email registration flow.
+ * Delegates signup logic to useEmailSignup hook.
+ */
+
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { Building2, Users, GraduationCap, ArrowLeft } from 'lucide-react-native';
+import { AuthStackParamList } from '../../../navigation/types';
+import { Button } from '../../../components/Button';
+import { EmailInput, PasswordInput } from '../../../components/Input';
+import { KeyboardView } from '../../../components/KeyboardView';
+import { colors } from '../../../theme/tokens';
+import { RoleCard, TermsCheckbox, type Role } from './email-signup-components';
+import { styles } from './email-signup-styles';
+import { useEmailSignup } from './use-email-signup';
+
+type EmailSignupNav = StackNavigationProp<AuthStackParamList, 'EmailSignup'>;
+
+export const EmailSignupScreen = () => {
+  const navigation = useNavigation<EmailSignupNav>();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [role, setRole] = useState<Role | null>(null);
+  const [agreed, setAgreed] = useState(false);
+
+  const { loading, handleSignup } = useEmailSignup({
+    onNavigateLogin: () => navigation.navigate('Login'),
+  });
+
+  const onSubmit = () => handleSignup({ email, password, confirmPassword, role, agreed });
+
+  return (
+    <KeyboardView
+      style={styles.container}
+      contentContainerStyle={styles.contentContainer}
+      scrollEnabled
+    >
+      <View style={styles.header}>
+        <View style={styles.headerRow}>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+            <ArrowLeft size={20} color={colors.textPrimary} strokeWidth={2.5} />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>ĐĂNG KÝ</Text>
+        </View>
+      </View>
+
+      <View style={styles.form}>
+        <View style={styles.inputContainer}>
+          <Text style={styles.labelSecondary}>EMAIL</Text>
+          <EmailInput value={email} onChangeText={setEmail} />
+        </View>
+
+        <View style={styles.inputContainer}>
+          <Text style={styles.labelSecondary}>MẬT KHẨU</Text>
+          <PasswordInput value={password} onChangeText={setPassword} />
+        </View>
+
+        <View style={styles.inputContainer}>
+          <Text style={styles.labelSecondary}>XÁC NHẬN MẬT KHẨU</Text>
+          <PasswordInput value={confirmPassword} onChangeText={setConfirmPassword} />
+        </View>
+
+        <Text style={styles.sectionLabel}>BẠN LÀ:</Text>
+        <View style={styles.rolesContainer}>
+          <RoleCard
+            value="owner"
+            label="Chủ sân"
+            Icon={Building2}
+            selected={role === 'owner'}
+            onSelect={setRole}
+          />
+          <RoleCard
+            value="player"
+            label="Người chơi"
+            Icon={Users}
+            selected={role === 'player'}
+            onSelect={setRole}
+          />
+          <RoleCard
+            value="coach"
+            label="HLV"
+            Icon={GraduationCap}
+            selected={role === 'coach'}
+            onSelect={setRole}
+          />
+        </View>
+
+        <TermsCheckbox agreed={agreed} onToggle={() => setAgreed(!agreed)} />
+
+        <Button
+          title="ĐĂNG KÝ"
+          onPress={onSubmit}
+          loading={loading}
+          disabled={!agreed || !role}
+          style={styles.submitButton}
+          textStyle={styles.submitButtonText}
+        />
+      </View>
+
+      <View style={styles.footer}>
+        <Text style={styles.footerText}>Đã có tài khoản? </Text>
+        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+          <Text style={styles.link}>Đăng nhập</Text>
+        </TouchableOpacity>
+      </View>
+    </KeyboardView>
+  );
+};
+
+export default EmailSignupScreen;

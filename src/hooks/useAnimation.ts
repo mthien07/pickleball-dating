@@ -1,16 +1,13 @@
 /**
  * useAnimation Hook
  *
- * Simplified animation hook with common patterns
+ * Simplified animation hook with common patterns for opacity, scale,
+ * translate, and rotation animations.
  *
  * Usage:
  * ```tsx
- * const { animatedStyle, fadeIn, fadeOut } = useAnimation();
- *
- * useEffect(() => {
- *   fadeIn();
- * }, []);
- *
+ * const { animatedStyle, fadeIn, fadeOut } = useAnimation({ initialOpacity: 0 });
+ * useEffect(() => { fadeIn(); }, []);
  * <Animated.View style={animatedStyle} />
  * ```
  */
@@ -32,39 +29,17 @@ import * as Haptics from 'expo-haptics';
 // ============================================
 
 export interface UseAnimationOptions {
-  /**
-   * Initial opacity
-   * @default 0
-   */
+  /** Initial opacity @default 0 */
   initialOpacity?: number;
-
-  /**
-   * Initial scale
-   * @default 1
-   */
+  /** Initial scale @default 1 */
   initialScale?: number;
-
-  /**
-   * Initial translateY
-   * @default 0
-   */
+  /** Initial translateY @default 0 */
   initialTranslateY?: number;
-
-  /**
-   * Initial translateX
-   * @default 0
-   */
+  /** Initial translateX @default 0 */
   initialTranslateX?: number;
-
-  /**
-   * Enable haptic feedback
-   * @default false
-   */
+  /** Enable haptic feedback @default false */
   enableHaptic?: boolean;
-
-  /**
-   * Callback after animation completes
-   */
+  /** Callback after animation completes */
   onComplete?: () => void;
 }
 
@@ -82,21 +57,18 @@ export const useAnimation = (options: UseAnimationOptions = {}) => {
     onComplete,
   } = options;
 
-  // Shared values
   const opacity = useSharedValue(initialOpacity);
   const scale = useSharedValue(initialScale);
   const translateY = useSharedValue(initialTranslateY);
   const translateX = useSharedValue(initialTranslateX);
   const rotate = useSharedValue(0);
 
-  // Trigger haptic if enabled
   const triggerHaptic = useCallback(() => {
     if (enableHaptic) {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     }
   }, [enableHaptic]);
 
-  // Animated style
   const animatedStyle = useAnimatedStyle(() => ({
     opacity: opacity.value,
     transform: [
@@ -107,18 +79,13 @@ export const useAnimation = (options: UseAnimationOptions = {}) => {
     ],
   }));
 
-  // Animation methods
   const fadeIn = useCallback(
     (duration?: number) => {
       opacity.value = withTiming(
         1,
-        {
-          ...timingConfig.normal,
-          ...(duration && { duration }),
-        },
+        { ...timingConfig.normal, ...(duration && { duration }) },
         onComplete ? () => runOnJS(onComplete)() : undefined
       );
-
       if (enableHaptic) {
         runOnJS(triggerHaptic)();
       }
@@ -130,10 +97,7 @@ export const useAnimation = (options: UseAnimationOptions = {}) => {
     (duration?: number) => {
       opacity.value = withTiming(
         0,
-        {
-          ...timingConfig.normal,
-          ...(duration && { duration }),
-        },
+        { ...timingConfig.normal, ...(duration && { duration }) },
         onComplete ? () => runOnJS(onComplete)() : undefined
       );
     },
@@ -169,19 +133,19 @@ export const useAnimation = (options: UseAnimationOptions = {}) => {
     }
   }, [enableHaptic]);
 
-  const slideUp = useCallback((distance: number = 50) => {
+  const slideUp = useCallback((distance = 50) => {
     translateY.value = withSpring(translateY.value - distance, springConfig.normal);
   }, []);
 
-  const slideDown = useCallback((distance: number = 50) => {
+  const slideDown = useCallback((distance = 50) => {
     translateY.value = withSpring(translateY.value + distance, springConfig.normal);
   }, []);
 
-  const slideLeft = useCallback((distance: number = 50) => {
+  const slideLeft = useCallback((distance = 50) => {
     translateX.value = withSpring(translateX.value - distance, springConfig.normal);
   }, []);
 
-  const slideRight = useCallback((distance: number = 50) => {
+  const slideRight = useCallback((distance = 50) => {
     translateX.value = withSpring(translateX.value + distance, springConfig.normal);
   }, []);
 
@@ -201,7 +165,6 @@ export const useAnimation = (options: UseAnimationOptions = {}) => {
       withTiming(10, { duration: 50 }),
       withTiming(0, { duration: 50 })
     );
-
     if (enableHaptic) {
       runOnJS(triggerHaptic)();
     }
@@ -219,17 +182,12 @@ export const useAnimation = (options: UseAnimationOptions = {}) => {
   }, []);
 
   return {
-    // Shared values (for custom animations)
     opacity,
     scale,
     translateY,
     translateX,
     rotate,
-
-    // Animated style
     animatedStyle,
-
-    // Animation methods
     fadeIn,
     fadeOut,
     scaleIn,
@@ -247,75 +205,3 @@ export const useAnimation = (options: UseAnimationOptions = {}) => {
 };
 
 export default useAnimation;
-
-// ============================================
-// USAGE EXAMPLES
-// ============================================
-
-/*
-// Basic fade in
-const FadeInComponent = () => {
-  const { animatedStyle, fadeIn } = useAnimation({ initialOpacity: 0 });
-
-  useEffect(() => {
-    fadeIn();
-  }, []);
-
-  return <Animated.View style={animatedStyle}>Content</Animated.View>;
-};
-
-// Scale pop on press
-const PopButton = () => {
-  const { animatedStyle, scalePop } = useAnimation();
-
-  return (
-    <Animated.View style={animatedStyle}>
-      <TouchableOpacity onPress={scalePop}>
-        <Text>Press Me</Text>
-      </TouchableOpacity>
-    </Animated.View>
-  );
-};
-
-// Shake on error
-const ShakingInput = ({ hasError }) => {
-  const { animatedStyle, shake } = useAnimation({ enableHaptic: true });
-
-  useEffect(() => {
-    if (hasError) {
-      shake();
-    }
-  }, [hasError]);
-
-  return <Animated.View style={animatedStyle}><Input /></Animated.View>;
-};
-
-// Complex animation sequence
-const ComplexAnimation = () => {
-  const { animatedStyle, fadeIn, scaleIn, slideUp } = useAnimation({
-    initialOpacity: 0,
-    initialScale: 0,
-    initialTranslateY: 50,
-  });
-
-  useEffect(() => {
-    fadeIn();
-    scaleIn();
-    slideUp(50);
-  }, []);
-
-  return <Animated.View style={animatedStyle}>Content</Animated.View>;
-};
-
-// With callback
-const AnimationWithCallback = () => {
-  const { animatedStyle, fadeOut } = useAnimation({
-    onComplete: () => {
-      console.log('Animation completed!');
-      navigation.goBack();
-    },
-  });
-
-  return <Animated.View style={animatedStyle}>Content</Animated.View>;
-};
-*/

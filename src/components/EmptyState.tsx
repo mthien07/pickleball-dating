@@ -2,23 +2,13 @@
  * EmptyState Component
  *
  * Reusable component for displaying empty states (no data, errors, etc.)
- * Supports custom icons, images, and action buttons.
- *
- * Usage:
- * ```tsx
- * <EmptyState
- *   title="No Matches Yet"
- *   message="Swipe right on more profiles to get matched!"
- *   icon="💔"
- *   actionLabel="Start Swiping"
- *   onAction={handleStartSwiping}
- * />
- * ```
+ * Supports custom icons (Lucide SVG), images, and action buttons.
  */
 
 import React from 'react';
 import { View, Text, StyleSheet, ViewStyle } from 'react-native';
 import { Image, ImageSource } from 'expo-image';
+import { Heart, MapPin, MessageCircle, AlertTriangle, FolderOpen } from 'lucide-react-native';
 import { colors, spacing, typography } from '../theme/tokens';
 import { Button } from './Button';
 
@@ -38,10 +28,10 @@ export interface EmptyStateProps {
   message?: string;
 
   /**
-   * Icon (emoji or text) to display
-   * @default '📂'
+   * Icon (Lucide component or ReactNode) to display
+   * @default FolderOpen icon
    */
-  icon?: string | React.ReactNode;
+  icon?: React.ReactNode;
 
   /**
    * Image source (overrides icon if provided)
@@ -74,10 +64,12 @@ export interface EmptyStateProps {
 // COMPONENT
 // ============================================
 
+const DefaultIcon = () => <FolderOpen size={48} color={colors.textTertiary} />;
+
 export const EmptyState: React.FC<EmptyStateProps> = ({
   title,
   message,
-  icon = '📂',
+  icon,
   image,
   actionLabel,
   onAction,
@@ -92,10 +84,8 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
       <View style={styles.visualContainer}>
         {image ? (
           <Image source={image} style={styles.image} contentFit="contain" transition={200} />
-        ) : typeof icon === 'string' ? (
-          <Text style={styles.iconText}>{icon}</Text>
         ) : (
-          icon
+          icon || <DefaultIcon />
         )}
       </View>
 
@@ -120,35 +110,35 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
 export const EmptyStatePresets = {
   NoMatches: (props: Partial<EmptyStateProps>) => (
     <EmptyState
-      title="No Matches Yet"
-      message="Start swiping to find your pickleball partner!"
-      icon="🎾"
-      actionLabel="Start Swiping"
+      title="Chưa Có Kết Quả"
+      message="Vuốt để tìm bạn chơi pickleball!"
+      icon={<Heart size={48} color={colors.accent} />}
+      actionLabel="Bắt Đầu"
       {...props}
     />
   ),
   NoCourts: (props: Partial<EmptyStateProps>) => (
     <EmptyState
-      title="No Courts Found"
-      message="Try adjusting your filters or search in a different area."
-      icon="🗺️"
+      title="Không Tìm Thấy Sân"
+      message="Thử điều chỉnh bộ lọc hoặc tìm ở khu vực khác."
+      icon={<MapPin size={48} color={colors.primary} />}
       {...props}
     />
   ),
   NoMessages: (props: Partial<EmptyStateProps>) => (
     <EmptyState
-      title="No Messages"
-      message="You haven't started any conversations yet."
-      icon="💬"
+      title="Chưa Có Tin Nhắn"
+      message="Bạn chưa bắt đầu cuộc trò chuyện nào."
+      icon={<MessageCircle size={48} color={colors.primary} />}
       {...props}
     />
   ),
   Error: (props: Partial<EmptyStateProps>) => (
     <EmptyState
-      title="Something Went Wrong"
-      message="We couldn't load the data. Please try again."
-      icon="⚠️"
-      actionLabel="Retry"
+      title="Đã Xảy Ra Lỗi"
+      message="Không thể tải dữ liệu. Vui lòng thử lại."
+      icon={<AlertTriangle size={48} color={colors.warning} />}
+      actionLabel="Thử Lại"
       {...props}
     />
   ),
@@ -185,9 +175,6 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: '100%',
-  },
-  iconText: {
-    fontSize: 48,
   },
   title: {
     ...typography.h3,

@@ -31,17 +31,13 @@ describe('useAnimation', () => {
     });
 
     it('should accept custom initial opacity', () => {
-      const { result } = renderHook(() =>
-        useAnimation({ initialOpacity: 0.5 })
-      );
+      const { result } = renderHook(() => useAnimation({ initialOpacity: 0.5 }));
 
       expect(result.current).toBeDefined();
     });
 
     it('should accept custom initial scale', () => {
-      const { result } = renderHook(() =>
-        useAnimation({ initialScale: 0.8 })
-      );
+      const { result } = renderHook(() => useAnimation({ initialScale: 0.8 }));
 
       expect(result.current).toBeDefined();
     });

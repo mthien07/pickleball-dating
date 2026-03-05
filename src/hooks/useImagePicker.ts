@@ -1,7 +1,7 @@
 /**
  * useImagePicker Hook
  *
- * React hook for unified image picking from gallery or camera.
+ * Unified image picking from gallery or camera.
  * Handles permissions and returns compressed images ready for upload.
  */
 
@@ -9,51 +9,13 @@ import { useState, useCallback } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import { Alert, Platform } from 'react-native';
 import { compressImage } from '../services/storage.service';
+import type {
+  ImagePickerResult,
+  UseImagePickerOptions,
+  UseImagePickerReturn,
+} from './useImagePicker.types';
 
-// ============================================
-// TYPES
-// ============================================
-
-export interface ImagePickerResult {
-  uri: string;
-  width: number;
-  height: number;
-  type?: string;
-}
-
-export interface UseImagePickerOptions {
-  /** Allow multiple image selection */
-  allowsMultiple?: boolean;
-  /** Aspect ratio for cropping [width, height] */
-  aspect?: [number, number];
-  /** Allow editing/cropping */
-  allowsEditing?: boolean;
-  /** Auto-compress images */
-  autoCompress?: boolean;
-  /** Image quality (0-1) */
-  quality?: number;
-}
-
-interface UseImagePickerReturn {
-  /** Pick image from gallery */
-  pickImage: () => Promise<ImagePickerResult[] | null>;
-  /** Take photo with camera */
-  takePhoto: () => Promise<ImagePickerResult | null>;
-  /** Currently selected images */
-  images: ImagePickerResult[];
-  /** Add images to selection */
-  addImages: (newImages: ImagePickerResult[]) => void;
-  /** Remove image at index */
-  removeImage: (index: number) => void;
-  /** Clear all images */
-  clearImages: () => void;
-  /** Whether an operation is in progress */
-  isLoading: boolean;
-}
-
-// ============================================
-// HOOK
-// ============================================
+export type { ImagePickerResult, UseImagePickerOptions, UseImagePickerReturn };
 
 export function useImagePicker(options: UseImagePickerOptions = {}): UseImagePickerReturn {
   const {
@@ -67,7 +29,6 @@ export function useImagePicker(options: UseImagePickerOptions = {}): UseImagePic
   const [images, setImages] = useState<ImagePickerResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Request gallery permission
   const requestGalleryPermission = async (): Promise<boolean> => {
     if (Platform.OS !== 'web') {
       const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -83,7 +44,6 @@ export function useImagePicker(options: UseImagePickerOptions = {}): UseImagePic
     return true;
   };
 
-  // Request camera permission
   const requestCameraPermission = async (): Promise<boolean> => {
     if (Platform.OS !== 'web') {
       const { status } = await ImagePicker.requestCameraPermissionsAsync();
@@ -97,32 +57,20 @@ export function useImagePicker(options: UseImagePickerOptions = {}): UseImagePic
     return true;
   };
 
-  // Process picked images
   const processImages = async (
     assets: ImagePicker.ImagePickerAsset[]
   ): Promise<ImagePickerResult[]> => {
     const processedImages: ImagePickerResult[] = [];
-
     for (const asset of assets) {
       let uri = asset.uri;
-
-      // Compress if enabled
       if (autoCompress) {
         uri = await compressImage(uri);
       }
-
-      processedImages.push({
-        uri,
-        width: asset.width,
-        height: asset.height,
-        type: asset.mimeType,
-      });
+      processedImages.push({ uri, width: asset.width, height: asset.height, type: asset.mimeType });
     }
-
     return processedImages;
   };
 
-  // Pick from gallery
   const pickImage = useCallback(async (): Promise<ImagePickerResult[] | null> => {
     const hasPermission = await requestGalleryPermission();
     if (!hasPermission) {
@@ -142,9 +90,7 @@ export function useImagePicker(options: UseImagePickerOptions = {}): UseImagePic
       if (result.canceled || !result.assets?.length) {
         return null;
       }
-
-      const processedImages = await processImages(result.assets);
-      return processedImages;
+      return await processImages(result.assets);
     } catch (error) {
       console.error('Error picking image:', error);
       Alert.alert('Lỗi', 'Không thể chọn ảnh. Vui lòng thử lại.');
@@ -154,7 +100,6 @@ export function useImagePicker(options: UseImagePickerOptions = {}): UseImagePic
     }
   }, [allowsEditing, allowsMultiple, aspect, quality, autoCompress]);
 
-  // Take photo with camera
   const takePhoto = useCallback(async (): Promise<ImagePickerResult | null> => {
     const hasPermission = await requestCameraPermission();
     if (!hasPermission) {
@@ -163,16 +108,10 @@ export function useImagePicker(options: UseImagePickerOptions = {}): UseImagePic
 
     setIsLoading(true);
     try {
-      const result = await ImagePicker.launchCameraAsync({
-        allowsEditing,
-        aspect,
-        quality,
-      });
-
+      const result = await ImagePicker.launchCameraAsync({ allowsEditing, aspect, quality });
       if (result.canceled || !result.assets?.length) {
         return null;
       }
-
       const processedImages = await processImages(result.assets);
       return processedImages[0] || null;
     } catch (error) {
@@ -184,30 +123,19 @@ export function useImagePicker(options: UseImagePickerOptions = {}): UseImagePic
     }
   }, [allowsEditing, aspect, quality, autoCompress]);
 
-  // Add images to state
   const addImages = useCallback((newImages: ImagePickerResult[]) => {
     setImages((prev) => [...prev, ...newImages]);
   }, []);
 
-  // Remove image at index
   const removeImage = useCallback((index: number) => {
     setImages((prev) => prev.filter((_, i) => i !== index));
   }, []);
 
-  // Clear all images
   const clearImages = useCallback(() => {
     setImages([]);
   }, []);
 
-  return {
-    pickImage,
-    takePhoto,
-    images,
-    addImages,
-    removeImage,
-    clearImages,
-    isLoading,
-  };
+  return { pickImage, takePhoto, images, addImages, removeImage, clearImages, isLoading };
 }
 
 export default useImagePicker;

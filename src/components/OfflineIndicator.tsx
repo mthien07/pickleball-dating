@@ -33,9 +33,7 @@ export interface OfflineIndicatorProps {
 // COMPONENT
 // ============================================
 
-export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({
-  position = 'top',
-}) => {
+export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({ position = 'top' }) => {
   const { shouldShowOfflineBanner, networkType, isWifi } = useOfflineIndicator();
 
   // Animation values
@@ -66,14 +64,10 @@ export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({
 
   return (
     <Animated.View
-      style={[
-        styles.container,
-        position === 'top' ? styles.top : styles.bottom,
-        animatedStyle,
-      ]}
+      style={[styles.container, position === 'top' ? styles.top : styles.bottom, animatedStyle]}
     >
       <View style={styles.content}>
-        <WifiOff size={16} color={colors.background} />
+        <WifiOff size={18} color={colors.white} />
         <Text style={styles.text}>You're offline</Text>
         <Text style={styles.subtext}>Some features may be limited</Text>
       </View>
@@ -119,7 +113,7 @@ export const OnlineIndicator: React.FC = () => {
   return (
     <View style={[styles.container, styles.top, styles.online]}>
       <View style={styles.content}>
-        <Wifi size={16} color={colors.background} />
+        <Wifi size={18} color={colors.white} />
         <Text style={styles.text}>Back online!</Text>
       </View>
     </View>
@@ -133,53 +127,50 @@ export const OnlineIndicator: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    left: 0,
-    right: 0,
+    left: spacing.md,
+    right: spacing.md,
     backgroundColor: colors.error,
     paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
+    paddingVertical: 14,
     zIndex: 9999,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+    borderRadius: 16, // Modern rounded corners
+    shadowColor: colors.error,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 12,
+    elevation: 6,
   },
 
   top: {
-    top: 0,
-    paddingTop: spacing.xl,
+    top: spacing.xl + 10,
   },
 
   bottom: {
-    bottom: 0,
-    paddingBottom: spacing.xl,
+    bottom: spacing.xl + 10,
   },
 
   online: {
-    backgroundColor: colors.success,
+    backgroundColor: colors.secondary, // Green
+    shadowColor: colors.secondary,
   },
 
   content: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: spacing.sm,
+    gap: 10,
   },
 
   text: {
     ...typography.body,
-    color: colors.background,
+    color: colors.white,
     fontWeight: '600',
   },
 
   subtext: {
     ...typography.bodySmall,
-    color: colors.background,
-    opacity: 0.9,
+    color: colors.white,
+    opacity: 0.85,
   },
 });
 

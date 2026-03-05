@@ -112,6 +112,21 @@ npx expo start --android
 npx expo start
 ```
 
+### Troubleshooting
+
+```bash
+# Module not found / Metro bundler issues
+rm -rf node_modules && npm install && npx expo start --clear
+
+# iOS Simulator not opening (macOS)
+xcrun simctl erase all && npx expo start --ios
+
+# Supabase connection fails
+# 1. Check .env credentials
+# 2. Verify migrations ran in Supabase Dashboard
+# 3. Check internet connection
+```
+
 ---
 
 ## 📚 Documentation
@@ -133,9 +148,10 @@ npx expo start
 - [supabase/migrations/](supabase/migrations/) - SQL Migrations
 
 ### Setup Guides
-- [docs/SETUP_INSTRUCTIONS.md](docs/SETUP_INSTRUCTIONS.md) - Dev Setup
+- [docs/SETUP_INSTRUCTIONS.md](docs/SETUP_INSTRUCTIONS.md) - Complete Dev Setup
 - [docs/SUPABASE_SETUP.md](docs/SUPABASE_SETUP.md) - Supabase Config
 - [docs/BACKEND_INTEGRATION.md](docs/BACKEND_INTEGRATION.md) - Integration
+- [docs/MOBILE_TESTING_GUIDE.md](docs/MOBILE_TESTING_GUIDE.md) - Test on Device
 - [docs/MOBILE_DEPLOYMENT.md](docs/MOBILE_DEPLOYMENT.md) - Deploy Guide
 
 ---
@@ -236,7 +252,7 @@ Contributions welcome! See [CONTRIBUTING.md](CONTRIBUTING.md)
 ---
 
 <p align="center">
-  Made with ❤️ for the Pickleball Community
+  Made by MThien for the Pickleball Community
   <br>
   🚀 Built with <a href="https://antigravity.google/">Antigravity</a>, <a href="https://cursor.com/">Cursor</a> & <a href="https://claude.ai/">Claude Code</a>
 </p>

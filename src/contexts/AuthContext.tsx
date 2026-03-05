@@ -1,10 +1,10 @@
 /**
- * Auth Context - Tích hợp Supabase Auth + Profile
+ * Auth Context - Supabase Auth + Profile integration
  *
- * Quản lý trạng thái đăng nhập và profile user:
- * - Lắng nghe auth state changes
- * - Tự động load profile khi đăng nhập
- * - Cung cấp methods login/logout/refreshProfile cho các component
+ * Manages auth state and user profile:
+ * - Listens to auth state changes
+ * - Auto-loads profile on login
+ * - Provides login/logout/refreshProfile methods
  */
 
 import React, {
@@ -16,20 +16,12 @@ import React, {
   useCallback,
 } from 'react';
 import { supabase } from '../services/supabase';
-import { getMyProfile, UserProfile } from '../services/api/profile.service';
+import { getMyProfile } from '../services/api/profile.service';
 import type { User, Session } from '@supabase/supabase-js';
+import type { AuthContextType } from './auth-context.types';
+import type { UserProfile } from '../services/api/profile.service';
 
-interface AuthContextType {
-  isAuthenticated: boolean;
-  isLoading: boolean;
-  user: User | null;
-  session: Session | null;
-  profile: UserProfile | null;
-  profileLoading: boolean;
-  profileError: Error | null;
-  logout: () => Promise<void>;
-  refreshProfile: () => Promise<void>;
-}
+export type { AuthContextType };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -42,7 +34,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [profileLoading, setProfileLoading] = useState(false);
   const [profileError, setProfileError] = useState<Error | null>(null);
 
-  // Load profile từ database
   const loadProfile = useCallback(async () => {
     try {
       if (__DEV__) {
@@ -68,12 +59,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  // Refresh profile (để gọi sau khi update)
   const refreshProfile = useCallback(async () => {
     await loadProfile();
   }, [loadProfile]);
 
-  // Helper to set authenticated state (DRY principle)
   const setAuthState = useCallback((newSession: Session | null) => {
     if (newSession) {
       setSession(newSession);
@@ -97,7 +86,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   useEffect(() => {
-    // 1. Kiểm tra session hiện tại khi app khởi động
     const checkSession = async () => {
       try {
         if (__DEV__) {
@@ -107,15 +95,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           data: { session: currentSession },
           error,
         } = await supabase.auth.getSession();
-
         if (error) {
           console.error('[AuthContext] Error getting session:', error.message);
         }
-
-        // Use helper to set auth state
         setAuthState(currentSession);
-
-        // Load profile in background if authenticated (non-blocking with error handling)
         if (currentSession) {
           if (__DEV__) {
             console.log('[AuthContext] Profile loading started in background');
@@ -127,54 +110,44 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       } catch (error) {
         console.error('[AuthContext] Session check error:', error);
         setIsLoading(false);
-        if (__DEV__) {
-          console.log('[AuthContext] isLoading set to FALSE after error');
-        }
       }
     };
 
     checkSession();
 
-    // 2. Lắng nghe auth state changes (đăng nhập/đăng xuất)
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, newSession) => {
-      if (__DEV__) {
-        console.log('[AuthContext] Auth state changed:', event, 'at', new Date().toISOString());
-      }
-
-      // Use helper to set auth state
+      console.log(
+        '[AuthContext] onAuthStateChange:',
+        event,
+        'session:',
+        !!newSession,
+        'user:',
+        newSession?.user?.email
+      );
       setAuthState(newSession);
-
-      // Load profile in background if authenticated (non-blocking with error handling)
       if (newSession) {
-        if (__DEV__) {
-          console.log('[AuthContext] Profile loading started in background');
-        }
+        console.log('[AuthContext] User authenticated, loading profile in background...');
         loadProfile().catch((err) => {
           console.error('[AuthContext] Background profile load failed:', err);
         });
       }
     });
 
-    // Cleanup subscription khi unmount
     return () => {
       subscription.unsubscribe();
     };
   }, [loadProfile, setAuthState]);
 
-  // Logout - gọi Supabase signOut
   const logout = async () => {
     try {
       setIsLoading(true);
       const { error } = await supabase.auth.signOut();
-
       if (error) {
         console.error('Logout error:', error.message);
         throw error;
       }
-
-      // Clear all auth state using helper
       setAuthState(null);
     } catch (error) {
       console.error('Logout failed:', error);

@@ -5,11 +5,7 @@
  */
 
 import { renderHook, act, waitFor } from '@testing-library/react-native';
-import {
-  useNetworkStatus,
-  usePrefetch,
-  useOfflineIndicator,
-} from '../useOfflineQuery';
+import { useNetworkStatus, usePrefetch, useOfflineIndicator } from '../useOfflineQuery';
 import NetInfo from '@react-native-community/netinfo';
 
 // Mock @react-native-community/netinfo

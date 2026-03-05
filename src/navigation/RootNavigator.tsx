@@ -35,20 +35,15 @@ const RootStack = createStackNavigator<RootStackParamList>();
 export const RootNavigator = () => {
   const { isAuthenticated, isLoading } = useAuth();
 
-  if (__DEV__) {
-    console.log('[RootNavigator] isLoading:', isLoading, 'isAuthenticated:', isAuthenticated);
-  }
+  // Always log for debugging navigation issues
+  console.log('[RootNavigator] State:', { isLoading, isAuthenticated });
 
   if (isLoading) {
-    if (__DEV__) {
-      console.log('[RootNavigator] Showing splash screen');
-    }
+    console.log('[RootNavigator] Showing splash screen...');
     return <SplashScreen />;
   }
 
-  if (__DEV__) {
-    console.log('[RootNavigator] Rendering', isAuthenticated ? 'Main' : 'Auth', 'navigator');
-  }
+  console.log('[RootNavigator] Rendering:', isAuthenticated ? 'MainNavigator' : 'AuthNavigator');
 
   return (
     <NavigationContainer>

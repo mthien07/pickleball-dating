@@ -48,13 +48,9 @@ export function useNotifications(options: UseNotificationsOptions = {}): UseNoti
   const notificationListener = useRef<Notifications.EventSubscription | null>(null);
   const responseListener = useRef<Notifications.EventSubscription | null>(null);
 
-  // Get navigation object safely
-  let navigation: any = null;
-  try {
-    navigation = useNavigation();
-  } catch {
-    // Navigation context may not be available
-  }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const navigation = useNavigation<any>();
+
   const handleNotificationNavigation = (data: Record<string, unknown>) => {
     if (!navigation) {
       return;

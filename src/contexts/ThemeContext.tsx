@@ -5,66 +5,28 @@
  * and persistent storage of user preference.
  */
 
-import React, { createContext, useContext, useState, useEffect, ReactNode, useMemo } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+  useMemo,
+  useCallback,
+} from 'react';
 import { useColorScheme } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ThemeColors, lightColors, darkColors } from './theme-colors';
+
+// Re-export for consumers
+export type { ThemeColors };
+export { lightColors, darkColors };
 
 // ============================================
 // TYPES
 // ============================================
 
 export type ThemeMode = 'system' | 'light' | 'dark';
-
-export interface ThemeColors {
-  // Primary
-  primary: string;
-  primaryGradientStart: string;
-  primaryGradientEnd: string;
-  primaryDark: string;
-  primaryLight: string;
-
-  // Secondary
-  secondary: string;
-  secondaryDark: string;
-
-  // Accent
-  accent: string;
-  lime: string;
-  sportGreen: string;
-
-  // Background
-  background: string;
-  surface: string;
-  surfaceGlass: string;
-
-  // Text
-  textPrimary: string;
-  textSecondary: string;
-  textTertiary: string;
-  textInverse: string;
-
-  // Border
-  border: string;
-
-  // Status
-  success: string;
-  error: string;
-  warning: string;
-  info: string;
-
-  // Skill Levels
-  skillBeginner: string;
-  skillIntermediate: string;
-  skillAdvanced: string;
-  skillPro: string;
-
-  // Utility
-  black: string;
-  white: string;
-  overlay: string;
-  overlayLight: string;
-  overlayDark: string;
-}
 
 export interface Theme {
   isDark: boolean;
@@ -78,112 +40,6 @@ interface ThemeContextType {
   setThemeMode: (mode: ThemeMode) => void;
   toggleTheme: () => void;
 }
-
-// ============================================
-// THEME DEFINITIONS
-// ============================================
-
-export const lightColors: ThemeColors = {
-  // Primary Colors (Orange Theme)
-  primary: '#F97316',
-  primaryGradientStart: '#F97316',
-  primaryGradientEnd: '#FB923C',
-  primaryDark: '#EA580C',
-  primaryLight: '#FDBA74',
-
-  // Secondary Colors (Green)
-  secondary: '#22C55E',
-  secondaryDark: '#16A34A',
-
-  // Accent Colors
-  accent: '#EAB308',
-  lime: '#84CC16',
-  sportGreen: '#22C55E',
-
-  // Background Colors
-  background: '#FFFFFF',
-  surface: '#F8FAFC',
-  surfaceGlass: 'rgba(255, 255, 255, 0.90)',
-
-  // Text Colors
-  textPrimary: '#0F172A',
-  textSecondary: '#64748B',
-  textTertiary: '#94A3B8',
-  textInverse: '#FFFFFF',
-
-  // Border Colors
-  border: '#E2E8F0',
-
-  // Status Colors
-  success: '#22C55E',
-  error: '#EF4444',
-  warning: '#F59E0B',
-  info: '#3B82F6',
-
-  // Skill Level Colors
-  skillBeginner: '#22C55E',
-  skillIntermediate: '#EAB308',
-  skillAdvanced: '#F97316',
-  skillPro: '#EF4444',
-
-  // Utility Colors
-  black: '#000000',
-  white: '#FFFFFF',
-  overlay: 'rgba(15, 23, 42, 0.5)',
-  overlayLight: 'rgba(15, 23, 42, 0.3)',
-  overlayDark: 'rgba(15, 23, 42, 0.7)',
-};
-
-export const darkColors: ThemeColors = {
-  // Primary Colors (Orange Theme - stays vibrant in dark mode)
-  primary: '#FB923C',
-  primaryGradientStart: '#FB923C',
-  primaryGradientEnd: '#FDBA74',
-  primaryDark: '#F97316',
-  primaryLight: '#FED7AA',
-
-  // Secondary Colors (Green)
-  secondary: '#4ADE80',
-  secondaryDark: '#22C55E',
-
-  // Accent Colors
-  accent: '#FACC15',
-  lime: '#A3E635',
-  sportGreen: '#4ADE80',
-
-  // Background Colors
-  background: '#0F172A',
-  surface: '#1E293B',
-  surfaceGlass: 'rgba(30, 41, 59, 0.90)',
-
-  // Text Colors
-  textPrimary: '#F1F5F9',
-  textSecondary: '#94A3B8',
-  textTertiary: '#64748B',
-  textInverse: '#0F172A',
-
-  // Border Colors
-  border: '#334155',
-
-  // Status Colors
-  success: '#4ADE80',
-  error: '#F87171',
-  warning: '#FBBF24',
-  info: '#60A5FA',
-
-  // Skill Level Colors
-  skillBeginner: '#4ADE80',
-  skillIntermediate: '#FACC15',
-  skillAdvanced: '#FB923C',
-  skillPro: '#F87171',
-
-  // Utility Colors
-  black: '#000000',
-  white: '#FFFFFF',
-  overlay: 'rgba(0, 0, 0, 0.5)',
-  overlayLight: 'rgba(0, 0, 0, 0.3)',
-  overlayDark: 'rgba(0, 0, 0, 0.7)',
-};
 
 // ============================================
 // STORAGE KEY
@@ -203,15 +59,19 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 interface ThemeProviderProps {
   children: ReactNode;
+  initialMode?: ThemeMode;
 }
 
-export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
+export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children, initialMode }) => {
   const systemColorScheme = useColorScheme();
-  const [themeMode, setThemeModeState] = useState<ThemeMode>('system');
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [themeMode, setThemeModeState] = useState<ThemeMode>(initialMode || 'system');
+  const [isLoaded, setIsLoaded] = useState(!!initialMode);
 
-  // Load saved theme preference
   useEffect(() => {
+    if (initialMode) {
+      return;
+    }
+
     const loadThemePreference = async () => {
       try {
         const savedMode = await AsyncStorage.getItem(THEME_STORAGE_KEY);
@@ -225,26 +85,23 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
       }
     };
     loadThemePreference();
-  }, []);
+  }, [initialMode]);
 
-  // Save theme preference
-  const setThemeMode = async (mode: ThemeMode) => {
+  const setThemeMode = useCallback(async (mode: ThemeMode) => {
     setThemeModeState(mode);
     try {
       await AsyncStorage.setItem(THEME_STORAGE_KEY, mode);
     } catch (error) {
       console.warn('Failed to save theme preference:', error);
     }
-  };
+  }, []);
 
-  // Toggle between light and dark
-  const toggleTheme = () => {
+  const toggleTheme = useCallback(() => {
     const currentIsDark =
       themeMode === 'system' ? systemColorScheme === 'dark' : themeMode === 'dark';
     setThemeMode(currentIsDark ? 'light' : 'dark');
-  };
+  }, [themeMode, systemColorScheme, setThemeMode]);
 
-  // Compute actual dark mode state
   const isDark = useMemo(() => {
     if (themeMode === 'system') {
       return systemColorScheme === 'dark';
@@ -252,7 +109,6 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     return themeMode === 'dark';
   }, [themeMode, systemColorScheme]);
 
-  // Create theme object
   const theme: Theme = useMemo(
     () => ({
       isDark,
@@ -262,17 +118,10 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   );
 
   const value: ThemeContextType = useMemo(
-    () => ({
-      theme,
-      themeMode,
-      isDark,
-      setThemeMode,
-      toggleTheme,
-    }),
-    [theme, themeMode, isDark]
+    () => ({ theme, themeMode, isDark, setThemeMode, toggleTheme }),
+    [theme, themeMode, isDark, setThemeMode, toggleTheme]
   );
 
-  // Don't render until theme is loaded to prevent flash
   if (!isLoaded) {
     return null;
   }
@@ -281,7 +130,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
 };
 
 // ============================================
-// HOOK
+// HOOKS
 // ============================================
 
 export const useTheme = (): ThemeContextType => {
@@ -291,10 +140,6 @@ export const useTheme = (): ThemeContextType => {
   }
   return context;
 };
-
-// ============================================
-// CONVENIENCE HOOK - Just Colors
-// ============================================
 
 export const useThemeColors = (): ThemeColors => {
   const { theme } = useTheme();

@@ -1,0 +1,228 @@
+import React from 'react';
+import { View, ViewStyle } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import Animated from 'react-native-reanimated';
+import { GRADIENT_COLORS, GRADIENT_DIRECTIONS } from './gradient-constants';
+import { styles } from './gradient-styles';
+
+// ---- GradientView ----
+
+interface GradientViewProps {
+  colors?: readonly [string, string, ...string[]];
+  direction?: keyof typeof GRADIENT_DIRECTIONS;
+  style?: ViewStyle;
+  children?: React.ReactNode;
+}
+
+export const GradientView: React.FC<GradientViewProps> = ({
+  colors = GRADIENT_COLORS.primary,
+  direction = 'horizontal',
+  style,
+  children,
+}) => {
+  const { start, end } = GRADIENT_DIRECTIONS[direction];
+  return (
+    <LinearGradient
+      colors={colors}
+      start={start}
+      end={end}
+      style={[styles.gradientContainer, style]}
+    >
+      {children}
+    </LinearGradient>
+  );
+};
+
+// ---- GradientButton ----
+
+const BUTTON_VARIANT_COLORS = {
+  primary: GRADIENT_COLORS.primary,
+  subtle: GRADIENT_COLORS.primarySubtle,
+  dark: GRADIENT_COLORS.primaryDark,
+  light: GRADIENT_COLORS.primaryLight,
+} as const;
+
+interface GradientButtonProps {
+  colors?: readonly [string, string, ...string[]];
+  direction?: keyof typeof GRADIENT_DIRECTIONS;
+  style?: ViewStyle;
+  children?: React.ReactNode;
+  variant?: 'primary' | 'subtle' | 'dark' | 'light';
+}
+
+export const GradientButton: React.FC<GradientButtonProps> = ({
+  colors,
+  direction = 'horizontal',
+  style,
+  children,
+  variant = 'primary',
+}) => {
+  const gradientColors = colors || BUTTON_VARIANT_COLORS[variant];
+  const { start, end } = GRADIENT_DIRECTIONS[direction];
+  return (
+    <LinearGradient
+      colors={gradientColors}
+      start={start}
+      end={end}
+      style={[styles.gradientButton, style]}
+    >
+      {children}
+    </LinearGradient>
+  );
+};
+
+// ---- GradientCard ----
+
+interface GradientCardProps {
+  colors?: readonly [string, string, ...string[]];
+  direction?: keyof typeof GRADIENT_DIRECTIONS;
+  style?: ViewStyle;
+  children?: React.ReactNode;
+  variant?: 'subtle' | 'medium' | 'primary';
+}
+
+export const GradientCard: React.FC<GradientCardProps> = ({
+  colors,
+  direction = 'diagonal',
+  style,
+  children,
+  variant = 'subtle',
+}) => {
+  const gradientColors =
+    colors ||
+    (variant === 'subtle'
+      ? GRADIENT_COLORS.primarySubtle
+      : variant === 'medium'
+        ? GRADIENT_COLORS.bgMedium
+        : GRADIENT_COLORS.primary);
+  const { start, end } = GRADIENT_DIRECTIONS[direction];
+  return (
+    <LinearGradient
+      colors={gradientColors}
+      start={start}
+      end={end}
+      style={[styles.gradientCard, style]}
+    >
+      {children}
+    </LinearGradient>
+  );
+};
+
+// ---- GradientOverlay ----
+
+interface GradientOverlayProps {
+  position?: 'top' | 'bottom' | 'left' | 'right' | 'full';
+  intensity?: 'light' | 'medium' | 'heavy';
+  style?: ViewStyle;
+  children?: React.ReactNode;
+}
+
+export const GradientOverlay: React.FC<GradientOverlayProps> = ({
+  position = 'bottom',
+  intensity = 'medium',
+  style,
+  children,
+}) => {
+  const alphaMap = {
+    light: { from: 0, to: 0.3 },
+    medium: { from: 0, to: 0.6 },
+    heavy: { from: 0, to: 0.8 },
+  };
+  const alpha = alphaMap[intensity];
+  const overlayColors: [string, string] = [
+    `rgba(37, 99, 235, ${alpha.from})`,
+    `rgba(96, 165, 250, ${alpha.to})`,
+  ];
+
+  const directionMap: Record<
+    string,
+    { start: { x: number; y: number }; end: { x: number; y: number } }
+  > = {
+    top: { start: { x: 0, y: 0 }, end: { x: 0, y: 0.5 } },
+    bottom: { start: { x: 0, y: 0.5 }, end: { x: 0, y: 1 } },
+    left: { start: { x: 0, y: 0 }, end: { x: 0.5, y: 0 } },
+    right: { start: { x: 0.5, y: 0 }, end: { x: 1, y: 0 } },
+    full: GRADIENT_DIRECTIONS.diagonal,
+  };
+
+  const { start, end } = directionMap[position];
+
+  return (
+    <View style={[styles.overlayContainer, style]}>
+      {children}
+      <LinearGradient
+        colors={overlayColors}
+        start={start}
+        end={end}
+        style={styles.overlay}
+        pointerEvents="none"
+      />
+    </View>
+  );
+};
+
+// ---- AnimatedGradientView ----
+
+const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
+
+interface AnimatedGradientViewProps {
+  colors?: readonly [string, string, ...string[]];
+  direction?: keyof typeof GRADIENT_DIRECTIONS;
+  style?: any;
+  children?: React.ReactNode;
+}
+
+export const AnimatedGradientView: React.FC<AnimatedGradientViewProps> = ({
+  colors = GRADIENT_COLORS.primary,
+  direction = 'horizontal',
+  style,
+  children,
+}) => {
+  const { start, end } = GRADIENT_DIRECTIONS[direction];
+  return (
+    <AnimatedLinearGradient
+      colors={colors}
+      start={start}
+      end={end}
+      style={[styles.gradientContainer, style]}
+    >
+      {children}
+    </AnimatedLinearGradient>
+  );
+};
+
+// ---- GradientBadge ----
+
+interface GradientBadgeProps {
+  colors?: readonly [string, string, ...string[]];
+  style?: ViewStyle;
+  children?: React.ReactNode;
+}
+
+export const GradientBadge: React.FC<GradientBadgeProps> = ({
+  colors = GRADIENT_COLORS.primary,
+  style,
+  children,
+}) => {
+  return (
+    <LinearGradient
+      colors={colors}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 0 }}
+      style={[styles.gradientBadge, style]}
+    >
+      {children}
+    </LinearGradient>
+  );
+};
+
+export default {
+  GradientView,
+  GradientButton,
+  GradientCard,
+  GradientOverlay,
+  AnimatedGradientView,
+  GradientBadge,
+  GRADIENT_COLORS,
+  GRADIENT_DIRECTIONS,
+};

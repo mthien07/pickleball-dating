@@ -21,7 +21,7 @@ import type { RealtimeChannel } from '@supabase/supabase-js';
  */
 export const subscribeToMessages = (
   conversationId: string,
-  onNewMessage: (message: any) => void
+  onNewMessage: (message: Record<string, unknown>) => void
 ): RealtimeChannel => {
   return supabase
     .channel(`conversation:${conversationId}`)
@@ -45,7 +45,7 @@ export const subscribeToMessages = (
  */
 export const subscribeToMessageUpdates = (
   conversationId: string,
-  onMessageUpdate: (message: any) => void
+  onMessageUpdate: (message: Record<string, unknown>) => void
 ): RealtimeChannel => {
   return supabase
     .channel(`conversation:${conversationId}:updates`)
@@ -69,7 +69,7 @@ export const subscribeToMessageUpdates = (
  */
 export const subscribeToMatches = (
   userId: string,
-  onNewMatch: (match: any) => void
+  onNewMatch: (match: Record<string, unknown>) => void
 ): RealtimeChannel => {
   const channel = supabase.channel(`user:${userId}:matches`);
 
@@ -166,7 +166,7 @@ export const trackPresence = async (userId: string): Promise<RealtimeChannel> =>
  * Listen to presence changes
  */
 export const listenToPresence = (
-  onPresenceChange: (onlineUsers: any[]) => void
+  onPresenceChange: (onlineUsers: Record<string, unknown>[]) => void
 ): RealtimeChannel => {
   const presenceChannel = supabase.channel('online-users');
 

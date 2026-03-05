@@ -33,9 +33,7 @@ describe('useAnimations', () => {
 
     it('should accept custom scale value', () => {
       const customScale = 0.95;
-      const { result } = renderHook(() =>
-        usePressAnimation({ scaleValue: customScale })
-      );
+      const { result } = renderHook(() => usePressAnimation({ scaleValue: customScale }));
 
       expect(result.current).toBeDefined();
     });
@@ -65,12 +63,8 @@ describe('useAnimations', () => {
     });
 
     it('should support spring or timing animation', () => {
-      const { result: springResult } = renderHook(() =>
-        usePressAnimation({ useSpring: true })
-      );
-      const { result: timingResult } = renderHook(() =>
-        usePressAnimation({ useSpring: false })
-      );
+      const { result: springResult } = renderHook(() => usePressAnimation({ useSpring: true }));
+      const { result: timingResult } = renderHook(() => usePressAnimation({ useSpring: false }));
 
       expect(springResult.current).toBeDefined();
       expect(timingResult.current).toBeDefined();
@@ -132,9 +126,7 @@ describe('useAnimations', () => {
     });
 
     it('should accept custom initial opacity', () => {
-      const { result } = renderHook(() =>
-        useFadeAnimation({ initialOpacity: 0.5 })
-      );
+      const { result } = renderHook(() => useFadeAnimation({ initialOpacity: 0.5 }));
 
       expect(result.current).toBeDefined();
     });

@@ -6,112 +6,120 @@ import {
   KeyboardAvoidingView,
   Platform,
   StatusBar,
-  TouchableWithoutFeedback,
-  Keyboard,
   TouchableOpacity,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ChevronLeft } from 'lucide-react-native';
-import { colors } from '../../theme/tokens';
+import { colors, fontFamily, spacing } from '../../theme/tokens';
+import { shadows } from '../../theme/shadows';
 import { Input, PasswordInput } from '../../components/Input';
 import { Button } from '../../components/Button';
-
-// Map design colors to tokens or use specific hex if needed for dark mode
-const COLORS = {
-  background: colors.background,
-  text: colors.textPrimary,
-  textSecondary: colors.textSecondary,
-  primary: colors.primary,
-  disabled: colors.textTertiary,
-  white: '#FFFFFF',
-};
+import { supabase } from '../../services/supabase';
+import { showSuccess, showError } from '../../services/toast';
 
 export default function LoginScreenDesign({ navigation }: { navigation?: any }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const isFormValid = email.trim() !== '' && password.trim() !== '';
 
-  const handleLogin = () => {
-    // Add login logic here
-    console.log('Login', { email, password });
-    // After successful login, navigation should be handled by AuthContext state change usually
-    // But if testing navigation:
-    // navigation.navigate('Main');
+  const handleLogin = async () => {
+    if (!isFormValid) {
+      return;
+    }
+
+    setLoading(true);
+    try {
+      console.log('[LoginDesign] Logging in:', email);
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+      if (error) {
+        throw error;
+      }
+
+      console.log('[LoginDesign] Login successful:', data.user?.email);
+      showSuccess('Đăng nhập thành công!');
+      // AuthContext will detect session change and navigate to Main
+    } catch (error: any) {
+      console.error('[LoginDesign] Login error:', error.message);
+      showError(error.message || 'Đăng nhập thất bại');
+      if (Platform.OS === 'web') {
+        window.alert('Lỗi: ' + error.message);
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={COLORS.background} />
+      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
 
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity style={styles.backButton} onPress={() => navigation?.goBack()}>
-          <ChevronLeft size={28} color={COLORS.text} />
+          <ChevronLeft size={24} color={colors.textPrimary} strokeWidth={2.5} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Đăng nhập</Text>
-        <View style={{ width: 28 }} />
+        <Text style={styles.headerTitle}>ĐĂNG NHẬP</Text>
+        <View style={{ width: 48 }} />
       </View>
 
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          style={styles.keyboardView}
-        >
-          <View style={styles.content}>
-            <View style={styles.form}>
-              {/* Email Input */}
-              <Input
-                label="Email hoặc Số điện thoại"
-                placeholder="example@email.com hoặc 0912345678"
-                value={email}
-                onChangeText={setEmail}
-                keyboardType="email-address"
-                autoCapitalize="none"
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.keyboardView}
+      >
+        <View style={styles.content}>
+          <View style={styles.form}>
+            {/* Email Input */}
+            <Input
+              label="Email hoặc Số điện thoại"
+              placeholder="example@email.com hoặc 0912345678"
+              value={email}
+              onChangeText={setEmail}
+              keyboardType="email-address"
+              autoCapitalize="none"
+            />
+
+            {/* Password Input */}
+            <View>
+              <PasswordInput
+                label="Mật khẩu"
+                placeholder="Nhập mật khẩu"
+                value={password}
+                onChangeText={setPassword}
               />
-
-              {/* Password Input */}
-              <View>
-                <PasswordInput
-                  label="Mật khẩu"
-                  placeholder="Nhập mật khẩu"
-                  value={password}
-                  onChangeText={setPassword}
-                />
-                <TouchableOpacity
-                  style={styles.forgotPassword}
-                  onPress={() => console.log('Forgot Password')}
-                >
-                  <Text style={styles.forgotPasswordText}>Quên mật khẩu?</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-
-            {/* Bottom Section */}
-            <View style={styles.bottomSection}>
-              <Button
-                title="ĐĂNG NHẬP"
-                onPress={handleLogin}
-                disabled={!isFormValid}
-                fullWidth
-                size="large"
-              />
-
-              <View style={styles.footer}>
-                <Text style={styles.footerText}>
-                  Chưa có tài khoản?{' '}
-                  <Text
-                    style={styles.linkText}
-                    onPress={() => navigation?.navigate('SignupDesign')}
-                  >
-                    Đăng ký
-                  </Text>
-                </Text>
-              </View>
+              <TouchableOpacity
+                style={styles.forgotPassword}
+                onPress={() => console.log('Forgot Password')}
+              >
+                <Text style={styles.forgotPasswordText}>Quên mật khẩu?</Text>
+              </TouchableOpacity>
             </View>
           </View>
-        </KeyboardAvoidingView>
-      </TouchableWithoutFeedback>
+
+          {/* Bottom Section */}
+          <View style={styles.bottomSection}>
+            <Button
+              title="ĐĂNG NHẬP"
+              onPress={handleLogin}
+              disabled={!isFormValid}
+              loading={loading}
+              fullWidth
+              size="large"
+            />
+
+            <View style={styles.footer}>
+              <Text style={styles.footerText}>
+                Chưa có tài khoản?{' '}
+                <Text style={styles.linkText} onPress={() => navigation?.navigate('SignupDesign')}>
+                  Đăng ký
+                </Text>
+              </Text>
+            </View>
+          </View>
+        </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
@@ -119,57 +127,66 @@ export default function LoginScreenDesign({ navigation }: { navigation?: any }) 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: colors.background,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
   },
   backButton: {
-    padding: 4,
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: colors.surface,
+    justifyContent: 'center',
+    alignItems: 'center',
+    ...shadows.sm,
   },
   headerTitle: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: COLORS.text,
+    fontFamily: 'Barlow-Bold',
+    fontSize: 22,
+    color: colors.textPrimary,
+    letterSpacing: 0.5,
+    textTransform: 'uppercase',
   },
   keyboardView: {
     flex: 1,
   },
   content: {
     flex: 1,
-    padding: 24,
+    padding: spacing.lg,
     justifyContent: 'space-between',
   },
   form: {
-    gap: 24,
-    marginTop: 20,
+    gap: spacing.lg,
+    marginTop: spacing.lg,
   },
   forgotPassword: {
     alignSelf: 'flex-end',
-    marginTop: 8,
+    marginTop: spacing.sm,
   },
   forgotPasswordText: {
-    color: COLORS.primary,
+    fontFamily: 'Barlow-Medium',
+    color: colors.accent,
     fontSize: 14,
-    fontWeight: '500',
   },
   bottomSection: {
-    gap: 24,
-    marginBottom: Platform.OS === 'ios' ? 0 : 24,
+    gap: spacing.lg,
+    marginBottom: Platform.OS === 'ios' ? 0 : spacing.lg,
   },
   footer: {
     alignItems: 'center',
   },
   footerText: {
+    fontFamily: 'Barlow-Regular',
     fontSize: 14,
-    color: COLORS.textSecondary,
+    color: colors.textSecondary,
   },
   linkText: {
-    color: COLORS.primary,
-    fontWeight: '500',
+    fontFamily: 'Barlow-SemiBold',
+    color: colors.accent,
   },
 });

@@ -1,10 +1,9 @@
 /**
  * Profile Service
  *
- * Handles user profile operations:
+ * Handles user profile CRUD operations:
  * - Create/complete profile after signup
  * - Update profile information
- * - Upload profile photos
  * - Get user profile
  * - Update online status
  *
@@ -12,78 +11,18 @@
  */
 
 import { supabase } from '../supabase';
+import type { CreateProfileParams, UpdateProfileParams, UserProfile } from './profile.types';
 
-// =====================================================
-// TYPES
-// =====================================================
+// Re-export types for consumers
+export type { CreateProfileParams, UpdateProfileParams, UserProfile };
 
-export interface CreateProfileParams {
-  displayName: string;
-  dateOfBirth: string; // YYYY-MM-DD
-  gender: 'male' | 'female' | 'other';
-  bio?: string;
-  avatarUrls: string[]; // At least 1 required
-  skillLevel: 'beginner' | 'intermediate' | 'advanced' | 'pro';
-  playStyle: 'competitive' | 'casual' | 'social';
-  lookingFor: ('opponent' | 'doubles_partner' | 'dating')[];
-  availability?: Record<string, string[]>; // { "monday": ["morning", "evening"] }
-  preferredLat?: number;
-  preferredLng?: number;
-  preferredAddress?: string;
-}
-
-export interface UpdateProfileParams {
-  displayName?: string;
-  bio?: string;
-  avatarUrls?: string[];
-  skillLevel?: 'beginner' | 'intermediate' | 'advanced' | 'pro';
-  playStyle?: 'competitive' | 'casual' | 'social';
-  lookingFor?: ('opponent' | 'doubles_partner' | 'dating')[];
-  availability?: Record<string, string[]>;
-  preferredLat?: number;
-  preferredLng?: number;
-  preferredAddress?: string;
-}
-
-export interface UserProfile {
-  id: string;
-  created_at: string;
-  updated_at: string;
-  email?: string;
-  phone?: string;
-  display_name: string;
-  date_of_birth: string;
-  gender: string;
-  bio?: string;
-  avatar_urls: string[];
-  skill_level: string;
-  play_style: string;
-  looking_for: string[];
-  availability?: Record<string, string[]>;
-  preferred_address?: string;
-  phone_verified: boolean;
-  email_verified: boolean;
-  matches_count: number;
-  games_played: number;
-  average_rating: number;
-  is_online: boolean;
-  last_active: string;
-  profile_complete: boolean;
-  is_active: boolean;
-}
-
-// =====================================================
-// PROFILE CRUD
-// =====================================================
+// Re-export photo functions
+export { uploadProfilePhoto, deleteProfilePhoto } from './profile-photos.service';
 
 /**
  * Create user profile after signup
- *
- * This should be called after successful authentication
- * to complete the user's profile setup.
  */
 export const createProfile = async (params: CreateProfileParams): Promise<UserProfile> => {
-  // Get current user ID
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -91,13 +30,11 @@ export const createProfile = async (params: CreateProfileParams): Promise<UserPr
     throw new Error('User not authenticated');
   }
 
-  // Prepare location point (if provided)
   let locationPoint = null;
   if (params.preferredLat && params.preferredLng) {
     locationPoint = `POINT(${params.preferredLng} ${params.preferredLat})`;
   }
 
-  // Insert user profile
   const { data, error } = await supabase
     .from('users')
     .insert({
@@ -125,7 +62,6 @@ export const createProfile = async (params: CreateProfileParams): Promise<UserPr
   if (error) {
     throw error;
   }
-
   return data as UserProfile;
 };
 
@@ -143,10 +79,9 @@ export const getMyProfile = async (): Promise<UserProfile | null> => {
   const { data, error } = await supabase.from('users').select('*').eq('id', user.id).single();
 
   if (error) {
-    // PGRST116: No rows found - user hasn't completed profile setup yet
     if (error.code === 'PGRST116') {
       return null;
-    }
+    } // No rows found
     throw error;
   }
 
@@ -181,12 +116,8 @@ export const getUserProfile = async (userId: string): Promise<Partial<UserProfil
     throw error;
   }
 
-  // Transform null to undefined for optional fields
   if (data) {
-    return {
-      ...data,
-      bio: data.bio ?? undefined,
-    };
+    return { ...data, bio: data.bio ?? undefined };
   }
 
   return null;
@@ -203,8 +134,7 @@ export const updateProfile = async (params: UpdateProfileParams): Promise<UserPr
     throw new Error('User not authenticated');
   }
 
-  // Prepare update object
-  const updates: any = {};
+  const updates: Record<string, unknown> = {};
 
   if (params.displayName) {
     updates.display_name = params.displayName;
@@ -230,8 +160,6 @@ export const updateProfile = async (params: UpdateProfileParams): Promise<UserPr
   if (params.preferredAddress) {
     updates.preferred_address = params.preferredAddress;
   }
-
-  // Update location if provided
   if (params.preferredLat && params.preferredLng) {
     updates.preferred_location = `POINT(${params.preferredLng} ${params.preferredLat})`;
   }
@@ -246,7 +174,6 @@ export const updateProfile = async (params: UpdateProfileParams): Promise<UserPr
   if (error) {
     throw error;
   }
-
   return data as UserProfile;
 };
 
@@ -263,69 +190,8 @@ export const updateOnlineStatus = async (isOnline: boolean): Promise<void> => {
 
   const { error } = await supabase
     .from('users')
-    .update({
-      is_online: isOnline,
-      last_active: new Date().toISOString(),
-    })
+    .update({ is_online: isOnline, last_active: new Date().toISOString() })
     .eq('id', user.id);
-
-  if (error) {
-    throw error;
-  }
-};
-
-// =====================================================
-// PROFILE PHOTOS
-// =====================================================
-
-/**
- * Upload profile photo to Supabase Storage
- *
- * @param file - Image file (from Expo ImagePicker)
- * @param userId - User ID (for folder naming)
- * @returns Public URL of uploaded image
- */
-export const uploadProfilePhoto = async (
-  file: { uri: string; type: string },
-  userId: string
-): Promise<string> => {
-  // Generate unique filename
-  const timestamp = Date.now();
-  const filename = `${userId}/${timestamp}.jpg`;
-
-  // Convert URI to blob (for React Native)
-  const response = await fetch(file.uri);
-  const blob = await response.blob();
-
-  // Upload to Supabase Storage
-  const { data, error } = await supabase.storage.from('profile-photos').upload(filename, blob, {
-    contentType: file.type || 'image/jpeg',
-    upsert: false,
-  });
-
-  if (error) {
-    throw error;
-  }
-
-  // Get public URL
-  const {
-    data: { publicUrl },
-  } = supabase.storage.from('profile-photos').getPublicUrl(data.path);
-
-  return publicUrl;
-};
-
-/**
- * Delete profile photo from storage
- */
-export const deleteProfilePhoto = async (photoUrl: string, userId: string): Promise<void> => {
-  // Extract path from URL
-  const path = photoUrl.split('/profile-photos/')[1];
-  if (!path) {
-    throw new Error('Invalid photo URL');
-  }
-
-  const { error } = await supabase.storage.from('profile-photos').remove([path]);
 
   if (error) {
     throw error;
