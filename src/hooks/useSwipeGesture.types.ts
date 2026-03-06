@@ -27,5 +27,5 @@ export interface UseSwipeGestureReturn {
   /** Reset position programmatically */
   reset: () => void;
   /** Trigger swipe programmatically */
-  swipe: (direction: 'left' | 'right') => void;
+  swipe: (direction: 'left' | 'right' | 'up') => void;
 }

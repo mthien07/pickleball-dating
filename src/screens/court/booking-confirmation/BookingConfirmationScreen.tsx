@@ -149,7 +149,7 @@ export const BookingConfirmationScreen = () => {
             />
             <Button
               title="Về trang chủ"
-              onPress={() => navigation.popToTop()}
+              onPress={() => navigation.navigate('Home')}
               variant="primary"
               fullWidth
             />

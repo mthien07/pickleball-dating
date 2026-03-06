@@ -93,6 +93,7 @@ export const ProfileCard = React.memo<ProfileCardProps>(
           contentPosition="top center"
           transition={200}
           cachePolicy="memory-disk"
+          pointerEvents="none"
         />
 
         {showMatchPercentage && matchPercentage && (

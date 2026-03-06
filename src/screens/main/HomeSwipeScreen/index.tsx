@@ -52,7 +52,7 @@ export const HomeSwipeScreen = () => {
 
   const handleSuperLike = useCallback(() => {
     showSuccess(`Super Liked ${currentUserRef.current.display_name}! ⚡`);
-    swipeCardRef.current?.swipe('right');
+    swipeCardRef.current?.swipe('up');
   }, []);
 
   const handleReload = () => {

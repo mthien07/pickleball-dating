@@ -46,6 +46,7 @@ export const SettingsRow = React.memo<SettingsRowProps>(
         ]}
         onPress={type !== 'toggle' ? onPress : undefined}
         android_ripple={type !== 'toggle' ? { color: 'rgba(37, 99, 235, 0.15)' } : undefined}
+        pointerEvents={type === 'toggle' ? 'box-none' : 'auto'}
       >
         <View
           style={[

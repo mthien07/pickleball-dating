@@ -5,7 +5,7 @@
  * Handles email/password form, role selection, terms checkbox, Supabase signup.
  */
 
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   View,
   Text,
@@ -37,6 +37,8 @@ export default function SignupScreenDesign({ navigation }: { navigation?: any })
   const [selectedRole, setSelectedRole] = useState<SignupRole | null>(null);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const onToggleAgreedToTerms = useCallback(() => setAgreedToTerms((prev) => !prev), []);
 
   const isFormValid =
     email.trim() !== '' &&
@@ -205,7 +207,7 @@ export default function SignupScreenDesign({ navigation }: { navigation?: any })
           </View>
 
           <View style={styles.termsContainer}>
-            <Checkbox checked={agreedToTerms} onPress={() => setAgreedToTerms(!agreedToTerms)} />
+            <Checkbox checked={agreedToTerms} onPress={onToggleAgreedToTerms} />
             <View style={styles.termsTextContainer}>
               <Text style={styles.termsText}>
                 Tôi đồng ý với <Text style={styles.linkText}>Điều khoản sử dụng</Text>

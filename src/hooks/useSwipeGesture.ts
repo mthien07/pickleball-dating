@@ -153,9 +153,13 @@ export const useSwipeGesture = (options: UseSwipeGestureOptions = {}): UseSwipeG
   }, []);
 
   const swipe = useCallback(
-    (direction: 'left' | 'right') => {
-      const dir = direction === 'right' ? 1 : -1;
-      translateX.value = withTiming(dir * SCREEN_WIDTH * 1.5, { duration: 300 });
+    (direction: 'left' | 'right' | 'up') => {
+      if (direction === 'up') {
+        translateY.value = withTiming(-SCREEN_WIDTH * 1.5, { duration: 300 });
+      } else {
+        const dir = direction === 'right' ? 1 : -1;
+        translateX.value = withTiming(dir * SCREEN_WIDTH * 1.5, { duration: 300 });
+      }
       if (enableHaptic) {
         triggerHaptic();
       }

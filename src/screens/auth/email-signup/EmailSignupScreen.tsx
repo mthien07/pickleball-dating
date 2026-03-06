@@ -5,7 +5,7 @@
  * Delegates signup logic to useEmailSignup hook.
  */
 
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -37,6 +37,7 @@ export const EmailSignupScreen = () => {
   });
 
   const onSubmit = () => handleSignup({ email, password, confirmPassword, role, agreed });
+  const onToggleAgreed = useCallback(() => setAgreed((prev) => !prev), []);
 
   return (
     <KeyboardView
@@ -99,7 +100,7 @@ export const EmailSignupScreen = () => {
           />
         </View>
 
-        <TermsCheckbox agreed={agreed} onToggle={() => setAgreed(!agreed)} />
+        <TermsCheckbox agreed={agreed} onToggle={onToggleAgreed} />
 
         <Button
           title="ĐĂNG KÝ"

@@ -19,6 +19,9 @@ import { useAuth } from '../../../contexts/AuthContext';
 import { createStyles } from './edit-profile-styles';
 import { PhotoGrid } from './edit-profile-photo-grid';
 
+/** Strip HTML/script tags to prevent XSS in profile text fields */
+const sanitizeInput = (text: string): string => text.replace(/<[^>]*>/g, '');
+
 const SKILL_LEVELS = [
   { id: 'beginner', label: 'Moi bat dau' },
   { id: 'intermediate', label: 'Trung binh' },
@@ -100,6 +103,10 @@ export const EditProfileScreen = () => {
       Alert.alert('Loi', 'Ten hien thi phai co it nhat 2 ky tu');
       return;
     }
+    if (photos.length === 0) {
+      Alert.alert('Thieu anh', 'Vui long them it nhat 1 anh truoc khi luu');
+      return;
+    }
     setIsSaving(true);
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     try {
@@ -115,7 +122,11 @@ export const EditProfileScreen = () => {
       navigation.goBack();
     } catch (error: any) {
       console.error('Save error:', error);
-      showError(error.message || 'Khong the luu. Vui long thu lai.');
+      const msg =
+        error?.code === 'PGRST116'
+          ? 'Khong tim thay ho so. Vui long them anh va thu lai.'
+          : error.message || 'Khong the luu. Vui long thu lai.';
+      showError(msg);
     } finally {
       setIsSaving(false);
     }
@@ -154,7 +165,7 @@ export const EditProfileScreen = () => {
             <TextInput
               style={styles.input}
               value={name}
-              onChangeText={setName}
+              onChangeText={(t) => setName(sanitizeInput(t))}
               placeholder="Nhap ten cua ban"
               placeholderTextColor={colors.textTertiary}
             />
@@ -165,7 +176,7 @@ export const EditProfileScreen = () => {
             <TextInput
               style={[styles.input, styles.bioInput]}
               value={bio}
-              onChangeText={setBio}
+              onChangeText={(t) => setBio(sanitizeInput(t))}
               placeholder="Viet vai dong ve ban..."
               placeholderTextColor={colors.textTertiary}
               multiline

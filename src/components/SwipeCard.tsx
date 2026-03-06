@@ -23,7 +23,7 @@ export interface SwipeCardProps extends ProfileCardProps {
 }
 
 export interface SwipeCardRef {
-  swipe: (direction: 'left' | 'right') => void;
+  swipe: (direction: 'left' | 'right' | 'up') => void;
   reset: () => void;
 }
 
