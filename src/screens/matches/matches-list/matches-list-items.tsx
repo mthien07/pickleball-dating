@@ -6,6 +6,7 @@ import { Image } from 'expo-image';
 import Animated, { FadeInDown, FadeInRight } from 'react-native-reanimated';
 
 import { useThemeColors } from '../../../contexts/ThemeContext';
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { useThemedStyles } from '../../../hooks/useThemedStyles';
 import { Match } from '@data/mockData';
 import { createStyles } from './matches-list-styles';
@@ -23,8 +24,9 @@ interface StoryMatchItemProps {
 export const StoryMatchItem = React.memo<StoryMatchItemProps>(({ match, index, onPress }) => {
   const colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
+  const { getEntering } = useReducedMotion();
   return (
-    <Animated.View entering={FadeInRight.delay(index * 80).duration(250)}>
+    <Animated.View entering={getEntering(FadeInRight.delay(index * 80).duration(250))}>
       <Pressable
         style={({ pressed }) => [styles.storyItem, pressed && { opacity: 0.7 }]}
         onPress={onPress}
@@ -89,10 +91,11 @@ const formatTime = (isoString: string) => {
 export const ConversationItem = React.memo<ConversationItemProps>(({ match, index, onPress }) => {
   const colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
+  const { getEntering } = useReducedMotion();
   const hasUnread = match.unread_count > 0;
 
   return (
-    <Animated.View entering={FadeInDown.delay(index * 40).duration(200)}>
+    <Animated.View entering={getEntering(FadeInDown.delay(index * 40).duration(200))}>
       <Pressable
         style={({ pressed }) => [styles.conversationItem, pressed && { opacity: 0.6 }]}
         onPress={onPress}

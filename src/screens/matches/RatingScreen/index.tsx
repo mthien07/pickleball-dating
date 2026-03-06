@@ -19,6 +19,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
 
 import { Button } from '../../../components/Button';
 import { Avatar } from '../../../components/Avatar';
@@ -44,6 +45,7 @@ export const RatingScreen = () => {
   const route = useRoute<any>();
   const colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
+  const { getEntering } = useReducedMotion();
   const { userId, userName } = route.params || {};
 
   const user = MOCK_USERS.find((u: any) => u.id === userId) || MOCK_USERS[1];
@@ -91,7 +93,7 @@ export const RatingScreen = () => {
           style={styles.keyboardView}
         >
           <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-            <Animated.View entering={FadeIn.delay(100)} style={styles.userSection}>
+            <Animated.View entering={getEntering(FadeIn.delay(100))} style={styles.userSection}>
               <Avatar
                 size="lg"
                 imageUrl={user.avatar_urls[0]}
@@ -103,7 +105,10 @@ export const RatingScreen = () => {
               <Text style={styles.ratingPrompt}>Bạn đánh giá trận đấu thế nào?</Text>
             </Animated.View>
 
-            <Animated.View entering={FadeInUp.delay(200)} style={styles.overallSection}>
+            <Animated.View
+              entering={getEntering(FadeInUp.delay(200))}
+              style={styles.overallSection}
+            >
               <Text style={styles.overallLabel}>Đánh giá tổng thể</Text>
               <StarRating value={overallRating} onChange={setOverallRating} size={48} />
               {overallRating > 0 && (
@@ -135,7 +140,10 @@ export const RatingScreen = () => {
               />
             </View>
 
-            <Animated.View entering={FadeInUp.delay(450)} style={styles.commentSection}>
+            <Animated.View
+              entering={getEntering(FadeInUp.delay(450))}
+              style={styles.commentSection}
+            >
               <Text style={styles.commentLabel}>Nhận xét (tùy chọn)</Text>
               <TextInput
                 style={styles.commentInput}

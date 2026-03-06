@@ -5,6 +5,7 @@ import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
 
 import { Button } from '../../../components/Button';
 import { MOCK_COURTS } from '@data/mockData';
@@ -30,6 +31,7 @@ export const PaymentScreen = () => {
   const themeColors = useThemeColors();
   const styles = useThemedStyles(createStyles);
 
+  const { getEntering } = useReducedMotion();
   const [selectedMethod, setSelectedMethod] = useState<PaymentMethod>('card');
   const [cardData, setCardData] = useState<CardData | null>(null);
   const [processing, setProcessing] = useState(false);
@@ -74,7 +76,7 @@ export const PaymentScreen = () => {
 
         <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
           {/* Order Summary */}
-          <Animated.View entering={FadeInUp} style={styles.summaryCard}>
+          <Animated.View entering={getEntering(FadeInUp)} style={styles.summaryCard}>
             <Text style={styles.sectionTitle}>Chi tiet dat san</Text>
             <View style={styles.summaryRow}>
               <Ionicons name="location-outline" size={18} color={themeColors.textSecondary} />
@@ -100,7 +102,7 @@ export const PaymentScreen = () => {
           </Animated.View>
 
           {/* Payment Methods */}
-          <Animated.View entering={FadeInUp.delay(100)} style={styles.section}>
+          <Animated.View entering={getEntering(FadeInUp.delay(100))} style={styles.section}>
             <Text style={styles.sectionTitle}>Phuong thuc thanh toan</Text>
             <PaymentMethodCard
               method="card"
@@ -132,7 +134,7 @@ export const PaymentScreen = () => {
           )}
 
           {(selectedMethod === 'momo' || selectedMethod === 'zalopay') && (
-            <Animated.View entering={FadeInUp.delay(100)} style={styles.walletInfo}>
+            <Animated.View entering={getEntering(FadeInUp.delay(100))} style={styles.walletInfo}>
               <Ionicons name="information-circle-outline" size={20} color={themeColors.primary} />
               <Text style={styles.walletInfoText}>
                 Ban se duoc chuyen den ung dung {selectedMethod === 'momo' ? 'MoMo' : 'ZaloPay'} de

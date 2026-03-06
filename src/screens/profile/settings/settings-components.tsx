@@ -9,6 +9,7 @@ import { View, Text, Pressable, Switch } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import { type ThemeColors } from '../../../contexts/ThemeContext';
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { createStyles } from './settings-styles';
 
 export interface SettingsRowProps {
@@ -97,8 +98,9 @@ export interface SettingsSectionProps {
 export const SettingsSection = React.memo<SettingsSectionProps>(
   ({ title, children, delay = 0, colors }) => {
     const styles = createStyles(colors);
+    const { getEntering } = useReducedMotion();
     return (
-      <Animated.View entering={FadeInUp.delay(delay)} style={styles.section}>
+      <Animated.View entering={getEntering(FadeInUp.delay(delay))} style={styles.section}>
         <Text style={[styles.sectionTitle, { color: colors.textSecondary }]}>{title}</Text>
         <View style={[styles.sectionContent, { backgroundColor: colors.surface }]}>{children}</View>
       </Animated.View>

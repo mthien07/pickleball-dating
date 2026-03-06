@@ -14,8 +14,9 @@ import {
   GradientCard,
   GradientBadge,
   GradientOverlay,
-  GRADIENT_COLORS,
+  createGradientColors,
 } from '../../../components/GradientBackground';
+import { useThemeColors } from '../../../contexts/ThemeContext';
 import { useBounceAnimation } from '../../../hooks/useAnimations';
 import { styles } from './animation-demo-styles';
 import { FeatureCard, ShowcaseItem } from './animation-demo-components';
@@ -30,6 +31,8 @@ const FEATURES = [
 export const AnimationDemoScreen = () => {
   const [counter, setCounter] = useState(0);
   const { animatedStyle: bounceStyle, bounce } = useBounceAnimation();
+  const themeColors = useThemeColors();
+  const GRADIENT_COLORS = createGradientColors(themeColors);
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>

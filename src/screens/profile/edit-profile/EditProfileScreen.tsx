@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
 
 import { Button } from '../../../components/Button';
 import { spacing } from '../../../theme/tokens';
@@ -35,6 +36,7 @@ export const EditProfileScreen = () => {
   const navigation = useNavigation<any>();
   const colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
+  const { getEntering } = useReducedMotion();
   const { profile, user, refreshProfile } = useAuth();
 
   const [photos, setPhotos] = useState<string[]>([]);
@@ -136,7 +138,7 @@ export const EditProfileScreen = () => {
         </View>
 
         <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-          <Animated.View entering={FadeInUp.delay(100)} style={styles.section}>
+          <Animated.View entering={getEntering(FadeInUp.delay(100))} style={styles.section}>
             <Text style={styles.sectionTitle}>Anh cua ban</Text>
             <Text style={styles.sectionHint}>Anh dau tien se la anh dai dien</Text>
             <PhotoGrid
@@ -147,7 +149,7 @@ export const EditProfileScreen = () => {
             />
           </Animated.View>
 
-          <Animated.View entering={FadeInUp.delay(150)} style={styles.section}>
+          <Animated.View entering={getEntering(FadeInUp.delay(150))} style={styles.section}>
             <Text style={styles.fieldLabel}>Ten hien thi</Text>
             <TextInput
               style={styles.input}
@@ -158,7 +160,7 @@ export const EditProfileScreen = () => {
             />
           </Animated.View>
 
-          <Animated.View entering={FadeInUp.delay(200)} style={styles.section}>
+          <Animated.View entering={getEntering(FadeInUp.delay(200))} style={styles.section}>
             <Text style={styles.fieldLabel}>Gioi thieu</Text>
             <TextInput
               style={[styles.input, styles.bioInput]}
@@ -173,7 +175,7 @@ export const EditProfileScreen = () => {
             <Text style={styles.charCount}>{bio.length}/300</Text>
           </Animated.View>
 
-          <Animated.View entering={FadeInUp.delay(250)} style={styles.section}>
+          <Animated.View entering={getEntering(FadeInUp.delay(250))} style={styles.section}>
             <Text style={styles.fieldLabel}>Trinh do</Text>
             <View style={styles.optionGrid}>
               {SKILL_LEVELS.map((level) => (
@@ -200,7 +202,7 @@ export const EditProfileScreen = () => {
             </View>
           </Animated.View>
 
-          <Animated.View entering={FadeInUp.delay(300)} style={styles.section}>
+          <Animated.View entering={getEntering(FadeInUp.delay(300))} style={styles.section}>
             <Text style={styles.fieldLabel}>Phong cach choi</Text>
             <View style={styles.optionRow}>
               {PLAY_STYLES.map((s) => (

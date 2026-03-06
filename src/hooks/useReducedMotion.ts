@@ -14,11 +14,13 @@
 import { useReducedMotion as useReanimatedReducedMotion } from 'react-native-reanimated';
 import type { BaseAnimationBuilder } from 'react-native-reanimated';
 
+type AnimationInput = BaseAnimationBuilder | typeof BaseAnimationBuilder;
+
 export function useReducedMotion() {
   const shouldReduceMotion = useReanimatedReducedMotion();
 
   // Returns the animation or undefined if reduced motion is preferred
-  const getEntering = (animation: BaseAnimationBuilder): BaseAnimationBuilder | undefined => {
+  const getEntering = (animation: AnimationInput): AnimationInput | undefined => {
     return shouldReduceMotion ? undefined : animation;
   };
 

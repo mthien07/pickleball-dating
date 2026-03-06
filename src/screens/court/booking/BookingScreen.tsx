@@ -10,6 +10,7 @@ import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 
 import { CalendarPicker } from '../../../components/CalendarPicker';
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { TimeSlotPicker, TimeSlot } from '../../../components/TimeSlotPicker';
 import { Button } from '../../../components/Button';
 import { useThemeColors } from '../../../contexts/ThemeContext';
@@ -46,6 +47,7 @@ export const BookingScreen = () => {
   const route = useRoute<RouteProp<BookingRouteParams, 'Booking'>>();
   const colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
+  const { getEntering } = useReducedMotion();
   const { courtId } = route.params || {};
 
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
@@ -103,7 +105,7 @@ export const BookingScreen = () => {
         </View>
 
         <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-          <Animated.View entering={FadeInUp.delay(100)} style={styles.section}>
+          <Animated.View entering={getEntering(FadeInUp.delay(100))} style={styles.section}>
             <View style={styles.stepHeader}>
               <View style={styles.stepNumber}>
                 <Text style={styles.stepNumberText}>1</Text>
@@ -118,7 +120,7 @@ export const BookingScreen = () => {
           </Animated.View>
 
           {selectedDate && (
-            <Animated.View entering={FadeInUp.delay(200)} style={styles.section}>
+            <Animated.View entering={getEntering(FadeInUp.delay(200))} style={styles.section}>
               <View style={styles.stepHeader}>
                 <View style={styles.stepNumber}>
                   <Text style={styles.stepNumberText}>2</Text>

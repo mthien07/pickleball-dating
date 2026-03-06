@@ -10,6 +10,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
 
 import { Button } from '../../../components/Button';
 import { Avatar } from '../../../components/Avatar';
@@ -40,6 +41,7 @@ export const CoachDetailScreen = () => {
   const route = useRoute<any>();
   const colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
+  const { getEntering } = useReducedMotion();
   const { coachId } = route.params || {};
 
   const coach = MOCK_COACHES.find((c) => c.id === coachId) || MOCK_COACHES[0];
@@ -80,7 +82,7 @@ export const CoachDetailScreen = () => {
 
       <View style={styles.content}>
         <ScrollView showsVerticalScrollIndicator={false}>
-          <Animated.View entering={FadeIn.delay(100)} style={styles.profileCard}>
+          <Animated.View entering={getEntering(FadeIn.delay(100))} style={styles.profileCard}>
             <Avatar
               size="xl"
               imageUrl={coach.avatar_url}
@@ -100,12 +102,12 @@ export const CoachDetailScreen = () => {
             </View>
           </Animated.View>
 
-          <Animated.View entering={FadeInUp.delay(150)} style={styles.section}>
+          <Animated.View entering={getEntering(FadeInUp.delay(150))} style={styles.section}>
             <Text style={styles.sectionTitle}>Giới thiệu</Text>
             <Text style={styles.bio}>{coach.bio}</Text>
           </Animated.View>
 
-          <Animated.View entering={FadeInUp.delay(200)} style={styles.section}>
+          <Animated.View entering={getEntering(FadeInUp.delay(200))} style={styles.section}>
             <Text style={styles.sectionTitle}>Chứng chỉ</Text>
             <View style={styles.certList}>
               {coach.certifications.map((cert, index) => (
@@ -117,7 +119,7 @@ export const CoachDetailScreen = () => {
             </View>
           </Animated.View>
 
-          <Animated.View entering={FadeInUp.delay(250)} style={styles.section}>
+          <Animated.View entering={getEntering(FadeInUp.delay(250))} style={styles.section}>
             <Text style={styles.sectionTitle}>Địa điểm</Text>
             <View style={styles.locationCard}>
               <Ionicons name="location" size={24} color={colors.primary} />
@@ -126,7 +128,7 @@ export const CoachDetailScreen = () => {
           </Animated.View>
 
           {coach.gallery_urls.length > 0 && (
-            <Animated.View entering={FadeInUp.delay(300)} style={styles.section}>
+            <Animated.View entering={getEntering(FadeInUp.delay(300))} style={styles.section}>
               <Text style={styles.sectionTitle}>Thư viện ảnh</Text>
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 <View style={styles.galleryRow}>
@@ -138,7 +140,7 @@ export const CoachDetailScreen = () => {
             </Animated.View>
           )}
 
-          <Animated.View entering={FadeInUp.delay(350)} style={styles.section}>
+          <Animated.View entering={getEntering(FadeInUp.delay(350))} style={styles.section}>
             <Text style={styles.sectionTitle}>Liên hệ</Text>
             <View style={styles.contactRow}>
               <Pressable

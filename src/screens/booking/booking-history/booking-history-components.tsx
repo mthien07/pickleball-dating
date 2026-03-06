@@ -9,6 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeInUp, Layout } from 'react-native-reanimated';
 
 import { useThemeColors } from '../../../contexts/ThemeContext';
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { useThemedStyles } from '../../../hooks/useThemedStyles';
 import { MOCK_BOOKINGS, BookingStatus } from '@data/mockData';
 import { createStyles } from './booking-history-styles';
@@ -95,10 +96,11 @@ interface BookingCardProps {
 export const BookingCard: React.FC<BookingCardProps> = React.memo(({ booking, index, onPress }) => {
   const colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
+  const { getEntering } = useReducedMotion();
   const statusStyle = getStatusColor(booking.status, colors);
 
   return (
-    <Animated.View entering={FadeInUp.delay(index * 100)} layout={Layout.springify()}>
+    <Animated.View entering={getEntering(FadeInUp.delay(index * 100))} layout={Layout.springify()}>
       <Pressable
         style={({ pressed }) => [styles.bookingCard, pressed && { opacity: 0.8 }]}
         onPress={onPress}

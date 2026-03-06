@@ -9,6 +9,7 @@ import { View, Text, StyleSheet, TextInput } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 
 import { spacing, typography, borderRadius } from '../../../theme/tokens';
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { useThemeColors } from '../../../contexts/ThemeContext';
 import { useThemedStyles } from '../../../hooks/useThemedStyles';
 import type { ThemeColors } from '../../../contexts/theme-colors';
@@ -21,8 +22,9 @@ export interface BioStepProps {
 export const ProfileSetupBioStep = React.memo<BioStepProps>(({ bio, onBioChange }) => {
   const colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
+  const { getEntering } = useReducedMotion();
   return (
-    <Animated.View entering={FadeInUp} style={styles.stepContent}>
+    <Animated.View entering={getEntering(FadeInUp)} style={styles.stepContent}>
       <Text style={styles.stepTitle}>Giới thiệu bản thân</Text>
       <Text style={styles.stepDescription}>
         Viết vài dòng về bản thân để người khác hiểu bạn hơn

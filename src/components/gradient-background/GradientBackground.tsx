@@ -2,7 +2,8 @@ import React from 'react';
 import { View, ViewStyle } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated from 'react-native-reanimated';
-import { GRADIENT_COLORS, GRADIENT_DIRECTIONS } from './gradient-constants';
+import { useThemeColors } from '../../contexts/ThemeContext';
+import { createGradientColors, GRADIENT_DIRECTIONS } from './gradient-constants';
 import { styles } from './gradient-styles';
 
 // ---- GradientView ----
@@ -15,15 +16,18 @@ interface GradientViewProps {
 }
 
 export const GradientView: React.FC<GradientViewProps> = ({
-  colors = GRADIENT_COLORS.primary,
+  colors: colorsProp,
   direction = 'horizontal',
   style,
   children,
 }) => {
+  const themeColors = useThemeColors();
+  const gradientColors = createGradientColors(themeColors);
+  const resolvedColors = colorsProp || gradientColors.primary;
   const { start, end } = GRADIENT_DIRECTIONS[direction];
   return (
     <LinearGradient
-      colors={colors}
+      colors={resolvedColors}
       start={start}
       end={end}
       style={[styles.gradientContainer, style]}
@@ -35,13 +39,6 @@ export const GradientView: React.FC<GradientViewProps> = ({
 
 // ---- GradientButton ----
 
-const BUTTON_VARIANT_COLORS = {
-  primary: GRADIENT_COLORS.primary,
-  subtle: GRADIENT_COLORS.primarySubtle,
-  dark: GRADIENT_COLORS.primaryDark,
-  light: GRADIENT_COLORS.primaryLight,
-} as const;
-
 interface GradientButtonProps {
   colors?: readonly [string, string, ...string[]];
   direction?: keyof typeof GRADIENT_DIRECTIONS;
@@ -51,17 +48,25 @@ interface GradientButtonProps {
 }
 
 export const GradientButton: React.FC<GradientButtonProps> = ({
-  colors,
+  colors: colorsProp,
   direction = 'horizontal',
   style,
   children,
   variant = 'primary',
 }) => {
-  const gradientColors = colors || BUTTON_VARIANT_COLORS[variant];
+  const themeColors = useThemeColors();
+  const gc = createGradientColors(themeColors);
+  const variantColors = {
+    primary: gc.primary,
+    subtle: gc.primarySubtle,
+    dark: gc.primaryDark,
+    light: gc.primaryLight,
+  };
+  const resolvedColors = colorsProp || variantColors[variant];
   const { start, end } = GRADIENT_DIRECTIONS[direction];
   return (
     <LinearGradient
-      colors={gradientColors}
+      colors={resolvedColors}
       start={start}
       end={end}
       style={[styles.gradientButton, style]}
@@ -82,19 +87,17 @@ interface GradientCardProps {
 }
 
 export const GradientCard: React.FC<GradientCardProps> = ({
-  colors,
+  colors: colorsProp,
   direction = 'diagonal',
   style,
   children,
   variant = 'subtle',
 }) => {
+  const themeColors = useThemeColors();
+  const gc = createGradientColors(themeColors);
   const gradientColors =
-    colors ||
-    (variant === 'subtle'
-      ? GRADIENT_COLORS.primarySubtle
-      : variant === 'medium'
-        ? GRADIENT_COLORS.bgMedium
-        : GRADIENT_COLORS.primary);
+    colorsProp ||
+    (variant === 'subtle' ? gc.primarySubtle : variant === 'medium' ? gc.bgMedium : gc.primary);
   const { start, end } = GRADIENT_DIRECTIONS[direction];
   return (
     <LinearGradient
@@ -173,11 +176,14 @@ interface AnimatedGradientViewProps {
 }
 
 export const AnimatedGradientView: React.FC<AnimatedGradientViewProps> = ({
-  colors = GRADIENT_COLORS.primary,
+  colors: colorsProp,
   direction = 'horizontal',
   style,
   children,
 }) => {
+  const themeColors = useThemeColors();
+  const gc = createGradientColors(themeColors);
+  const colors = colorsProp || gc.primary;
   const { start, end } = GRADIENT_DIRECTIONS[direction];
   return (
     <AnimatedLinearGradient
@@ -200,10 +206,13 @@ interface GradientBadgeProps {
 }
 
 export const GradientBadge: React.FC<GradientBadgeProps> = ({
-  colors = GRADIENT_COLORS.primary,
+  colors: colorsProp,
   style,
   children,
 }) => {
+  const themeColors = useThemeColors();
+  const gc = createGradientColors(themeColors);
+  const colors = colorsProp || gc.primary;
   return (
     <LinearGradient
       colors={colors}
@@ -223,6 +232,6 @@ export default {
   GradientOverlay,
   AnimatedGradientView,
   GradientBadge,
-  GRADIENT_COLORS,
+  createGradientColors,
   GRADIENT_DIRECTIONS,
 };

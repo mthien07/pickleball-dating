@@ -9,6 +9,7 @@ import { View, Text, StyleSheet, Pressable, TextInput } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 
 import { spacing, typography, borderRadius } from '../../../theme/tokens';
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { useThemeColors } from '../../../contexts/ThemeContext';
 import { useThemedStyles } from '../../../hooks/useThemedStyles';
 import type { ThemeColors } from '../../../contexts/theme-colors';
@@ -26,6 +27,7 @@ export const ProfileSetupBasicInfoStep = React.memo<BasicInfoStepProps>(
   ({ name, onNameChange, birthDate, onBirthDateChange, gender, onGenderChange }) => {
     const colors = useThemeColors();
     const styles = useThemedStyles(createStyles);
+    const { getEntering } = useReducedMotion();
     // Auto-format birth date as DD/MM/YYYY
     const handleBirthDateChange = (text: string) => {
       const numbersOnly = text.replace(/[^0-9]/g, '');
@@ -43,7 +45,7 @@ export const ProfileSetupBasicInfoStep = React.memo<BasicInfoStepProps>(
     };
 
     return (
-      <Animated.View entering={FadeInUp} style={styles.stepContent}>
+      <Animated.View entering={getEntering(FadeInUp)} style={styles.stepContent}>
         <Text style={styles.stepTitle}>Thông tin cơ bản</Text>
 
         <View style={styles.formField}>

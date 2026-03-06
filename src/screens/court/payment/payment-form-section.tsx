@@ -5,6 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 
 import { spacing } from '../../../theme/tokens';
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { useThemeColors } from '../../../contexts/ThemeContext';
 import { useThemedStyles } from '../../../hooks/useThemedStyles';
 import { createStyles } from './payment-styles';
@@ -82,6 +83,7 @@ export const CreditCardForm = React.memo(
   ({ onCardChange, gradientColors, chipColor }: CreditCardFormProps) => {
     const colors = useThemeColors();
     const styles = useThemedStyles(createStyles);
+    const { getEntering } = useReducedMotion();
     const [cardNumber, setCardNumber] = useState('');
     const [expiry, setExpiry] = useState('');
     const [cvv, setCvv] = useState('');
@@ -114,7 +116,7 @@ export const CreditCardForm = React.memo(
     };
 
     return (
-      <Animated.View entering={FadeInUp.delay(100)} style={styles.cardForm}>
+      <Animated.View entering={getEntering(FadeInUp.delay(100))} style={styles.cardForm}>
         <LinearGradient
           colors={gradientColors}
           start={{ x: 0, y: 0 }}

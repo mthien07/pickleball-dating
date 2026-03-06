@@ -10,6 +10,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
 
 import { Button } from '../../../components/Button';
 import { spacing } from '../../../theme/tokens';
@@ -46,6 +47,7 @@ export const BookingDetailScreen = () => {
   const route = useRoute<any>();
   const colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
+  const { getEntering } = useReducedMotion();
   const { bookingId } = route.params || {};
 
   const booking = MOCK_BOOKINGS.find((b) => b.id === bookingId) || MOCK_BOOKINGS[0];
@@ -85,7 +87,7 @@ export const BookingDetailScreen = () => {
         <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
           {/* Status Banner */}
           <Animated.View
-            entering={FadeIn.delay(100)}
+            entering={getEntering(FadeIn.delay(100))}
             style={[styles.statusBanner, { backgroundColor: statusInfo.bg }]}
           >
             <Ionicons name={statusInfo.icon as any} size={24} color={statusInfo.color} />
@@ -93,7 +95,7 @@ export const BookingDetailScreen = () => {
           </Animated.View>
 
           {/* Court Card */}
-          <Animated.View entering={FadeInUp.delay(150)}>
+          <Animated.View entering={getEntering(FadeInUp.delay(150))}>
             <Pressable
               style={({ pressed }) => [styles.courtCard, pressed && { opacity: 0.8 }]}
               onPress={() => navigation.navigate('CourtDetail', { courtId: booking.court.id })}
@@ -118,7 +120,7 @@ export const BookingDetailScreen = () => {
           </Animated.View>
 
           {/* Booking Info */}
-          <Animated.View entering={FadeInUp.delay(200)} style={styles.section}>
+          <Animated.View entering={getEntering(FadeInUp.delay(200))} style={styles.section}>
             <Text style={styles.sectionTitle}>Thông tin đặt sân</Text>
             <View style={styles.infoCard}>
               <InfoRow icon="calendar-outline" label="Ngày" value={formatDate(booking.date)} />
@@ -136,7 +138,7 @@ export const BookingDetailScreen = () => {
           </Animated.View>
 
           {/* Slots Detail */}
-          <Animated.View entering={FadeInUp.delay(250)} style={styles.section}>
+          <Animated.View entering={getEntering(FadeInUp.delay(250))} style={styles.section}>
             <Text style={styles.sectionTitle}>Chi tiết</Text>
             <View style={styles.slotsCard}>
               {booking.slots.map((slot: any, index: number) => (
@@ -156,7 +158,7 @@ export const BookingDetailScreen = () => {
 
           {/* QR Code */}
           {booking.status === 'confirmed' && booking.qr_code && (
-            <Animated.View entering={FadeInUp.delay(300)} style={styles.section}>
+            <Animated.View entering={getEntering(FadeInUp.delay(300))} style={styles.section}>
               <Text style={styles.sectionTitle}>Mã QR check-in</Text>
               <View style={styles.qrCard}>
                 <View style={styles.qrPlaceholder}>

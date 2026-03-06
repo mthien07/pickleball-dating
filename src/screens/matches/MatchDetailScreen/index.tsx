@@ -11,6 +11,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
 
 import { Button } from '../../../components/Button';
 import { spacing } from '../../../theme/tokens';
@@ -25,6 +26,7 @@ export const MatchDetailScreen = () => {
   const route = useRoute<any>();
   const colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
+  const { getEntering } = useReducedMotion();
   const { matchId } = route.params || {};
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
 
@@ -106,7 +108,7 @@ export const MatchDetailScreen = () => {
       {/* Content */}
       <View style={styles.content}>
         <ScrollView showsVerticalScrollIndicator={false}>
-          <Animated.View entering={FadeInUp.delay(100)} style={styles.nameSection}>
+          <Animated.View entering={getEntering(FadeInUp.delay(100))} style={styles.nameSection}>
             <Text style={styles.displayName}>
               {user.display_name}, {age}
             </Text>
@@ -118,7 +120,7 @@ export const MatchDetailScreen = () => {
             )}
           </Animated.View>
 
-          <Animated.View entering={FadeInUp.delay(150)} style={styles.infoRow}>
+          <Animated.View entering={getEntering(FadeInUp.delay(150))} style={styles.infoRow}>
             <View style={styles.infoBadge}>
               <Text style={styles.infoEmoji}>{skillInfo.emoji}</Text>
               <Text style={styles.infoText}>{skillInfo.label}</Text>
@@ -128,7 +130,7 @@ export const MatchDetailScreen = () => {
             </View>
           </Animated.View>
 
-          <Animated.View entering={FadeInUp.delay(200)} style={styles.statsRow}>
+          <Animated.View entering={getEntering(FadeInUp.delay(200))} style={styles.statsRow}>
             <View style={styles.statItem}>
               <Text style={styles.statValue}>{user.stats.matches_count}</Text>
               <Text style={styles.statLabel}>Matches</Text>
@@ -146,13 +148,13 @@ export const MatchDetailScreen = () => {
           </Animated.View>
 
           {user.bio && (
-            <Animated.View entering={FadeInUp.delay(250)} style={styles.bioSection}>
+            <Animated.View entering={getEntering(FadeInUp.delay(250))} style={styles.bioSection}>
               <Text style={styles.sectionTitle}>Giới thiệu</Text>
               <Text style={styles.bio}>{user.bio}</Text>
             </Animated.View>
           )}
 
-          <Animated.View entering={FadeInUp.delay(300)} style={styles.section}>
+          <Animated.View entering={getEntering(FadeInUp.delay(300))} style={styles.section}>
             <Text style={styles.sectionTitle}>Đang tìm kiếm</Text>
             <View style={styles.tagRow}>
               {user.looking_for.map((item: string) => (

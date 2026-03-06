@@ -11,6 +11,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 
 import { useThemeColors } from '../../../contexts/ThemeContext';
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { useThemedStyles } from '../../../hooks/useThemedStyles';
 import { createStyles, SCREEN_WIDTH } from './court-detail-styles';
 import { Court } from '@data/mockData';
@@ -93,8 +94,9 @@ interface HeaderInfoProps {
 export const HeaderInfo = React.memo(({ court, starColor }: HeaderInfoProps) => {
   const colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
+  const { getEntering } = useReducedMotion();
   return (
-    <Animated.View entering={FadeInUp.delay(100)} style={styles.headerSection}>
+    <Animated.View entering={getEntering(FadeInUp.delay(100))} style={styles.headerSection}>
       {court.is_partner && (
         <View style={styles.partnerBadge}>
           <Ionicons name="shield-checkmark" size={14} color={colors.white} />
@@ -122,8 +124,9 @@ export const HeaderInfo = React.memo(({ court, starColor }: HeaderInfoProps) => 
 export const LocationSection = React.memo(({ address }: { address: string }) => {
   const colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
+  const { getEntering } = useReducedMotion();
   return (
-    <Animated.View entering={FadeInUp.delay(150)} style={styles.section}>
+    <Animated.View entering={getEntering(FadeInUp.delay(150))} style={styles.section}>
       <View style={styles.sectionHeader}>
         <Ionicons name="location-outline" size={20} color={colors.primary} />
         <Text style={styles.sectionTitle}>Địa chỉ</Text>
@@ -147,8 +150,9 @@ export const LocationSection = React.memo(({ address }: { address: string }) => 
 export const AmenitiesSection = React.memo(({ amenities }: { amenities: string[] }) => {
   const colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
+  const { getEntering } = useReducedMotion();
   return (
-    <Animated.View entering={FadeInUp.delay(200)} style={styles.section}>
+    <Animated.View entering={getEntering(FadeInUp.delay(200))} style={styles.section}>
       <View style={styles.sectionHeader}>
         <Ionicons name="fitness-outline" size={20} color={colors.primary} />
         <Text style={styles.sectionTitle}>Tiện ích</Text>
@@ -177,8 +181,9 @@ interface ReviewsSectionProps {
 export const ReviewsSection = React.memo(({ reviews, starColor }: ReviewsSectionProps) => {
   const colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
+  const { getEntering } = useReducedMotion();
   return (
-    <Animated.View entering={FadeInUp.delay(350)} style={styles.section}>
+    <Animated.View entering={getEntering(FadeInUp.delay(350))} style={styles.section}>
       <View style={styles.sectionHeader}>
         <Ionicons name="chatbubble-outline" size={20} color={colors.primary} />
         <Text style={styles.sectionTitle}>Đánh giá</Text>

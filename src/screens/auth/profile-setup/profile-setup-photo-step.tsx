@@ -10,6 +10,7 @@ import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeInUp, FadeIn } from 'react-native-reanimated';
 
 import { spacing, typography, borderRadius } from '../../../theme/tokens';
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { useThemeColors } from '../../../contexts/ThemeContext';
 import { useThemedStyles } from '../../../hooks/useThemedStyles';
 import type { ThemeColors } from '../../../contexts/theme-colors';
@@ -27,8 +28,9 @@ export const ProfileSetupPhotoStep = React.memo<PhotoStepProps>(
   ({ photos, onAddPhoto, onRemovePhoto, isUploading }) => {
     const colors = useThemeColors();
     const styles = useThemedStyles(createStyles);
+    const { getEntering } = useReducedMotion();
     return (
-      <Animated.View entering={FadeInUp} style={styles.stepContent}>
+      <Animated.View entering={getEntering(FadeInUp)} style={styles.stepContent}>
         <Text style={styles.stepTitle}>Thêm ảnh của bạn</Text>
         <Text style={styles.stepDescription}>
           Thêm ít nhất 2 ảnh để bắt đầu. Ảnh đầu tiên sẽ là ảnh đại diện.
@@ -50,7 +52,7 @@ export const ProfileSetupPhotoStep = React.memo<PhotoStepProps>(
               {photos[index] ? (
                 <>
                   <Animated.Image
-                    entering={FadeIn}
+                    entering={getEntering(FadeIn)}
                     source={{ uri: photos[index] }}
                     style={styles.photoImage}
                   />

@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeInUp, FadeIn } from 'react-native-reanimated';
 
 import { Button } from '../../../components/Button';
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { MOCK_COURTS, MOCK_REVIEWS } from '@data/mockData';
 import { useThemeColors } from '../../../contexts/ThemeContext';
 import { useThemedStyles } from '../../../hooks/useThemedStyles';
@@ -28,6 +29,7 @@ export const CourtDetailScreen = () => {
   const colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
 
+  const { getEntering } = useReducedMotion();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const scrollRef = useRef<ScrollView>(null);
 
@@ -60,7 +62,7 @@ export const CourtDetailScreen = () => {
         <LocationSection address={court.address} />
         <AmenitiesSection amenities={court.amenities} />
 
-        <Animated.View entering={FadeInUp.delay(250)} style={styles.section}>
+        <Animated.View entering={getEntering(FadeInUp.delay(250))} style={styles.section}>
           <View style={styles.sectionHeader}>
             <Ionicons name="information-circle-outline" size={20} color={colors.primary} />
             <Text style={styles.sectionTitle}>Mô tả</Text>
@@ -68,7 +70,7 @@ export const CourtDetailScreen = () => {
           <Text style={styles.description}>{court.description}</Text>
         </Animated.View>
 
-        <Animated.View entering={FadeInUp.delay(300)} style={styles.section}>
+        <Animated.View entering={getEntering(FadeInUp.delay(300))} style={styles.section}>
           <View style={styles.sectionHeader}>
             <Ionicons name="time-outline" size={20} color={colors.primary} />
             <Text style={styles.sectionTitle}>Giờ hoạt động</Text>
@@ -85,7 +87,7 @@ export const CourtDetailScreen = () => {
         <View style={{ height: 120 }} />
       </ScrollView>
 
-      <Animated.View entering={FadeIn.delay(400)} style={styles.footer}>
+      <Animated.View entering={getEntering(FadeIn.delay(400))} style={styles.footer}>
         <View style={styles.priceContainer}>
           <Text style={styles.priceLabel}>Giá từ</Text>
           <Text style={styles.price}>

@@ -13,6 +13,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeInUp, FadeIn } from 'react-native-reanimated';
 import { Avatar } from '../../../components/Avatar';
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { Button } from '../../../components/Button';
 import { spacing } from '../../../theme/tokens';
 import { useThemeColors } from '../../../contexts/ThemeContext';
@@ -53,8 +54,9 @@ interface StatCardProps {
 export const StatCard = React.memo<StatCardProps>(({ icon, value, label, delay = 0 }) => {
   const colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
+  const { getEntering } = useReducedMotion();
   return (
-    <Animated.View entering={FadeInUp.delay(delay)} style={styles.statCard}>
+    <Animated.View entering={getEntering(FadeInUp.delay(delay))} style={styles.statCard}>
       <Ionicons name={icon as any} size={24} color={colors.primary} />
       <Text style={styles.statValue}>{value}</Text>
       <Text style={styles.statLabel}>{label}</Text>
@@ -129,11 +131,12 @@ interface PhotosSectionProps {
 
 export const PhotosSection = React.memo<PhotosSectionProps>(({ avatarUrls, onEditPress }) => {
   const styles = useThemedStyles(createStyles);
+  const { getEntering } = useReducedMotion();
   if (avatarUrls.length === 0) {
     return null;
   }
   return (
-    <Animated.View entering={FadeInUp.delay(400)} style={styles.section}>
+    <Animated.View entering={getEntering(FadeInUp.delay(400))} style={styles.section}>
       <View style={styles.sectionHeader}>
         <Text style={styles.sectionTitle}>Ảnh</Text>
         <Pressable onPress={onEditPress} style={({ pressed }) => pressed && { opacity: 0.7 }}>
@@ -165,8 +168,9 @@ export const ProfileCard = React.memo<ProfileCardProps>(
   ({ displayName, skillInfo, playStyleLabel, avatarUrl, onEditPress }) => {
     const colors = useThemeColors();
     const styles = useThemedStyles(createStyles);
+    const { getEntering } = useReducedMotion();
     return (
-      <Animated.View entering={FadeIn.delay(100)} style={styles.profileCard}>
+      <Animated.View entering={getEntering(FadeIn.delay(100))} style={styles.profileCard}>
         <View style={styles.avatarSection}>
           <Avatar
             size="xl"

@@ -13,6 +13,7 @@ import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 
 import { Button } from '../../../components/Button';
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { spacing } from '../../../theme/tokens';
 import { useThemeColors } from '../../../contexts/ThemeContext';
 import { useThemedStyles } from '../../../hooks/useThemedStyles';
@@ -32,6 +33,7 @@ export const ProfileMeScreen = () => {
   const navigation = useNavigation<any>();
   const colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
+  const { getEntering } = useReducedMotion();
   const { profile, profileLoading, user } = useAuth();
 
   if (profileLoading) {
@@ -91,7 +93,7 @@ export const ProfileMeScreen = () => {
             />
           </View>
 
-          <Animated.View entering={FadeInUp.delay(350)} style={styles.section}>
+          <Animated.View entering={getEntering(FadeInUp.delay(350))} style={styles.section}>
             <Text style={styles.sectionTitle}>Giới thiệu</Text>
             <Text style={styles.bio}>{profile.bio || 'Chưa có giới thiệu'}</Text>
           </Animated.View>
@@ -101,7 +103,7 @@ export const ProfileMeScreen = () => {
             onEditPress={() => navigation.navigate('EditProfile')}
           />
 
-          <Animated.View entering={FadeInUp.delay(450)} style={styles.actions}>
+          <Animated.View entering={getEntering(FadeInUp.delay(450))} style={styles.actions}>
             <Button
               title="Chỉnh sửa hồ sơ"
               onPress={() => navigation.navigate('EditProfile')}

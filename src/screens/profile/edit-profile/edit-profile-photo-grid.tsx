@@ -3,6 +3,7 @@ import { View, Text, Pressable, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { useThemeColors } from '../../../contexts/ThemeContext';
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { useThemedStyles } from '../../../hooks/useThemedStyles';
 import { createStyles } from './edit-profile-styles';
 
@@ -16,6 +17,7 @@ interface PhotoGridProps {
 export const PhotoGrid = React.memo(({ photos, onAdd, onRemove, isUploading }: PhotoGridProps) => {
   const colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
+  const { getEntering } = useReducedMotion();
   return (
     <View style={styles.photoGrid}>
       {[0, 1, 2, 3, 4, 5].map((index) => (
@@ -33,7 +35,7 @@ export const PhotoGrid = React.memo(({ photos, onAdd, onRemove, isUploading }: P
           {photos[index] ? (
             <>
               <Animated.Image
-                entering={FadeIn}
+                entering={getEntering(FadeIn)}
                 source={{ uri: photos[index] }}
                 style={styles.photoImage}
               />

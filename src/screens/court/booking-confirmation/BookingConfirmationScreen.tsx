@@ -19,6 +19,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
 
 import { Button } from '../../../components/Button';
 import { useThemeColors } from '../../../contexts/ThemeContext';
@@ -54,6 +55,7 @@ export const BookingConfirmationScreen = () => {
   const court = MOCK_COURTS.find((c) => c.id === courtId) || MOCK_COURTS[0];
   const bookingDate = date ? new Date(date) : new Date();
 
+  const { getEntering } = useReducedMotion();
   const pulse = useSharedValue(1);
 
   useEffect(() => {
@@ -74,20 +76,23 @@ export const BookingConfirmationScreen = () => {
       <StatusBar barStyle="light-content" />
       <LinearGradient colors={[colors.primary, colors.primaryDark]} style={styles.gradient}>
         <SafeAreaView style={styles.safeArea}>
-          <Animated.View entering={ZoomIn.delay(200).springify()} style={styles.successIcon}>
+          <Animated.View
+            entering={getEntering(ZoomIn.delay(200).springify())}
+            style={styles.successIcon}
+          >
             <View style={styles.iconCircle}>
               <Ionicons name="checkmark" size={48} color={colors.primary} />
             </View>
           </Animated.View>
 
-          <Animated.Text entering={FadeInUp.delay(400)} style={styles.title}>
+          <Animated.Text entering={getEntering(FadeInUp.delay(400))} style={styles.title}>
             Đặt sân thành công!
           </Animated.Text>
-          <Animated.Text entering={FadeInUp.delay(500)} style={styles.subtitle}>
+          <Animated.Text entering={getEntering(FadeInUp.delay(500))} style={styles.subtitle}>
             Mã đặt sân: {bookingId}
           </Animated.Text>
 
-          <Animated.View entering={FadeInUp.delay(600)} style={styles.bookingCard}>
+          <Animated.View entering={getEntering(FadeInUp.delay(600))} style={styles.bookingCard}>
             <Animated.View style={[styles.qrContainer, pulseStyle]}>
               <View style={styles.qrCode}>
                 <Ionicons name="qr-code" size={100} color={colors.textPrimary} />
@@ -133,7 +138,7 @@ export const BookingConfirmationScreen = () => {
             </View>
           </Animated.View>
 
-          <Animated.View entering={FadeIn.delay(800)} style={styles.actions}>
+          <Animated.View entering={getEntering(FadeIn.delay(800))} style={styles.actions}>
             <Button
               title="Thêm vào Calendar"
               onPress={() => {}}

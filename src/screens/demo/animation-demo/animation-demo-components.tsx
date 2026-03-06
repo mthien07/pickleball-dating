@@ -8,7 +8,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 
-import { GradientCard, GRADIENT_COLORS } from '../../../components/GradientBackground';
+import { GradientCard, createGradientColors } from '../../../components/GradientBackground';
+import { useThemeColors } from '../../../contexts/ThemeContext';
 import { usePressAnimation } from '../../../hooks/useAnimations';
 import { styles } from './animation-demo-styles';
 
@@ -56,16 +57,20 @@ interface ShowcaseItemProps {
   title: string;
 }
 
-export const ShowcaseItem = React.memo(({ icon, title }: ShowcaseItemProps) => (
-  <View style={styles.showcaseItem}>
-    <LinearGradient
-      colors={GRADIENT_COLORS.primary}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
-      style={styles.showcaseIcon}
-    >
-      <Ionicons name={icon as any} size={24} color="#FFFFFF" />
-    </LinearGradient>
-    <Text style={styles.showcaseItemTitle}>{title}</Text>
-  </View>
-));
+export const ShowcaseItem = React.memo(({ icon, title }: ShowcaseItemProps) => {
+  const colors = useThemeColors();
+  const gc = createGradientColors(colors);
+  return (
+    <View style={styles.showcaseItem}>
+      <LinearGradient
+        colors={gc.primary}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.showcaseIcon}
+      >
+        <Ionicons name={icon as any} size={24} color="#FFFFFF" />
+      </LinearGradient>
+      <Text style={styles.showcaseItemTitle}>{title}</Text>
+    </View>
+  );
+});

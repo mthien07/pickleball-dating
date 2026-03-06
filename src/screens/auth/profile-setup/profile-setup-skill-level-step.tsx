@@ -10,6 +10,7 @@ import Animated, { FadeInUp } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
 
 import { spacing, typography, borderRadius } from '../../../theme/tokens';
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { useThemeColors } from '../../../contexts/ThemeContext';
 import { useThemedStyles } from '../../../hooks/useThemedStyles';
 import type { ThemeColors } from '../../../contexts/theme-colors';
@@ -29,8 +30,9 @@ export interface SkillLevelStepProps {
 export const ProfileSetupSkillLevelStep = React.memo<SkillLevelStepProps>(
   ({ skillLevel, onSkillLevelChange }) => {
     const styles = useThemedStyles(createStyles);
+    const { getEntering } = useReducedMotion();
     return (
-      <Animated.View entering={FadeInUp} style={styles.stepContent}>
+      <Animated.View entering={getEntering(FadeInUp)} style={styles.stepContent}>
         <Text style={styles.stepTitle}>Trình độ của bạn</Text>
         <Text style={styles.stepDescription}>Chọn trình độ phù hợp để tìm đối thủ ngang tay</Text>
 

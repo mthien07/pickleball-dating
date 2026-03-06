@@ -13,7 +13,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useThemeColors } from '../../contexts/ThemeContext';
 import { useThemedStyles } from '../../hooks/useThemedStyles';
 import { usePressAnimation, useElevationAnimation } from '../../hooks/useAnimations';
-import { GRADIENT_COLORS } from '../GradientBackground';
+import { createGradientColors } from '../GradientBackground';
 import { createStyles } from './button-styles';
 
 export type ButtonVariant = 'primary' | 'secondary' | 'text' | 'icon' | 'gradient' | 'elevated';
@@ -142,7 +142,11 @@ export const Button: React.FC<ButtonProps> = ({
         accessibilityState={{ disabled: disabled || loading, busy: loading }}
       >
         <LinearGradient
-          colors={disabled ? ['#D1D5DB', '#9CA3AF'] : GRADIENT_COLORS.primary}
+          colors={
+            disabled
+              ? [colors.disabledGradientStart, colors.disabledGradientEnd]
+              : createGradientColors(colors).primary
+          }
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
           style={[styles.gradientContainer, styles[`${size}Container`]]}

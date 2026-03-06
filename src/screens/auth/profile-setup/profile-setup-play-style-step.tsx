@@ -9,6 +9,7 @@ import { View, Text, StyleSheet, Pressable } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 
 import { spacing, typography, borderRadius } from '../../../theme/tokens';
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { useThemeColors } from '../../../contexts/ThemeContext';
 import { useThemedStyles } from '../../../hooks/useThemedStyles';
 import type { ThemeColors } from '../../../contexts/theme-colors';
@@ -35,6 +36,7 @@ export interface PlayStyleStepProps {
 export const ProfileSetupPlayStyleStep = React.memo<PlayStyleStepProps>(
   ({ playStyle, onPlayStyleChange, lookingFor, onLookingForChange }) => {
     const styles = useThemedStyles(createStyles);
+    const { getEntering } = useReducedMotion();
     const toggleLookingFor = (id: string) => {
       if (lookingFor.includes(id)) {
         onLookingForChange(lookingFor.filter((i) => i !== id));
@@ -44,7 +46,7 @@ export const ProfileSetupPlayStyleStep = React.memo<PlayStyleStepProps>(
     };
 
     return (
-      <Animated.View entering={FadeInUp} style={styles.stepContent}>
+      <Animated.View entering={getEntering(FadeInUp)} style={styles.stepContent}>
         <Text style={styles.stepTitle}>Phong cách chơi</Text>
 
         <View style={styles.formField}>
