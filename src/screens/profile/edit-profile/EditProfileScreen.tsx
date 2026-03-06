@@ -7,13 +7,15 @@ import Animated, { FadeInUp } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
 
 import { Button } from '../../../components/Button';
-import { colors, spacing } from '../../../theme/tokens';
+import { spacing } from '../../../theme/tokens';
+import { useThemeColors } from '../../../contexts/ThemeContext';
+import { useThemedStyles } from '../../../hooks/useThemedStyles';
 import { useImagePicker } from '../../../hooks/useImagePicker';
 import { uploadProfileImage } from '../../../services/storage.service';
 import { updateProfile } from '../../../services/api/profile.service';
 import { showSuccess, showError } from '../../../services/toast';
 import { useAuth } from '../../../contexts/AuthContext';
-import { styles } from './edit-profile-styles';
+import { createStyles } from './edit-profile-styles';
 import { PhotoGrid } from './edit-profile-photo-grid';
 
 const SKILL_LEVELS = [
@@ -31,6 +33,8 @@ const PLAY_STYLES = [
 
 export const EditProfileScreen = () => {
   const navigation = useNavigation<any>();
+  const colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
   const { profile, user, refreshProfile } = useAuth();
 
   const [photos, setPhotos] = useState<string[]>([]);

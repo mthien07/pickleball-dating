@@ -18,7 +18,8 @@ import Animated, {
   withSpring,
   Easing,
 } from 'react-native-reanimated';
-import { colors, borderRadius, spacing } from '../theme/tokens';
+import { borderRadius, spacing } from '../theme/tokens';
+import { useThemeColors } from '../contexts/ThemeContext';
 
 // ============================================
 // TYPES
@@ -66,12 +67,15 @@ export interface ProgressBarProps {
 
 export const ProgressBar: React.FC<ProgressBarProps> = ({
   progress,
-  color = colors.primary,
-  trackColor = colors.border,
+  color,
+  trackColor,
   height = 8,
   style,
   animated = true,
 }) => {
+  const colors = useThemeColors();
+  const resolvedColor = color ?? colors.primary;
+  const resolvedTrackColor = trackColor ?? colors.border;
   // Clamp progress between 0 and 1
   const clampedProgress = Math.min(Math.max(progress, 0), 1);
   const widthValue = useSharedValue(0);
@@ -89,7 +93,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
 
   const progressStyle = useAnimatedStyle(() => ({
     width: `${widthValue.value * 100}%` as DimensionValue,
-    backgroundColor: color,
+    backgroundColor: resolvedColor,
   }));
 
   return (
@@ -98,7 +102,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
         styles.track,
         {
           height,
-          backgroundColor: trackColor,
+          backgroundColor: resolvedTrackColor,
           borderRadius: height / 2,
         },
         style,

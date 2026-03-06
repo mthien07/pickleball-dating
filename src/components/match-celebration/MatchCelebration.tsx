@@ -13,9 +13,10 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
 import * as Haptics from 'expo-haptics';
 import { Avatar } from '../Avatar';
-import { colors } from '../../theme/tokens';
+import { useThemeColors } from '../../contexts/ThemeContext';
+import { useThemedStyles } from '../../hooks/useThemedStyles';
 import { ConfettiParticle } from './confetti-particle';
-import { styles } from './match-celebration-styles';
+import { createStyles } from './match-celebration-styles';
 
 export interface MatchCelebrationProps {
   visible: boolean;
@@ -26,7 +27,6 @@ export interface MatchCelebrationProps {
   onSendMessage?: () => void;
 }
 
-const CONFETTI_COLORS = [colors.primary, '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899'];
 const CONFETTI_COUNT = 50;
 
 export const MatchCelebration: React.FC<MatchCelebrationProps> = ({
@@ -37,6 +37,9 @@ export const MatchCelebration: React.FC<MatchCelebrationProps> = ({
   onClose,
   onSendMessage,
 }) => {
+  const colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
+  const CONFETTI_COLORS = [colors.primary, '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899'];
   const scale = useSharedValue(0);
   const avatarScale = useSharedValue(0);
   const heartScale = useSharedValue(0);

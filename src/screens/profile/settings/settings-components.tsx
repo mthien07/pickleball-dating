@@ -9,7 +9,7 @@ import { View, Text, Pressable, Switch } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import { type ThemeColors } from '../../../contexts/ThemeContext';
-import { styles } from './settings-styles';
+import { createStyles } from './settings-styles';
 
 export interface SettingsRowProps {
   icon: string;
@@ -34,48 +34,57 @@ export const SettingsRow = React.memo<SettingsRowProps>(
     onToggle,
     danger = false,
     colors,
-  }) => (
-    <Pressable
-      style={({ pressed }) => [
-        styles.row,
-        { borderBottomColor: colors.border },
-        type !== 'toggle' && pressed && { opacity: 0.7 },
-      ]}
-      onPress={type !== 'toggle' ? onPress : undefined}
-      android_ripple={type !== 'toggle' ? { color: 'rgba(37, 99, 235, 0.15)' } : undefined}
-    >
-      <View
-        style={[
-          styles.rowIcon,
-          { backgroundColor: colors.background },
-          danger && { backgroundColor: `${colors.error}15` },
+  }) => {
+    const styles = createStyles(colors);
+    return (
+      <Pressable
+        style={({ pressed }) => [
+          styles.row,
+          { borderBottomColor: colors.border },
+          type !== 'toggle' && pressed && { opacity: 0.7 },
         ]}
+        onPress={type !== 'toggle' ? onPress : undefined}
+        android_ripple={type !== 'toggle' ? { color: 'rgba(37, 99, 235, 0.15)' } : undefined}
       >
-        <Ionicons
-          name={icon as React.ComponentProps<typeof Ionicons>['name']}
-          size={20}
-          color={danger ? colors.error : colors.primary}
-        />
-      </View>
-      <Text
-        style={[styles.rowLabel, { color: colors.textPrimary }, danger && { color: colors.error }]}
-      >
-        {label}
-      </Text>
-      {type === 'value' && (
-        <Text style={[styles.rowValue, { color: colors.textSecondary }]}>{value}</Text>
-      )}
-      {type === 'toggle' && (
-        <Switch
-          value={isToggled}
-          onValueChange={onToggle}
-          trackColor={{ false: colors.border, true: colors.primary }}
-          thumbColor={colors.white}
-        />
-      )}
-      {type === 'link' && <Ionicons name="chevron-forward" size={20} color={colors.textTertiary} />}
-    </Pressable>
-  )
+        <View
+          style={[
+            styles.rowIcon,
+            { backgroundColor: colors.background },
+            danger && { backgroundColor: `${colors.error}15` },
+          ]}
+        >
+          <Ionicons
+            name={icon as React.ComponentProps<typeof Ionicons>['name']}
+            size={20}
+            color={danger ? colors.error : colors.primary}
+          />
+        </View>
+        <Text
+          style={[
+            styles.rowLabel,
+            { color: colors.textPrimary },
+            danger && { color: colors.error },
+          ]}
+        >
+          {label}
+        </Text>
+        {type === 'value' && (
+          <Text style={[styles.rowValue, { color: colors.textSecondary }]}>{value}</Text>
+        )}
+        {type === 'toggle' && (
+          <Switch
+            value={isToggled}
+            onValueChange={onToggle}
+            trackColor={{ false: colors.border, true: colors.primary }}
+            thumbColor={colors.white}
+          />
+        )}
+        {type === 'link' && (
+          <Ionicons name="chevron-forward" size={20} color={colors.textTertiary} />
+        )}
+      </Pressable>
+    );
+  }
 );
 
 export interface SettingsSectionProps {
@@ -86,10 +95,13 @@ export interface SettingsSectionProps {
 }
 
 export const SettingsSection = React.memo<SettingsSectionProps>(
-  ({ title, children, delay = 0, colors }) => (
-    <Animated.View entering={FadeInUp.delay(delay)} style={styles.section}>
-      <Text style={[styles.sectionTitle, { color: colors.textSecondary }]}>{title}</Text>
-      <View style={[styles.sectionContent, { backgroundColor: colors.surface }]}>{children}</View>
-    </Animated.View>
-  )
+  ({ title, children, delay = 0, colors }) => {
+    const styles = createStyles(colors);
+    return (
+      <Animated.View entering={FadeInUp.delay(delay)} style={styles.section}>
+        <Text style={[styles.sectionTitle, { color: colors.textSecondary }]}>{title}</Text>
+        <View style={[styles.sectionContent, { backgroundColor: colors.surface }]}>{children}</View>
+      </Animated.View>
+    );
+  }
 );

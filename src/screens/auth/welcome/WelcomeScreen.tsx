@@ -10,8 +10,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { Mail, Phone } from 'lucide-react-native';
-import { colors } from '../../../theme/tokens';
-import { styles } from './welcome-styles';
+import { useThemeColors } from '../../../contexts/ThemeContext';
+import { useThemedStyles } from '../../../hooks/useThemedStyles';
+import { createStyles } from './welcome-styles';
 
 // Unified button for both Ionicons (social) and Lucide (action) icons
 const WelcomeButton = ({
@@ -28,35 +29,41 @@ const WelcomeButton = ({
   ionIcon?: string;
   ionIconColor?: string;
   LucideIcon?: any;
-}) => (
-  <Pressable
-    style={({ pressed }) => [
-      styles.button,
-      variant === 'filled' ? styles.buttonFilled : styles.buttonOutline,
-      pressed && { opacity: 0.8 },
-    ]}
-    onPress={onPress}
-    android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
-  >
-    <View style={styles.buttonContent}>
-      {ionIcon && (
-        <Ionicons
-          name={ionIcon as any}
-          size={20}
-          color={ionIconColor || colors.textPrimary}
-          style={styles.buttonIcon}
-        />
-      )}
-      {LucideIcon && <LucideIcon size={20} color={colors.primary} style={styles.buttonIcon} />}
-      <Text style={[styles.buttonText, variant === 'outline' && styles.buttonTextOutline]}>
-        {title}
-      </Text>
-    </View>
-  </Pressable>
-);
+}) => {
+  const colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
+  return (
+    <Pressable
+      style={({ pressed }) => [
+        styles.button,
+        variant === 'filled' ? styles.buttonFilled : styles.buttonOutline,
+        pressed && { opacity: 0.8 },
+      ]}
+      onPress={onPress}
+      android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+    >
+      <View style={styles.buttonContent}>
+        {ionIcon && (
+          <Ionicons
+            name={ionIcon as any}
+            size={20}
+            color={ionIconColor || colors.textPrimary}
+            style={styles.buttonIcon}
+          />
+        )}
+        {LucideIcon && <LucideIcon size={20} color={colors.primary} style={styles.buttonIcon} />}
+        <Text style={[styles.buttonText, variant === 'outline' && styles.buttonTextOutline]}>
+          {title}
+        </Text>
+      </View>
+    </Pressable>
+  );
+};
 
 export const WelcomeScreen = () => {
   const navigation = useNavigation<any>();
+  const colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
 
   return (
     <View style={styles.container}>

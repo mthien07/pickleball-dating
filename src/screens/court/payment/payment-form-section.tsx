@@ -4,8 +4,10 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 
-import { colors, spacing } from '../../../theme/tokens';
-import { styles } from './payment-styles';
+import { spacing } from '../../../theme/tokens';
+import { useThemeColors } from '../../../contexts/ThemeContext';
+import { useThemedStyles } from '../../../hooks/useThemedStyles';
+import { createStyles } from './payment-styles';
 
 export type PaymentMethod = 'card' | 'momo' | 'zalopay';
 
@@ -35,6 +37,8 @@ const METHOD_INFO = {
 
 export const PaymentMethodCard = React.memo(
   ({ method, isSelected, onSelect }: PaymentMethodCardProps) => {
+    const colors = useThemeColors();
+    const styles = useThemedStyles(createStyles);
     const info = METHOD_INFO[method];
     return (
       <Pressable
@@ -76,6 +80,8 @@ interface CreditCardFormProps {
 
 export const CreditCardForm = React.memo(
   ({ onCardChange, gradientColors, chipColor }: CreditCardFormProps) => {
+    const colors = useThemeColors();
+    const styles = useThemedStyles(createStyles);
     const [cardNumber, setCardNumber] = useState('');
     const [expiry, setExpiry] = useState('');
     const [cvv, setCvv] = useState('');

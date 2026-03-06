@@ -22,10 +22,12 @@ import * as Haptics from 'expo-haptics';
 
 import { Button } from '../../../components/Button';
 import { Avatar } from '../../../components/Avatar';
-import { colors, spacing } from '../../../theme/tokens';
+import { spacing } from '../../../theme/tokens';
+import { useThemeColors } from '../../../contexts/ThemeContext';
+import { useThemedStyles } from '../../../hooks/useThemedStyles';
 import { showSuccess } from '../../../services/toast';
 import { MOCK_USERS } from '@data/mockData';
-import { styles } from './styles';
+import { createStyles } from './styles';
 import { StarRating } from './StarRating';
 import { RatingCategory } from './RatingCategory';
 
@@ -40,6 +42,8 @@ const RATING_LABELS: Record<number, string> = {
 export const RatingScreen = () => {
   const navigation = useNavigation<any>();
   const route = useRoute<any>();
+  const colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
   const { userId, userName } = route.params || {};
 
   const user = MOCK_USERS.find((u: any) => u.id === userId) || MOCK_USERS[1];

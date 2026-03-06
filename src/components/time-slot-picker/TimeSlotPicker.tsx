@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { View, Text, ScrollView } from 'react-native';
-import { styles } from './time-slot-styles';
+import { useThemedStyles } from '../../hooks/useThemedStyles';
+import { createStyles } from './time-slot-styles';
 import { TimeSlotItem } from './TimeSlotItem';
 
 export interface TimeSlot {
@@ -31,6 +32,7 @@ interface SlotSectionProps {
 /** Memoized section to avoid re-rendering unaffected time periods */
 const SlotSection = React.memo(
   ({ title, sectionSlots, startIndex, selectedSlotIds, onSlotSelect }: SlotSectionProps) => {
+    const styles = useThemedStyles(createStyles);
     if (sectionSlots.length === 0) {
       return null;
     }
@@ -60,6 +62,7 @@ export const TimeSlotPicker: React.FC<TimeSlotPickerProps> = ({
   selectedSlotIds,
   onSlotSelect,
 }) => {
+  const styles = useThemedStyles(createStyles);
   // Memoize slot groups - avoids re-filtering on every render
   const morningSlots = useMemo(
     () =>

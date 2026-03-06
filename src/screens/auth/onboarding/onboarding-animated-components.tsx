@@ -12,8 +12,9 @@ import Animated, {
   withSequence,
   withSpring,
 } from 'react-native-reanimated';
-import { colors } from '../../../theme/tokens';
-import { styles } from './onboarding-styles';
+import { useThemeColors } from '../../../contexts/ThemeContext';
+import { useThemedStyles } from '../../../hooks/useThemedStyles';
+import { createStyles } from './onboarding-styles';
 
 // Animated background blob with rotation and scale
 export const AnimatedBlob = React.memo(
@@ -34,6 +35,7 @@ export const AnimatedBlob = React.memo(
     duration: number;
     initialRotate?: number;
   }) => {
+    const styles = useThemedStyles(createStyles);
     const rotation = useSharedValue(initialRotate);
     const scale = useSharedValue(1);
 
@@ -85,6 +87,8 @@ export const PulsingHeartLogo = React.memo(
     pulseColor: string;
     pulseBorderColor: string;
   }) => {
+    const colors = useThemeColors();
+    const styles = useThemedStyles(createStyles);
     const pulseScale = useSharedValue(1);
 
     useEffect(() => {
@@ -146,6 +150,8 @@ export const FloatingCard = React.memo(
     likeGradient?: readonly [string, string];
     iconColor?: string;
   }) => {
+    const colors = useThemeColors();
+    const styles = useThemedStyles(createStyles);
     const floatY = useSharedValue(0);
 
     useEffect(() => {

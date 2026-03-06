@@ -5,10 +5,10 @@ import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeInUp, FadeIn } from 'react-native-reanimated';
 
 import { Button } from '../../../components/Button';
-import { colors } from '../../../theme/tokens';
 import { MOCK_COURTS, MOCK_REVIEWS } from '@data/mockData';
 import { useThemeColors } from '../../../contexts/ThemeContext';
-import { styles } from './court-detail-styles';
+import { useThemedStyles } from '../../../hooks/useThemedStyles';
+import { createStyles } from './court-detail-styles';
 import {
   ImageCarousel,
   HeaderInfo,
@@ -25,7 +25,8 @@ export const CourtDetailScreen = () => {
   const navigation = useNavigation<any>();
   const route = useRoute<RouteProp<CourtDetailRouteParams, 'CourtDetail'>>();
   const { courtId } = route.params || {};
-  const themeColors = useThemeColors();
+  const colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const scrollRef = useRef<ScrollView>(null);
@@ -55,7 +56,7 @@ export const CourtDetailScreen = () => {
       />
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        <HeaderInfo court={court} starColor={themeColors.starColor} />
+        <HeaderInfo court={court} starColor={colors.starColor} />
         <LocationSection address={court.address} />
         <AmenitiesSection amenities={court.amenities} />
 
@@ -79,9 +80,7 @@ export const CourtDetailScreen = () => {
           </Text>
         </Animated.View>
 
-        {reviews.length > 0 && (
-          <ReviewsSection reviews={reviews} starColor={themeColors.starColor} />
-        )}
+        {reviews.length > 0 && <ReviewsSection reviews={reviews} starColor={colors.starColor} />}
 
         <View style={{ height: 120 }} />
       </ScrollView>

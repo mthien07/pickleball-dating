@@ -15,7 +15,8 @@ import Animated, {
 } from 'react-native-reanimated';
 import { WifiOff, Wifi } from 'lucide-react-native';
 import { useOfflineIndicator } from '../hooks/useOfflineQuery';
-import { colors, spacing, typography } from '../theme/tokens';
+import { spacing, typography } from '../theme/tokens';
+import { useThemeColors } from '../contexts/ThemeContext';
 
 // ============================================
 // TYPES
@@ -34,6 +35,7 @@ export interface OfflineIndicatorProps {
 // ============================================
 
 export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({ position = 'top' }) => {
+  const colors = useThemeColors();
   const { shouldShowOfflineBanner, networkType, isWifi } = useOfflineIndicator();
 
   // Animation values
@@ -83,6 +85,7 @@ export const OfflineIndicator: React.FC<OfflineIndicatorProps> = ({ position = '
  * Shows when connection is restored
  */
 export const OnlineIndicator: React.FC = () => {
+  const colors = useThemeColors();
   const { shouldShowOfflineBanner } = useOfflineIndicator();
   const [wasOffline, setWasOffline] = React.useState(false);
   const [showReconnected, setShowReconnected] = React.useState(false);
@@ -129,12 +132,12 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: spacing.md,
     right: spacing.md,
-    backgroundColor: colors.error,
+    backgroundColor: '#EF4444', // error red
     paddingHorizontal: spacing.lg,
     paddingVertical: 14,
     zIndex: 9999,
-    borderRadius: 16, // Modern rounded corners
-    shadowColor: colors.error,
+    borderRadius: 16,
+    shadowColor: '#EF4444',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 12,
@@ -150,8 +153,8 @@ const styles = StyleSheet.create({
   },
 
   online: {
-    backgroundColor: colors.secondary, // Green
-    shadowColor: colors.secondary,
+    backgroundColor: '#10B981', // success green
+    shadowColor: '#10B981',
   },
 
   content: {
@@ -163,13 +166,13 @@ const styles = StyleSheet.create({
 
   text: {
     ...typography.body,
-    color: colors.white,
+    color: '#FFFFFF',
     fontWeight: '600',
   },
 
   subtext: {
     ...typography.bodySmall,
-    color: colors.white,
+    color: '#FFFFFF',
     opacity: 0.85,
   },
 });

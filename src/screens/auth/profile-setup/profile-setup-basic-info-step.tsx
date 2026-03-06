@@ -8,7 +8,10 @@ import React from 'react';
 import { View, Text, StyleSheet, Pressable, TextInput } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 
-import { colors, spacing, typography, borderRadius } from '../../../theme/tokens';
+import { spacing, typography, borderRadius } from '../../../theme/tokens';
+import { useThemeColors } from '../../../contexts/ThemeContext';
+import { useThemedStyles } from '../../../hooks/useThemedStyles';
+import type { ThemeColors } from '../../../contexts/theme-colors';
 
 export interface BasicInfoStepProps {
   name: string;
@@ -21,6 +24,8 @@ export interface BasicInfoStepProps {
 
 export const ProfileSetupBasicInfoStep = React.memo<BasicInfoStepProps>(
   ({ name, onNameChange, birthDate, onBirthDateChange, gender, onGenderChange }) => {
+    const colors = useThemeColors();
+    const styles = useThemedStyles(createStyles);
     // Auto-format birth date as DD/MM/YYYY
     const handleBirthDateChange = (text: string) => {
       const numbersOnly = text.replace(/[^0-9]/g, '');
@@ -94,61 +99,62 @@ export const ProfileSetupBasicInfoStep = React.memo<BasicInfoStepProps>(
 
 ProfileSetupBasicInfoStep.displayName = 'ProfileSetupBasicInfoStep';
 
-const styles = StyleSheet.create({
-  stepContent: {
-    paddingTop: spacing.lg,
-  },
-  stepTitle: {
-    ...typography.h2,
-    color: colors.textPrimary,
-    marginBottom: spacing.xs,
-  },
-  formField: {
-    marginBottom: spacing.lg,
-  },
-  fieldLabel: {
-    ...typography.label,
-    color: colors.textSecondary,
-    marginBottom: spacing.sm,
-  },
-  input: {
-    backgroundColor: colors.surface,
-    borderRadius: borderRadius.md,
-    borderWidth: 1,
-    borderColor: colors.border,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.md,
-    ...typography.body,
-    color: colors.textPrimary,
-  },
-  hint: {
-    color: colors.textTertiary,
-    fontSize: 12,
-    marginTop: 4,
-  },
-  optionRow: {
-    flexDirection: 'row',
-    gap: spacing.sm,
-  },
-  optionButton: {
-    flex: 1,
-    paddingVertical: spacing.md,
-    borderRadius: borderRadius.md,
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.border,
-    alignItems: 'center',
-  },
-  optionButtonSelected: {
-    backgroundColor: colors.primary,
-    borderColor: colors.primary,
-  },
-  optionText: {
-    ...typography.body,
-    fontWeight: '600',
-    color: colors.textPrimary,
-  },
-  optionTextSelected: {
-    color: colors.white,
-  },
-});
+const createStyles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    stepContent: {
+      paddingTop: spacing.lg,
+    },
+    stepTitle: {
+      ...typography.h2,
+      color: colors.textPrimary,
+      marginBottom: spacing.xs,
+    },
+    formField: {
+      marginBottom: spacing.lg,
+    },
+    fieldLabel: {
+      ...typography.label,
+      color: colors.textSecondary,
+      marginBottom: spacing.sm,
+    },
+    input: {
+      backgroundColor: colors.surface,
+      borderRadius: borderRadius.md,
+      borderWidth: 1,
+      borderColor: colors.border,
+      paddingHorizontal: spacing.md,
+      paddingVertical: spacing.md,
+      ...typography.body,
+      color: colors.textPrimary,
+    },
+    hint: {
+      color: colors.textTertiary,
+      fontSize: 12,
+      marginTop: 4,
+    },
+    optionRow: {
+      flexDirection: 'row',
+      gap: spacing.sm,
+    },
+    optionButton: {
+      flex: 1,
+      paddingVertical: spacing.md,
+      borderRadius: borderRadius.md,
+      backgroundColor: colors.surface,
+      borderWidth: 1,
+      borderColor: colors.border,
+      alignItems: 'center',
+    },
+    optionButtonSelected: {
+      backgroundColor: colors.primary,
+      borderColor: colors.primary,
+    },
+    optionText: {
+      ...typography.body,
+      fontWeight: '600',
+      color: colors.textPrimary,
+    },
+    optionTextSelected: {
+      color: colors.white,
+    },
+  });

@@ -6,9 +6,10 @@
 import React, { useState } from 'react';
 import { View, TextInput, Text, TextInputProps, Pressable } from 'react-native';
 import { Eye, EyeOff, X } from 'lucide-react-native';
-import { colors } from '../../theme/tokens';
+import { useThemeColors } from '../../contexts/ThemeContext';
+import { useThemedStyles } from '../../hooks/useThemedStyles';
 import { InputProps } from './input-types';
-import { styles } from './input-styles';
+import { createStyles } from './input-styles';
 
 const getKeyboardType = (type: InputProps['type']): TextInputProps['keyboardType'] => {
   switch (type) {
@@ -42,6 +43,8 @@ export const WebInput: React.FC<InputProps> = ({
   onClear,
   ...textInputProps
 }) => {
+  const colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
   const [isFocused, setIsFocused] = useState(false);
   const [isSecureText, setIsSecureText] = useState(type === 'password');
 

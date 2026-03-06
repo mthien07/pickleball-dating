@@ -2,9 +2,10 @@ import React from 'react';
 import { Pressable, Text } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, { FadeInUp } from 'react-native-reanimated';
-import { colors } from '../../theme/tokens';
+import { useThemeColors } from '../../contexts/ThemeContext';
+import { useThemedStyles } from '../../hooks/useThemedStyles';
 import { TimeSlot } from './TimeSlotPicker';
-import { styles } from './time-slot-styles';
+import { createStyles } from './time-slot-styles';
 
 interface SlotProps {
   slot: TimeSlot;
@@ -18,6 +19,8 @@ const formatPrice = (price: number): string => `${(price / 1000).toFixed(0)}k`;
 /** Single time slot cell with available/selected/booked states */
 export const TimeSlotItem: React.FC<SlotProps> = React.memo(
   ({ slot, isSelected, onPress, index }) => {
+    const colors = useThemeColors();
+    const styles = useThemedStyles(createStyles);
     if (!slot.isAvailable) {
       return (
         <Animated.View

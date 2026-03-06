@@ -10,8 +10,9 @@ import Animated, {
   interpolate,
 } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
-import { colors } from '../../theme/tokens';
-import { styles } from './message-input-styles';
+import { useThemeColors } from '../../contexts/ThemeContext';
+import { useThemedStyles } from '../../hooks/useThemedStyles';
+import { createStyles } from './message-input-styles';
 
 export interface MessageInputProps {
   onSend: (text: string) => void;
@@ -28,6 +29,8 @@ export const MessageInput: React.FC<MessageInputProps> = ({
   placeholder = 'Nhắn tin...',
   disabled = false,
 }) => {
+  const colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
   const [text, setText] = useState('');
   const inputRef = useRef<TextInput>(null);
 

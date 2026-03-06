@@ -8,28 +8,33 @@ import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 
-import { colors } from '../../../theme/tokens';
-import { styles } from './court-discovery-styles';
+import { useThemeColors } from '../../../contexts/ThemeContext';
+import { useThemedStyles } from '../../../hooks/useThemedStyles';
+import { createStyles } from './court-discovery-styles';
 
 // ============================================
 // STAR RATING
 // ============================================
 
-export const StarRating = React.memo(({ rating, count }: { rating: number; count: number }) => (
-  <View style={styles.starContainer}>
-    <View style={{ flexDirection: 'row' }}>
-      {[1, 2, 3, 4, 5].map((star) => (
-        <Ionicons
-          key={star}
-          name={star <= rating ? 'star' : 'star-outline'}
-          size={14}
-          color={colors.accent}
-        />
-      ))}
+export const StarRating = React.memo(({ rating, count }: { rating: number; count: number }) => {
+  const colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
+  return (
+    <View style={styles.starContainer}>
+      <View style={{ flexDirection: 'row' }}>
+        {[1, 2, 3, 4, 5].map((star) => (
+          <Ionicons
+            key={star}
+            name={star <= rating ? 'star' : 'star-outline'}
+            size={14}
+            color={colors.accent}
+          />
+        ))}
+      </View>
+      <Text style={styles.reviewCount}>({count})</Text>
     </View>
-    <Text style={styles.reviewCount}>({count})</Text>
-  </View>
-));
+  );
+});
 
 // ============================================
 // COURT CARD
@@ -42,6 +47,8 @@ interface CourtCardProps {
 }
 
 export const CourtCard = React.memo(({ court, onPress, onBook }: CourtCardProps) => {
+  const colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
   const imageUrl =
     court.images && court.images.length > 0
       ? court.images[0]
@@ -106,23 +113,31 @@ export const CourtCard = React.memo(({ court, onPress, onBook }: CourtCardProps)
 // MAP PLACEHOLDER
 // ============================================
 
-export const MapPlaceholder = React.memo(() => (
-  <View style={styles.mapPlaceholder}>
-    <LinearGradient colors={[colors.surface, colors.background]} style={styles.mapGradient}>
-      <Ionicons name="map" size={64} color={colors.primary} />
-      <Text style={styles.mapText}>Bản Đồ Tương Tác</Text>
-      <Text style={styles.mapSubtext}>Sắp ra mắt</Text>
-    </LinearGradient>
-  </View>
-));
+export const MapPlaceholder = React.memo(() => {
+  const colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
+  return (
+    <View style={styles.mapPlaceholder}>
+      <LinearGradient colors={[colors.surface, colors.background]} style={styles.mapGradient}>
+        <Ionicons name="map" size={64} color={colors.primary} />
+        <Text style={styles.mapText}>Bản Đồ Tương Tác</Text>
+        <Text style={styles.mapSubtext}>Sắp ra mắt</Text>
+      </LinearGradient>
+    </View>
+  );
+});
 
 // ============================================
 // EMPTY STATE
 // ============================================
 
-export const EmptyState = React.memo(() => (
-  <View style={styles.emptyState}>
-    <Ionicons name="map-outline" size={48} color={colors.textTertiary} />
-    <Text style={styles.emptyText}>Không tìm thấy sân</Text>
-  </View>
-));
+export const EmptyState = React.memo(() => {
+  const colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
+  return (
+    <View style={styles.emptyState}>
+      <Ionicons name="map-outline" size={48} color={colors.textTertiary} />
+      <Text style={styles.emptyText}>Không tìm thấy sân</Text>
+    </View>
+  );
+});

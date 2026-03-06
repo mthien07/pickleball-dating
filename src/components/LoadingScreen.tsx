@@ -12,7 +12,8 @@
 import React from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, Modal } from 'react-native';
 import { BlurView } from 'expo-blur';
-import { colors, spacing, typography } from '../theme/tokens';
+import { spacing, typography } from '../theme/tokens';
+import { useThemeColors } from '../contexts/ThemeContext';
 
 interface LoadingScreenProps {
   visible?: boolean;
@@ -25,6 +26,7 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({
   message,
   overlay = false,
 }) => {
+  const colors = useThemeColors();
   if (!visible) {
     return null;
   }
@@ -63,7 +65,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: colors.background,
+    backgroundColor: '#F8FAFC',
   },
   overlayContainer: {
     backgroundColor: 'transparent',
@@ -76,11 +78,11 @@ const styles = StyleSheet.create({
   },
   card: {
     padding: spacing.xl,
-    backgroundColor: colors.surface,
+    backgroundColor: '#FFFFFF',
     borderRadius: 16,
     alignItems: 'center',
     minWidth: 150,
-    shadowColor: colors.black,
+    shadowColor: '#000000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
     shadowRadius: 12,
@@ -88,12 +90,12 @@ const styles = StyleSheet.create({
   },
   message: {
     ...typography.body,
-    color: colors.textSecondary,
+    color: '#64748B',
     marginTop: spacing.md,
   },
   cardMessage: {
     ...typography.body,
-    color: colors.textPrimary,
+    color: '#1E293B',
     marginTop: spacing.md,
     textAlign: 'center',
   },

@@ -7,13 +7,14 @@
 
 import React from 'react';
 import { BaseToast, ErrorToast, BaseToastProps } from 'react-native-toast-message';
-import { colors, typography, spacing, borderRadius } from '../theme/tokens';
+import { typography, spacing, borderRadius } from '../theme/tokens';
+import type { ThemeColors } from '../contexts/theme-colors';
 
 // ============================================
 // TOAST CONFIG
 // ============================================
 
-export const toastConfig = {
+export const createToastConfig = (colors: ThemeColors) => ({
   /*
     Success Toast
   */
@@ -94,4 +95,4 @@ export const toastConfig = {
       }}
     />
   ),
-};
+});

@@ -21,13 +21,16 @@ import { Input, PasswordInput } from '../../../components/Input';
 import { Button } from '../../../components/Button';
 import { supabase } from '../../../services/supabase';
 import { showSuccess, showError } from '../../../services/toast';
-import { colors } from '../../../theme/tokens';
+import { useThemeColors } from '../../../contexts/ThemeContext';
+import { useThemedStyles } from '../../../hooks/useThemedStyles';
 import { RoleCard, Checkbox } from './signup-design-components';
-import { styles } from './signup-design-styles';
+import { createStyles } from './signup-design-styles';
 
 type SignupRole = 'owner' | 'player' | 'coach';
 
 export default function SignupScreenDesign({ navigation }: { navigation?: any }) {
+  const colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');

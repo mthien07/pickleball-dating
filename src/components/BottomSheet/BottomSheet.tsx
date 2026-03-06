@@ -21,7 +21,8 @@ import GorhomBottomSheet, {
   BottomSheetHandle,
   BottomSheetHandleProps,
 } from '@gorhom/bottom-sheet';
-import { colors, spacing, borderRadius } from '../../theme/tokens';
+import { spacing, borderRadius } from '../../theme/tokens';
+import { useThemeColors } from '../../contexts/ThemeContext';
 
 // ============================================
 // TYPES
@@ -127,12 +128,14 @@ export const BottomSheet = forwardRef<BottomSheetRef, BottomSheetProps>(
       initialSnapIndex = 0,
       enablePanDownToClose = true,
       enableBackdrop = true,
-      backgroundColor = colors.surface,
+      backgroundColor,
       onChange,
       onClose,
     },
     ref
   ) => {
+    const colors = useThemeColors();
+    const resolvedBackgroundColor = backgroundColor ?? colors.surface;
     // Memoize snap points
     const memoizedSnapPoints = useMemo(() => snapPoints, [snapPoints]);
 
@@ -164,7 +167,7 @@ export const BottomSheet = forwardRef<BottomSheetRef, BottomSheetProps>(
         enablePanDownToClose={enablePanDownToClose}
         backdropComponent={renderBackdrop}
         handleComponent={CustomHandle}
-        backgroundStyle={{ backgroundColor }}
+        backgroundStyle={{ backgroundColor: resolvedBackgroundColor }}
         onChange={handleChange}
       >
         <View style={styles.contentContainer}>{children}</View>
@@ -187,7 +190,7 @@ const styles = StyleSheet.create({
   handleIndicator: {
     width: 40,
     height: 4,
-    backgroundColor: colors.border,
+    backgroundColor: '#E2E8F0', // border color
     borderRadius: borderRadius.sm,
   },
   contentContainer: {

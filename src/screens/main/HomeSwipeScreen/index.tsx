@@ -6,20 +6,21 @@ import { X, Star, Heart, User } from 'lucide-react-native';
 
 import { SwipeCard, SwipeCardRef } from '../../../components/SwipeCard';
 import { EmptyState } from '../../../components/EmptyState';
-import { colors } from '../../../theme/tokens';
 import { CARD_WIDTH, CARD_MAX_WIDTH } from '../../../theme/breakpoints';
 import { MOCK_USERS } from '@data/mockData';
 import { showSuccess, showInfo } from '../../../services/toast';
 import { useThemeColors } from '../../../contexts/ThemeContext';
+import { useThemedStyles } from '../../../hooks/useThemedStyles';
 import { useResponsive } from '../../../hooks/useResponsive';
 import { useWebUtils } from '../../../hooks/useWebUtils';
 import { webStyles } from '../../../theme/webStyles';
-import { styles } from './styles';
+import { createStyles } from './styles';
 
 const { width: screenWidth } = Dimensions.get('window');
 
 export const HomeSwipeScreen = () => {
   const themeColors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
   const [currentIndex, setCurrentIndex] = useState(0);
   const swipeCardRef = useRef<SwipeCardRef>(null);
 
@@ -126,14 +127,14 @@ export const HomeSwipeScreen = () => {
               android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
               hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             >
-              <User size={24} color={colors.textPrimary} strokeWidth={2} />
+              <User size={24} color={themeColors.textPrimary} strokeWidth={2} />
             </Pressable>
           </View>
 
           {/* Card Stack */}
           <View style={styles.cardContainer}>
             <LinearGradient
-              colors={[colors.secondary, colors.primary, colors.accent]}
+              colors={[themeColors.secondary, themeColors.primary, themeColors.accent]}
               locations={[0, 0.5, 1]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
@@ -169,7 +170,7 @@ export const HomeSwipeScreen = () => {
               onPress={() => swipeCardRef.current?.swipe('left')}
               android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
             >
-              <X size={32} color={colors.textSecondary} strokeWidth={2.5} />
+              <X size={32} color={themeColors.textSecondary} strokeWidth={2.5} />
             </Pressable>
 
             <Pressable
@@ -182,12 +183,17 @@ export const HomeSwipeScreen = () => {
               android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
             >
               <LinearGradient
-                colors={[colors.primary, colors.primaryLight]}
+                colors={[themeColors.primary, themeColors.primaryLight]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
                 style={styles.superLikeGradient}
               >
-                <Star size={26} color={colors.white} fill={colors.white} strokeWidth={0} />
+                <Star
+                  size={26}
+                  color={themeColors.white}
+                  fill={themeColors.white}
+                  strokeWidth={0}
+                />
               </LinearGradient>
             </Pressable>
 
@@ -201,12 +207,17 @@ export const HomeSwipeScreen = () => {
               android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
             >
               <LinearGradient
-                colors={[colors.accent, colors.accentLight]}
+                colors={[themeColors.accent, themeColors.accentLight]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
                 style={styles.likeGradient}
               >
-                <Heart size={30} color={colors.white} fill={colors.white} strokeWidth={0} />
+                <Heart
+                  size={30}
+                  color={themeColors.white}
+                  fill={themeColors.white}
+                  strokeWidth={0}
+                />
               </LinearGradient>
             </Pressable>
           </View>

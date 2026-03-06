@@ -13,7 +13,10 @@ import { Ionicons } from '@expo/vector-icons';
 
 import { Button } from '../../../components/Button';
 import { ProgressBar } from '../../../components/ProgressBar';
-import { colors, spacing } from '../../../theme/tokens';
+import { spacing } from '../../../theme/tokens';
+import { useThemeColors } from '../../../contexts/ThemeContext';
+import { useThemedStyles } from '../../../hooks/useThemedStyles';
+import type { ThemeColors } from '../../../contexts/theme-colors';
 
 import { useProfileSetupForm, TOTAL_STEPS } from './use-profile-setup-form';
 import { ProfileSetupPhotoStep } from './profile-setup-photo-step';
@@ -24,6 +27,8 @@ import { ProfileSetupBioStep } from './profile-setup-bio-step';
 
 export const ProfileSetupScreen = () => {
   const navigation = useNavigation<any>();
+  const colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
   const [currentStep, setCurrentStep] = useState(0);
 
   const form = useProfileSetupForm();
@@ -135,42 +140,43 @@ export const ProfileSetupScreen = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-  safeArea: {
-    flex: 1,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-  },
-  backButton: {
-    width: 44,
-    height: 44,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  progressContainer: {
-    flex: 1,
-    marginHorizontal: spacing.md,
-  },
-  spacer: {
-    width: 44,
-  },
-  content: {
-    flex: 1,
-    paddingHorizontal: spacing.lg,
-  },
-  footer: {
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
-    paddingBottom: spacing.xl,
-  },
-});
+const createStyles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.background,
+    },
+    safeArea: {
+      flex: 1,
+    },
+    header: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingHorizontal: spacing.md,
+      paddingVertical: spacing.sm,
+    },
+    backButton: {
+      width: 44,
+      height: 44,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    progressContainer: {
+      flex: 1,
+      marginHorizontal: spacing.md,
+    },
+    spacer: {
+      width: 44,
+    },
+    content: {
+      flex: 1,
+      paddingHorizontal: spacing.lg,
+    },
+    footer: {
+      paddingHorizontal: spacing.lg,
+      paddingVertical: spacing.md,
+      paddingBottom: spacing.xl,
+    },
+  });
 
 export default ProfileSetupScreen;

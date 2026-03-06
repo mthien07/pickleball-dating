@@ -5,7 +5,7 @@
 
 import React from 'react';
 import { Search } from 'lucide-react-native';
-import { colors } from '../../theme/tokens';
+import { useThemeColors } from '../../contexts/ThemeContext';
 import { InputProps } from './input-types';
 import { Input } from './input-base';
 
@@ -13,14 +13,17 @@ import { Input } from './input-base';
  * Search Input
  * Pre-configured search input with pill shape and search icon
  */
-export const SearchInput: React.FC<Omit<InputProps, 'type'>> = (props) => (
-  <Input
-    {...props}
-    type="search"
-    clearable
-    leadingIcon={<Search size={20} color={colors.textSecondary} strokeWidth={2} />}
-  />
-);
+export const SearchInput: React.FC<Omit<InputProps, 'type'>> = (props) => {
+  const colors = useThemeColors();
+  return (
+    <Input
+      {...props}
+      type="search"
+      clearable
+      leadingIcon={<Search size={20} color={colors.textSecondary} strokeWidth={2} />}
+    />
+  );
+};
 
 /**
  * Email Input

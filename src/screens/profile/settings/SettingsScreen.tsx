@@ -14,9 +14,10 @@ import { Ionicons } from '@expo/vector-icons';
 
 import { spacing } from '../../../theme/tokens';
 import { useTheme, ThemeMode } from '../../../contexts/ThemeContext';
+import { useThemedStyles } from '../../../hooks/useThemedStyles';
 import { RootStackParamList, ProfileStackParamList } from '../../../navigation/types';
 import { SettingsRow, SettingsSection } from './settings-components';
-import { styles } from './settings-styles';
+import { createStyles } from './settings-styles';
 
 type SettingsNav = CompositeNavigationProp<
   StackNavigationProp<ProfileStackParamList, 'Settings'>,
@@ -27,6 +28,7 @@ export const SettingsScreen = () => {
   const navigation = useNavigation<SettingsNav>();
   const { theme, themeMode, setThemeMode } = useTheme();
   const colors = theme.colors;
+  const styles = useThemedStyles(createStyles);
 
   const [notifications, setNotifications] = useState({
     newMatches: true,
@@ -80,9 +82,9 @@ export const SettingsScreen = () => {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <View style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
-        <View style={[styles.header, { borderBottomColor: colors.border }]}>
+        <View style={styles.header}>
           <Pressable
             onPress={() => navigation.goBack()}
             style={({ pressed }) => [styles.backButton, pressed && { opacity: 0.7 }]}
@@ -91,7 +93,7 @@ export const SettingsScreen = () => {
           >
             <Ionicons name="chevron-back" size={28} color={colors.textPrimary} />
           </Pressable>
-          <Text style={[styles.headerTitle, { color: colors.textPrimary }]}>Cài đặt</Text>
+          <Text style={styles.headerTitle}>Cài đặt</Text>
           <View style={{ width: 44 }} />
         </View>
 

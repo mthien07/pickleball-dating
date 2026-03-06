@@ -1,8 +1,10 @@
 import React from 'react';
 import { View, Text, ViewStyle } from 'react-native';
 import { Image } from 'expo-image';
-import { colors, avatarSizes } from '../../theme/tokens';
-import { styles, AVATAR_COLORS } from './avatar-styles';
+import { avatarSizes } from '../../theme/tokens';
+import { useThemeColors } from '../../contexts/ThemeContext';
+import { useThemedStyles } from '../../hooks/useThemedStyles';
+import { createStyles, AVATAR_COLORS } from './avatar-styles';
 
 export type AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
@@ -35,9 +37,12 @@ export const Avatar: React.FC<AvatarProps> = ({
   name,
   isOnline = false,
   showBorder = false,
-  borderColor = colors.white,
+  borderColor,
   style,
 }) => {
+  const colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
+  borderColor = borderColor ?? colors.white;
   const sizeValue = avatarSizes[size];
   const initials = getInitials(name);
   const backgroundColor = getBackgroundColor(name);

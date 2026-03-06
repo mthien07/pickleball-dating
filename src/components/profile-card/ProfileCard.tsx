@@ -4,11 +4,13 @@ import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
-import { colors, borderRadius } from '../../theme/tokens';
+import { borderRadius } from '../../theme/tokens';
+import { useThemeColors } from '../../contexts/ThemeContext';
+import { useThemedStyles } from '../../hooks/useThemedStyles';
 import { shadows } from '../../theme/shadows';
 import { CARD_MAX_WIDTH, CARD_ASPECT_RATIO } from '../../theme/breakpoints';
 import { User } from '@data/mockData';
-import { styles } from './profile-card-styles';
+import { createStyles } from './profile-card-styles';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -48,6 +50,8 @@ export const ProfileCard = React.memo<ProfileCardProps>(
     currentImageIndex = 0,
     cardWidth,
   }) => {
+    const colors = useThemeColors();
+    const styles = useThemedStyles(createStyles);
     const width = cardWidth || DEFAULT_CARD_WIDTH;
     const scale = useSharedValue(1);
 

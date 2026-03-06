@@ -10,6 +10,7 @@ import { View, Text, StyleSheet, ViewStyle } from 'react-native';
 import { Image, ImageSource } from 'expo-image';
 import { Heart, MapPin, MessageCircle, AlertTriangle, FolderOpen } from 'lucide-react-native';
 import { colors, spacing, typography } from '../theme/tokens';
+import { useThemeColors } from '../contexts/ThemeContext';
 import { Button } from './Button';
 
 // ============================================
@@ -64,7 +65,10 @@ export interface EmptyStateProps {
 // COMPONENT
 // ============================================
 
-const DefaultIcon = () => <FolderOpen size={48} color={colors.textTertiary} />;
+const DefaultIcon = () => {
+  const colors = useThemeColors();
+  return <FolderOpen size={48} color={colors.textTertiary} />;
+};
 
 export const EmptyState: React.FC<EmptyStateProps> = ({
   title,
@@ -108,40 +112,52 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
 // ============================================
 
 export const EmptyStatePresets = {
-  NoMatches: (props: Partial<EmptyStateProps>) => (
-    <EmptyState
-      title="Chưa Có Kết Quả"
-      message="Vuốt để tìm bạn chơi pickleball!"
-      icon={<Heart size={48} color={colors.accent} />}
-      actionLabel="Bắt Đầu"
-      {...props}
-    />
-  ),
-  NoCourts: (props: Partial<EmptyStateProps>) => (
-    <EmptyState
-      title="Không Tìm Thấy Sân"
-      message="Thử điều chỉnh bộ lọc hoặc tìm ở khu vực khác."
-      icon={<MapPin size={48} color={colors.primary} />}
-      {...props}
-    />
-  ),
-  NoMessages: (props: Partial<EmptyStateProps>) => (
-    <EmptyState
-      title="Chưa Có Tin Nhắn"
-      message="Bạn chưa bắt đầu cuộc trò chuyện nào."
-      icon={<MessageCircle size={48} color={colors.primary} />}
-      {...props}
-    />
-  ),
-  Error: (props: Partial<EmptyStateProps>) => (
-    <EmptyState
-      title="Đã Xảy Ra Lỗi"
-      message="Không thể tải dữ liệu. Vui lòng thử lại."
-      icon={<AlertTriangle size={48} color={colors.warning} />}
-      actionLabel="Thử Lại"
-      {...props}
-    />
-  ),
+  NoMatches: (props: Partial<EmptyStateProps>) => {
+    const themeColors = useThemeColors();
+    return (
+      <EmptyState
+        title="Chưa Có Kết Quả"
+        message="Vuốt để tìm bạn chơi pickleball!"
+        icon={<Heart size={48} color={themeColors.accent} />}
+        actionLabel="Bắt Đầu"
+        {...props}
+      />
+    );
+  },
+  NoCourts: (props: Partial<EmptyStateProps>) => {
+    const themeColors = useThemeColors();
+    return (
+      <EmptyState
+        title="Không Tìm Thấy Sân"
+        message="Thử điều chỉnh bộ lọc hoặc tìm ở khu vực khác."
+        icon={<MapPin size={48} color={themeColors.primary} />}
+        {...props}
+      />
+    );
+  },
+  NoMessages: (props: Partial<EmptyStateProps>) => {
+    const themeColors = useThemeColors();
+    return (
+      <EmptyState
+        title="Chưa Có Tin Nhắn"
+        message="Bạn chưa bắt đầu cuộc trò chuyện nào."
+        icon={<MessageCircle size={48} color={themeColors.primary} />}
+        {...props}
+      />
+    );
+  },
+  Error: (props: Partial<EmptyStateProps>) => {
+    const themeColors = useThemeColors();
+    return (
+      <EmptyState
+        title="Đã Xảy Ra Lỗi"
+        message="Không thể tải dữ liệu. Vui lòng thử lại."
+        icon={<AlertTriangle size={48} color={themeColors.warning} />}
+        actionLabel="Thử Lại"
+        {...props}
+      />
+    );
+  },
 };
 
 // ============================================

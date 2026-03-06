@@ -4,8 +4,9 @@ import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, { FadeInUp } from 'react-native-reanimated';
-import { colors } from '../../theme/tokens';
-import { styles } from './message-bubble-styles';
+import { useThemeColors } from '../../contexts/ThemeContext';
+import { useThemedStyles } from '../../hooks/useThemedStyles';
+import { createStyles } from './message-bubble-styles';
 
 export interface Message {
   id: string;
@@ -27,6 +28,7 @@ export interface MessageBubbleProps {
 }
 
 const StatusIcon = ({ status }: { status: Message['status'] }) => {
+  const colors = useThemeColors();
   switch (status) {
     case 'sending':
       return <Ionicons name="time-outline" size={14} color={colors.textTertiary} />;
@@ -49,6 +51,8 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
   onImagePress,
   animationDelay = 0,
 }) => {
+  const colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
   const formatTime = (isoString: string) =>
     new Date(isoString).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
 

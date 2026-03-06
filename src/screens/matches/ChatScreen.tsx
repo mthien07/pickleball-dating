@@ -25,8 +25,10 @@ import * as ImagePicker from 'expo-image-picker';
 import { Avatar } from '../../components/Avatar';
 import { MessageBubble, TypingIndicator, Message } from '../../components/MessageBubble';
 import { MessageInput } from '../../components/MessageInput';
-import { colors, spacing, typography } from '../../theme/tokens';
+import { spacing, typography } from '../../theme/tokens';
 import { shadows } from '../../theme/shadows';
+import { useThemeColors } from '../../contexts/ThemeContext';
+import { useThemedStyles } from '../../hooks/useThemedStyles';
 import { MOCK_MATCHES, MOCK_MESSAGES, getUserById } from '@data/mockData';
 
 // ============================================
@@ -47,6 +49,8 @@ type ChatRouteParams = {
 export const ChatScreen = () => {
   const navigation = useNavigation<any>();
   const route = useRoute<RouteProp<ChatRouteParams, 'Chat'>>();
+  const colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
   const { matchId, userId } = route.params || {};
 
   const flatListRef = useRef<FlatList>(null);
@@ -251,63 +255,64 @@ export const ChatScreen = () => {
 // STYLES
 // ============================================
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-  safeArea: {
-    flex: 1,
-  },
-  keyboardView: {
-    flex: 1,
-  },
+const createStyles = (colors: import('../../contexts/theme-colors').ThemeColors) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.background,
+    },
+    safeArea: {
+      flex: 1,
+    },
+    keyboardView: {
+      flex: 1,
+    },
 
-  // Header
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.sm,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-    backgroundColor: colors.background,
-    ...shadows.sm,
-  },
-  backButton: {
-    width: 44,
-    height: 44,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  headerProfile: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginLeft: spacing.xs,
-  },
-  headerInfo: {
-    marginLeft: spacing.sm,
-  },
-  headerName: {
-    ...typography.h4,
-    color: colors.textPrimary,
-  },
-  headerStatus: {
-    ...typography.bodySmall,
-    color: colors.textSecondary,
-  },
-  moreButton: {
-    width: 44,
-    height: 44,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+    // Header
+    header: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingHorizontal: spacing.sm,
+      paddingVertical: spacing.sm,
+      borderBottomWidth: 1,
+      borderBottomColor: colors.border,
+      backgroundColor: colors.background,
+      ...shadows.sm,
+    },
+    backButton: {
+      width: 44,
+      height: 44,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    headerProfile: {
+      flex: 1,
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginLeft: spacing.xs,
+    },
+    headerInfo: {
+      marginLeft: spacing.sm,
+    },
+    headerName: {
+      ...typography.h4,
+      color: colors.textPrimary,
+    },
+    headerStatus: {
+      ...typography.bodySmall,
+      color: colors.textSecondary,
+    },
+    moreButton: {
+      width: 44,
+      height: 44,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
 
-  // Messages
-  messagesList: {
-    paddingVertical: spacing.md,
-  },
-});
+    // Messages
+    messagesList: {
+      paddingVertical: spacing.md,
+    },
+  });
 
 export default ChatScreen;

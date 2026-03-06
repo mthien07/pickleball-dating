@@ -5,9 +5,10 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Image } from 'expo-image';
 import Animated, { FadeInDown, FadeInRight } from 'react-native-reanimated';
 
-import { colors } from '../../../theme/tokens';
+import { useThemeColors } from '../../../contexts/ThemeContext';
+import { useThemedStyles } from '../../../hooks/useThemedStyles';
 import { Match } from '@data/mockData';
-import { styles } from './matches-list-styles';
+import { createStyles } from './matches-list-styles';
 
 // ============================================
 // STORY-STYLE MATCH ITEM (Instagram Stories)
@@ -19,39 +20,43 @@ interface StoryMatchItemProps {
   onPress: () => void;
 }
 
-export const StoryMatchItem = React.memo<StoryMatchItemProps>(({ match, index, onPress }) => (
-  <Animated.View entering={FadeInRight.delay(index * 80).duration(250)}>
-    <Pressable
-      style={({ pressed }) => [styles.storyItem, pressed && { opacity: 0.7 }]}
-      onPress={onPress}
-      android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
-    >
-      <LinearGradient
-        colors={
-          match.is_new
-            ? [colors.accent, colors.primary, colors.primaryLight]
-            : [colors.border, colors.border]
-        }
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={styles.storyRing}
+export const StoryMatchItem = React.memo<StoryMatchItemProps>(({ match, index, onPress }) => {
+  const colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
+  return (
+    <Animated.View entering={FadeInRight.delay(index * 80).duration(250)}>
+      <Pressable
+        style={({ pressed }) => [styles.storyItem, pressed && { opacity: 0.7 }]}
+        onPress={onPress}
+        android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
       >
-        <View style={styles.storyAvatarWrapper}>
-          <Image
-            source={{ uri: match.matched_user.avatar_urls[0] }}
-            style={styles.storyAvatar}
-            contentFit="cover"
-            transition={150}
-          />
-        </View>
-      </LinearGradient>
-      {match.matched_user.is_online && <View style={styles.storyOnline} />}
-      <Text style={styles.storyName} numberOfLines={1}>
-        {match.matched_user.display_name.split(' ')[0]}
-      </Text>
-    </Pressable>
-  </Animated.View>
-));
+        <LinearGradient
+          colors={
+            match.is_new
+              ? [colors.accent, colors.primary, colors.primaryLight]
+              : [colors.border, colors.border]
+          }
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={styles.storyRing}
+        >
+          <View style={styles.storyAvatarWrapper}>
+            <Image
+              source={{ uri: match.matched_user.avatar_urls[0] }}
+              style={styles.storyAvatar}
+              contentFit="cover"
+              transition={150}
+            />
+          </View>
+        </LinearGradient>
+        {match.matched_user.is_online && <View style={styles.storyOnline} />}
+        <Text style={styles.storyName} numberOfLines={1}>
+          {match.matched_user.display_name.split(' ')[0]}
+        </Text>
+      </Pressable>
+    </Animated.View>
+  );
+});
 
 StoryMatchItem.displayName = 'StoryMatchItem';
 
@@ -82,6 +87,8 @@ const formatTime = (isoString: string) => {
 };
 
 export const ConversationItem = React.memo<ConversationItemProps>(({ match, index, onPress }) => {
+  const colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
   const hasUnread = match.unread_count > 0;
 
   return (

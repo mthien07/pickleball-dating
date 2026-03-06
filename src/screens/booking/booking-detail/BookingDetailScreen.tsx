@@ -3,7 +3,8 @@
  */
 
 import React from 'react';
-import { View, Text, ScrollView, Pressable, Image, Alert } from 'react-native';
+import { View, Text, ScrollView, Pressable, Alert } from 'react-native';
+import { Image } from 'expo-image';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
@@ -11,10 +12,12 @@ import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
 
 import { Button } from '../../../components/Button';
-import { colors, spacing } from '../../../theme/tokens';
+import { spacing } from '../../../theme/tokens';
+import { useThemeColors } from '../../../contexts/ThemeContext';
+import { useThemedStyles } from '../../../hooks/useThemedStyles';
 import { showSuccess } from '../../../services/toast';
 import { MOCK_BOOKINGS } from '@data/mockData';
-import { styles } from './booking-detail-styles';
+import { createStyles } from './booking-detail-styles';
 import { formatDate, formatPrice, getStatusInfo } from './booking-detail-helpers';
 
 // InfoRow sub-component
@@ -22,25 +25,31 @@ const InfoRow: React.FC<{ icon: string; label: string; value: string }> = ({
   icon,
   label,
   value,
-}) => (
-  <View style={styles.infoRow}>
-    <View style={styles.infoIcon}>
-      <Ionicons name={icon as any} size={20} color={colors.primary} />
+}) => {
+  const colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
+  return (
+    <View style={styles.infoRow}>
+      <View style={styles.infoIcon}>
+        <Ionicons name={icon as any} size={20} color={colors.primary} />
+      </View>
+      <View style={styles.infoContent}>
+        <Text style={styles.infoLabel}>{label}</Text>
+        <Text style={styles.infoValue}>{value}</Text>
+      </View>
     </View>
-    <View style={styles.infoContent}>
-      <Text style={styles.infoLabel}>{label}</Text>
-      <Text style={styles.infoValue}>{value}</Text>
-    </View>
-  </View>
-);
+  );
+};
 
 export const BookingDetailScreen = () => {
   const navigation = useNavigation<any>();
   const route = useRoute<any>();
+  const colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
   const { bookingId } = route.params || {};
 
   const booking = MOCK_BOOKINGS.find((b) => b.id === bookingId) || MOCK_BOOKINGS[0];
-  const statusInfo = getStatusInfo(booking.status);
+  const statusInfo = getStatusInfo(booking.status, colors);
 
   const handleCancel = () => {
     Alert.alert('Hủy đặt sân', 'Bạn có chắc chắn muốn hủy lịch đặt sân này?', [

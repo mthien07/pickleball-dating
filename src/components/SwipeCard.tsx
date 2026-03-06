@@ -6,7 +6,10 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { ProfileCard, ProfileCardProps } from './Card';
 import { useSwipeGesture } from '../hooks/useSwipeGesture';
-import { colors, borderRadius, fontFamily } from '../theme/tokens';
+import { borderRadius, fontFamily } from '../theme/tokens';
+import { useThemeColors } from '../contexts/ThemeContext';
+import { useThemedStyles } from '../hooks/useThemedStyles';
+import type { ThemeColors } from '../contexts/theme-colors';
 import { CARD_MAX_WIDTH, CARD_ASPECT_RATIO } from '../theme/breakpoints';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -31,6 +34,8 @@ interface SwipeOverlayProps {
 }
 
 const SwipeOverlay = React.memo(({ type, translateX, threshold }: SwipeOverlayProps) => {
+  const colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
   const isLike = type === 'like';
 
   // Pre-compute ranges outside worklet - they only depend on props
@@ -76,6 +81,8 @@ interface SuperLikeOverlayProps {
 }
 
 const SuperLikeOverlay = React.memo(({ translateY, threshold }: SuperLikeOverlayProps) => {
+  const colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
   // Pre-compute ranges outside worklet
   const inputRange = [-threshold, -threshold * 0.5, 0];
 
@@ -165,62 +172,63 @@ export const SwipeCard = forwardRef<SwipeCardRef, SwipeCardProps>(
 
 SwipeCard.displayName = 'SwipeCard';
 
-const styles = StyleSheet.create({
-  overlayContainer: {
-    position: 'absolute',
-    top: 50,
-    zIndex: 100,
-  },
-  likeOverlay: {
-    left: 20,
-  },
-  nopeOverlay: {
-    right: 20,
-  },
-  overlayBadge: {
-    paddingHorizontal: 18,
-    paddingVertical: 10,
-    borderWidth: 3,
-    borderRadius: borderRadius.lg, // More rounded
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
-  },
-  overlayText: {
-    fontSize: 28,
-    fontWeight: '800',
-    letterSpacing: 1.5,
-    fontFamily: fontFamily.heading, // Barlow-Bold for Vibrant Sport
-    textTransform: 'uppercase' as const,
-  },
-  superLikeOverlay: {
-    position: 'absolute',
-    bottom: 110,
-    left: 0,
-    right: 0,
-    alignItems: 'center',
-    zIndex: 100,
-  },
-  superLikeBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-    paddingHorizontal: 22,
-    paddingVertical: 14,
-    borderRadius: 24, // More rounded - bento style
-    shadowColor: colors.primary,
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.4,
-    shadowRadius: 16,
-    elevation: 8,
-  },
-  superLikeText: {
-    color: colors.white,
-    fontSize: 22,
-    fontWeight: '800',
-    letterSpacing: 0.5,
-    fontFamily: fontFamily.heading, // Barlow-Bold for Vibrant Sport
-    textTransform: 'uppercase' as const,
-  },
-});
+const createStyles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    overlayContainer: {
+      position: 'absolute',
+      top: 50,
+      zIndex: 100,
+    },
+    likeOverlay: {
+      left: 20,
+    },
+    nopeOverlay: {
+      right: 20,
+    },
+    overlayBadge: {
+      paddingHorizontal: 18,
+      paddingVertical: 10,
+      borderWidth: 3,
+      borderRadius: borderRadius.lg, // More rounded
+      backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    },
+    overlayText: {
+      fontSize: 28,
+      fontWeight: '800',
+      letterSpacing: 1.5,
+      fontFamily: fontFamily.heading, // Barlow-Bold for Vibrant Sport
+      textTransform: 'uppercase' as const,
+    },
+    superLikeOverlay: {
+      position: 'absolute',
+      bottom: 110,
+      left: 0,
+      right: 0,
+      alignItems: 'center',
+      zIndex: 100,
+    },
+    superLikeBadge: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 10,
+      paddingHorizontal: 22,
+      paddingVertical: 14,
+      borderRadius: 24, // More rounded - bento style
+      shadowColor: colors.primary,
+      shadowOffset: { width: 0, height: 6 },
+      shadowOpacity: 0.4,
+      shadowRadius: 16,
+      elevation: 8,
+    },
+    superLikeText: {
+      color: colors.white,
+      fontSize: 22,
+      fontWeight: '800',
+      letterSpacing: 0.5,
+      fontFamily: fontFamily.heading, // Barlow-Bold for Vibrant Sport
+      textTransform: 'uppercase' as const,
+    },
+  });
 
 // Default export
 export default SwipeCard;

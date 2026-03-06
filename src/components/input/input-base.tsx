@@ -7,9 +7,11 @@ import React, { useState } from 'react';
 import { View, TextInput, Text, TextInputProps, Pressable, Platform } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { Eye, EyeOff, X } from 'lucide-react-native';
-import { colors, durations } from '../../theme/tokens';
+import { durations } from '../../theme/tokens';
+import { useThemeColors } from '../../contexts/ThemeContext';
+import { useThemedStyles } from '../../hooks/useThemedStyles';
 import { InputProps } from './input-types';
-import { styles } from './input-styles';
+import { createStyles } from './input-styles';
 import { WebInput } from './input-web';
 
 const AnimatedView = Animated.createAnimatedComponent(View);
@@ -46,6 +48,8 @@ const NativeInput: React.FC<InputProps> = ({
   onClear,
   ...textInputProps
 }) => {
+  const colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
   const [isFocused, setIsFocused] = useState(false);
   const [isSecureText, setIsSecureText] = useState(type === 'password');
 

@@ -60,6 +60,9 @@ export interface ThemeColors {
   disabledGradientEnd: string;
   onboardingOverlay: string;
 
+  // Border
+  borderGlass: string;
+
   // Utility
   black: string;
   white: string;
@@ -108,6 +111,7 @@ export const lightColors: ThemeColors = {
   disabledGradientStart: '#CBD5E1',
   disabledGradientEnd: '#94A3B8',
   onboardingOverlay: 'rgba(255, 255, 255, 0.15)',
+  borderGlass: 'rgba(226, 232, 240, 0.5)',
   black: '#000000',
   white: '#FFFFFF',
   overlay: 'rgba(15, 23, 42, 0.4)',
@@ -155,6 +159,7 @@ export const darkColors: ThemeColors = {
   disabledGradientStart: '#475569',
   disabledGradientEnd: '#334155',
   onboardingOverlay: 'rgba(0, 0, 0, 0.4)',
+  borderGlass: 'rgba(51, 65, 85, 0.5)',
   black: '#000000',
   white: '#FFFFFF',
   overlay: 'rgba(0, 0, 0, 0.5)',

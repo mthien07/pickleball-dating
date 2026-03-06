@@ -16,7 +16,7 @@ import React from 'react';
 import { View, StyleSheet, ViewStyle, Platform } from 'react-native';
 import { BlurView, BlurViewProps } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
-import { colors, borderRadius, spacing } from '../theme/tokens';
+import { borderRadius, spacing } from '../theme/tokens';
 
 // ============================================
 // TYPES

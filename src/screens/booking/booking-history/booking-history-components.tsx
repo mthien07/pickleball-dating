@@ -3,13 +3,16 @@
  */
 
 import React from 'react';
-import { View, Text, Pressable, Image } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
+import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeInUp, Layout } from 'react-native-reanimated';
 
-import { colors } from '../../../theme/tokens';
+import { useThemeColors } from '../../../contexts/ThemeContext';
+import { useThemedStyles } from '../../../hooks/useThemedStyles';
 import { MOCK_BOOKINGS, BookingStatus } from '@data/mockData';
-import { styles } from './booking-history-styles';
+import { createStyles } from './booking-history-styles';
+import type { ThemeColors } from '../../../contexts/theme-colors';
 
 // ============================================
 // HELPERS
@@ -24,7 +27,10 @@ export const formatPrice = (price: number): string => {
   return new Intl.NumberFormat('vi-VN').format(price) + 'đ';
 };
 
-export const getStatusColor = (status: BookingStatus): { bg: string; text: string } => {
+export const getStatusColor = (
+  status: BookingStatus,
+  colors: ThemeColors
+): { bg: string; text: string } => {
   const statusColors: Record<BookingStatus, { bg: string; text: string }> = {
     confirmed: { bg: `${colors.success}20`, text: colors.success },
     completed: { bg: colors.surface, text: colors.textSecondary },
@@ -52,26 +58,29 @@ interface TabBarProps {
   onTabChange: (tab: string) => void;
 }
 
-export const TabBar: React.FC<TabBarProps> = React.memo(({ tabs, activeTab, onTabChange }) => (
-  <View style={styles.tabBar}>
-    {tabs.map((tab) => (
-      <Pressable
-        key={tab.id}
-        style={({ pressed }) => [
-          styles.tab,
-          activeTab === tab.id && styles.tabActive,
-          pressed && { opacity: 0.7 },
-        ]}
-        onPress={() => onTabChange(tab.id)}
-        android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
-      >
-        <Text style={[styles.tabText, activeTab === tab.id && styles.tabTextActive]}>
-          {tab.label}
-        </Text>
-      </Pressable>
-    ))}
-  </View>
-));
+export const TabBar: React.FC<TabBarProps> = React.memo(({ tabs, activeTab, onTabChange }) => {
+  const styles = useThemedStyles(createStyles);
+  return (
+    <View style={styles.tabBar}>
+      {tabs.map((tab) => (
+        <Pressable
+          key={tab.id}
+          style={({ pressed }) => [
+            styles.tab,
+            activeTab === tab.id && styles.tabActive,
+            pressed && { opacity: 0.7 },
+          ]}
+          onPress={() => onTabChange(tab.id)}
+          android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+        >
+          <Text style={[styles.tabText, activeTab === tab.id && styles.tabTextActive]}>
+            {tab.label}
+          </Text>
+        </Pressable>
+      ))}
+    </View>
+  );
+});
 
 // ============================================
 // BOOKING CARD
@@ -84,7 +93,9 @@ interface BookingCardProps {
 }
 
 export const BookingCard: React.FC<BookingCardProps> = React.memo(({ booking, index, onPress }) => {
-  const statusStyle = getStatusColor(booking.status);
+  const colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
+  const statusStyle = getStatusColor(booking.status, colors);
 
   return (
     <Animated.View entering={FadeInUp.delay(index * 100)} layout={Layout.springify()}>
@@ -124,9 +135,13 @@ export const BookingCard: React.FC<BookingCardProps> = React.memo(({ booking, in
 // EMPTY STATE
 // ============================================
 
-export const EmptyState = React.memo(({ message }: { message: string }) => (
-  <View style={styles.emptyState}>
-    <Ionicons name="calendar-outline" size={64} color={colors.border} />
-    <Text style={styles.emptyText}>{message}</Text>
-  </View>
-));
+export const EmptyState = React.memo(({ message }: { message: string }) => {
+  const colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
+  return (
+    <View style={styles.emptyState}>
+      <Ionicons name="calendar-outline" size={64} color={colors.border} />
+      <Text style={styles.emptyText}>{message}</Text>
+    </View>
+  );
+});

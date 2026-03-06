@@ -12,13 +12,18 @@ import { AuthStackParamList } from '../../navigation/types';
 import { Button } from '../../components/Button';
 import { Input } from '../../components/Input';
 import { KeyboardView } from '../../components/KeyboardView';
-import { colors, spacing, typography } from '../../theme/tokens';
+import { spacing, typography } from '../../theme/tokens';
+import { useThemeColors } from '../../contexts/ThemeContext';
+import { useThemedStyles } from '../../hooks/useThemedStyles';
+import type { ThemeColors } from '../../contexts/theme-colors';
 import { showSuccess, showError } from '../../services/toast';
 
 type PhoneSignupScreenNavigationProp = StackNavigationProp<AuthStackParamList, 'PhoneSignup'>;
 
 export const PhoneSignupScreen = () => {
   const navigation = useNavigation<PhoneSignupScreenNavigationProp>();
+  const colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
   const [loading, setLoading] = useState(false);
   const [phone, setPhone] = useState('');
   const [code, setCode] = useState('');
@@ -106,41 +111,42 @@ export const PhoneSignupScreen = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-  contentContainer: {
-    padding: spacing.lg,
-    paddingTop: spacing.xl,
-  },
-  header: {
-    marginBottom: spacing.xl,
-  },
-  backButton: {
-    marginBottom: spacing.sm,
-  },
-  backButtonText: {
-    ...typography.body,
-    color: colors.textSecondary,
-  },
-  title: {
-    ...typography.h2,
-    color: colors.textPrimary,
-    marginBottom: spacing.xs,
-  },
-  subtitle: {
-    ...typography.body,
-    color: colors.textSecondary,
-  },
-  form: {
-    gap: spacing.sm,
-  },
-  input: {
-    marginBottom: spacing.xs,
-  },
-  submitButton: {
-    marginTop: spacing.md,
-  },
-});
+const createStyles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.background,
+    },
+    contentContainer: {
+      padding: spacing.lg,
+      paddingTop: spacing.xl,
+    },
+    header: {
+      marginBottom: spacing.xl,
+    },
+    backButton: {
+      marginBottom: spacing.sm,
+    },
+    backButtonText: {
+      ...typography.body,
+      color: colors.textSecondary,
+    },
+    title: {
+      ...typography.h2,
+      color: colors.textPrimary,
+      marginBottom: spacing.xs,
+    },
+    subtitle: {
+      ...typography.body,
+      color: colors.textSecondary,
+    },
+    form: {
+      gap: spacing.sm,
+    },
+    input: {
+      marginBottom: spacing.xs,
+    },
+    submitButton: {
+      marginTop: spacing.md,
+    },
+  });

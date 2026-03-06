@@ -21,9 +21,10 @@ import Animated, {
 import * as Haptics from 'expo-haptics';
 
 import { Button } from '../../../components/Button';
-import { colors } from '../../../theme/tokens';
+import { useThemeColors } from '../../../contexts/ThemeContext';
+import { useThemedStyles } from '../../../hooks/useThemedStyles';
 import { MOCK_COURTS } from '@data/mockData';
-import { styles } from './booking-confirmation-styles';
+import { createStyles } from './booking-confirmation-styles';
 
 type ConfirmationRouteParams = {
   BookingConfirmation: {
@@ -46,6 +47,8 @@ const formatDate = (d: Date): string =>
 export const BookingConfirmationScreen = () => {
   const navigation = useNavigation<any>();
   const route = useRoute<RouteProp<ConfirmationRouteParams, 'BookingConfirmation'>>();
+  const colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
   const { courtId, date, slots = [], totalPrice = 0, bookingId } = route.params || {};
 
   const court = MOCK_COURTS.find((c) => c.id === courtId) || MOCK_COURTS[0];

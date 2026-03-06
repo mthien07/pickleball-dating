@@ -16,13 +16,16 @@ import { KeyboardView } from '../../../components/KeyboardView';
 import { showSuccess, showError } from '../../../services/toast';
 import { AuthStackParamList } from '../../../navigation/types';
 import { supabase } from '../../../services/supabase';
-import { colors } from '../../../theme/tokens';
-import { styles } from './login-styles';
+import { useThemeColors } from '../../../contexts/ThemeContext';
+import { useThemedStyles } from '../../../hooks/useThemedStyles';
+import { createStyles } from './login-styles';
 
 type LoginNav = StackNavigationProp<AuthStackParamList, 'Login'>;
 
 export const LoginScreen = () => {
   const navigation = useNavigation<LoginNav>();
+  const colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

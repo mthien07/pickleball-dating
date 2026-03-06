@@ -7,18 +7,22 @@
  */
 
 import React from 'react';
-import { View, Text, Pressable, Image, ActivityIndicator, ScrollView } from 'react-native';
+import { View, Text, Pressable, ActivityIndicator, ScrollView } from 'react-native';
+import { Image } from 'expo-image';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeInUp, FadeIn } from 'react-native-reanimated';
 import { Avatar } from '../../../components/Avatar';
 import { Button } from '../../../components/Button';
-import { colors, spacing } from '../../../theme/tokens';
-import { styles } from './profile-me-styles';
+import { spacing } from '../../../theme/tokens';
+import { useThemeColors } from '../../../contexts/ThemeContext';
+import { useThemedStyles } from '../../../hooks/useThemedStyles';
+import { createStyles } from './profile-me-styles';
+import type { ThemeColors } from '../../../contexts/theme-colors';
 
 // ---- Helpers ----
 
-export const getSkillLevelLabel = (level: string) => {
+export const getSkillLevelLabel = (level: string, colors: ThemeColors) => {
   const labels: Record<string, { label: string; color: string }> = {
     beginner: { label: 'Mới bắt đầu', color: colors.skillBeginner },
     intermediate: { label: 'Trung bình', color: colors.skillIntermediate },
@@ -46,22 +50,30 @@ interface StatCardProps {
   delay?: number;
 }
 
-export const StatCard = React.memo<StatCardProps>(({ icon, value, label, delay = 0 }) => (
-  <Animated.View entering={FadeInUp.delay(delay)} style={styles.statCard}>
-    <Ionicons name={icon as any} size={24} color={colors.primary} />
-    <Text style={styles.statValue}>{value}</Text>
-    <Text style={styles.statLabel}>{label}</Text>
-  </Animated.View>
-));
+export const StatCard = React.memo<StatCardProps>(({ icon, value, label, delay = 0 }) => {
+  const colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
+  return (
+    <Animated.View entering={FadeInUp.delay(delay)} style={styles.statCard}>
+      <Ionicons name={icon as any} size={24} color={colors.primary} />
+      <Text style={styles.statValue}>{value}</Text>
+      <Text style={styles.statLabel}>{label}</Text>
+    </Animated.View>
+  );
+});
 
 // ---- LoadingState ----
 
-export const LoadingState = React.memo(() => (
-  <View style={[styles.container, styles.centerContent]}>
-    <ActivityIndicator size="large" color={colors.primary} />
-    <Text style={styles.loadingText}>Đang tải hồ sơ...</Text>
-  </View>
-));
+export const LoadingState = React.memo(() => {
+  const colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
+  return (
+    <View style={[styles.container, styles.centerContent]}>
+      <ActivityIndicator size="large" color={colors.primary} />
+      <Text style={styles.loadingText}>Đang tải hồ sơ...</Text>
+    </View>
+  );
+});
 
 // ---- EmptyProfileState ----
 
@@ -72,36 +84,40 @@ interface EmptyProfileStateProps {
 }
 
 export const EmptyProfileState = React.memo<EmptyProfileStateProps>(
-  ({ user, onNavigateSettings, onNavigateSetup }) => (
-    <View style={[styles.container, styles.centerContent]}>
-      <SafeAreaView style={styles.safeArea}>
-        <View style={styles.header}>
-          <Text style={styles.headerTitle}>Hồ sơ</Text>
-          <Pressable
-            onPress={onNavigateSettings}
-            style={({ pressed }) => [styles.iconButton, pressed && { opacity: 0.7 }]}
-            android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
-            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-          >
-            <Ionicons name="settings-outline" size={24} color={colors.textPrimary} />
-          </Pressable>
-        </View>
-        <View style={styles.emptyContainer}>
-          <Ionicons name="person-circle-outline" size={80} color={colors.textTertiary} />
-          <Text style={styles.emptyTitle}>Chưa có hồ sơ</Text>
-          <Text style={styles.emptyText}>
-            {user ? 'Hoàn tất hồ sơ để bắt đầu' : 'Đăng nhập để xem hồ sơ'}
-          </Text>
-          <Button
-            title="Tạo hồ sơ"
-            onPress={onNavigateSetup}
-            variant="primary"
-            style={{ marginTop: spacing.lg }}
-          />
-        </View>
-      </SafeAreaView>
-    </View>
-  )
+  ({ user, onNavigateSettings, onNavigateSetup }) => {
+    const colors = useThemeColors();
+    const styles = useThemedStyles(createStyles);
+    return (
+      <View style={[styles.container, styles.centerContent]}>
+        <SafeAreaView style={styles.safeArea}>
+          <View style={styles.header}>
+            <Text style={styles.headerTitle}>Hồ sơ</Text>
+            <Pressable
+              onPress={onNavigateSettings}
+              style={({ pressed }) => [styles.iconButton, pressed && { opacity: 0.7 }]}
+              android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            >
+              <Ionicons name="settings-outline" size={24} color={colors.textPrimary} />
+            </Pressable>
+          </View>
+          <View style={styles.emptyContainer}>
+            <Ionicons name="person-circle-outline" size={80} color={colors.textTertiary} />
+            <Text style={styles.emptyTitle}>Chưa có hồ sơ</Text>
+            <Text style={styles.emptyText}>
+              {user ? 'Hoàn tất hồ sơ để bắt đầu' : 'Đăng nhập để xem hồ sơ'}
+            </Text>
+            <Button
+              title="Tạo hồ sơ"
+              onPress={onNavigateSetup}
+              variant="primary"
+              style={{ marginTop: spacing.lg }}
+            />
+          </View>
+        </SafeAreaView>
+      </View>
+    );
+  }
 );
 
 // ---- PhotosSection ----
@@ -112,6 +128,7 @@ interface PhotosSectionProps {
 }
 
 export const PhotosSection = React.memo<PhotosSectionProps>(({ avatarUrls, onEditPress }) => {
+  const styles = useThemedStyles(createStyles);
   if (avatarUrls.length === 0) {
     return null;
   }
@@ -145,31 +162,35 @@ interface ProfileCardProps {
 }
 
 export const ProfileCard = React.memo<ProfileCardProps>(
-  ({ displayName, skillInfo, playStyleLabel, avatarUrl, onEditPress }) => (
-    <Animated.View entering={FadeIn.delay(100)} style={styles.profileCard}>
-      <View style={styles.avatarSection}>
-        <Avatar
-          size="xl"
-          imageUrl={avatarUrl}
-          name={displayName}
-          showBorder
-          borderColor={colors.primary}
-        />
-        <Pressable
-          style={({ pressed }) => [styles.editButton, pressed && { opacity: 0.7 }]}
-          onPress={onEditPress}
-          android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
-          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-        >
-          <Ionicons name="pencil" size={16} color={colors.white} />
-        </Pressable>
-      </View>
-      <Text style={styles.displayName}>{displayName}</Text>
-      <View style={styles.skillBadge}>
-        <View style={[styles.skillDot, { backgroundColor: skillInfo.color }]} />
-        <Text style={[styles.skillText, { color: skillInfo.color }]}>{skillInfo.label}</Text>
-      </View>
-      <Text style={styles.playStyle}>{playStyleLabel}</Text>
-    </Animated.View>
-  )
+  ({ displayName, skillInfo, playStyleLabel, avatarUrl, onEditPress }) => {
+    const colors = useThemeColors();
+    const styles = useThemedStyles(createStyles);
+    return (
+      <Animated.View entering={FadeIn.delay(100)} style={styles.profileCard}>
+        <View style={styles.avatarSection}>
+          <Avatar
+            size="xl"
+            imageUrl={avatarUrl}
+            name={displayName}
+            showBorder
+            borderColor={colors.primary}
+          />
+          <Pressable
+            style={({ pressed }) => [styles.editButton, pressed && { opacity: 0.7 }]}
+            onPress={onEditPress}
+            android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+          >
+            <Ionicons name="pencil" size={16} color={colors.white} />
+          </Pressable>
+        </View>
+        <Text style={styles.displayName}>{displayName}</Text>
+        <View style={styles.skillBadge}>
+          <View style={[styles.skillDot, { backgroundColor: skillInfo.color }]} />
+          <Text style={[styles.skillText, { color: skillInfo.color }]}>{skillInfo.label}</Text>
+        </View>
+        <Text style={styles.playStyle}>{playStyleLabel}</Text>
+      </Animated.View>
+    );
+  }
 );

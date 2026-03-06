@@ -2,8 +2,9 @@ import React, { useState, useMemo } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeIn, SlideInRight, SlideInLeft } from 'react-native-reanimated';
-import { colors } from '../../theme/tokens';
-import { styles } from './calendar-styles';
+import { useThemeColors } from '../../contexts/ThemeContext';
+import { useThemedStyles } from '../../hooks/useThemedStyles';
+import { createStyles } from './calendar-styles';
 import { CalendarDay } from './CalendarDay';
 import { WEEKDAYS, MONTHS, isSameDay, buildCalendarDays } from './calendar-helpers';
 
@@ -22,6 +23,8 @@ export const CalendarPicker: React.FC<CalendarPickerProps> = ({
   maxDate,
   disabledDates = [],
 }) => {
+  const colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [direction, setDirection] = useState<'left' | 'right'>('right');
   const today = new Date();

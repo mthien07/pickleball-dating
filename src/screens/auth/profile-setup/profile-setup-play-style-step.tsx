@@ -8,7 +8,10 @@ import React from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 
-import { colors, spacing, typography, borderRadius } from '../../../theme/tokens';
+import { spacing, typography, borderRadius } from '../../../theme/tokens';
+import { useThemeColors } from '../../../contexts/ThemeContext';
+import { useThemedStyles } from '../../../hooks/useThemedStyles';
+import type { ThemeColors } from '../../../contexts/theme-colors';
 
 const PLAY_STYLES = [
   { id: 'competitive', label: 'Cạnh tranh', emoji: '🔥' },
@@ -31,6 +34,7 @@ export interface PlayStyleStepProps {
 
 export const ProfileSetupPlayStyleStep = React.memo<PlayStyleStepProps>(
   ({ playStyle, onPlayStyleChange, lookingFor, onLookingForChange }) => {
+    const styles = useThemedStyles(createStyles);
     const toggleLookingFor = (id: string) => {
       if (lookingFor.includes(id)) {
         onLookingForChange(lookingFor.filter((i) => i !== id));
@@ -101,74 +105,75 @@ export const ProfileSetupPlayStyleStep = React.memo<PlayStyleStepProps>(
 
 ProfileSetupPlayStyleStep.displayName = 'ProfileSetupPlayStyleStep';
 
-const styles = StyleSheet.create({
-  stepContent: {
-    paddingTop: spacing.lg,
-  },
-  stepTitle: {
-    ...typography.h2,
-    color: colors.textPrimary,
-    marginBottom: spacing.xs,
-  },
-  formField: {
-    marginBottom: spacing.lg,
-  },
-  fieldLabel: {
-    ...typography.label,
-    color: colors.textSecondary,
-    marginBottom: spacing.sm,
-  },
-  optionRow: {
-    flexDirection: 'row',
-    gap: spacing.sm,
-  },
-  styleCard: {
-    flex: 1,
-    padding: spacing.md,
-    backgroundColor: colors.surface,
-    borderRadius: borderRadius.md,
-    borderWidth: 1,
-    borderColor: colors.border,
-    alignItems: 'center',
-  },
-  styleCardSelected: {
-    borderColor: colors.primary,
-    backgroundColor: `${colors.primary}10`,
-  },
-  styleEmoji: {
-    fontSize: 24,
-    marginBottom: 4,
-  },
-  styleLabel: {
-    ...typography.bodySmall,
-    fontWeight: '600',
-    color: colors.textPrimary,
-  },
-  styleLabelSelected: {
-    color: colors.primary,
-  },
-  chipGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: spacing.sm,
-  },
-  chip: {
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-    borderRadius: borderRadius.full,
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  chipSelected: {
-    backgroundColor: colors.primary,
-    borderColor: colors.primary,
-  },
-  chipText: {
-    ...typography.body,
-    color: colors.textPrimary,
-  },
-  chipTextSelected: {
-    color: colors.white,
-  },
-});
+const createStyles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    stepContent: {
+      paddingTop: spacing.lg,
+    },
+    stepTitle: {
+      ...typography.h2,
+      color: colors.textPrimary,
+      marginBottom: spacing.xs,
+    },
+    formField: {
+      marginBottom: spacing.lg,
+    },
+    fieldLabel: {
+      ...typography.label,
+      color: colors.textSecondary,
+      marginBottom: spacing.sm,
+    },
+    optionRow: {
+      flexDirection: 'row',
+      gap: spacing.sm,
+    },
+    styleCard: {
+      flex: 1,
+      padding: spacing.md,
+      backgroundColor: colors.surface,
+      borderRadius: borderRadius.md,
+      borderWidth: 1,
+      borderColor: colors.border,
+      alignItems: 'center',
+    },
+    styleCardSelected: {
+      borderColor: colors.primary,
+      backgroundColor: `${colors.primary}10`,
+    },
+    styleEmoji: {
+      fontSize: 24,
+      marginBottom: 4,
+    },
+    styleLabel: {
+      ...typography.bodySmall,
+      fontWeight: '600',
+      color: colors.textPrimary,
+    },
+    styleLabelSelected: {
+      color: colors.primary,
+    },
+    chipGrid: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      gap: spacing.sm,
+    },
+    chip: {
+      paddingHorizontal: spacing.md,
+      paddingVertical: spacing.sm,
+      borderRadius: borderRadius.full,
+      backgroundColor: colors.surface,
+      borderWidth: 1,
+      borderColor: colors.border,
+    },
+    chipSelected: {
+      backgroundColor: colors.primary,
+      borderColor: colors.primary,
+    },
+    chipText: {
+      ...typography.body,
+      color: colors.textPrimary,
+    },
+    chipTextSelected: {
+      color: colors.white,
+    },
+  });

@@ -5,21 +5,26 @@
  */
 
 import React, { useState } from 'react';
-import { View, Text, ScrollView, Pressable, Image, Alert } from 'react-native';
+import { View, Text, ScrollView, Pressable, Alert } from 'react-native';
+import { Image } from 'expo-image';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
 
 import { Button } from '../../../components/Button';
-import { colors, spacing } from '../../../theme/tokens';
+import { spacing } from '../../../theme/tokens';
+import { useThemeColors } from '../../../contexts/ThemeContext';
+import { useThemedStyles } from '../../../hooks/useThemedStyles';
 import { MOCK_MATCHES, MOCK_USERS } from '@data/mockData';
-import { styles, SCREEN_WIDTH } from './styles';
+import { createStyles, SCREEN_WIDTH } from './styles';
 import { getSkillLevelLabel, getPlayStyleLabel, calculateAge, LOOKING_FOR_LABELS } from './helpers';
 
 export const MatchDetailScreen = () => {
   const navigation = useNavigation<any>();
   const route = useRoute<any>();
+  const colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
   const { matchId } = route.params || {};
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
 

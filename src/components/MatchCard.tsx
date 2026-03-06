@@ -1,8 +1,11 @@
 import React from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
-import { colors, spacing, typography, borderRadius, fontFamily } from '../theme/tokens';
+import { spacing, typography, borderRadius, fontFamily } from '../theme/tokens';
 import { shadows } from '../theme/shadows';
+import { useThemeColors } from '../contexts/ThemeContext';
+import { useThemedStyles } from '../hooks/useThemedStyles';
+import type { ThemeColors } from '../contexts/theme-colors';
 import { Match } from '@data/mockData';
 import { Avatar } from './Avatar';
 
@@ -15,6 +18,8 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 export const MatchCard = React.memo<MatchCardProps>(
   ({ match, onPress }) => {
+    const colors = useThemeColors();
+    const styles = useThemedStyles(createStyles);
     const scale = useSharedValue(1);
 
     const animatedStyle = useAnimatedStyle(() => ({
@@ -105,69 +110,70 @@ export const MatchCard = React.memo<MatchCardProps>(
 );
 MatchCard.displayName = 'MatchCard';
 
-const styles = StyleSheet.create({
-  // Match Card - Rose shadow for dating vibe
-  matchCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: colors.surface,
-    paddingHorizontal: spacing.md,
-    paddingVertical: 14,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-    ...shadows.matchCard,
-  },
-  matchInfo: {
-    flex: 1,
-    marginLeft: 14,
-  },
-  matchHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 3,
-  },
-  matchName: {
-    ...typography.bodyLarge,
-    color: colors.textPrimary,
-    flex: 1,
-    fontWeight: '500',
-    fontFamily: fontFamily.bodyMedium,
-  },
-  matchNameUnread: {
-    fontWeight: '700',
-    fontFamily: fontFamily.heading,
-  },
-  matchTime: {
-    ...typography.bodySmall,
-    color: colors.textTertiary,
-    fontSize: 12,
-  },
-  matchMessageRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  matchMessage: {
-    ...typography.body,
-    color: colors.textSecondary,
-    flex: 1,
-  },
-  unreadBadge: {
-    backgroundColor: colors.accent, // Rose for CTA
-    borderRadius: borderRadius.full,
-    width: 22,
-    height: 22,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginLeft: spacing.sm,
-  },
-  unreadBadgeText: {
-    ...typography.label,
-    fontSize: 11,
-    color: colors.white,
-    fontWeight: '700',
-  },
-});
+const createStyles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    // Match Card - Rose shadow for dating vibe
+    matchCard: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      backgroundColor: colors.surface,
+      paddingHorizontal: spacing.md,
+      paddingVertical: 14,
+      borderBottomWidth: 1,
+      borderBottomColor: colors.border,
+      ...shadows.matchCard,
+    },
+    matchInfo: {
+      flex: 1,
+      marginLeft: 14,
+    },
+    matchHeader: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: 3,
+    },
+    matchName: {
+      ...typography.bodyLarge,
+      color: colors.textPrimary,
+      flex: 1,
+      fontWeight: '500',
+      fontFamily: fontFamily.bodyMedium,
+    },
+    matchNameUnread: {
+      fontWeight: '700',
+      fontFamily: fontFamily.heading,
+    },
+    matchTime: {
+      ...typography.bodySmall,
+      color: colors.textTertiary,
+      fontSize: 12,
+    },
+    matchMessageRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    },
+    matchMessage: {
+      ...typography.body,
+      color: colors.textSecondary,
+      flex: 1,
+    },
+    unreadBadge: {
+      backgroundColor: colors.accent, // Rose for CTA
+      borderRadius: borderRadius.full,
+      width: 22,
+      height: 22,
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginLeft: spacing.sm,
+    },
+    unreadBadgeText: {
+      ...typography.label,
+      fontSize: 11,
+      color: colors.white,
+      fontWeight: '700',
+    },
+  });
 
 export default MatchCard;

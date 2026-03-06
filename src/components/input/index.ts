@@ -4,7 +4,7 @@
  */
 
 export type { InputType, InputProps } from './input-types';
-export { styles as inputStyles } from './input-styles';
+export { createStyles as createInputStyles } from './input-styles';
 export { Input, default } from './input-base';
 export { WebInput } from './input-web';
 export { SearchInput, EmailInput, PasswordInput, TextArea } from './input-variants';

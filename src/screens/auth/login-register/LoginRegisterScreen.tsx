@@ -11,16 +11,19 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Button } from '../../../components/Button';
-import { colors } from '../../../theme/tokens';
+import { useThemeColors } from '../../../contexts/ThemeContext';
+import { useThemedStyles } from '../../../hooks/useThemedStyles';
 import { FadeIn, SlideIn, StaggerContainer } from '../../../components/Animations';
 import { showInfo } from '../../../services/toast';
 import { AuthStackParamList } from '../../../navigation/types';
-import { styles } from './login-register-styles';
+import { createStyles } from './login-register-styles';
 
 type LoginRegisterNav = StackNavigationProp<AuthStackParamList, 'LoginRegister'>;
 
 export const LoginRegisterScreen = () => {
   const navigation = useNavigation<LoginRegisterNav>();
+  const colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
 
   const handleSocialLogin = (provider: string) => {
     showInfo(`Continue with ${provider} coming soon!`);

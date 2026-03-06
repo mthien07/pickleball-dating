@@ -20,14 +20,17 @@ import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 
 import { EmptyState } from '../../../components/EmptyState';
-import { colors } from '../../../theme/tokens';
+import { useThemeColors } from '../../../contexts/ThemeContext';
+import { useThemedStyles } from '../../../hooks/useThemedStyles';
 import { MOCK_MATCHES, Match } from '@data/mockData';
-import { styles } from './matches-list-styles';
+import { createStyles } from './matches-list-styles';
 import { StoryMatchItem, ConversationItem } from './matches-list-items';
 import { SkeletonList } from '../../../components/SkeletonLoaders';
 
 export const MatchesListScreen = () => {
   const navigation = useNavigation<any>();
+  const colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
   const [refreshing, setRefreshing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');

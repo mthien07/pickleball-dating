@@ -3,7 +3,8 @@
  */
 
 import React from 'react';
-import { View, Text, ScrollView, Pressable, Image, Linking } from 'react-native';
+import { View, Text, ScrollView, Pressable, Linking } from 'react-native';
+import { Image } from 'expo-image';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
@@ -12,26 +13,33 @@ import * as Haptics from 'expo-haptics';
 
 import { Button } from '../../../components/Button';
 import { Avatar } from '../../../components/Avatar';
-import { colors } from '../../../theme/tokens';
+import { useThemeColors } from '../../../contexts/ThemeContext';
+import { useThemedStyles } from '../../../hooks/useThemedStyles';
 import { MOCK_COACHES } from '@data/mockData';
-import { styles } from './coach-detail-styles';
+import { createStyles } from './coach-detail-styles';
 
 const formatPrice = (price: number): string =>
   new Intl.NumberFormat('vi-VN').format(price) + 'đ/giờ';
 
 const StatItem: React.FC<{ icon: string; value: string | number; label: string }> = React.memo(
-  ({ icon, value, label }) => (
-    <View style={styles.statItem}>
-      <Ionicons name={icon as any} size={20} color={colors.primary} />
-      <Text style={styles.statValue}>{value}</Text>
-      <Text style={styles.statLabel}>{label}</Text>
-    </View>
-  )
+  ({ icon, value, label }) => {
+    const colors = useThemeColors();
+    const styles = useThemedStyles(createStyles);
+    return (
+      <View style={styles.statItem}>
+        <Ionicons name={icon as any} size={20} color={colors.primary} />
+        <Text style={styles.statValue}>{value}</Text>
+        <Text style={styles.statLabel}>{label}</Text>
+      </View>
+    );
+  }
 );
 
 export const CoachDetailScreen = () => {
   const navigation = useNavigation<any>();
   const route = useRoute<any>();
+  const colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
   const { coachId } = route.params || {};
 
   const coach = MOCK_COACHES.find((c) => c.id === coachId) || MOCK_COACHES[0];

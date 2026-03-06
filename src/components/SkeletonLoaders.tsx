@@ -13,7 +13,8 @@
 import React from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
 import { Skeleton } from 'moti/skeleton';
-import { colors, spacing, borderRadius } from '../theme/tokens';
+import { spacing, borderRadius } from '../theme/tokens';
+import { useThemeColors } from '../contexts/ThemeContext';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -114,7 +115,7 @@ const styles = StyleSheet.create({
   profileCard: {
     width: SCREEN_WIDTH * 0.9,
     aspectRatio: 3 / 4,
-    backgroundColor: colors.surface,
+    backgroundColor: '#FFFFFF',
     borderRadius: borderRadius.profileCard,
     overflow: 'hidden',
     marginBottom: spacing.md,
@@ -123,11 +124,11 @@ const styles = StyleSheet.create({
   // Court Card Skeleton
   courtCard: {
     flexDirection: 'row',
-    backgroundColor: colors.surface,
+    backgroundColor: '#FFFFFF',
     borderRadius: borderRadius.card,
     padding: spacing.sm + 4,
     marginBottom: spacing.md,
-    shadowColor: colors.black,
+    shadowColor: '#000000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.08,
     shadowRadius: 12,
@@ -148,11 +149,11 @@ const styles = StyleSheet.create({
   matchCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.surface,
+    backgroundColor: '#FFFFFF',
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.md,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    borderBottomColor: '#E2E8F0',
   },
   matchInfo: {
     flex: 1,

@@ -10,10 +10,11 @@ import {
 } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
-import { colors } from '../../theme/tokens';
+import { useThemeColors } from '../../contexts/ThemeContext';
+import { useThemedStyles } from '../../hooks/useThemedStyles';
 import { usePressAnimation, useElevationAnimation } from '../../hooks/useAnimations';
 import { GRADIENT_COLORS } from '../GradientBackground';
-import { styles } from './button-styles';
+import { createStyles } from './button-styles';
 
 export type ButtonVariant = 'primary' | 'secondary' | 'text' | 'icon' | 'gradient' | 'elevated';
 export type ButtonSize = 'small' | 'medium' | 'large';
@@ -58,6 +59,8 @@ export const Button: React.FC<ButtonProps> = ({
   });
   const pressAnim = usePressAnimation({ scaleValue: 0.98 });
 
+  const colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
   const { animatedStyle, handlePressIn, handlePressOut } = useElevated ? elevationAnim : pressAnim;
 
   const handlePress = () => {

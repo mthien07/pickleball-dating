@@ -7,10 +7,10 @@ import Animated, { FadeInUp } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
 
 import { Button } from '../../../components/Button';
-import { colors } from '../../../theme/tokens';
 import { MOCK_COURTS } from '@data/mockData';
 import { useTheme, useThemeColors } from '../../../contexts/ThemeContext';
-import { styles } from './payment-styles';
+import { useThemedStyles } from '../../../hooks/useThemedStyles';
+import { createStyles } from './payment-styles';
 import { PaymentMethod, CardData, PaymentMethodCard, CreditCardForm } from './payment-form-section';
 
 type PaymentRouteParams = {
@@ -28,6 +28,7 @@ export const PaymentScreen = () => {
   const { courtId, date, slots = [], totalPrice = 0 } = route.params || {};
   const { theme } = useTheme();
   const themeColors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
 
   const [selectedMethod, setSelectedMethod] = useState<PaymentMethod>('card');
   const [cardData, setCardData] = useState<CardData | null>(null);
@@ -65,7 +66,7 @@ export const PaymentScreen = () => {
             android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
             hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           >
-            <Ionicons name="chevron-back" size={28} color={colors.textPrimary} />
+            <Ionicons name="chevron-back" size={28} color={themeColors.textPrimary} />
           </Pressable>
           <Text style={styles.headerTitle}>Thanh toan</Text>
           <View style={{ width: 44 }} />
@@ -76,15 +77,15 @@ export const PaymentScreen = () => {
           <Animated.View entering={FadeInUp} style={styles.summaryCard}>
             <Text style={styles.sectionTitle}>Chi tiet dat san</Text>
             <View style={styles.summaryRow}>
-              <Ionicons name="location-outline" size={18} color={colors.textSecondary} />
+              <Ionicons name="location-outline" size={18} color={themeColors.textSecondary} />
               <Text style={styles.summaryText}>{court.name}</Text>
             </View>
             <View style={styles.summaryRow}>
-              <Ionicons name="calendar-outline" size={18} color={colors.textSecondary} />
+              <Ionicons name="calendar-outline" size={18} color={themeColors.textSecondary} />
               <Text style={styles.summaryText}>{formatDate(bookingDate)}</Text>
             </View>
             <View style={styles.summaryRow}>
-              <Ionicons name="time-outline" size={18} color={colors.textSecondary} />
+              <Ionicons name="time-outline" size={18} color={themeColors.textSecondary} />
               <Text style={styles.summaryText}>
                 {slots.length > 0
                   ? `${slots[0].startTime} - ${slots[slots.length - 1].endTime}`
@@ -132,7 +133,7 @@ export const PaymentScreen = () => {
 
           {(selectedMethod === 'momo' || selectedMethod === 'zalopay') && (
             <Animated.View entering={FadeInUp.delay(100)} style={styles.walletInfo}>
-              <Ionicons name="information-circle-outline" size={20} color={colors.primary} />
+              <Ionicons name="information-circle-outline" size={20} color={themeColors.primary} />
               <Text style={styles.walletInfoText}>
                 Ban se duoc chuyen den ung dung {selectedMethod === 'momo' ? 'MoMo' : 'ZaloPay'} de
                 hoan tat thanh toan.

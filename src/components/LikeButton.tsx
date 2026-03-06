@@ -23,7 +23,7 @@ import Animated, {
   runOnJS,
 } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
-import { colors } from '../theme/tokens';
+import { useThemeColors } from '../contexts/ThemeContext';
 import { springConfig } from '../animations/presets';
 import { HeartParticles } from './HeartParticles';
 
@@ -77,10 +77,13 @@ export const LikeButton: React.FC<LikeButtonProps> = ({
   isActive,
   onPress,
   size = 24,
-  activeColor = colors.primary,
-  inactiveColor = colors.textSecondary,
+  activeColor,
+  inactiveColor,
   style,
 }) => {
+  const colors = useThemeColors();
+  const resolvedActiveColor = activeColor ?? colors.primary;
+  const resolvedInactiveColor = inactiveColor ?? colors.textSecondary;
   // Shared values for animation
   const scale = useSharedValue(1);
 
@@ -135,7 +138,7 @@ export const LikeButton: React.FC<LikeButtonProps> = ({
             styles.icon,
             {
               fontSize: size,
-              color: isActive ? activeColor : inactiveColor,
+              color: isActive ? resolvedActiveColor : resolvedInactiveColor,
             },
             animatedStyle,
           ]}

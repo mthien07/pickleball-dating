@@ -10,11 +10,12 @@ import { WelcomeScreen } from '../screens/auth/WelcomeScreen';
 import { OnboardingScreen } from '../screens/auth/OnboardingScreen';
 import SignupScreenDesign from '../screens/auth/SignupScreenDesign';
 import LoginScreenDesign from '../screens/auth/LoginScreenDesign';
-import { colors } from '../theme/tokens';
+import { useThemeColors } from '../contexts/ThemeContext';
 
 const Stack = createStackNavigator<AuthStackParamList>();
 
 export const AuthNavigator = () => {
+  const colors = useThemeColors();
   return (
     <Stack.Navigator
       screenOptions={{

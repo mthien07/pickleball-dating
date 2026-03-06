@@ -9,8 +9,10 @@ import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 
 import { spacing } from '../../../theme/tokens';
+import { useThemeColors } from '../../../contexts/ThemeContext';
+import { useThemedStyles } from '../../../hooks/useThemedStyles';
 import { MOCK_BOOKINGS } from '@data/mockData';
-import { styles } from './booking-history-styles';
+import { createStyles } from './booking-history-styles';
 import { TabBar, BookingCard, EmptyState } from './booking-history-components';
 import { SkeletonList } from '../../../components/SkeletonLoaders';
 
@@ -34,6 +36,8 @@ const STATUS_MAP: Record<string, string> = {
 
 export const BookingHistoryScreen = () => {
   const navigation = useNavigation<any>();
+  const colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
   const [activeTab, setActiveTab] = useState('upcoming');
   const [refreshing, setRefreshing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);

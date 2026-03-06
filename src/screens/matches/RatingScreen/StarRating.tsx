@@ -2,8 +2,9 @@ import React, { useCallback } from 'react';
 import { View, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
-import { colors } from '../../../theme/tokens';
-import { styles } from './styles';
+import { useThemeColors } from '../../../contexts/ThemeContext';
+import { useThemedStyles } from '../../../hooks/useThemedStyles';
+import { createStyles } from './styles';
 
 const STARS = [1, 2, 3, 4, 5];
 
@@ -25,26 +26,30 @@ const StarButton = React.memo(
     isSelected: boolean;
     size: number;
     onPress: (star: number) => void;
-  }) => (
-    <Pressable
-      onPress={() => onPress(star)}
-      style={({ pressed }) => pressed && { opacity: 0.7 }}
-      android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
-      hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-    >
-      <Ionicons
-        name={isSelected ? 'star' : 'star-outline'}
-        size={size}
-        color={isSelected ? colors.warning : colors.border}
-      />
-    </Pressable>
-  )
+  }) => {
+    const colors = useThemeColors();
+    return (
+      <Pressable
+        onPress={() => onPress(star)}
+        style={({ pressed }) => pressed && { opacity: 0.7 }}
+        android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+        hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+      >
+        <Ionicons
+          name={isSelected ? 'star' : 'star-outline'}
+          size={size}
+          color={isSelected ? colors.warning : colors.border}
+        />
+      </Pressable>
+    );
+  }
 );
 
 StarButton.displayName = 'StarButton';
 
 export const StarRating: React.FC<StarRatingProps> = React.memo(
   ({ value, onChange, size = 36 }) => {
+    const styles = useThemedStyles(createStyles);
     // Stable handler - avoids creating new function on every render
     const handlePress = useCallback(
       (star: number) => {

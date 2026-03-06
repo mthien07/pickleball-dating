@@ -1,8 +1,9 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { colors, spacing } from '../theme/tokens';
+import { spacing } from '../theme/tokens';
 import { shadows } from '../theme/shadows';
+import { useThemeColors } from '../contexts/ThemeContext';
 import type { MainTabParamList } from './types';
 
 import { HomeSwipeScreen } from '../screens/main/HomeSwipeScreen';
@@ -13,6 +14,7 @@ const Tab = createBottomTabNavigator<MainTabParamList>();
 
 export const MainNavigator = () => {
   const insets = useSafeAreaInsets();
+  const colors = useThemeColors();
 
   return (
     <Tab.Navigator

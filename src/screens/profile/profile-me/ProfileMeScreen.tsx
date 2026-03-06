@@ -13,7 +13,9 @@ import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 
 import { Button } from '../../../components/Button';
-import { spacing, colors } from '../../../theme/tokens';
+import { spacing } from '../../../theme/tokens';
+import { useThemeColors } from '../../../contexts/ThemeContext';
+import { useThemedStyles } from '../../../hooks/useThemedStyles';
 import { useAuth } from '../../../contexts/AuthContext';
 import {
   StatCard,
@@ -24,10 +26,12 @@ import {
   getSkillLevelLabel,
   getPlayStyleLabel,
 } from './profile-me-components';
-import { styles } from './profile-me-styles';
+import { createStyles } from './profile-me-styles';
 
 export const ProfileMeScreen = () => {
   const navigation = useNavigation<any>();
+  const colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
   const { profile, profileLoading, user } = useAuth();
 
   if (profileLoading) {
@@ -44,7 +48,7 @@ export const ProfileMeScreen = () => {
     );
   }
 
-  const skillInfo = getSkillLevelLabel(profile.skill_level);
+  const skillInfo = getSkillLevelLabel(profile.skill_level, colors);
   const avatarUrls = profile.avatar_urls || [];
 
   return (

@@ -10,14 +10,19 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ChevronLeft } from 'lucide-react-native';
-import { colors, fontFamily, spacing } from '../../theme/tokens';
+import { fontFamily, spacing } from '../../theme/tokens';
 import { shadows } from '../../theme/shadows';
+import { useThemeColors } from '../../contexts/ThemeContext';
+import { useThemedStyles } from '../../hooks/useThemedStyles';
+import type { ThemeColors } from '../../contexts/theme-colors';
 import { Input, PasswordInput } from '../../components/Input';
 import { Button } from '../../components/Button';
 import { supabase } from '../../services/supabase';
 import { showSuccess, showError } from '../../services/toast';
 
 export default function LoginScreenDesign({ navigation }: { navigation?: any }) {
+  const colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -130,69 +135,70 @@ export default function LoginScreenDesign({ navigation }: { navigation?: any }) 
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-  },
-  backButton: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: colors.surface,
-    justifyContent: 'center',
-    alignItems: 'center',
-    ...shadows.sm,
-  },
-  headerTitle: {
-    fontFamily: 'Barlow-Bold',
-    fontSize: 22,
-    color: colors.textPrimary,
-    letterSpacing: 0.5,
-    textTransform: 'uppercase',
-  },
-  keyboardView: {
-    flex: 1,
-  },
-  content: {
-    flex: 1,
-    padding: spacing.lg,
-    justifyContent: 'space-between',
-  },
-  form: {
-    gap: spacing.lg,
-    marginTop: spacing.lg,
-  },
-  forgotPassword: {
-    alignSelf: 'flex-end',
-    marginTop: spacing.sm,
-  },
-  forgotPasswordText: {
-    fontFamily: 'Barlow-Medium',
-    color: colors.accent,
-    fontSize: 14,
-  },
-  bottomSection: {
-    gap: spacing.lg,
-    marginBottom: Platform.OS === 'ios' ? 0 : spacing.lg,
-  },
-  footer: {
-    alignItems: 'center',
-  },
-  footerText: {
-    fontFamily: 'Barlow-Regular',
-    fontSize: 14,
-    color: colors.textSecondary,
-  },
-  linkText: {
-    fontFamily: 'Barlow-SemiBold',
-    color: colors.accent,
-  },
-});
+const createStyles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.background,
+    },
+    header: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      paddingHorizontal: spacing.md,
+      paddingVertical: spacing.sm,
+    },
+    backButton: {
+      width: 48,
+      height: 48,
+      borderRadius: 24,
+      backgroundColor: colors.surface,
+      justifyContent: 'center',
+      alignItems: 'center',
+      ...shadows.sm,
+    },
+    headerTitle: {
+      fontFamily: 'Barlow-Bold',
+      fontSize: 22,
+      color: colors.textPrimary,
+      letterSpacing: 0.5,
+      textTransform: 'uppercase',
+    },
+    keyboardView: {
+      flex: 1,
+    },
+    content: {
+      flex: 1,
+      padding: spacing.lg,
+      justifyContent: 'space-between',
+    },
+    form: {
+      gap: spacing.lg,
+      marginTop: spacing.lg,
+    },
+    forgotPassword: {
+      alignSelf: 'flex-end',
+      marginTop: spacing.sm,
+    },
+    forgotPasswordText: {
+      fontFamily: 'Barlow-Medium',
+      color: colors.accent,
+      fontSize: 14,
+    },
+    bottomSection: {
+      gap: spacing.lg,
+      marginBottom: Platform.OS === 'ios' ? 0 : spacing.lg,
+    },
+    footer: {
+      alignItems: 'center',
+    },
+    footerText: {
+      fontFamily: 'Barlow-Regular',
+      fontSize: 14,
+      color: colors.textSecondary,
+    },
+    linkText: {
+      fontFamily: 'Barlow-SemiBold',
+      color: colors.accent,
+    },
+  });

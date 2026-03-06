@@ -4,17 +4,18 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 
-import { colors } from '../../../theme/tokens';
 import { MOCK_COACHES, Coach } from '@data/mockData';
 import { showInfo } from '../../../services/toast';
 import { useThemeColors } from '../../../contexts/ThemeContext';
-import { styles } from './coach-directory-styles';
+import { useThemedStyles } from '../../../hooks/useThemedStyles';
+import { createStyles } from './coach-directory-styles';
 import { CoachCard, EmptyState } from './coach-directory-components';
 import { SkeletonList } from '../../../components/SkeletonLoaders';
 
 export const CoachDirectoryScreen = () => {
   const navigation = useNavigation();
   const themeColors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
   const [query, setQuery] = useState('');
   const [coaches, setCoaches] = useState<Coach[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -60,16 +61,21 @@ export const CoachDirectoryScreen = () => {
           android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
-          <Ionicons name="options-outline" size={24} color={colors.textPrimary} />
+          <Ionicons name="options-outline" size={24} color={themeColors.textPrimary} />
         </Pressable>
       </View>
 
       <View style={styles.searchContainer}>
-        <Ionicons name="search" size={20} color={colors.textSecondary} style={styles.searchIcon} />
+        <Ionicons
+          name="search"
+          size={20}
+          color={themeColors.textSecondary}
+          style={styles.searchIcon}
+        />
         <TextInput
           style={styles.searchInput}
           placeholder="Search by name or location..."
-          placeholderTextColor={colors.textTertiary}
+          placeholderTextColor={themeColors.textTertiary}
           value={query}
           onChangeText={setQuery}
         />

@@ -2,8 +2,8 @@
  * BookingDetail - Helper functions and types
  */
 
-import { colors } from '../../../theme/tokens';
 import { BookingStatus } from '@data/mockData';
+import type { ThemeColors } from '../../../contexts/theme-colors';
 
 export const formatDate = (dateString: string): string => {
   const date = new Date(dateString);
@@ -21,7 +21,8 @@ export const formatPrice = (price: number): string => {
 };
 
 export const getStatusInfo = (
-  status: BookingStatus
+  status: BookingStatus,
+  colors: ThemeColors
 ): { label: string; color: string; bg: string; icon: string } => {
   const info: Record<BookingStatus, { label: string; color: string; bg: string; icon: string }> = {
     confirmed: {

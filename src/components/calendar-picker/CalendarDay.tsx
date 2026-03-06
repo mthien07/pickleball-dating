@@ -1,8 +1,9 @@
 import React from 'react';
 import { Pressable, Text } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { colors } from '../../theme/tokens';
-import { styles } from './calendar-styles';
+import { useThemeColors } from '../../contexts/ThemeContext';
+import { useThemedStyles } from '../../hooks/useThemedStyles';
+import { createStyles } from './calendar-styles';
 
 interface DayProps {
   date: Date;
@@ -15,6 +16,8 @@ interface DayProps {
 /** Single day cell in the calendar grid */
 export const CalendarDay: React.FC<DayProps> = React.memo(
   ({ date, isSelected, isDisabled, isToday, onPress }) => {
+    const colors = useThemeColors();
+    const styles = useThemedStyles(createStyles);
     if (isSelected) {
       return (
         <Pressable

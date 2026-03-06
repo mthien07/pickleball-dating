@@ -12,9 +12,10 @@ import Animated, { FadeInUp } from 'react-native-reanimated';
 import { CalendarPicker } from '../../../components/CalendarPicker';
 import { TimeSlotPicker, TimeSlot } from '../../../components/TimeSlotPicker';
 import { Button } from '../../../components/Button';
-import { colors } from '../../../theme/tokens';
+import { useThemeColors } from '../../../contexts/ThemeContext';
+import { useThemedStyles } from '../../../hooks/useThemedStyles';
 import { MOCK_COURTS } from '@data/mockData';
-import { styles } from './booking-screen-styles';
+import { createStyles } from './booking-screen-styles';
 
 type BookingRouteParams = {
   Booking: { courtId: string };
@@ -43,6 +44,8 @@ const generateTimeSlots = (date: Date): TimeSlot[] => {
 export const BookingScreen = () => {
   const navigation = useNavigation<any>();
   const route = useRoute<RouteProp<BookingRouteParams, 'Booking'>>();
+  const colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
   const { courtId } = route.params || {};
 
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);

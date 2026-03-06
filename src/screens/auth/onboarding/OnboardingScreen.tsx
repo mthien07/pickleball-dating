@@ -4,12 +4,12 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { AuthStackParamList } from '../../../navigation/types';
 import { FadeIn } from '../../../components/Animations';
-import { colors } from '../../../theme/tokens';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Heart, ArrowRight } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useTheme } from '../../../contexts/ThemeContext';
-import { styles } from './onboarding-styles';
+import { useTheme, useThemeColors } from '../../../contexts/ThemeContext';
+import { useThemedStyles } from '../../../hooks/useThemedStyles';
+import { createStyles } from './onboarding-styles';
 import { AnimatedBlob, PulsingHeartLogo, FloatingCard } from './onboarding-animated-components';
 
 type OnboardingScreenNavigationProp = StackNavigationProp<AuthStackParamList, 'Welcome'>;
@@ -17,11 +17,11 @@ type OnboardingScreenNavigationProp = StackNavigationProp<AuthStackParamList, 'W
 export const OnboardingScreen = () => {
   const navigation = useNavigation<OnboardingScreenNavigationProp>();
   const { theme } = useTheme();
+  const colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
   const isDark = theme.isDark;
 
-  const backgroundGradient = isDark
-    ? ([colors.backgroundDark, colors.surfaceDark, colors.backgroundDark] as const)
-    : ([colors.background, colors.surface, colors.background] as const);
+  const backgroundGradient = [colors.background, colors.surface, colors.background] as const;
 
   const blobColors1 = [colors.primaryLight, colors.primary] as const;
   const blobColors2 = [colors.accentLight, colors.accent] as const;
@@ -47,7 +47,7 @@ export const OnboardingScreen = () => {
               <PulsingHeartLogo
                 gradientColors={[colors.accent, colors.primary]}
                 pulseColor={colors.success}
-                pulseBorderColor={isDark ? colors.backgroundDark : colors.background}
+                pulseBorderColor={colors.background}
               />
             </FadeIn>
 

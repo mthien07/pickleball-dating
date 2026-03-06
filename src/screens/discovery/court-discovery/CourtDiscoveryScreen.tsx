@@ -11,8 +11,9 @@ import { Ionicons } from '@expo/vector-icons';
 
 import { MOCK_COURTS } from '@data/mockData';
 import { CourtsStackParamList } from '../../../navigation/types';
-import { colors } from '../../../theme/tokens';
-import { styles } from './court-discovery-styles';
+import { useThemeColors } from '../../../contexts/ThemeContext';
+import { useThemedStyles } from '../../../hooks/useThemedStyles';
+import { createStyles } from './court-discovery-styles';
 import { CourtCard, MapPlaceholder, EmptyState } from './court-discovery-components';
 import { SkeletonList } from '../../../components/SkeletonLoaders';
 
@@ -20,6 +21,8 @@ type CourtDiscoveryNavigationProp = StackNavigationProp<CourtsStackParamList, 'C
 
 export const CourtDiscoveryScreen = () => {
   const navigation = useNavigation<CourtDiscoveryNavigationProp>();
+  const colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
   const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
   const [query, setQuery] = useState('');
   const [courts, setCourts] = useState<any[]>([]);

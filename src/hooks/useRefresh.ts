@@ -18,7 +18,7 @@
 
 import { useState, useCallback, useMemo } from 'react';
 import { RefreshControlProps } from 'react-native';
-import { colors } from '../theme/tokens';
+import { useThemeColors } from '../contexts/ThemeContext';
 
 // ============================================
 // TYPES
@@ -71,6 +71,7 @@ export const useRefresh = (
   refreshFunction: () => Promise<void>,
   options?: UseRefreshOptions
 ): UseRefreshReturn => {
+  const colors = useThemeColors();
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = useCallback(async () => {

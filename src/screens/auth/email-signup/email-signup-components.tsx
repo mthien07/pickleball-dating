@@ -8,8 +8,9 @@ import React from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Check } from 'lucide-react-native';
-import { colors } from '../../../theme/tokens';
-import { styles } from './email-signup-styles';
+import { useThemeColors } from '../../../contexts/ThemeContext';
+import { useThemedStyles } from '../../../hooks/useThemedStyles';
+import { createStyles } from './email-signup-styles';
 
 export type Role = 'player' | 'owner' | 'coach';
 
@@ -22,6 +23,8 @@ interface RoleCardProps {
 }
 
 export const RoleCard = React.memo(({ value, label, Icon, selected, onSelect }: RoleCardProps) => {
+  const colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
   const cardContent = (
     <View style={[styles.roleCard, selected && styles.roleCardSelected]}>
       <Icon size={28} color={selected ? colors.primary : colors.textSecondary} strokeWidth={2} />
@@ -37,7 +40,7 @@ export const RoleCard = React.memo(({ value, label, Icon, selected, onSelect }: 
     >
       {selected ? (
         <LinearGradient
-          colors={[colors.bentoLight, colors.surface]}
+          colors={[colors.backgroundCircle, colors.surface]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={[styles.roleCardGradient, { borderColor: colors.primary }]}
@@ -56,17 +59,21 @@ interface TermsCheckboxProps {
   onToggle: () => void;
 }
 
-export const TermsCheckbox = React.memo(({ agreed, onToggle }: TermsCheckboxProps) => (
-  <Pressable
-    style={({ pressed }) => [styles.termsContainer, pressed && { opacity: 0.8 }]}
-    onPress={onToggle}
-    android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
-  >
-    <View style={[styles.checkbox, agreed && styles.checkboxChecked]}>
-      {agreed && <Check size={14} color={colors.white} strokeWidth={3} />}
-    </View>
-    <Text style={styles.termsText}>
-      Tôi đồng ý với <Text style={styles.link}>Điều khoản sử dụng</Text>
-    </Text>
-  </Pressable>
-));
+export const TermsCheckbox = React.memo(({ agreed, onToggle }: TermsCheckboxProps) => {
+  const colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
+  return (
+    <Pressable
+      style={({ pressed }) => [styles.termsContainer, pressed && { opacity: 0.8 }]}
+      onPress={onToggle}
+      android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+    >
+      <View style={[styles.checkbox, agreed && styles.checkboxChecked]}>
+        {agreed && <Check size={14} color={colors.white} strokeWidth={3} />}
+      </View>
+      <Text style={styles.termsText}>
+        Tôi đồng ý với <Text style={styles.link}>Điều khoản sử dụng</Text>
+      </Text>
+    </Pressable>
+  );
+});

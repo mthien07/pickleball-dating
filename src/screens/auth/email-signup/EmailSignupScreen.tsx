@@ -14,15 +14,18 @@ import { AuthStackParamList } from '../../../navigation/types';
 import { Button } from '../../../components/Button';
 import { EmailInput, PasswordInput } from '../../../components/Input';
 import { KeyboardView } from '../../../components/KeyboardView';
-import { colors } from '../../../theme/tokens';
+import { useThemeColors } from '../../../contexts/ThemeContext';
+import { useThemedStyles } from '../../../hooks/useThemedStyles';
 import { RoleCard, TermsCheckbox, type Role } from './email-signup-components';
-import { styles } from './email-signup-styles';
+import { createStyles } from './email-signup-styles';
 import { useEmailSignup } from './use-email-signup';
 
 type EmailSignupNav = StackNavigationProp<AuthStackParamList, 'EmailSignup'>;
 
 export const EmailSignupScreen = () => {
   const navigation = useNavigation<EmailSignupNav>();
+  const colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
