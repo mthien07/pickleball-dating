@@ -132,7 +132,7 @@ const createStyles = (colors: ThemeColors) =>
     hint: {
       color: colors.textTertiary,
       fontSize: 12,
-      marginTop: 4,
+      marginTop: spacing.xs,
     },
     optionRow: {
       flexDirection: 'row',

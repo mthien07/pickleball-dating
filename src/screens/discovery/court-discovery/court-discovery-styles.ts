@@ -27,7 +27,7 @@ export const createStyles = (colors: ThemeColors) =>
       flexDirection: 'row',
       backgroundColor: colors.surface,
       borderRadius: borderRadius.lg,
-      padding: 4,
+      padding: spacing.xs,
       marginBottom: spacing.md,
       ...shadows.sm,
     },
@@ -143,7 +143,7 @@ export const createStyles = (colors: ThemeColors) =>
       paddingHorizontal: spacing.sm,
       paddingVertical: 2,
       borderRadius: borderRadius.sm,
-      gap: 4,
+      gap: spacing.xs,
     },
     distanceText: {
       ...typography.label,
@@ -153,7 +153,7 @@ export const createStyles = (colors: ThemeColors) =>
       flexDirection: 'row',
       alignItems: 'center',
       marginBottom: spacing.md,
-      gap: 4,
+      gap: spacing.xs,
     },
     locationText: {
       ...typography.bodySmall,
@@ -171,7 +171,7 @@ export const createStyles = (colors: ThemeColors) =>
     starContainer: {
       flexDirection: 'row',
       alignItems: 'center',
-      gap: 4,
+      gap: spacing.xs,
     },
     reviewCount: {
       ...typography.label,

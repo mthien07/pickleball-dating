@@ -72,7 +72,7 @@ export const createStyles = (colors: ThemeColors) =>
     courtLocation: {
       flexDirection: 'row',
       alignItems: 'center',
-      gap: 4,
+      gap: spacing.xs,
       marginTop: 2,
     },
     courtAddress: {
@@ -83,8 +83,8 @@ export const createStyles = (colors: ThemeColors) =>
     courtRating: {
       flexDirection: 'row',
       alignItems: 'center',
-      gap: 4,
-      marginTop: 4,
+      gap: spacing.xs,
+      marginTop: spacing.xs,
     },
     ratingText: {
       ...typography.bodySmall,

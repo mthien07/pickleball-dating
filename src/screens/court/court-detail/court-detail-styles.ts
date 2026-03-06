@@ -60,7 +60,7 @@ export const createStyles = (colors: ThemeColors) =>
       right: 0,
       flexDirection: 'row',
       justifyContent: 'center',
-      gap: 8,
+      gap: spacing.sm,
     },
     indicator: {
       width: 8,
@@ -91,10 +91,10 @@ export const createStyles = (colors: ThemeColors) =>
     partnerBadge: {
       flexDirection: 'row',
       alignItems: 'center',
-      gap: 4,
+      gap: spacing.xs,
       backgroundColor: colors.success,
       paddingHorizontal: spacing.sm,
-      paddingVertical: 4,
+      paddingVertical: spacing.xs,
       borderRadius: borderRadius.sm,
       alignSelf: 'flex-start',
       marginBottom: spacing.sm,
@@ -116,12 +116,12 @@ export const createStyles = (colors: ThemeColors) =>
       ...typography.body,
       fontWeight: '600',
       color: colors.textPrimary,
-      marginLeft: 4,
+      marginLeft: spacing.xs,
     },
     reviewCount: {
       ...typography.body,
       color: colors.textSecondary,
-      marginLeft: 4,
+      marginLeft: spacing.xs,
     },
     dot: {
       width: 4,
@@ -160,7 +160,7 @@ export const createStyles = (colors: ThemeColors) =>
     mapButton: {
       flexDirection: 'row',
       alignItems: 'center',
-      gap: 4,
+      gap: spacing.xs,
       marginTop: spacing.sm,
     },
     mapButtonText: {

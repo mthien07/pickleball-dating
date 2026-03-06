@@ -82,7 +82,7 @@ export const createStyles = (colors: ThemeColors) =>
       flexDirection: 'row',
       alignItems: 'center',
       gap: spacing.xs,
-      marginBottom: 4,
+      marginBottom: spacing.xs,
     },
     infoText: {
       ...typography.bodySmall,

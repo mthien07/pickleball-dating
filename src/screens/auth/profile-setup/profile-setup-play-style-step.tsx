@@ -144,7 +144,7 @@ const createStyles = (colors: ThemeColors) =>
     },
     styleEmoji: {
       fontSize: 24,
-      marginBottom: 4,
+      marginBottom: spacing.xs,
     },
     styleLabel: {
       ...typography.bodySmall,

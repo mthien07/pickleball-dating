@@ -98,7 +98,7 @@ export const createStyles = (colors: ThemeColors) =>
     },
     mediumContainer: {
       paddingVertical: 14,
-      paddingHorizontal: 24,
+      paddingHorizontal: spacing.lg,
     },
     mediumText: {
       fontSize: 16,
@@ -106,7 +106,7 @@ export const createStyles = (colors: ThemeColors) =>
     },
     largeContainer: {
       paddingVertical: 18,
-      paddingHorizontal: 32,
+      paddingHorizontal: spacing.xl,
     },
     largeText: {
       fontSize: 18,

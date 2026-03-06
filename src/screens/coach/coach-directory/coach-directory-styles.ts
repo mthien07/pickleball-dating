@@ -85,8 +85,8 @@ export const createStyles = (colors: ThemeColors) =>
     nameRow: {
       flexDirection: 'row',
       alignItems: 'center',
-      marginBottom: 4,
-      gap: 4,
+      marginBottom: spacing.xs,
+      gap: spacing.xs,
     },
     name: {
       ...typography.h3,
@@ -96,8 +96,8 @@ export const createStyles = (colors: ThemeColors) =>
     ratingContainer: {
       flexDirection: 'row',
       alignItems: 'center',
-      marginBottom: 8,
-      gap: 4,
+      marginBottom: spacing.sm,
+      gap: spacing.xs,
     },
     ratingText: {
       ...typography.label,
@@ -111,7 +111,7 @@ export const createStyles = (colors: ThemeColors) =>
     skillBadge: {
       backgroundColor: colors.lime,
       paddingHorizontal: spacing.sm,
-      paddingVertical: 4,
+      paddingVertical: spacing.xs,
       borderRadius: borderRadius.sm,
       alignSelf: 'flex-start',
     },

@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { typography, borderRadius, fontFamily } from '../../theme/tokens';
+import { spacing, typography, borderRadius, fontFamily } from '../../theme/tokens';
 import type { ThemeColors } from '../../contexts/theme-colors';
 
 export const createStyles = (colors: ThemeColors) =>
@@ -21,7 +21,7 @@ export const createStyles = (colors: ThemeColors) =>
       top: 20,
       left: 20,
       paddingHorizontal: 14,
-      paddingVertical: 8,
+      paddingVertical: spacing.sm,
       borderRadius: 24,
       borderWidth: 1,
       borderColor: 'rgba(255, 255, 255, 0.25)',

@@ -133,6 +133,6 @@ const createStyles = (colors: ThemeColors) =>
     primaryLabel: {
       ...typography.bodySmall,
       color: colors.primary,
-      marginTop: 4,
+      marginTop: spacing.xs,
     },
   });

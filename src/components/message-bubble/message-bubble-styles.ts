@@ -33,7 +33,7 @@ export const createStyles = (colors: ThemeColors) =>
       borderColor: colors.border,
     },
     imageBubble: {
-      padding: 4,
+      padding: spacing.xs,
       overflow: 'hidden',
     },
     messageText: {
@@ -53,8 +53,8 @@ export const createStyles = (colors: ThemeColors) =>
     meta: {
       flexDirection: 'row',
       alignItems: 'center',
-      gap: 4,
-      marginTop: 4,
+      gap: spacing.xs,
+      marginTop: spacing.xs,
     },
     metaMe: {
       justifyContent: 'flex-end',
@@ -84,7 +84,7 @@ export const createStyles = (colors: ThemeColors) =>
     typingDots: {
       flexDirection: 'row',
       alignItems: 'center',
-      gap: 4,
+      gap: spacing.xs,
     },
     typingDot: {
       width: 8,

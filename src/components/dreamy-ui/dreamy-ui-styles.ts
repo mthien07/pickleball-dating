@@ -51,8 +51,8 @@ export const dreamyColors = {
 export const sharedStyles = StyleSheet.create({
   // Badge
   badge: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
     borderRadius: borderRadius.full,
     borderWidth: 1,
   },
@@ -74,11 +74,11 @@ export const sharedStyles = StyleSheet.create({
   },
   tabBarInner: {
     flexDirection: 'row',
-    padding: 8,
-    gap: 8,
+    padding: spacing.sm,
+    gap: spacing.sm,
   },
   tabButton: {
-    paddingHorizontal: 24,
+    paddingHorizontal: spacing.lg,
     paddingVertical: 10,
     borderRadius: borderRadius.md,
     position: 'relative',
@@ -185,12 +185,12 @@ export const sharedStyles = StyleSheet.create({
   },
   heroButtons: {
     flexDirection: 'row',
-    gap: 16,
+    gap: spacing.md,
     alignItems: 'center',
   },
   primaryButton: {
-    paddingHorizontal: 32,
-    paddingVertical: 16,
+    paddingHorizontal: spacing.xl,
+    paddingVertical: spacing.md,
     borderRadius: borderRadius.lg,
     shadowColor: '#EC4899',
     shadowOffset: { width: 0, height: 8 },
@@ -205,8 +205,8 @@ export const sharedStyles = StyleSheet.create({
     fontSize: 18,
   },
   secondaryButton: {
-    paddingHorizontal: 32,
-    paddingVertical: 16,
+    paddingHorizontal: spacing.xl,
+    paddingVertical: spacing.md,
     borderRadius: borderRadius.lg,
     borderWidth: 1,
     borderColor: '#F9A8D4',

@@ -80,7 +80,7 @@ export const createStyles = (colors: ThemeColors) =>
       alignItems: 'center',
       backgroundColor: `${colors.success}20`,
       paddingHorizontal: spacing.sm,
-      paddingVertical: 4,
+      paddingVertical: spacing.xs,
       borderRadius: borderRadius.full,
     },
     onlineDot: {
@@ -88,7 +88,7 @@ export const createStyles = (colors: ThemeColors) =>
       height: 8,
       borderRadius: 4,
       backgroundColor: colors.success,
-      marginRight: 4,
+      marginRight: spacing.xs,
     },
     onlineText: {
       ...typography.bodySmall,
@@ -111,7 +111,7 @@ export const createStyles = (colors: ThemeColors) =>
     },
     infoEmoji: {
       fontSize: 16,
-      marginRight: 4,
+      marginRight: spacing.xs,
     },
     infoText: {
       ...typography.body,
