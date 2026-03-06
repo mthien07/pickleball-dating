@@ -1,7 +1,7 @@
 {
-  "buildCommand": "npm install && npx expo export --platform web && node scripts/post-build-seo.js",
+  "buildCommand": null,
   "outputDirectory": "dist",
-  "installCommand": "npm install",
+  "installCommand": null,
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
