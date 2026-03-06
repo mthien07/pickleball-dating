@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeIn, SlideInRight, SlideInLeft } from 'react-native-reanimated';
 import { colors } from '../../theme/tokens';
@@ -58,17 +58,23 @@ export const CalendarPicker: React.FC<CalendarPickerProps> = ({
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity
+        <Pressable
           onPress={goToPrevMonth}
-          style={[styles.navButton, !canGoPrev() && styles.navButtonDisabled]}
+          style={({ pressed }) => [
+            styles.navButton,
+            !canGoPrev() && styles.navButtonDisabled,
+            pressed && canGoPrev() && { opacity: 0.7 },
+          ]}
           disabled={!canGoPrev()}
+          android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
           <Ionicons
             name="chevron-back"
             size={24}
             color={canGoPrev() ? colors.textPrimary : colors.textTertiary}
           />
-        </TouchableOpacity>
+        </Pressable>
 
         <Animated.Text
           key={`${currentMonth.getMonth()}-${currentMonth.getFullYear()}`}
@@ -78,9 +84,14 @@ export const CalendarPicker: React.FC<CalendarPickerProps> = ({
           {MONTHS[currentMonth.getMonth()]} {currentMonth.getFullYear()}
         </Animated.Text>
 
-        <TouchableOpacity onPress={goToNextMonth} style={styles.navButton}>
+        <Pressable
+          onPress={goToNextMonth}
+          style={({ pressed }) => [styles.navButton, pressed && { opacity: 0.7 }]}
+          android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+        >
           <Ionicons name="chevron-forward" size={24} color={colors.textPrimary} />
-        </TouchableOpacity>
+        </Pressable>
       </View>
 
       <View style={styles.weekdaysRow}>

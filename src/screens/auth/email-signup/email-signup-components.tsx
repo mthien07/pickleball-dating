@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Check } from 'lucide-react-native';
 import { colors } from '../../../theme/tokens';
@@ -30,10 +30,10 @@ export const RoleCard = React.memo(({ value, label, Icon, selected, onSelect }: 
   );
 
   return (
-    <TouchableOpacity
+    <Pressable
       onPress={() => onSelect(value)}
-      activeOpacity={0.8}
-      style={styles.roleCardTouchable}
+      style={({ pressed }) => [styles.roleCardTouchable, pressed && { opacity: 0.8 }]}
+      android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
     >
       {selected ? (
         <LinearGradient
@@ -47,7 +47,7 @@ export const RoleCard = React.memo(({ value, label, Icon, selected, onSelect }: 
       ) : (
         cardContent
       )}
-    </TouchableOpacity>
+    </Pressable>
   );
 });
 
@@ -57,12 +57,16 @@ interface TermsCheckboxProps {
 }
 
 export const TermsCheckbox = React.memo(({ agreed, onToggle }: TermsCheckboxProps) => (
-  <TouchableOpacity style={styles.termsContainer} onPress={onToggle} activeOpacity={0.8}>
+  <Pressable
+    style={({ pressed }) => [styles.termsContainer, pressed && { opacity: 0.8 }]}
+    onPress={onToggle}
+    android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+  >
     <View style={[styles.checkbox, agreed && styles.checkboxChecked]}>
       {agreed && <Check size={14} color={colors.white} strokeWidth={3} />}
     </View>
     <Text style={styles.termsText}>
       Tôi đồng ý với <Text style={styles.link}>Điều khoản sử dụng</Text>
     </Text>
-  </TouchableOpacity>
+  </Pressable>
 ));

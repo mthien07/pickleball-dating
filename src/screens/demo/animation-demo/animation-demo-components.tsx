@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, { FadeInUp } from 'react-native-reanimated';
@@ -28,7 +28,11 @@ export const FeatureCard = React.memo(({ icon, title, description, delay }: Feat
 
   return (
     <Animated.View entering={FadeInUp.duration(400).delay(delay)} style={styles.featureCard}>
-      <TouchableOpacity onPressIn={handlePressIn} onPressOut={handlePressOut} activeOpacity={0.9}>
+      <Pressable
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+        android_ripple={{ color: 'rgba(37, 99, 235, 0.1)' }}
+      >
         <Animated.View style={animatedStyle}>
           <GradientCard variant="subtle" style={styles.featureCardInner}>
             <View style={styles.featureIconContainer}>
@@ -38,7 +42,7 @@ export const FeatureCard = React.memo(({ icon, title, description, delay }: Feat
             <Text style={styles.featureDescription}>{description}</Text>
           </GradientCard>
         </Animated.View>
-      </TouchableOpacity>
+      </Pressable>
     </Animated.View>
   );
 });

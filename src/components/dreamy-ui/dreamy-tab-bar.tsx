@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { BlurView } from 'expo-blur';
@@ -21,11 +21,11 @@ export const DreamyTabBar: React.FC<DreamyTabBarProps> = ({ tabs, activeTab, onT
       <BlurView intensity={60} tint="light" style={sharedStyles.tabBarBlur}>
         <View style={sharedStyles.tabBarInner}>
           {tabs.map((tab, index) => (
-            <TouchableOpacity
+            <Pressable
               key={tab}
               onPress={() => onTabChange(index)}
-              style={sharedStyles.tabButton}
-              activeOpacity={0.7}
+              style={({ pressed }) => [sharedStyles.tabButton, pressed && { opacity: 0.7 }]}
+              android_ripple={{ color: 'rgba(37, 99, 235, 0.1)' }}
             >
               {activeTab === index && (
                 <Animated.View entering={FadeIn.duration(200)} style={sharedStyles.activeTabBg}>
@@ -45,7 +45,7 @@ export const DreamyTabBar: React.FC<DreamyTabBarProps> = ({ tabs, activeTab, onT
               >
                 {tab}
               </Text>
-            </TouchableOpacity>
+            </Pressable>
           ))}
         </View>
       </BlurView>

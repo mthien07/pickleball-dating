@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, Pressable, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, { FadeInUp } from 'react-native-reanimated';
@@ -37,10 +37,14 @@ export const PaymentMethodCard = React.memo(
   ({ method, isSelected, onSelect }: PaymentMethodCardProps) => {
     const info = METHOD_INFO[method];
     return (
-      <TouchableOpacity
-        style={[styles.methodCard, isSelected && styles.methodCardSelected]}
+      <Pressable
+        style={({ pressed }) => [
+          styles.methodCard,
+          isSelected && styles.methodCardSelected,
+          pressed && { opacity: 0.8 },
+        ]}
         onPress={onSelect}
-        activeOpacity={0.8}
+        android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
       >
         <View style={[styles.methodIcon, isSelected && styles.methodIconSelected]}>
           <Ionicons
@@ -56,7 +60,7 @@ export const PaymentMethodCard = React.memo(
         <View style={[styles.radioOuter, isSelected && styles.radioOuterSelected]}>
           {isSelected && <View style={styles.radioInner} />}
         </View>
-      </TouchableOpacity>
+      </Pressable>
     );
   }
 );

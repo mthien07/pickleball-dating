@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, Text } from 'react-native';
+import { Pressable, Text } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { colors } from '../../theme/tokens';
 import { styles } from './calendar-styles';
@@ -17,19 +17,28 @@ export const CalendarDay: React.FC<DayProps> = React.memo(
   ({ date, isSelected, isDisabled, isToday, onPress }) => {
     if (isSelected) {
       return (
-        <TouchableOpacity onPress={onPress} activeOpacity={0.8}>
+        <Pressable
+          onPress={onPress}
+          style={({ pressed }) => pressed && { opacity: 0.8 }}
+          android_ripple={{ color: 'rgba(255, 255, 255, 0.3)' }}
+        >
           <LinearGradient colors={[colors.primary, colors.primaryDark]} style={styles.daySelected}>
             <Text style={styles.dayTextSelected}>{date.getDate()}</Text>
           </LinearGradient>
-        </TouchableOpacity>
+        </Pressable>
       );
     }
 
     return (
-      <TouchableOpacity
+      <Pressable
         onPress={isDisabled ? undefined : onPress}
-        style={[styles.day, isToday && styles.dayToday, isDisabled && styles.dayDisabled]}
-        activeOpacity={isDisabled ? 1 : 0.7}
+        style={({ pressed }) => [
+          styles.day,
+          isToday && styles.dayToday,
+          isDisabled && styles.dayDisabled,
+          !isDisabled && pressed && { opacity: 0.7 },
+        ]}
+        android_ripple={!isDisabled ? { color: 'rgba(37, 99, 235, 0.15)' } : undefined}
       >
         <Text
           style={[
@@ -40,7 +49,7 @@ export const CalendarDay: React.FC<DayProps> = React.memo(
         >
           {date.getDate()}
         </Text>
-      </TouchableOpacity>
+      </Pressable>
     );
   }
 );

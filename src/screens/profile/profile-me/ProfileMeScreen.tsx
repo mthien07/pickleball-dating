@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
@@ -52,12 +52,14 @@ export const ProfileMeScreen = () => {
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Hồ sơ</Text>
-          <TouchableOpacity
+          <Pressable
             onPress={() => navigation.navigate('Settings')}
-            style={styles.iconButton}
+            style={({ pressed }) => [styles.iconButton, pressed && { opacity: 0.7 }]}
+            android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           >
             <Ionicons name="settings-outline" size={24} color={colors.textPrimary} />
-          </TouchableOpacity>
+          </Pressable>
         </View>
 
         <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>

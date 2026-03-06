@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import {
-  TouchableOpacity,
+  Pressable,
   Text,
   ActivityIndicator,
   ViewStyle,
@@ -33,7 +33,7 @@ export interface ButtonProps {
   accessibilityLabel?: string;
 }
 
-const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 export const Button: React.FC<ButtonProps> = ({
   title,
@@ -127,12 +127,12 @@ export const Button: React.FC<ButtonProps> = ({
 
   if (variant === 'gradient') {
     return (
-      <AnimatedTouchable
+      <AnimatedPressable
         onPress={handlePress}
         onPressIn={handlePressIn}
         onPressOut={handlePressOut}
         disabled={disabled || loading}
-        activeOpacity={0.8}
+        android_ripple={{ color: 'rgba(255, 255, 255, 0.3)' }}
         style={[styles.base, fullWidth && styles.fullWidth, style, animatedStyle]}
         accessibilityLabel={accessibilityLabel || title}
         accessibilityRole="button"
@@ -146,24 +146,24 @@ export const Button: React.FC<ButtonProps> = ({
         >
           {renderContent()}
         </LinearGradient>
-      </AnimatedTouchable>
+      </AnimatedPressable>
     );
   }
 
   return (
-    <AnimatedTouchable
+    <AnimatedPressable
       onPress={handlePress}
       onPressIn={!disabled && !loading ? handlePressIn : undefined}
       onPressOut={!disabled && !loading ? handlePressOut : undefined}
       disabled={disabled || loading}
-      activeOpacity={0.8}
+      android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
       style={[containerStyle, animatedStyle]}
       accessibilityLabel={accessibilityLabel || title}
       accessibilityRole="button"
       accessibilityState={{ disabled: disabled || loading, busy: loading }}
     >
       {renderContent()}
-    </AnimatedTouchable>
+    </AnimatedPressable>
   );
 };
 

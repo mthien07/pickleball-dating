@@ -6,7 +6,7 @@
  */
 
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Building2, Users, GraduationCap, ArrowLeft } from 'lucide-react-native';
@@ -43,9 +43,14 @@ export const EmailSignupScreen = () => {
     >
       <View style={styles.header}>
         <View style={styles.headerRow}>
-          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <Pressable
+            onPress={() => navigation.goBack()}
+            style={({ pressed }) => [styles.backButton, pressed && { opacity: 0.7 }]}
+            android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
             <ArrowLeft size={20} color={colors.textPrimary} strokeWidth={2.5} />
-          </TouchableOpacity>
+          </Pressable>
           <Text style={styles.headerTitle}>ĐĂNG KÝ</Text>
         </View>
       </View>
@@ -105,9 +110,12 @@ export const EmailSignupScreen = () => {
 
       <View style={styles.footer}>
         <Text style={styles.footerText}>Đã có tài khoản? </Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+        <Pressable
+          onPress={() => navigation.navigate('Login')}
+          style={({ pressed }) => pressed && { opacity: 0.7 }}
+        >
           <Text style={styles.link}>Đăng nhập</Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
     </KeyboardView>
   );

@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { View, TextInput, TouchableOpacity } from 'react-native';
+import { View, TextInput, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, {
@@ -71,14 +71,15 @@ export const MessageInput: React.FC<MessageInputProps> = ({
   return (
     <View style={styles.container}>
       <Animated.View style={attachButtonStyle}>
-        <TouchableOpacity
+        <Pressable
           onPress={onAttachment}
-          style={styles.iconButton}
+          style={({ pressed }) => [styles.iconButton, pressed && { opacity: 0.7 }]}
           disabled={disabled}
-          activeOpacity={0.7}
+          android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
         >
           <Ionicons name="add-circle" size={28} color={colors.primary} />
-        </TouchableOpacity>
+        </Pressable>
       </Animated.View>
 
       <Animated.View style={[styles.inputContainer, inputContainerStyle]}>
@@ -97,22 +98,28 @@ export const MessageInput: React.FC<MessageInputProps> = ({
           blurOnSubmit={false}
         />
         {text.length === 0 && onCamera && (
-          <TouchableOpacity onPress={onCamera} style={styles.cameraButton} activeOpacity={0.7}>
+          <Pressable
+            onPress={onCamera}
+            style={({ pressed }) => [styles.cameraButton, pressed && { opacity: 0.7 }]}
+            android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+          >
             <Ionicons name="camera" size={22} color={colors.textTertiary} />
-          </TouchableOpacity>
+          </Pressable>
         )}
       </Animated.View>
 
       <Animated.View style={[styles.sendContainer, sendButtonStyle]}>
-        <TouchableOpacity
+        <Pressable
           onPress={handleSend}
-          activeOpacity={0.8}
+          style={({ pressed }) => pressed && { opacity: 0.8 }}
           disabled={disabled || text.trim().length === 0}
+          android_ripple={{ color: 'rgba(255, 255, 255, 0.3)' }}
         >
           <LinearGradient colors={[colors.primary, colors.primaryDark]} style={styles.sendButton}>
             <Ionicons name="send" size={18} color={colors.white} />
           </LinearGradient>
-        </TouchableOpacity>
+        </Pressable>
       </Animated.View>
     </View>
   );

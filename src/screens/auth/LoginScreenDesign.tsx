@@ -6,7 +6,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   StatusBar,
-  TouchableOpacity,
+  Pressable,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ChevronLeft } from 'lucide-react-native';
@@ -58,9 +58,14 @@ export default function LoginScreenDesign({ navigation }: { navigation?: any }) 
 
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton} onPress={() => navigation?.goBack()}>
+        <Pressable
+          style={({ pressed }) => [styles.backButton, pressed && { opacity: 0.7 }]}
+          onPress={() => navigation?.goBack()}
+          android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+        >
           <ChevronLeft size={24} color={colors.textPrimary} strokeWidth={2.5} />
-        </TouchableOpacity>
+        </Pressable>
         <Text style={styles.headerTitle}>ĐĂNG NHẬP</Text>
         <View style={{ width: 48 }} />
       </View>
@@ -89,12 +94,13 @@ export default function LoginScreenDesign({ navigation }: { navigation?: any }) 
                 value={password}
                 onChangeText={setPassword}
               />
-              <TouchableOpacity
-                style={styles.forgotPassword}
+              <Pressable
+                style={({ pressed }) => [styles.forgotPassword, pressed && { opacity: 0.7 }]}
                 onPress={() => console.log('Forgot Password')}
+                android_ripple={{ color: 'rgba(37, 99, 235, 0.1)' }}
               >
                 <Text style={styles.forgotPasswordText}>Quên mật khẩu?</Text>
-              </TouchableOpacity>
+              </Pressable>
             </View>
           </View>
 

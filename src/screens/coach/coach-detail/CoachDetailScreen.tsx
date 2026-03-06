@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Image, Linking } from 'react-native';
+import { View, Text, ScrollView, Pressable, Image, Linking } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
@@ -59,9 +59,14 @@ export const CoachDetailScreen = () => {
         <Image source={{ uri: coach.avatar_url }} style={styles.coverImage} />
         <View style={styles.headerOverlay} />
         <SafeAreaView style={styles.headerActions}>
-          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+          <Pressable
+            style={({ pressed }) => [styles.backButton, pressed && { opacity: 0.7 }]}
+            onPress={() => navigation.goBack()}
+            android_ripple={{ color: 'rgba(255, 255, 255, 0.3)' }}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
             <Ionicons name="chevron-back" size={28} color={colors.white} />
-          </TouchableOpacity>
+          </Pressable>
         </SafeAreaView>
       </View>
 
@@ -128,16 +133,27 @@ export const CoachDetailScreen = () => {
           <Animated.View entering={FadeInUp.delay(350)} style={styles.section}>
             <Text style={styles.sectionTitle}>Liên hệ</Text>
             <View style={styles.contactRow}>
-              <TouchableOpacity style={styles.contactButton} onPress={handleCall}>
+              <Pressable
+                style={({ pressed }) => [styles.contactButton, pressed && { opacity: 0.8 }]}
+                onPress={handleCall}
+                android_ripple={{ color: 'rgba(255, 255, 255, 0.3)' }}
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+              >
                 <Ionicons name="call" size={24} color={colors.white} />
-              </TouchableOpacity>
+              </Pressable>
               {coach.contact.email && (
-                <TouchableOpacity
-                  style={[styles.contactButton, styles.emailButton]}
+                <Pressable
+                  style={({ pressed }) => [
+                    styles.contactButton,
+                    styles.emailButton,
+                    pressed && { opacity: 0.7 },
+                  ]}
                   onPress={handleEmail}
+                  android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+                  hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
                 >
                   <Ionicons name="mail" size={24} color={colors.primary} />
-                </TouchableOpacity>
+                </Pressable>
               )}
             </View>
           </Animated.View>

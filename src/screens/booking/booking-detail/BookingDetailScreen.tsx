@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Image, Alert } from 'react-native';
+import { View, Text, ScrollView, Pressable, Image, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
@@ -61,9 +61,14 @@ export const BookingDetailScreen = () => {
     <View style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <Pressable
+            onPress={() => navigation.goBack()}
+            style={({ pressed }) => [styles.backButton, pressed && { opacity: 0.7 }]}
+            android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
             <Ionicons name="chevron-back" size={28} color={colors.textPrimary} />
-          </TouchableOpacity>
+          </Pressable>
           <Text style={styles.headerTitle}>Chi tiết đặt sân</Text>
           <View style={{ width: 44 }} />
         </View>
@@ -80,10 +85,10 @@ export const BookingDetailScreen = () => {
 
           {/* Court Card */}
           <Animated.View entering={FadeInUp.delay(150)}>
-            <TouchableOpacity
-              style={styles.courtCard}
+            <Pressable
+              style={({ pressed }) => [styles.courtCard, pressed && { opacity: 0.8 }]}
               onPress={() => navigation.navigate('CourtDetail', { courtId: booking.court.id })}
-              activeOpacity={0.8}
+              android_ripple={{ color: 'rgba(37, 99, 235, 0.08)' }}
             >
               <Image source={{ uri: booking.court.images[0] }} style={styles.courtImage} />
               <View style={styles.courtInfo}>
@@ -100,7 +105,7 @@ export const BookingDetailScreen = () => {
                 </View>
               </View>
               <Ionicons name="chevron-forward" size={20} color={colors.textTertiary} />
-            </TouchableOpacity>
+            </Pressable>
           </Animated.View>
 
           {/* Booking Info */}

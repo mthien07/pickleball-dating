@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { View, Text, TouchableOpacity, StatusBar } from 'react-native';
+import { View, Text, Pressable, StatusBar } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
@@ -29,10 +29,14 @@ const WelcomeButton = ({
   ionIconColor?: string;
   LucideIcon?: any;
 }) => (
-  <TouchableOpacity
-    style={[styles.button, variant === 'filled' ? styles.buttonFilled : styles.buttonOutline]}
+  <Pressable
+    style={({ pressed }) => [
+      styles.button,
+      variant === 'filled' ? styles.buttonFilled : styles.buttonOutline,
+      pressed && { opacity: 0.8 },
+    ]}
     onPress={onPress}
-    activeOpacity={0.8}
+    android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
   >
     <View style={styles.buttonContent}>
       {ionIcon && (
@@ -48,7 +52,7 @@ const WelcomeButton = ({
         {title}
       </Text>
     </View>
-  </TouchableOpacity>
+  </Pressable>
 );
 
 export const WelcomeScreen = () => {
@@ -115,13 +119,14 @@ export const WelcomeScreen = () => {
 
         {/* Footer */}
         <View style={styles.footer}>
-          <TouchableOpacity
+          <Pressable
             onPress={() => navigation.navigate('LoginDesign')}
-            style={styles.signInContainer}
+            style={({ pressed }) => [styles.signInContainer, pressed && { opacity: 0.7 }]}
+            android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
           >
             <Text style={styles.footerText}>Đã có tài khoản? </Text>
             <Text style={styles.signInLink}>Đăng nhập</Text>
-          </TouchableOpacity>
+          </Pressable>
 
           <Text style={styles.legalText}>
             Khi tiếp tục, bạn đồng ý với <Text style={styles.legalLink}>Điều khoản</Text>

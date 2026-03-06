@@ -9,7 +9,7 @@ import React, { useState } from 'react';
 import {
   View,
   Text,
-  TouchableOpacity,
+  Pressable,
   ScrollView,
   KeyboardAvoidingView,
   Platform,
@@ -137,9 +137,14 @@ export default function SignupScreenDesign({ navigation }: { navigation?: any })
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
 
       <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton} onPress={() => navigation?.goBack()}>
+        <Pressable
+          style={({ pressed }) => [styles.backButton, pressed && { opacity: 0.7 }]}
+          onPress={() => navigation?.goBack()}
+          android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+        >
           <ChevronLeft size={24} color={colors.textPrimary} strokeWidth={2.5} />
-        </TouchableOpacity>
+        </Pressable>
         <Text style={styles.headerTitle}>ĐĂNG KÝ</Text>
         <View style={{ width: 48 }} />
       </View>

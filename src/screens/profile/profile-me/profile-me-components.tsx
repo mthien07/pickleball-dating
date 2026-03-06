@@ -7,7 +7,7 @@
  */
 
 import React from 'react';
-import { View, Text, TouchableOpacity, Image, ActivityIndicator, ScrollView } from 'react-native';
+import { View, Text, Pressable, Image, ActivityIndicator, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeInUp, FadeIn } from 'react-native-reanimated';
@@ -77,9 +77,14 @@ export const EmptyProfileState = React.memo<EmptyProfileStateProps>(
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Hồ sơ</Text>
-          <TouchableOpacity onPress={onNavigateSettings} style={styles.iconButton}>
+          <Pressable
+            onPress={onNavigateSettings}
+            style={({ pressed }) => [styles.iconButton, pressed && { opacity: 0.7 }]}
+            android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
             <Ionicons name="settings-outline" size={24} color={colors.textPrimary} />
-          </TouchableOpacity>
+          </Pressable>
         </View>
         <View style={styles.emptyContainer}>
           <Ionicons name="person-circle-outline" size={80} color={colors.textTertiary} />
@@ -114,9 +119,9 @@ export const PhotosSection = React.memo<PhotosSectionProps>(({ avatarUrls, onEdi
     <Animated.View entering={FadeInUp.delay(400)} style={styles.section}>
       <View style={styles.sectionHeader}>
         <Text style={styles.sectionTitle}>Ảnh</Text>
-        <TouchableOpacity onPress={onEditPress}>
+        <Pressable onPress={onEditPress} style={({ pressed }) => pressed && { opacity: 0.7 }}>
           <Text style={styles.editLink}>Chỉnh sửa</Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         <View style={styles.photoRow}>
@@ -150,9 +155,14 @@ export const ProfileCard = React.memo<ProfileCardProps>(
           showBorder
           borderColor={colors.primary}
         />
-        <TouchableOpacity style={styles.editButton} onPress={onEditPress}>
+        <Pressable
+          style={({ pressed }) => [styles.editButton, pressed && { opacity: 0.7 }]}
+          onPress={onEditPress}
+          android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+        >
           <Ionicons name="pencil" size={16} color={colors.white} />
-        </TouchableOpacity>
+        </Pressable>
       </View>
       <Text style={styles.displayName}>{displayName}</Text>
       <View style={styles.skillBadge}>

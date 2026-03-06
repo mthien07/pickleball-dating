@@ -6,7 +6,7 @@
  */
 
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, Pressable, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { ArrowLeft } from 'lucide-react-native';
@@ -100,9 +100,14 @@ export const LoginScreen = () => {
     >
       <View style={styles.header}>
         <View style={styles.headerRow}>
-          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <Pressable
+            onPress={() => navigation.goBack()}
+            style={({ pressed }) => [styles.backButton, pressed && { opacity: 0.7 }]}
+            android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
             <ArrowLeft size={20} color={colors.textPrimary} strokeWidth={2.5} />
-          </TouchableOpacity>
+          </Pressable>
           <Text style={styles.headerTitle}>ĐĂNG NHẬP</Text>
         </View>
       </View>
@@ -122,9 +127,13 @@ export const LoginScreen = () => {
           <PasswordInput value={password} onChangeText={setPassword} />
         </View>
 
-        <TouchableOpacity style={styles.forgotPassword} onPress={handleForgotPassword}>
+        <Pressable
+          style={({ pressed }) => [styles.forgotPassword, pressed && { opacity: 0.7 }]}
+          onPress={handleForgotPassword}
+          android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+        >
           <Text style={styles.forgotPasswordText}>Quên mật khẩu?</Text>
-        </TouchableOpacity>
+        </Pressable>
 
         <Button
           title="ĐĂNG NHẬP"
@@ -137,9 +146,12 @@ export const LoginScreen = () => {
 
       <View style={styles.footer}>
         <Text style={styles.footerText}>Chưa có tài khoản? </Text>
-        <TouchableOpacity onPress={() => navigation.navigate('EmailSignup')}>
+        <Pressable
+          onPress={() => navigation.navigate('EmailSignup')}
+          style={({ pressed }) => pressed && { opacity: 0.7 }}
+        >
           <Text style={styles.link}>Đăng ký</Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
     </KeyboardView>
   );

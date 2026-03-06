@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -55,14 +55,18 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
   const renderContent = () => {
     if (message.type === 'image' && message.image_url) {
       return (
-        <TouchableOpacity onPress={() => onImagePress?.(message.image_url!)} activeOpacity={0.9}>
+        <Pressable
+          onPress={() => onImagePress?.(message.image_url!)}
+          style={({ pressed }) => pressed && { opacity: 0.9 }}
+          android_ripple={{ color: 'rgba(37, 99, 235, 0.1)' }}
+        >
           <Image
             source={{ uri: message.image_url }}
             style={styles.imageMessage}
             contentFit="cover"
             transition={200}
           />
-        </TouchableOpacity>
+        </Pressable>
       );
     }
     return (

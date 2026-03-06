@@ -10,7 +10,7 @@ import {
   View,
   Text,
   FlatList,
-  TouchableOpacity,
+  Pressable,
   RefreshControl,
   StatusBar,
   TextInput,
@@ -24,11 +24,19 @@ import { colors } from '../../../theme/tokens';
 import { MOCK_MATCHES, Match } from '@data/mockData';
 import { styles } from './matches-list-styles';
 import { StoryMatchItem, ConversationItem } from './matches-list-items';
+import { SkeletonList } from '../../../components/SkeletonLoaders';
 
 export const MatchesListScreen = () => {
   const navigation = useNavigation<any>();
   const [refreshing, setRefreshing] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+
+  // Simulate initial load
+  React.useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 800);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Memoize derived lists - avoids re-filtering every render
   const newMatches = useMemo(() => MOCK_MATCHES.filter((m) => !m.last_message), []);
@@ -133,32 +141,44 @@ export const MatchesListScreen = () => {
             <Ionicons name="chevron-down" size={20} color={colors.textPrimary} />
           </View>
           <View style={styles.headerRight}>
-            <TouchableOpacity style={styles.headerButton}>
+            <Pressable
+              style={({ pressed }) => [styles.headerButton, pressed && { opacity: 0.7 }]}
+              android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            >
               <Ionicons name="videocam-outline" size={26} color={colors.textPrimary} />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.headerButton}>
+            </Pressable>
+            <Pressable
+              style={({ pressed }) => [styles.headerButton, pressed && { opacity: 0.7 }]}
+              android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            >
               <Ionicons name="create-outline" size={26} color={colors.textPrimary} />
-            </TouchableOpacity>
+            </Pressable>
           </View>
         </View>
 
         {/* Conversations List */}
-        <FlatList
-          data={conversations}
-          keyExtractor={(item) => item.id}
-          renderItem={renderConversationItem}
-          ListHeaderComponent={renderHeader}
-          contentContainerStyle={styles.listContent}
-          showsVerticalScrollIndicator={false}
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-              colors={[colors.primary]}
-              tintColor={colors.primary}
-            />
-          }
-        />
+        {isLoading ? (
+          <SkeletonList type="match" count={6} />
+        ) : (
+          <FlatList
+            data={conversations}
+            keyExtractor={(item) => item.id}
+            renderItem={renderConversationItem}
+            ListHeaderComponent={renderHeader}
+            contentContainerStyle={styles.listContent}
+            showsVerticalScrollIndicator={false}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+                colors={[colors.primary]}
+                tintColor={colors.primary}
+              />
+            }
+          />
+        )}
       </SafeAreaView>
     </View>
   );

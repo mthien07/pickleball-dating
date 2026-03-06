@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { TouchableOpacity, Text } from 'react-native';
+import { Pressable, Text } from 'react-native';
 import { Check } from 'lucide-react-native';
 import { colors } from '../../../theme/tokens';
 import { styles } from './signup-design-styles';
@@ -18,14 +18,18 @@ interface RoleCardProps {
 }
 
 export const RoleCard = React.memo<RoleCardProps>(({ icon: Icon, label, selected, onPress }) => (
-  <TouchableOpacity
+  <Pressable
     onPress={onPress}
-    style={[styles.roleCard, selected && styles.roleCardSelected]}
-    activeOpacity={0.7}
+    style={({ pressed }) => [
+      styles.roleCard,
+      selected && styles.roleCardSelected,
+      pressed && { opacity: 0.7 },
+    ]}
+    android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
   >
     <Icon size={24} color={selected ? colors.primary : colors.textSecondary} strokeWidth={2} />
     <Text style={[styles.roleCardText, selected && styles.roleCardTextSelected]}>{label}</Text>
-  </TouchableOpacity>
+  </Pressable>
 ));
 
 interface CheckboxProps {
@@ -34,11 +38,16 @@ interface CheckboxProps {
 }
 
 export const Checkbox = React.memo<CheckboxProps>(({ checked, onPress }) => (
-  <TouchableOpacity
+  <Pressable
     onPress={onPress}
-    style={[styles.checkbox, checked && styles.checkboxChecked]}
-    activeOpacity={0.7}
+    style={({ pressed }) => [
+      styles.checkbox,
+      checked && styles.checkboxChecked,
+      pressed && { opacity: 0.7 },
+    ]}
+    android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+    hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
   >
     {checked && <Check size={14} color={colors.white} strokeWidth={3} />}
-  </TouchableOpacity>
+  </Pressable>
 ));

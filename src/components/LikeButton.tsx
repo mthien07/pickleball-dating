@@ -14,7 +14,7 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { TouchableOpacity, StyleSheet, ViewStyle, View } from 'react-native';
+import { Pressable, StyleSheet, ViewStyle, View } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -70,7 +70,7 @@ export interface LikeButtonProps {
 // COMPONENT
 // ============================================
 
-const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 const AnimatedText = Animated.createAnimatedComponent(Animated.Text);
 
 export const LikeButton: React.FC<LikeButtonProps> = ({
@@ -125,9 +125,9 @@ export const LikeButton: React.FC<LikeButtonProps> = ({
       {/* ANTIGRAVITY: Heart particles burst effect */}
       <HeartParticles trigger={triggerParticles} count={8} size={size * 0.6} />
 
-      <AnimatedTouchableOpacity
+      <AnimatedPressable
         onPress={handlePress}
-        activeOpacity={0.8}
+        android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
         style={[styles.container, { width: size, height: size }]}
       >
         <AnimatedText
@@ -142,7 +142,7 @@ export const LikeButton: React.FC<LikeButtonProps> = ({
         >
           {isActive ? '❤️' : '🤍'}
         </AnimatedText>
-      </AnimatedTouchableOpacity>
+      </AnimatedPressable>
     </View>
   );
 };

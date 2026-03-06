@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, TextInput, Alert } from 'react-native';
+import { View, Text, ScrollView, Pressable, TextInput, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
@@ -119,9 +119,14 @@ export const EditProfileScreen = () => {
     <View style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <Pressable
+            onPress={() => navigation.goBack()}
+            style={({ pressed }) => [styles.backButton, pressed && { opacity: 0.7 }]}
+            android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
             <Ionicons name="chevron-back" size={28} color={colors.textPrimary} />
-          </TouchableOpacity>
+          </Pressable>
           <Text style={styles.headerTitle}>Chinh sua</Text>
           <View style={{ width: 44 }} />
         </View>
@@ -168,13 +173,15 @@ export const EditProfileScreen = () => {
             <Text style={styles.fieldLabel}>Trinh do</Text>
             <View style={styles.optionGrid}>
               {SKILL_LEVELS.map((level) => (
-                <TouchableOpacity
+                <Pressable
                   key={level.id}
-                  style={[
+                  style={({ pressed }) => [
                     styles.optionButton,
                     skillLevel === level.id && styles.optionButtonSelected,
+                    pressed && { opacity: 0.8 },
                   ]}
                   onPress={() => setSkillLevel(level.id)}
+                  android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
                 >
                   <Text
                     style={[
@@ -184,7 +191,7 @@ export const EditProfileScreen = () => {
                   >
                     {level.label}
                   </Text>
-                </TouchableOpacity>
+                </Pressable>
               ))}
             </View>
           </Animated.View>
@@ -193,15 +200,20 @@ export const EditProfileScreen = () => {
             <Text style={styles.fieldLabel}>Phong cach choi</Text>
             <View style={styles.optionRow}>
               {PLAY_STYLES.map((s) => (
-                <TouchableOpacity
+                <Pressable
                   key={s.id}
-                  style={[styles.styleButton, playStyle === s.id && styles.styleButtonSelected]}
+                  style={({ pressed }) => [
+                    styles.styleButton,
+                    playStyle === s.id && styles.styleButtonSelected,
+                    pressed && { opacity: 0.8 },
+                  ]}
                   onPress={() => setPlayStyle(s.id)}
+                  android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
                 >
                   <Text style={[styles.styleText, playStyle === s.id && styles.styleTextSelected]}>
                     {s.label}
                   </Text>
-                </TouchableOpacity>
+                </Pressable>
               ))}
             </View>
           </Animated.View>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Image } from 'expo-image';
@@ -21,7 +21,11 @@ interface StoryMatchItemProps {
 
 export const StoryMatchItem = React.memo<StoryMatchItemProps>(({ match, index, onPress }) => (
   <Animated.View entering={FadeInRight.delay(index * 80).duration(250)}>
-    <TouchableOpacity style={styles.storyItem} onPress={onPress} activeOpacity={0.7}>
+    <Pressable
+      style={({ pressed }) => [styles.storyItem, pressed && { opacity: 0.7 }]}
+      onPress={onPress}
+      android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+    >
       <LinearGradient
         colors={
           match.is_new
@@ -45,7 +49,7 @@ export const StoryMatchItem = React.memo<StoryMatchItemProps>(({ match, index, o
       <Text style={styles.storyName} numberOfLines={1}>
         {match.matched_user.display_name.split(' ')[0]}
       </Text>
-    </TouchableOpacity>
+    </Pressable>
   </Animated.View>
 ));
 
@@ -82,7 +86,11 @@ export const ConversationItem = React.memo<ConversationItemProps>(({ match, inde
 
   return (
     <Animated.View entering={FadeInDown.delay(index * 40).duration(200)}>
-      <TouchableOpacity style={styles.conversationItem} onPress={onPress} activeOpacity={0.6}>
+      <Pressable
+        style={({ pressed }) => [styles.conversationItem, pressed && { opacity: 0.6 }]}
+        onPress={onPress}
+        android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+      >
         {/* Avatar */}
         <View style={styles.conversationAvatarContainer}>
           <Image
@@ -119,10 +127,14 @@ export const ConversationItem = React.memo<ConversationItemProps>(({ match, inde
         </View>
 
         {/* Camera icon like Instagram */}
-        <TouchableOpacity style={styles.cameraButton} activeOpacity={0.6}>
+        <Pressable
+          style={({ pressed }) => [styles.cameraButton, pressed && { opacity: 0.6 }]}
+          android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+        >
           <Ionicons name="camera-outline" size={24} color={colors.textTertiary} />
-        </TouchableOpacity>
-      </TouchableOpacity>
+        </Pressable>
+      </Pressable>
     </Animated.View>
   );
 });

@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { View, TouchableOpacity } from 'react-native';
+import { View, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { colors } from '../../../theme/tokens';
@@ -26,13 +26,18 @@ const StarButton = React.memo(
     size: number;
     onPress: (star: number) => void;
   }) => (
-    <TouchableOpacity onPress={() => onPress(star)} activeOpacity={0.7}>
+    <Pressable
+      onPress={() => onPress(star)}
+      style={({ pressed }) => pressed && { opacity: 0.7 }}
+      android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+      hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+    >
       <Ionicons
         name={isSelected ? 'star' : 'star-outline'}
         size={size}
         color={isSelected ? colors.warning : colors.border}
       />
-    </TouchableOpacity>
+    </Pressable>
   )
 );
 

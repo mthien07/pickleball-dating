@@ -3,7 +3,7 @@
  */
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { View, FlatList, TouchableOpacity, Text, TextInput, StatusBar } from 'react-native';
+import { View, FlatList, Pressable, Text, TextInput, StatusBar } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -14,6 +14,7 @@ import { CourtsStackParamList } from '../../../navigation/types';
 import { colors } from '../../../theme/tokens';
 import { styles } from './court-discovery-styles';
 import { CourtCard, MapPlaceholder, EmptyState } from './court-discovery-components';
+import { SkeletonList } from '../../../components/SkeletonLoaders';
 
 type CourtDiscoveryNavigationProp = StackNavigationProp<CourtsStackParamList, 'CourtDiscovery'>;
 
@@ -74,22 +75,32 @@ export const CourtDiscoveryScreen = () => {
       <Text style={styles.screenTitle}>Tìm Sân</Text>
 
       <View style={styles.toggleContainer}>
-        <TouchableOpacity
-          style={[styles.toggleButton, viewMode === 'list' && styles.toggleButtonActive]}
+        <Pressable
+          style={({ pressed }) => [
+            styles.toggleButton,
+            viewMode === 'list' && styles.toggleButtonActive,
+            pressed && { opacity: 0.7 },
+          ]}
           onPress={() => setViewMode('list')}
+          android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
         >
           <Text style={[styles.toggleText, viewMode === 'list' && styles.toggleTextActive]}>
             Danh sách
           </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.toggleButton, viewMode === 'map' && styles.toggleButtonActive]}
+        </Pressable>
+        <Pressable
+          style={({ pressed }) => [
+            styles.toggleButton,
+            viewMode === 'map' && styles.toggleButtonActive,
+            pressed && { opacity: 0.7 },
+          ]}
           onPress={() => setViewMode('map')}
+          android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
         >
           <Text style={[styles.toggleText, viewMode === 'map' && styles.toggleTextActive]}>
             Bản đồ
           </Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
 
       <View style={styles.searchContainer}>
@@ -108,9 +119,13 @@ export const CourtDiscoveryScreen = () => {
             onChangeText={setQuery}
           />
         </View>
-        <TouchableOpacity style={styles.filterButton}>
+        <Pressable
+          style={({ pressed }) => [styles.filterButton, pressed && { opacity: 0.7 }]}
+          android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+        >
           <Ionicons name="options-outline" size={20} color={colors.textPrimary} />
-        </TouchableOpacity>
+        </Pressable>
       </View>
     </View>
   );
@@ -122,14 +137,16 @@ export const CourtDiscoveryScreen = () => {
         {renderHeader()}
 
         <View style={styles.contentContainer}>
-          {viewMode === 'list' ? (
+          {isLoading ? (
+            <SkeletonList type="court" count={5} />
+          ) : viewMode === 'list' ? (
             <FlatList
               data={filteredCourts}
               renderItem={renderItem}
               keyExtractor={(item) => item.id}
               contentContainerStyle={styles.listContent}
               showsVerticalScrollIndicator={false}
-              ListEmptyComponent={!isLoading ? <EmptyState /> : null}
+              ListEmptyComponent={<EmptyState />}
             />
           ) : (
             <MapPlaceholder />

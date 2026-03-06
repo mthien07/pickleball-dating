@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, Pressable, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { colors } from '../../../theme/tokens';
@@ -15,11 +15,15 @@ interface PhotoGridProps {
 export const PhotoGrid = React.memo(({ photos, onAdd, onRemove, isUploading }: PhotoGridProps) => (
   <View style={styles.photoGrid}>
     {[0, 1, 2, 3, 4, 5].map((index) => (
-      <TouchableOpacity
+      <Pressable
         key={index}
-        style={[styles.photoSlot, index === 0 && styles.primaryPhotoSlot]}
+        style={({ pressed }) => [
+          styles.photoSlot,
+          index === 0 && styles.primaryPhotoSlot,
+          pressed && { opacity: 0.8 },
+        ]}
         onPress={() => (photos[index] ? onRemove(index) : onAdd())}
-        activeOpacity={0.8}
+        android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
         disabled={isUploading}
       >
         {photos[index] ? (
@@ -43,7 +47,7 @@ export const PhotoGrid = React.memo(({ photos, onAdd, onRemove, isUploading }: P
             {index === 0 && <Text style={styles.primaryLabel}>Anh chinh</Text>}
           </>
         )}
-      </TouchableOpacity>
+      </Pressable>
     ))}
   </View>
 ));

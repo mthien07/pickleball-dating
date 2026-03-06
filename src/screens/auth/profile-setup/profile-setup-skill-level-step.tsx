@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
 
@@ -31,21 +31,25 @@ export const ProfileSetupSkillLevelStep = React.memo<SkillLevelStepProps>(
 
       <View style={styles.skillGrid}>
         {SKILL_LEVELS.map((level) => (
-          <TouchableOpacity
+          <Pressable
             key={level.id}
-            style={[styles.skillCard, skillLevel === level.id && styles.skillCardSelected]}
+            style={({ pressed }) => [
+              styles.skillCard,
+              skillLevel === level.id && styles.skillCardSelected,
+              pressed && { opacity: 0.8 },
+            ]}
             onPress={() => {
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
               onSkillLevelChange(level.id);
             }}
-            activeOpacity={0.8}
+            android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
           >
             <Text style={styles.skillEmoji}>{level.emoji}</Text>
             <Text style={[styles.skillLabel, skillLevel === level.id && styles.skillLabelSelected]}>
               {level.label}
             </Text>
             <Text style={styles.skillDesc}>{level.desc}</Text>
-          </TouchableOpacity>
+          </Pressable>
         ))}
       </View>
     </Animated.View>

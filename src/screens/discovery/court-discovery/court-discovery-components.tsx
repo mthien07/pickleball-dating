@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -52,7 +52,11 @@ export const CourtCard = React.memo(({ court, onPress, onBook }: CourtCardProps)
     : court.price || '$15/hr';
 
   return (
-    <TouchableOpacity activeOpacity={0.9} onPress={onPress} style={styles.card}>
+    <Pressable
+      style={({ pressed }) => [styles.card, pressed && { opacity: 0.9 }]}
+      onPress={onPress}
+      android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+    >
       <View style={styles.cardImageContainer}>
         <Image
           source={{ uri: imageUrl }}
@@ -85,12 +89,16 @@ export const CourtCard = React.memo(({ court, onPress, onBook }: CourtCardProps)
 
         <View style={styles.cardFooter}>
           <StarRating rating={court.rating} count={court.reviews || court.review_count || 0} />
-          <TouchableOpacity style={styles.bookButton} onPress={onBook}>
+          <Pressable
+            style={({ pressed }) => [styles.bookButton, pressed && { opacity: 0.7 }]}
+            onPress={onBook}
+            android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+          >
             <Text style={styles.bookButtonText}>Đặt Ngay</Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
       </View>
-    </TouchableOpacity>
+    </Pressable>
   );
 });
 

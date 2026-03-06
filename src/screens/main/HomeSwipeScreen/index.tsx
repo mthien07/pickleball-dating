@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback, useEffect, useMemo } from 'react';
-import { View, Text, TouchableOpacity, StatusBar, Dimensions, Platform } from 'react-native';
+import { View, Text, Pressable, StatusBar, Dimensions, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { X, Star, Heart, User } from 'lucide-react-native';
@@ -120,9 +120,14 @@ export const HomeSwipeScreen = () => {
                 <Text style={styles.logoAccent}>MATCH</Text>
               </Text>
             </View>
-            <TouchableOpacity style={styles.profileButton} onPress={() => showInfo('View profile')}>
+            <Pressable
+              style={({ pressed }) => [styles.profileButton, pressed && { opacity: 0.7 }]}
+              onPress={() => showInfo('View profile')}
+              android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            >
               <User size={24} color={colors.textPrimary} strokeWidth={2} />
-            </TouchableOpacity>
+            </Pressable>
           </View>
 
           {/* Card Stack */}
@@ -155,18 +160,26 @@ export const HomeSwipeScreen = () => {
 
           {/* Action Controls */}
           <View style={styles.controlsContainer}>
-            <TouchableOpacity
-              style={[styles.controlButton, styles.passButton]}
+            <Pressable
+              style={({ pressed }) => [
+                styles.controlButton,
+                styles.passButton,
+                pressed && { opacity: 0.85 },
+              ]}
               onPress={() => swipeCardRef.current?.swipe('left')}
-              activeOpacity={0.85}
+              android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
             >
               <X size={32} color={colors.textSecondary} strokeWidth={2.5} />
-            </TouchableOpacity>
+            </Pressable>
 
-            <TouchableOpacity
-              style={[styles.controlButton, styles.superLikeButton]}
+            <Pressable
+              style={({ pressed }) => [
+                styles.controlButton,
+                styles.superLikeButton,
+                pressed && { opacity: 0.85 },
+              ]}
               onPress={handleSuperLike}
-              activeOpacity={0.85}
+              android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
             >
               <LinearGradient
                 colors={[colors.primary, colors.primaryLight]}
@@ -176,12 +189,16 @@ export const HomeSwipeScreen = () => {
               >
                 <Star size={26} color={colors.white} fill={colors.white} strokeWidth={0} />
               </LinearGradient>
-            </TouchableOpacity>
+            </Pressable>
 
-            <TouchableOpacity
-              style={[styles.controlButton, styles.likeButton]}
+            <Pressable
+              style={({ pressed }) => [
+                styles.controlButton,
+                styles.likeButton,
+                pressed && { opacity: 0.85 },
+              ]}
               onPress={() => swipeCardRef.current?.swipe('right')}
-              activeOpacity={0.85}
+              android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
             >
               <LinearGradient
                 colors={[colors.accent, colors.accentLight]}
@@ -191,7 +208,7 @@ export const HomeSwipeScreen = () => {
               >
                 <Heart size={30} color={colors.white} fill={colors.white} strokeWidth={0} />
               </LinearGradient>
-            </TouchableOpacity>
+            </Pressable>
           </View>
 
           {isDesktop && isWeb && (

@@ -5,14 +5,7 @@
  */
 
 import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Dimensions,
-  ActivityIndicator,
-} from 'react-native';
+import { View, Text, StyleSheet, Pressable, Dimensions, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeInUp, FadeIn } from 'react-native-reanimated';
 
@@ -37,11 +30,15 @@ export const ProfileSetupPhotoStep = React.memo<PhotoStepProps>(
 
       <View style={styles.photoGrid}>
         {[0, 1, 2, 3, 4, 5].map((index) => (
-          <TouchableOpacity
+          <Pressable
             key={index}
-            style={[styles.photoSlot, index === 0 && styles.primaryPhotoSlot]}
+            style={({ pressed }) => [
+              styles.photoSlot,
+              index === 0 && styles.primaryPhotoSlot,
+              pressed && { opacity: 0.8 },
+            ]}
             onPress={() => (photos[index] ? onRemovePhoto(index) : onAddPhoto())}
-            activeOpacity={0.8}
+            android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
             disabled={isUploading}
           >
             {photos[index] ? (
@@ -65,7 +62,7 @@ export const ProfileSetupPhotoStep = React.memo<PhotoStepProps>(
                 {index === 0 && <Text style={styles.primaryLabel}>Ảnh chính</Text>}
               </>
             )}
-          </TouchableOpacity>
+          </Pressable>
         ))}
       </View>
     </Animated.View>

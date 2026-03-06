@@ -4,7 +4,7 @@
  */
 
 import React, { useState } from 'react';
-import { View, TextInput, Text, TextInputProps, TouchableOpacity, Platform } from 'react-native';
+import { View, TextInput, Text, TextInputProps, Pressable, Platform } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { Eye, EyeOff, X } from 'lucide-react-native';
 import { colors, durations } from '../../theme/tokens';
@@ -136,27 +136,31 @@ const NativeInput: React.FC<InputProps> = ({
           {...textInputProps}
         />
         {type === 'password' && (
-          <TouchableOpacity
+          <Pressable
             onPress={() => setIsSecureText(!isSecureText)}
-            style={styles.iconContainer}
+            style={({ pressed }) => [styles.iconContainer, pressed && { opacity: 0.7 }]}
+            android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
           >
             {isSecureText ? (
               <Eye size={20} color={colors.textSecondary} strokeWidth={2} />
             ) : (
               <EyeOff size={20} color={colors.textSecondary} strokeWidth={2} />
             )}
-          </TouchableOpacity>
+          </Pressable>
         )}
         {clearable && value.length > 0 && !disabled && type !== 'password' && (
-          <TouchableOpacity
+          <Pressable
             onPress={() => {
               onChangeText('');
               onClear?.();
             }}
-            style={styles.iconContainer}
+            style={({ pressed }) => [styles.iconContainer, pressed && { opacity: 0.7 }]}
+            android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
           >
             <X size={18} color={colors.textSecondary} strokeWidth={2} />
-          </TouchableOpacity>
+          </Pressable>
         )}
         {trailingIcon && type !== 'password' && (
           <View style={styles.iconContainer}>{trailingIcon}</View>

@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { View, Text, TouchableOpacity, Image } from 'react-native';
+import { View, Text, Pressable, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeInUp, Layout } from 'react-native-reanimated';
 
@@ -55,15 +55,20 @@ interface TabBarProps {
 export const TabBar: React.FC<TabBarProps> = React.memo(({ tabs, activeTab, onTabChange }) => (
   <View style={styles.tabBar}>
     {tabs.map((tab) => (
-      <TouchableOpacity
+      <Pressable
         key={tab.id}
-        style={[styles.tab, activeTab === tab.id && styles.tabActive]}
+        style={({ pressed }) => [
+          styles.tab,
+          activeTab === tab.id && styles.tabActive,
+          pressed && { opacity: 0.7 },
+        ]}
         onPress={() => onTabChange(tab.id)}
+        android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
       >
         <Text style={[styles.tabText, activeTab === tab.id && styles.tabTextActive]}>
           {tab.label}
         </Text>
-      </TouchableOpacity>
+      </Pressable>
     ))}
   </View>
 ));
@@ -83,7 +88,11 @@ export const BookingCard: React.FC<BookingCardProps> = React.memo(({ booking, in
 
   return (
     <Animated.View entering={FadeInUp.delay(index * 100)} layout={Layout.springify()}>
-      <TouchableOpacity style={styles.bookingCard} onPress={onPress} activeOpacity={0.8}>
+      <Pressable
+        style={({ pressed }) => [styles.bookingCard, pressed && { opacity: 0.8 }]}
+        onPress={onPress}
+        android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+      >
         <Image source={{ uri: booking.court.images[0] }} style={styles.courtImage} />
         <View style={styles.bookingInfo}>
           <Text style={styles.courtName}>{booking.court.name}</Text>
@@ -106,7 +115,7 @@ export const BookingCard: React.FC<BookingCardProps> = React.memo(({ booking, in
             </View>
           </View>
         </View>
-      </TouchableOpacity>
+      </Pressable>
     </Animated.View>
   );
 });

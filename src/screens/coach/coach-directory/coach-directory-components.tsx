@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -34,7 +34,11 @@ interface CoachCardProps {
 }
 
 export const CoachCard = React.memo(({ coach, onPress, onBook }: CoachCardProps) => (
-  <TouchableOpacity activeOpacity={0.95} onPress={onPress} style={styles.card}>
+  <Pressable
+    style={({ pressed }) => [styles.card, pressed && { opacity: 0.95 }]}
+    onPress={onPress}
+    android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+  >
     <View style={styles.cardContent}>
       <View style={styles.cardHeader}>
         <Image
@@ -77,18 +81,16 @@ export const CoachCard = React.memo(({ coach, onPress, onBook }: CoachCardProps)
             {(coach.hourly_rate / 1000).toFixed(0)}k <Text style={styles.currency}>VND</Text>
           </Text>
         </View>
-        <TouchableOpacity
-          style={styles.bookButton}
-          onPress={(e) => {
-            e.stopPropagation();
-            onBook();
-          }}
+        <Pressable
+          style={({ pressed }) => [styles.bookButton, pressed && { opacity: 0.7 }]}
+          onPress={onBook}
+          android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
         >
           <Text style={styles.bookButtonText}>Book Now</Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
     </View>
-  </TouchableOpacity>
+  </Pressable>
 ));
 
 // ============================================

@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { View, Text, TouchableOpacity, Switch } from 'react-native';
+import { View, Text, Pressable, Switch } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import { type ThemeColors } from '../../../contexts/ThemeContext';
@@ -35,10 +35,14 @@ export const SettingsRow = React.memo<SettingsRowProps>(
     danger = false,
     colors,
   }) => (
-    <TouchableOpacity
-      style={[styles.row, { borderBottomColor: colors.border }]}
+    <Pressable
+      style={({ pressed }) => [
+        styles.row,
+        { borderBottomColor: colors.border },
+        type !== 'toggle' && pressed && { opacity: 0.7 },
+      ]}
       onPress={type !== 'toggle' ? onPress : undefined}
-      activeOpacity={type === 'toggle' ? 1 : 0.7}
+      android_ripple={type !== 'toggle' ? { color: 'rgba(37, 99, 235, 0.15)' } : undefined}
     >
       <View
         style={[
@@ -70,7 +74,7 @@ export const SettingsRow = React.memo<SettingsRowProps>(
         />
       )}
       {type === 'link' && <Ionicons name="chevron-forward" size={20} color={colors.textTertiary} />}
-    </TouchableOpacity>
+    </Pressable>
   )
 );
 

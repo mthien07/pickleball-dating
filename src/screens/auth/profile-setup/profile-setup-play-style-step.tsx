@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 
 import { colors, spacing, typography, borderRadius } from '../../../theme/tokens';
@@ -47,10 +47,15 @@ export const ProfileSetupPlayStyleStep = React.memo<PlayStyleStepProps>(
           <Text style={styles.fieldLabel}>Bạn thích chơi kiểu nào?</Text>
           <View style={styles.optionRow}>
             {PLAY_STYLES.map((option) => (
-              <TouchableOpacity
+              <Pressable
                 key={option.id}
-                style={[styles.styleCard, playStyle === option.id && styles.styleCardSelected]}
+                style={({ pressed }) => [
+                  styles.styleCard,
+                  playStyle === option.id && styles.styleCardSelected,
+                  pressed && { opacity: 0.8 },
+                ]}
                 onPress={() => onPlayStyleChange(option.id)}
+                android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
               >
                 <Text style={styles.styleEmoji}>{option.emoji}</Text>
                 <Text
@@ -58,7 +63,7 @@ export const ProfileSetupPlayStyleStep = React.memo<PlayStyleStepProps>(
                 >
                   {option.label}
                 </Text>
-              </TouchableOpacity>
+              </Pressable>
             ))}
           </View>
         </View>
@@ -67,10 +72,15 @@ export const ProfileSetupPlayStyleStep = React.memo<PlayStyleStepProps>(
           <Text style={styles.fieldLabel}>Bạn đang tìm kiếm?</Text>
           <View style={styles.chipGrid}>
             {LOOKING_FOR_OPTIONS.map((option) => (
-              <TouchableOpacity
+              <Pressable
                 key={option.id}
-                style={[styles.chip, lookingFor.includes(option.id) && styles.chipSelected]}
+                style={({ pressed }) => [
+                  styles.chip,
+                  lookingFor.includes(option.id) && styles.chipSelected,
+                  pressed && { opacity: 0.8 },
+                ]}
                 onPress={() => toggleLookingFor(option.id)}
+                android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
               >
                 <Text
                   style={[
@@ -80,7 +90,7 @@ export const ProfileSetupPlayStyleStep = React.memo<PlayStyleStepProps>(
                 >
                   {option.label}
                 </Text>
-              </TouchableOpacity>
+              </Pressable>
             ))}
           </View>
         </View>

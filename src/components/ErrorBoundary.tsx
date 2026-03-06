@@ -6,7 +6,7 @@
  */
 
 import React, { Component, ReactNode } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeIn, SlideInDown } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
@@ -90,14 +90,14 @@ export class ErrorBoundary extends Component<Props, State> {
 
             {/* Reset Button */}
             <Animated.View entering={SlideInDown.delay(800).springify()}>
-              <TouchableOpacity
-                style={styles.button}
+              <Pressable
+                style={({ pressed }) => [styles.button, pressed && { opacity: 0.8 }]}
                 onPress={this.handleReset}
-                activeOpacity={0.8}
+                android_ripple={{ color: 'rgba(255, 255, 255, 0.3)' }}
               >
                 <Ionicons name="refresh" size={20} color={colors.white} />
                 <Text style={styles.buttonText}>Try Again</Text>
-              </TouchableOpacity>
+              </Pressable>
             </Animated.View>
           </Animated.View>
         </View>

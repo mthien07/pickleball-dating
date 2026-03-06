@@ -5,7 +5,7 @@
  */
 
 import React, { useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Image, Alert } from 'react-native';
+import { View, Text, ScrollView, Pressable, Image, Alert } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeInUp } from 'react-native-reanimated';
@@ -88,9 +88,14 @@ export const MatchDetailScreen = () => {
           ))}
         </View>
 
-        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+        <Pressable
+          style={({ pressed }) => [styles.backButton, pressed && { opacity: 0.7 }]}
+          onPress={() => navigation.goBack()}
+          android_ripple={{ color: 'rgba(255, 255, 255, 0.2)' }}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+        >
           <Ionicons name="chevron-back" size={28} color={colors.white} />
-        </TouchableOpacity>
+        </Pressable>
       </View>
 
       {/* Content */}
@@ -157,18 +162,28 @@ export const MatchDetailScreen = () => {
         </ScrollView>
 
         <View style={styles.actions}>
-          <TouchableOpacity style={styles.actionButton} onPress={handleUnmatch}>
+          <Pressable
+            style={({ pressed }) => [styles.actionButton, pressed && { opacity: 0.7 }]}
+            onPress={handleUnmatch}
+            android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
             <Ionicons name="close-circle" size={28} color={colors.error} />
-          </TouchableOpacity>
+          </Pressable>
           <Button
             title="Nhắn tin"
             onPress={handleChat}
             variant="primary"
             style={styles.chatButton}
           />
-          <TouchableOpacity style={styles.actionButton} onPress={handleRate}>
+          <Pressable
+            style={({ pressed }) => [styles.actionButton, pressed && { opacity: 0.7 }]}
+            onPress={handleRate}
+            android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
             <Ionicons name="star" size={28} color={colors.warning} />
-          </TouchableOpacity>
+          </Pressable>
         </View>
       </View>
     </View>

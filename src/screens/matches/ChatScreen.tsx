@@ -11,7 +11,7 @@ import {
   Text,
   StyleSheet,
   FlatList,
-  TouchableOpacity,
+  Pressable,
   KeyboardAvoidingView,
   Platform,
   StatusBar,
@@ -184,15 +184,19 @@ export const ChatScreen = () => {
       <SafeAreaView style={styles.safeArea} edges={['top']}>
         {/* Header */}
         <View style={styles.header}>
-          <TouchableOpacity
+          <Pressable
             onPress={() => navigation.goBack()}
-            style={styles.backButton}
-            activeOpacity={0.7}
+            style={({ pressed }) => [styles.backButton, pressed && { opacity: 0.7 }]}
+            android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           >
             <Ionicons name="chevron-back" size={28} color={colors.textPrimary} />
-          </TouchableOpacity>
+          </Pressable>
 
-          <TouchableOpacity style={styles.headerProfile} activeOpacity={0.8}>
+          <Pressable
+            style={({ pressed }) => [styles.headerProfile, pressed && { opacity: 0.8 }]}
+            android_ripple={{ color: 'rgba(37, 99, 235, 0.1)' }}
+          >
             <Avatar
               size="sm"
               imageUrl={otherUser.avatar_urls[0]}
@@ -203,11 +207,15 @@ export const ChatScreen = () => {
               <Text style={styles.headerName}>{otherUser.display_name}</Text>
               <Text style={styles.headerStatus}>{otherUser.is_online ? 'Online' : 'Offline'}</Text>
             </View>
-          </TouchableOpacity>
+          </Pressable>
 
-          <TouchableOpacity style={styles.moreButton} activeOpacity={0.7}>
+          <Pressable
+            style={({ pressed }) => [styles.moreButton, pressed && { opacity: 0.7 }]}
+            android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
             <Ionicons name="ellipsis-horizontal" size={24} color={colors.textPrimary} />
-          </TouchableOpacity>
+          </Pressable>
         </View>
 
         {/* Messages */}

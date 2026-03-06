@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, {
   useSharedValue,
@@ -75,7 +75,11 @@ export const DreamyHeroCard: React.FC<DreamyHeroCardProps> = ({
 
           {/* Buttons */}
           <View style={sharedStyles.heroButtons}>
-            <TouchableOpacity onPress={onPrimaryPress} activeOpacity={0.8}>
+            <Pressable
+              onPress={onPrimaryPress}
+              style={({ pressed }) => pressed && { opacity: 0.8 }}
+              android_ripple={{ color: 'rgba(255, 255, 255, 0.3)' }}
+            >
               <LinearGradient
                 colors={[dreamyColors.pink400, dreamyColors.purple400]}
                 start={{ x: 0, y: 0 }}
@@ -84,16 +88,16 @@ export const DreamyHeroCard: React.FC<DreamyHeroCardProps> = ({
               >
                 <Text style={sharedStyles.primaryButtonText}>{primaryButtonText}</Text>
               </LinearGradient>
-            </TouchableOpacity>
+            </Pressable>
 
             {secondaryButtonText && (
-              <TouchableOpacity
+              <Pressable
                 onPress={onSecondaryPress}
-                style={sharedStyles.secondaryButton}
-                activeOpacity={0.7}
+                style={({ pressed }) => [sharedStyles.secondaryButton, pressed && { opacity: 0.7 }]}
+                android_ripple={{ color: 'rgba(37, 99, 235, 0.1)' }}
               >
                 <Text style={sharedStyles.secondaryButtonText}>{secondaryButtonText}</Text>
-              </TouchableOpacity>
+              </Pressable>
             )}
           </View>
         </LinearGradient>

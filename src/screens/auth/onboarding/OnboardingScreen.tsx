@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { AuthStackParamList } from '../../../navigation/types';
@@ -89,10 +89,10 @@ export const OnboardingScreen = () => {
             </FadeIn>
 
             <FadeIn delay={800} style={styles.buttonSection}>
-              <TouchableOpacity
-                activeOpacity={0.9}
+              <Pressable
                 onPress={() => navigation.navigate('SignupDesign')}
-                style={styles.buttonContainer}
+                style={({ pressed }) => [styles.buttonContainer, pressed && { opacity: 0.9 }]}
+                android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
               >
                 <View style={styles.buttonGlow} />
                 <LinearGradient
@@ -105,7 +105,7 @@ export const OnboardingScreen = () => {
                   <Text style={styles.buttonText}>GET STARTED</Text>
                   <ArrowRight size={20} color={colors.white} strokeWidth={2.5} />
                 </LinearGradient>
-              </TouchableOpacity>
+              </Pressable>
             </FadeIn>
 
             <FadeIn delay={1000}>

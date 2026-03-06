@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 import { colors, spacing, typography, borderRadius, fontFamily } from '../theme/tokens';
 import { shadows } from '../theme/shadows';
@@ -11,7 +11,7 @@ export interface MatchCardProps {
   onPress?: () => void;
 }
 
-const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 export const MatchCard = React.memo<MatchCardProps>(
   ({ match, onPress }) => {
@@ -50,11 +50,11 @@ export const MatchCard = React.memo<MatchCardProps>(
     };
 
     return (
-      <AnimatedTouchable
+      <AnimatedPressable
         onPress={onPress}
         onPressIn={handlePressIn}
         onPressOut={handlePressOut}
-        activeOpacity={0.95}
+        android_ripple={{ color: 'rgba(244, 63, 94, 0.08)' }}
         style={[styles.matchCard, animatedStyle]}
       >
         {/* Avatar */}
@@ -92,7 +92,7 @@ export const MatchCard = React.memo<MatchCardProps>(
             )}
           </View>
         </View>
-      </AnimatedTouchable>
+      </AnimatedPressable>
     );
   },
   (prevProps, nextProps) => {

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Text, Modal, TouchableOpacity } from 'react-native';
+import { View, Text, Modal, Pressable } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -141,13 +141,13 @@ export const MatchCelebration: React.FC<MatchCelebrationProps> = ({
           <Text style={styles.message}>You and {matchedUserName} liked each other!</Text>
 
           <View style={styles.actions}>
-            <TouchableOpacity
-              style={styles.sendMessageButton}
+            <Pressable
+              style={({ pressed }) => [styles.sendMessageButton, pressed && { opacity: 0.8 }]}
               onPress={() => {
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
                 onSendMessage?.();
               }}
-              activeOpacity={0.8}
+              android_ripple={{ color: 'rgba(255, 255, 255, 0.3)' }}
             >
               <LinearGradient
                 colors={[colors.primary, colors.primaryDark]}
@@ -157,18 +157,18 @@ export const MatchCelebration: React.FC<MatchCelebrationProps> = ({
               >
                 <Text style={styles.sendMessageText}>SEND MESSAGE</Text>
               </LinearGradient>
-            </TouchableOpacity>
+            </Pressable>
 
-            <TouchableOpacity
-              style={styles.closeButton}
+            <Pressable
+              style={({ pressed }) => [styles.closeButton, pressed && { opacity: 0.7 }]}
               onPress={() => {
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                 onClose();
               }}
-              activeOpacity={0.7}
+              android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
             >
               <Text style={styles.closeText}>KEEP SWIPING</Text>
-            </TouchableOpacity>
+            </Pressable>
           </View>
         </Animated.View>
       </View>

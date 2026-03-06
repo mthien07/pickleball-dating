@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, Pressable, ScrollView } from 'react-native';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -47,12 +47,21 @@ export const ImageCarousel = React.memo(
       />
 
       <SafeAreaView style={styles.headerOverlay}>
-        <TouchableOpacity onPress={onBack} style={styles.backButton}>
+        <Pressable
+          onPress={onBack}
+          style={({ pressed }) => [styles.backButton, pressed && { opacity: 0.7 }]}
+          android_ripple={{ color: 'rgba(255, 255, 255, 0.2)' }}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+        >
           <Ionicons name="chevron-back" size={28} color={colors.white} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.shareButton}>
+        </Pressable>
+        <Pressable
+          style={({ pressed }) => [styles.shareButton, pressed && { opacity: 0.7 }]}
+          android_ripple={{ color: 'rgba(255, 255, 255, 0.2)' }}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+        >
           <Ionicons name="share-outline" size={24} color={colors.white} />
-        </TouchableOpacity>
+        </Pressable>
       </SafeAreaView>
 
       <View style={styles.imageIndicators}>
@@ -108,10 +117,13 @@ export const LocationSection = React.memo(({ address }: { address: string }) => 
       <Text style={styles.sectionTitle}>Địa chỉ</Text>
     </View>
     <Text style={styles.address}>{address}</Text>
-    <TouchableOpacity style={styles.mapButton}>
+    <Pressable
+      style={({ pressed }) => [styles.mapButton, pressed && { opacity: 0.7 }]}
+      android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+    >
       <Ionicons name="navigate-outline" size={16} color={colors.primary} />
       <Text style={styles.mapButtonText}>Xem bản đồ</Text>
-    </TouchableOpacity>
+    </Pressable>
   </Animated.View>
 ));
 

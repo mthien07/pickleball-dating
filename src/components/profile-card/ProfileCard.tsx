@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Text, Pressable, Dimensions } from 'react-native';
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
@@ -10,7 +10,7 @@ import { CARD_MAX_WIDTH, CARD_ASPECT_RATIO } from '../../theme/breakpoints';
 import { User } from '@data/mockData';
 import { styles } from './profile-card-styles';
 
-const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const DEFAULT_CARD_WIDTH = Math.min(SCREEN_WIDTH * 0.9, CARD_MAX_WIDTH);
 
@@ -75,11 +75,11 @@ export const ProfileCard = React.memo<ProfileCardProps>(
     };
 
     return (
-      <AnimatedTouchable
+      <AnimatedPressable
         onPress={onPress}
         onPressIn={handlePressIn}
         onPressOut={handlePressOut}
-        activeOpacity={0.95}
+        android_ripple={{ color: 'rgba(37, 99, 235, 0.1)' }}
         style={[cardStyle, animatedStyle]}
       >
         <Image
@@ -167,13 +167,14 @@ export const ProfileCard = React.memo<ProfileCardProps>(
             </View>
 
             {onShowProfile && (
-              <TouchableOpacity
+              <Pressable
                 onPress={onShowProfile}
-                style={styles.profileInfoButton}
-                activeOpacity={0.8}
+                style={({ pressed }) => [styles.profileInfoButton, pressed && { opacity: 0.8 }]}
+                android_ripple={{ color: 'rgba(255, 255, 255, 0.2)' }}
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
               >
                 <Ionicons name="information-circle" size={24} color={colors.white} />
-              </TouchableOpacity>
+              </Pressable>
             )}
           </View>
         </View>
@@ -181,17 +182,21 @@ export const ProfileCard = React.memo<ProfileCardProps>(
         {showActionButtons && (
           <View style={styles.profileActionButtons}>
             {onPass && (
-              <TouchableOpacity
+              <Pressable
                 onPress={onPass}
-                style={styles.actionButtonReject}
-                activeOpacity={0.8}
+                style={({ pressed }) => [styles.actionButtonReject, pressed && { opacity: 0.8 }]}
+                android_ripple={{ color: 'rgba(239, 68, 68, 0.2)' }}
               >
                 <Ionicons name="close" size={28} color={colors.error} />
-              </TouchableOpacity>
+              </Pressable>
             )}
 
             {onSuperLike && (
-              <TouchableOpacity onPress={onSuperLike} activeOpacity={0.8}>
+              <Pressable
+                onPress={onSuperLike}
+                style={({ pressed }) => pressed && { opacity: 0.8 }}
+                android_ripple={{ color: 'rgba(37, 99, 235, 0.2)' }}
+              >
                 <LinearGradient
                   colors={[colors.primary, colors.primaryDark]}
                   start={{ x: 0, y: 0 }}
@@ -200,11 +205,15 @@ export const ProfileCard = React.memo<ProfileCardProps>(
                 >
                   <Ionicons name="star" size={28} color={colors.white} />
                 </LinearGradient>
-              </TouchableOpacity>
+              </Pressable>
             )}
 
             {onLike && (
-              <TouchableOpacity onPress={onLike} activeOpacity={0.8}>
+              <Pressable
+                onPress={onLike}
+                style={({ pressed }) => pressed && { opacity: 0.8 }}
+                android_ripple={{ color: 'rgba(244, 63, 94, 0.2)' }}
+              >
                 <LinearGradient
                   colors={[colors.secondary, colors.secondaryDark]}
                   start={{ x: 0, y: 0 }}
@@ -213,11 +222,11 @@ export const ProfileCard = React.memo<ProfileCardProps>(
                 >
                   <Ionicons name="heart" size={28} color={colors.white} />
                 </LinearGradient>
-              </TouchableOpacity>
+              </Pressable>
             )}
           </View>
         )}
-      </AnimatedTouchable>
+      </AnimatedPressable>
     );
   },
   (prevProps, nextProps) => {

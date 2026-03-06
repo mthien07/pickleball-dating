@@ -5,7 +5,7 @@
  */
 
 import React, { useState } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Text, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { AuthStackParamList } from '../../navigation/types';
@@ -58,12 +58,13 @@ export const PhoneSignupScreen = () => {
     >
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity
+        <Pressable
           onPress={() => (step === 'phone' ? navigation.goBack() : setStep('phone'))}
-          style={styles.backButton}
+          style={({ pressed }) => [styles.backButton, pressed && { opacity: 0.7 }]}
+          android_ripple={{ color: 'rgba(37, 99, 235, 0.1)' }}
         >
           <Text style={styles.backButtonText}>← Back</Text>
-        </TouchableOpacity>
+        </Pressable>
         <Text style={styles.title}>{step === 'phone' ? 'Enter Phone Number' : 'Verify Phone'}</Text>
         <Text style={styles.subtitle}>
           {step === 'phone'

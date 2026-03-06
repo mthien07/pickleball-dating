@@ -1,12 +1,12 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { Image } from 'expo-image';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 import { colors, spacing, typography, borderRadius, fontFamily } from '../theme/tokens';
 import { shadows } from '../theme/shadows';
 import { Court } from '@data/mockData';
 
-const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 export interface CourtCardProps {
   court: Court;
@@ -31,11 +31,11 @@ export const CourtCard = React.memo<CourtCardProps>(
     };
 
     return (
-      <AnimatedTouchable
+      <AnimatedPressable
         onPress={onPress}
         onPressIn={handlePressIn}
         onPressOut={handlePressOut}
-        activeOpacity={0.95}
+        android_ripple={{ color: 'rgba(37, 99, 235, 0.08)' }}
         style={[styles.courtCard, animatedStyle]}
       >
         {/* Court Image */}
@@ -75,19 +75,17 @@ export const CourtCard = React.memo<CourtCardProps>(
               {(court.price_per_hour / 1000).toFixed(0)}k VND/giờ
             </Text>
             {onBookPress && (
-              <TouchableOpacity
-                onPress={(e) => {
-                  e.stopPropagation();
-                  onBookPress();
-                }}
-                style={styles.bookButton}
+              <Pressable
+                onPress={onBookPress}
+                style={({ pressed }) => [styles.bookButton, pressed && { opacity: 0.8 }]}
+                android_ripple={{ color: 'rgba(255, 255, 255, 0.3)' }}
               >
                 <Text style={styles.bookButtonText}>Đặt ngay</Text>
-              </TouchableOpacity>
+              </Pressable>
             )}
           </View>
         </View>
-      </AnimatedTouchable>
+      </AnimatedPressable>
     );
   },
   (prevProps, nextProps) => {

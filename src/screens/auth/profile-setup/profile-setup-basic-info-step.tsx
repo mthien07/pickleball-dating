@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, StyleSheet, Pressable, TextInput } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 
 import { colors, spacing, typography, borderRadius } from '../../../theme/tokens';
@@ -70,15 +70,20 @@ export const ProfileSetupBasicInfoStep = React.memo<BasicInfoStepProps>(
           <Text style={styles.fieldLabel}>Giới tính</Text>
           <View style={styles.optionRow}>
             {['Nam', 'Nữ', 'Khác'].map((option) => (
-              <TouchableOpacity
+              <Pressable
                 key={option}
-                style={[styles.optionButton, gender === option && styles.optionButtonSelected]}
+                style={({ pressed }) => [
+                  styles.optionButton,
+                  gender === option && styles.optionButtonSelected,
+                  pressed && { opacity: 0.8 },
+                ]}
                 onPress={() => onGenderChange(option)}
+                android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
               >
                 <Text style={[styles.optionText, gender === option && styles.optionTextSelected]}>
                   {option}
                 </Text>
-              </TouchableOpacity>
+              </Pressable>
             ))}
           </View>
         </View>

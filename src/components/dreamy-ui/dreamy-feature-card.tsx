@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { Text, TouchableOpacity } from 'react-native';
+import { Text, Pressable } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, {
   useSharedValue,
@@ -51,11 +51,11 @@ export const DreamyFeatureCard: React.FC<DreamyFeatureCardProps> = ({
 
   return (
     <Animated.View entering={FadeInDown.delay(delay).duration(600).springify()}>
-      <TouchableOpacity
+      <Pressable
         onPress={onPress}
         onPressIn={handlePressIn}
         onPressOut={handlePressOut}
-        activeOpacity={0.95}
+        android_ripple={{ color: 'rgba(216, 180, 254, 0.2)' }}
       >
         <Animated.View style={[sharedStyles.featureCard, animatedCardStyle]}>
           <LinearGradient
@@ -78,7 +78,7 @@ export const DreamyFeatureCard: React.FC<DreamyFeatureCardProps> = ({
             <Text style={sharedStyles.featureDescription}>{description}</Text>
           </LinearGradient>
         </Animated.View>
-      </TouchableOpacity>
+      </Pressable>
     </Animated.View>
   );
 };

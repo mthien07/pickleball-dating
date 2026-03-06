@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { View, FlatList, TouchableOpacity, Text, TextInput, StatusBar } from 'react-native';
+import { View, FlatList, Pressable, Text, TextInput, StatusBar } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
@@ -10,6 +10,7 @@ import { showInfo } from '../../../services/toast';
 import { useThemeColors } from '../../../contexts/ThemeContext';
 import { styles } from './coach-directory-styles';
 import { CoachCard, EmptyState } from './coach-directory-components';
+import { SkeletonList } from '../../../components/SkeletonLoaders';
 
 export const CoachDirectoryScreen = () => {
   const navigation = useNavigation();
@@ -53,12 +54,14 @@ export const CoachDirectoryScreen = () => {
     <View style={[styles.headerContainer, { backgroundColor: themeColors.background }]}>
       <View style={styles.titleRow}>
         <Text style={styles.screenTitle}>Find a Coach 🧢</Text>
-        <TouchableOpacity
-          style={styles.filterButton}
+        <Pressable
+          style={({ pressed }) => [styles.filterButton, pressed && { opacity: 0.7 }]}
           onPress={() => showInfo('Filters coming soon')}
+          android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
           <Ionicons name="options-outline" size={24} color={colors.textPrimary} />
-        </TouchableOpacity>
+        </Pressable>
       </View>
 
       <View style={styles.searchContainer}>
@@ -80,14 +83,18 @@ export const CoachDirectoryScreen = () => {
       <SafeAreaView edges={['top']} style={styles.safeArea}>
         {renderHeader()}
 
-        <FlatList
-          data={filteredCoaches}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={styles.listContent}
-          showsVerticalScrollIndicator={false}
-          ListEmptyComponent={!isLoading ? <EmptyState /> : null}
-        />
+        {isLoading ? (
+          <SkeletonList type="court" count={4} />
+        ) : (
+          <FlatList
+            data={filteredCoaches}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={styles.listContent}
+            showsVerticalScrollIndicator={false}
+            ListEmptyComponent={<EmptyState />}
+          />
+        )}
       </SafeAreaView>
     </View>
   );
