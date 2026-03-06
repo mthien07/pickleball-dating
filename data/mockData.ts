@@ -240,8 +240,8 @@ export const MOCK_USERS: User[] = [
     date_of_birth: '1997-03-22',
     gender: 'female',
     avatar_urls: [
-      'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=400',
-      'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400',
+      'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop',
+      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop',
     ],
     bio: 'Cô gái Vĩnh Long yêu thể thao! Mới tập pickleball, muốn tìm bạn chơi vui vẻ 😄',
     skill_level: 'beginner',
@@ -311,9 +311,9 @@ export const MOCK_USERS: User[] = [
     date_of_birth: '1998-11-05',
     gender: 'female',
     avatar_urls: [
-      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400',
-      'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400',
-      'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400',
+      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=400&fit=crop',
+      'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=400&fit=crop',
+      'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop',
     ],
     bio: 'Pro player đến từ Sóc Trăng 🏆 Đang tìm partner tập luyện cho giải đấu!',
     skill_level: 'pro',
@@ -348,8 +348,8 @@ export const MOCK_USERS: User[] = [
     date_of_birth: '1992-04-18',
     gender: 'male',
     avatar_urls: [
-      'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400',
-      'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400',
+      'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop',
+      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop',
     ],
     bio: 'Anh nông dân Đồng Tháp thích chơi thể thao sau giờ làm 🌾 Chơi vui là chính!',
     skill_level: 'intermediate',
@@ -384,7 +384,7 @@ export const MOCK_COACHES: Coach[] = [
   {
     id: 'coach_001',
     display_name: 'Coach Alex Tran',
-    avatar_url: 'https://images.unsplash.com/photo-1552374196-c4e7ffc6e126?w=400',
+    avatar_url: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop',
     bio: 'Professional pickleball coach with 10 years of experience. Specialized in beginner to advanced training.',
     experience_years: 10,
     certifications: ['IPTPA Certified', 'PPR Certified Pro'],
@@ -410,7 +410,7 @@ export const MOCK_COACHES: Coach[] = [
   {
     id: 'coach_002',
     display_name: 'Coach Maria Santos',
-    avatar_url: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400',
+    avatar_url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop',
     bio: 'Former national champion. Specializing in competitive play and tournament preparation.',
     experience_years: 8,
     certifications: ['PPR Certified Pro', 'USAPA Certified'],
@@ -435,7 +435,7 @@ export const MOCK_COACHES: Coach[] = [
   {
     id: 'coach_003',
     display_name: 'Coach Tom Wilson',
-    avatar_url: 'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=400',
+    avatar_url: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop',
     bio: "Patient and friendly coach for beginners. Let's learn the basics together!",
     experience_years: 5,
     certifications: ['IPTPA Certified'],
@@ -858,7 +858,8 @@ export const MOCK_REVIEWS: Review[] = [
     created_at: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
     reviewer: {
       display_name: 'Mike Johnson',
-      avatar_url: 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=400',
+      avatar_url:
+        'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop',
     },
   },
 ];

@@ -40,6 +40,14 @@ export const PaymentScreen = () => {
   const bookingDate = date ? new Date(date) : new Date();
 
   const handlePayment = async () => {
+    if (selectedMethod === 'card') {
+      const expiry = cardData?.expiry ?? '';
+      const expiryRegex = /^(0[1-9]|1[0-2])\/\d{2}$/;
+      if (!expiryRegex.test(expiry)) {
+        alert('Vui long nhap ngay het han hop le (MM/YY)');
+        return;
+      }
+    }
     setProcessing(true);
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     setTimeout(() => {
