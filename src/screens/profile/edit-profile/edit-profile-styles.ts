@@ -47,7 +47,7 @@ export const createStyles = (colors: ThemeColors) =>
       justifyContent: 'center',
       alignItems: 'center',
     },
-    primaryLabel: { ...typography.bodySmall, color: colors.primary, marginTop: 4 },
+    primaryLabel: { ...typography.bodySmall, color: colors.primary, marginTop: spacing.xs },
     fieldLabel: {
       ...typography.label,
       color: colors.textSecondary,

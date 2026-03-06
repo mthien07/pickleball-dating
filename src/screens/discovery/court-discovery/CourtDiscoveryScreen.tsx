@@ -14,10 +14,13 @@ import { CourtsStackParamList } from '../../../navigation/types';
 import { useThemeColors } from '../../../contexts/ThemeContext';
 import { useThemedStyles } from '../../../hooks/useThemedStyles';
 import { createStyles } from './court-discovery-styles';
-import { CourtCard, MapPlaceholder, EmptyState } from './court-discovery-components';
+import { CourtCard, CourtMapList, EmptyState } from './court-discovery-components';
+import { CourtFilterModal, FilterState } from './court-filter-modal';
 import { SkeletonList } from '../../../components/SkeletonLoaders';
 
 type CourtDiscoveryNavigationProp = StackNavigationProp<CourtsStackParamList, 'CourtDiscovery'>;
+
+const DEFAULT_FILTER: FilterState = { maxPrice: null, maxDistance: null, minRating: null };
 
 export const CourtDiscoveryScreen = () => {
   const navigation = useNavigation<CourtDiscoveryNavigationProp>();
@@ -27,6 +30,8 @@ export const CourtDiscoveryScreen = () => {
   const [query, setQuery] = useState('');
   const [courts, setCourts] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [showFilter, setShowFilter] = useState(false);
+  const [filter, setFilter] = useState<FilterState>(DEFAULT_FILTER);
 
   useEffect(() => {
     setIsLoading(true);
@@ -39,25 +44,32 @@ export const CourtDiscoveryScreen = () => {
   // Memoize filtered list - avoids re-running filter on every render
   const filteredCourts = useMemo(
     () =>
-      courts.filter(
-        (court) =>
+      courts.filter((court) => {
+        const matchQuery =
           court.name.toLowerCase().includes(query.toLowerCase()) ||
-          (court.address && court.address.toLowerCase().includes(query.toLowerCase()))
-      ),
-    [courts, query]
+          (court.address && court.address.toLowerCase().includes(query.toLowerCase()));
+        const matchPrice = filter.maxPrice == null || court.price_per_hour <= filter.maxPrice;
+        const matchDistance =
+          filter.maxDistance == null ||
+          !court.distance_km ||
+          court.distance_km <= filter.maxDistance;
+        const matchRating = filter.minRating == null || court.rating >= filter.minRating;
+        return matchQuery && matchPrice && matchDistance && matchRating;
+      }),
+    [courts, query, filter]
   );
 
+  const activeFilterCount = [filter.maxPrice, filter.maxDistance, filter.minRating].filter(
+    Boolean
+  ).length;
+
   const handleBook = useCallback(
-    (courtId: string) => {
-      navigation.navigate('CourtBooking', { courtId });
-    },
+    (courtId: string) => navigation.navigate('CourtBooking', { courtId }),
     [navigation]
   );
 
   const handleCourtPress = useCallback(
-    (courtId: string) => {
-      navigation.navigate('CourtDetail', { courtId });
-    },
+    (courtId: string) => navigation.navigate('CourtDetail', { courtId }),
     [navigation]
   );
 
@@ -123,11 +135,33 @@ export const CourtDiscoveryScreen = () => {
           />
         </View>
         <Pressable
-          style={({ pressed }) => [styles.filterButton, pressed && { opacity: 0.7 }]}
+          style={({ pressed }) => [
+            styles.filterButton,
+            activeFilterCount > 0 && { backgroundColor: colors.primary },
+            pressed && { opacity: 0.7 },
+          ]}
+          onPress={() => setShowFilter(true)}
           android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
-          <Ionicons name="options-outline" size={20} color={colors.textPrimary} />
+          <Ionicons
+            name="options-outline"
+            size={20}
+            color={activeFilterCount > 0 ? colors.white : colors.textPrimary}
+          />
+          {activeFilterCount > 0 && (
+            <View
+              style={{
+                position: 'absolute',
+                top: 6,
+                right: 6,
+                width: 8,
+                height: 8,
+                borderRadius: 4,
+                backgroundColor: colors.accent,
+              }}
+            />
+          )}
         </Pressable>
       </View>
     </View>
@@ -152,10 +186,18 @@ export const CourtDiscoveryScreen = () => {
               ListEmptyComponent={<EmptyState />}
             />
           ) : (
-            <MapPlaceholder />
+            <CourtMapList courts={filteredCourts} onPress={handleCourtPress} onBook={handleBook} />
           )}
         </View>
       </SafeAreaView>
+
+      <CourtFilterModal
+        visible={showFilter}
+        filter={filter}
+        resultCount={filteredCourts.length}
+        onFilterChange={setFilter}
+        onClose={() => setShowFilter(false)}
+      />
     </View>
   );
 };

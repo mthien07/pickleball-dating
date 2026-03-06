@@ -76,7 +76,7 @@ export const createStyles = (colors: ThemeColors) =>
     statValue: {
       ...typography.h4,
       color: colors.textPrimary,
-      marginTop: 4,
+      marginTop: spacing.xs,
     },
     statLabel: {
       ...typography.bodySmall,

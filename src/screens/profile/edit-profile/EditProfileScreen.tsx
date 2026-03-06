@@ -19,8 +19,21 @@ import { useAuth } from '../../../contexts/AuthContext';
 import { createStyles } from './edit-profile-styles';
 import { PhotoGrid } from './edit-profile-photo-grid';
 
-/** Strip HTML/script tags to prevent XSS in profile text fields */
-const sanitizeInput = (text: string): string => text.replace(/<[^>]*>/g, '');
+/** Strip HTML tags and SQL-like injection patterns from profile text fields */
+const sanitizeInput = (text: string): string => {
+  // Remove HTML/script tags
+  let sanitized = text.replace(/<[^>]*>/g, '');
+  // Remove semicolons used in SQL statement termination
+  sanitized = sanitized.replace(/;/g, '');
+  // Remove SQL DML/DDL keywords when combined with SQL syntax patterns
+  sanitized = sanitized.replace(
+    /\b(DROP|DELETE|INSERT|UPDATE|SELECT|TRUNCATE|ALTER|CREATE)\b\s+\b(TABLE|FROM|INTO|DATABASE|INDEX)\b/gi,
+    ''
+  );
+  // Remove SQL comment sequences
+  sanitized = sanitized.replace(/--/g, '').replace(/\/\*[\s\S]*?\*\//g, '');
+  return sanitized;
+};
 
 const SKILL_LEVELS = [
   { id: 'beginner', label: 'Moi bat dau' },

@@ -204,6 +204,13 @@ export const createStyles = (colors: ThemeColors) =>
       alignItems: 'center',
       justifyContent: 'center',
     },
+    mapBanner: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      padding: spacing.md,
+      borderBottomWidth: 1,
+      borderBottomColor: colors.border,
+    },
     mapText: {
       ...typography.h3,
       color: colors.textPrimary,

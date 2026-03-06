@@ -5,12 +5,13 @@
  * Sections: appearance, account, discovery, notifications, privacy, support, danger zone.
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Alert, ScrollView, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { CompositeNavigationProp, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { spacing } from '../../../theme/tokens';
 import { useTheme, ThemeMode } from '../../../contexts/ThemeContext';
@@ -18,6 +19,8 @@ import { useThemedStyles } from '../../../hooks/useThemedStyles';
 import { RootStackParamList, ProfileStackParamList } from '../../../navigation/types';
 import { SettingsRow, SettingsSection } from './settings-components';
 import { createStyles } from './settings-styles';
+
+const PRIVACY_STORAGE_KEY = '@privacy_settings';
 
 type SettingsNav = CompositeNavigationProp<
   StackNavigationProp<ProfileStackParamList, 'Settings'>,
@@ -43,6 +46,26 @@ export const SettingsScreen = () => {
     showDistance: true,
     showAge: true,
   });
+
+  // Load persisted privacy settings on mount
+  useEffect(() => {
+    AsyncStorage.getItem(PRIVACY_STORAGE_KEY)
+      .then((stored) => {
+        if (stored) {
+          setPrivacy(JSON.parse(stored));
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  // Persist privacy settings on change
+  const updatePrivacy = (update: Partial<typeof privacy>) => {
+    setPrivacy((prev) => {
+      const next = { ...prev, ...update };
+      AsyncStorage.setItem(PRIVACY_STORAGE_KEY, JSON.stringify(next)).catch(() => {});
+      return next;
+    });
+  };
 
   const themeModeLabels: Record<ThemeMode, string> = {
     system: 'Hệ thống',
@@ -222,7 +245,7 @@ export const SettingsScreen = () => {
               label="Hiện trạng thái online"
               type="toggle"
               isToggled={privacy.showOnlineStatus}
-              onToggle={(v) => setPrivacy((p) => ({ ...p, showOnlineStatus: v }))}
+              onToggle={(v) => updatePrivacy({ showOnlineStatus: v })}
               colors={colors}
             />
             <SettingsRow
@@ -230,7 +253,7 @@ export const SettingsScreen = () => {
               label="Hiện khoảng cách"
               type="toggle"
               isToggled={privacy.showDistance}
-              onToggle={(v) => setPrivacy((p) => ({ ...p, showDistance: v }))}
+              onToggle={(v) => updatePrivacy({ showDistance: v })}
               colors={colors}
             />
             <SettingsRow
@@ -238,7 +261,7 @@ export const SettingsScreen = () => {
               label="Hiện tuổi"
               type="toggle"
               isToggled={privacy.showAge}
-              onToggle={(v) => setPrivacy((p) => ({ ...p, showAge: v }))}
+              onToggle={(v) => updatePrivacy({ showAge: v })}
               colors={colors}
             />
           </SettingsSection>

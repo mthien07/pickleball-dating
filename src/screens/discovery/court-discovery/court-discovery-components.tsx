@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { View, Text, Pressable } from 'react-native';
+import { View, Text, Pressable, FlatList } from 'react-native';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -110,19 +110,96 @@ export const CourtCard = React.memo(({ court, onPress, onBook }: CourtCardProps)
 });
 
 // ============================================
-// MAP PLACEHOLDER
+// COURT MAP LIST (map-style distance view)
 // ============================================
 
-export const MapPlaceholder = React.memo(() => {
+interface CourtMapListProps {
+  courts: any[];
+  onPress: (id: string) => void;
+  onBook: (id: string) => void;
+}
+
+export const CourtMapList = React.memo(({ courts, onPress, onBook }: CourtMapListProps) => {
   const colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
+
   return (
     <View style={styles.mapPlaceholder}>
-      <LinearGradient colors={[colors.surface, colors.background]} style={styles.mapGradient}>
-        <Ionicons name="map" size={64} color={colors.primary} />
-        <Text style={styles.mapText}>Bản Đồ Tương Tác</Text>
-        <Text style={styles.mapSubtext}>Sắp ra mắt</Text>
+      {/* Map banner */}
+      <LinearGradient colors={[colors.primary + '22', colors.background]} style={styles.mapBanner}>
+        <Ionicons name="map-outline" size={28} color={colors.primary} />
+        <View style={{ marginLeft: 10 }}>
+          <Text style={{ ...styles.mapText, fontSize: 15 }}>Xem theo khoảng cách</Text>
+          <Text style={styles.mapSubtext}>{courts.length} sân gần bạn</Text>
+        </View>
       </LinearGradient>
+
+      {/* Court list sorted by distance */}
+      <FlatList
+        data={[...courts].sort((a, b) => (a.distance_km ?? 99) - (b.distance_km ?? 99))}
+        keyExtractor={(item) => item.id}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ padding: 12, gap: 10 }}
+        renderItem={({ item }) => (
+          <Pressable
+            onPress={() => onPress(item.id)}
+            style={({ pressed }) => ({
+              flexDirection: 'row',
+              alignItems: 'center',
+              backgroundColor: colors.surface,
+              borderRadius: 12,
+              padding: 12,
+              opacity: pressed ? 0.8 : 1,
+            })}
+          >
+            <View
+              style={{
+                width: 44,
+                height: 44,
+                borderRadius: 22,
+                backgroundColor: colors.primary + '18',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginRight: 12,
+              }}
+            >
+              <Ionicons name="location" size={22} color={colors.primary} />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text
+                style={{ fontSize: 15, fontWeight: '600', color: colors.textPrimary }}
+                numberOfLines={1}
+              >
+                {item.name}
+              </Text>
+              <Text
+                style={{ fontSize: 13, color: colors.textSecondary, marginTop: 2 }}
+                numberOfLines={1}
+              >
+                {item.address || item.location}
+              </Text>
+            </View>
+            <View style={{ alignItems: 'flex-end', marginLeft: 8 }}>
+              <Text style={{ fontSize: 13, fontWeight: '700', color: colors.primary }}>
+                {item.distance_km != null ? `${item.distance_km} km` : '—'}
+              </Text>
+              <Pressable
+                onPress={() => onBook(item.id)}
+                style={({ pressed }) => ({
+                  marginTop: 4,
+                  backgroundColor: colors.primary,
+                  borderRadius: 8,
+                  paddingHorizontal: 10,
+                  paddingVertical: 4,
+                  opacity: pressed ? 0.7 : 1,
+                })}
+              >
+                <Text style={{ fontSize: 12, color: colors.white, fontWeight: '700' }}>Đặt</Text>
+              </Pressable>
+            </View>
+          </Pressable>
+        )}
+      />
     </View>
   );
 });

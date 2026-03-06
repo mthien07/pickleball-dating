@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { spacing } from '../theme/tokens';
@@ -9,12 +9,17 @@ import type { MainTabParamList } from './types';
 import { HomeSwipeScreen } from '../screens/main/HomeSwipeScreen';
 import { TabIcon } from './components/TabIcon';
 import { MatchesNavigator, CourtsNavigator, ProfileNavigator } from './components/stack-navigators';
+import { MOCK_MATCHES } from '@data/mockData';
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
 
 export const MainNavigator = () => {
   const insets = useSafeAreaInsets();
   const colors = useThemeColors();
+  const unreadCount = useMemo(
+    () => MOCK_MATCHES.reduce((sum, m) => sum + (m.unread_count ?? 0), 0),
+    []
+  );
 
   return (
     <Tab.Navigator
@@ -58,6 +63,7 @@ export const MainNavigator = () => {
         component={MatchesNavigator}
         options={{
           tabBarLabel: 'Matches',
+          tabBarBadge: unreadCount > 0 ? unreadCount : undefined,
           tabBarIcon: ({ color, focused }) => (
             <TabIcon
               name={focused ? 'chatbubbles' : 'chatbubbles-outline'}

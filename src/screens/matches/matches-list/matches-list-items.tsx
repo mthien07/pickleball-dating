@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Pressable } from 'react-native';
+import { View, Text, Pressable, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Image } from 'expo-image';
@@ -88,6 +88,15 @@ const formatTime = (isoString: string) => {
   return `${diffDays}d`;
 };
 
+const handleConversationLongPress = (match: Match) => {
+  Alert.alert(match.matched_user.display_name, undefined, [
+    { text: 'Lưu trữ', onPress: () => {} },
+    { text: 'Xóa', style: 'destructive', onPress: () => {} },
+    { text: 'Chặn', style: 'destructive', onPress: () => {} },
+    { text: 'Hủy', style: 'cancel' },
+  ]);
+};
+
 export const ConversationItem = React.memo<ConversationItemProps>(({ match, index, onPress }) => {
   const colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
@@ -99,6 +108,7 @@ export const ConversationItem = React.memo<ConversationItemProps>(({ match, inde
       <Pressable
         style={({ pressed }) => [styles.conversationItem, pressed && { opacity: 0.6 }]}
         onPress={onPress}
+        onLongPress={() => handleConversationLongPress(match)}
         android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
       >
         {/* Avatar */}

@@ -15,8 +15,9 @@ import {
   KeyboardAvoidingView,
   Platform,
   StatusBar,
-  Keyboard,
+  Alert,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
@@ -62,21 +63,59 @@ export const ChatScreen = () => {
   const otherUser = match?.matched_user || getUserById(userId);
   const currentUserId = 'current-user'; // Would come from auth context
 
-  // Load messages and mark as read
-  useEffect(() => {
-    if (match?.conversation_id) {
-      const conversationMessages = MOCK_MESSAGES.filter(
-        (m) => m.conversation_id === match.conversation_id
-      ).sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-      setMessages(conversationMessages);
+  const storageKey = `chat_messages_${matchId || userId}`;
 
-      // Mark messages as read (in real app, call API here)
-      // This updates the local state to show as read
-      if (match.unread_count > 0) {
-        match.unread_count = 0;
+  // Load persisted + mock messages on mount
+  useEffect(() => {
+    const loadMessages = async () => {
+      try {
+        const stored = await AsyncStorage.getItem(storageKey);
+        const persisted: Message[] = stored ? JSON.parse(stored) : [];
+
+        const mockMessages = match?.conversation_id
+          ? MOCK_MESSAGES.filter((m) => m.conversation_id === match.conversation_id).sort(
+              (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+            )
+          : [];
+
+        // Merge: persisted (user-sent) + mock, deduplicate by id
+        const merged = [...persisted];
+        for (const m of mockMessages) {
+          if (!merged.find((p) => p.id === m.id)) {
+            merged.push(m);
+          }
+        }
+        merged.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+        setMessages(merged);
+
+        if (match && match.unread_count > 0) {
+          match.unread_count = 0;
+        }
+      } catch {
+        // fallback: load mock only
+        if (match?.conversation_id) {
+          const conversationMessages = MOCK_MESSAGES.filter(
+            (m) => m.conversation_id === match.conversation_id
+          ).sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+          setMessages(conversationMessages);
+        }
       }
-    }
-  }, [match]);
+    };
+    loadMessages();
+  }, [matchId, userId]);
+
+  const persistMessages = useCallback(
+    async (msgs: Message[]) => {
+      try {
+        // Only persist user-sent messages to avoid duplicating mock data
+        const userMessages = msgs.filter((m) => m.sender_id === currentUserId);
+        await AsyncStorage.setItem(storageKey, JSON.stringify(userMessages));
+      } catch {
+        // ignore storage errors
+      }
+    },
+    [storageKey]
+  );
 
   const handleSendMessage = useCallback(
     (text: string) => {
@@ -89,7 +128,11 @@ export const ChatScreen = () => {
         created_at: new Date().toISOString(),
       };
 
-      setMessages((prev) => [newMessage, ...prev]);
+      setMessages((prev) => {
+        const updated = [newMessage, ...prev];
+        persistMessages(updated);
+        return updated;
+      });
 
       // Simulate message being sent
       setTimeout(() => {
@@ -217,6 +260,14 @@ export const ChatScreen = () => {
             style={({ pressed }) => [styles.moreButton, pressed && { opacity: 0.7 }]}
             android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
             hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            onPress={() =>
+              Alert.alert(otherUser?.display_name ?? 'Chat', undefined, [
+                { text: 'Chặn người dùng', style: 'destructive', onPress: () => {} },
+                { text: 'Báo cáo', style: 'destructive', onPress: () => {} },
+                { text: 'Xóa cuộc trò chuyện', style: 'destructive', onPress: () => {} },
+                { text: 'Hủy', style: 'cancel' },
+              ])
+            }
           >
             <Ionicons name="ellipsis-horizontal" size={24} color={colors.textPrimary} />
           </Pressable>

@@ -25,7 +25,7 @@ export const createStyles = (colors: ThemeColors) =>
     headerLeft: {
       flexDirection: 'row',
       alignItems: 'center',
-      gap: 4,
+      gap: spacing.xs,
     },
     headerTitle: {
       fontSize: 22,
@@ -36,7 +36,7 @@ export const createStyles = (colors: ThemeColors) =>
     headerRight: {
       flexDirection: 'row',
       alignItems: 'center',
-      gap: 4,
+      gap: spacing.xs,
     },
     headerButton: {
       width: 44,
@@ -56,8 +56,8 @@ export const createStyles = (colors: ThemeColors) =>
       backgroundColor: colors.background,
       borderRadius: 10,
       paddingHorizontal: spacing.sm,
-      paddingVertical: 8,
-      gap: 8,
+      paddingVertical: spacing.sm,
+      gap: spacing.sm,
     },
     searchInput: {
       flex: 1,
@@ -185,7 +185,7 @@ export const createStyles = (colors: ThemeColors) =>
     conversationTime: {
       fontSize: 14,
       color: colors.textTertiary,
-      marginLeft: 8,
+      marginLeft: spacing.sm,
     },
     conversationPreview: {
       flexDirection: 'row',
@@ -205,7 +205,7 @@ export const createStyles = (colors: ThemeColors) =>
       height: 8,
       borderRadius: 4,
       backgroundColor: colors.primary,
-      marginLeft: 8,
+      marginLeft: spacing.sm,
     },
     cameraButton: {
       width: 44,
