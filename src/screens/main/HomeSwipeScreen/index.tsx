@@ -162,6 +162,7 @@ export const HomeSwipeScreen = () => {
           {/* Action Controls */}
           <View style={styles.controlsContainer}>
             <Pressable
+              testID="btn-pass"
               style={({ pressed }) => [
                 styles.controlButton,
                 styles.passButton,
@@ -174,6 +175,7 @@ export const HomeSwipeScreen = () => {
             </Pressable>
 
             <Pressable
+              testID="btn-super-like"
               style={({ pressed }) => [
                 styles.controlButton,
                 styles.superLikeButton,
@@ -198,6 +200,7 @@ export const HomeSwipeScreen = () => {
             </Pressable>
 
             <Pressable
+              testID="btn-like"
               style={({ pressed }) => [
                 styles.controlButton,
                 styles.likeButton,
