@@ -1,9 +1,12 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import { spacing, typography, borderRadius } from '../../../theme/tokens';
 import type { ThemeColors } from '../../../contexts/theme-colors';
 
+const SCREEN_HEIGHT = Dimensions.get('window').height;
+
 export const createStyles = (colors: ThemeColors) =>
   StyleSheet.create({
+    // Base
     container: {
       flex: 1,
       backgroundColor: colors.background,
@@ -40,143 +43,167 @@ export const createStyles = (colors: ThemeColors) =>
       marginTop: spacing.xs,
     },
 
-    // Header
-    header: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      paddingHorizontal: spacing.lg,
-      paddingVertical: spacing.md,
+    // Hero Section
+    heroContainer: {
+      height: SCREEN_HEIGHT * 0.6,
+      width: '100%',
+      borderBottomLeftRadius: 28,
+      borderBottomRightRadius: 28,
+      overflow: 'hidden',
     },
-    headerTitle: {
-      ...typography.h2,
-      color: colors.textPrimary,
+    heroImage: {
+      ...StyleSheet.absoluteFillObject,
     },
-    iconButton: {
-      width: 44,
-      height: 44,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-
-    // Content
-    content: {
-      flex: 1,
-      paddingHorizontal: spacing.lg,
-    },
-
-    // Profile Card
-    profileCard: {
-      alignItems: 'center',
-      paddingVertical: spacing.xl,
-      backgroundColor: colors.surface,
-      borderRadius: borderRadius.xl,
-      marginBottom: spacing.lg,
-    },
-    avatarSection: {
-      position: 'relative',
-      marginBottom: spacing.md,
-    },
-    editButton: {
+    heroGradient: {
       position: 'absolute',
       bottom: 0,
+      left: 0,
       right: 0,
-      width: 32,
-      height: 32,
-      borderRadius: 16,
-      backgroundColor: colors.primary,
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderWidth: 3,
-      borderColor: colors.surface,
+      height: '60%',
     },
-    displayName: {
-      ...typography.h3,
-      color: colors.textPrimary,
-      marginBottom: spacing.xs,
+    heroContent: {
+      position: 'absolute',
+      bottom: 0,
+      left: 0,
+      right: 0,
+      padding: 24,
     },
-    skillBadge: {
+    heroNameText: {
+      fontFamily: 'Barlow-Bold',
+      fontSize: 28,
+      color: colors.white,
+    },
+    heroLocationRow: {
       flexDirection: 'row',
       alignItems: 'center',
-      marginBottom: spacing.xs,
+      gap: 4,
+      marginTop: 4,
     },
-    skillDot: {
-      width: 8,
-      height: 8,
-      borderRadius: 4,
-      marginRight: spacing.xs,
-    },
-    skillText: {
-      ...typography.body,
-      fontWeight: '600',
-    },
-    playStyle: {
-      ...typography.body,
-      color: colors.textSecondary,
+    heroLocationText: {
+      fontFamily: 'Barlow-Regular',
+      fontSize: 14,
+      color: 'rgba(255,255,255,0.8)',
     },
 
-    // Stats
-    statsRow: {
+    // Settings Button
+    settingsButton: {
+      position: 'absolute',
+      top: 16,
+      right: 16,
+      width: 48,
+      height: 48,
+      borderRadius: 24,
+      backgroundColor: 'rgba(255,255,255,0.9)',
+      justifyContent: 'center',
+      alignItems: 'center',
+      shadowColor: colors.black,
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.15,
+      shadowRadius: 8,
+      elevation: 4,
+    },
+
+    // Skill Badge
+    skillBadge: {
+      paddingHorizontal: 12,
+      paddingVertical: 4,
+      borderRadius: 9999,
+      marginTop: 8,
+      alignSelf: 'flex-start',
+    },
+    skillBadgeText: {
+      fontFamily: 'Barlow-SemiBold',
+      fontSize: 12,
+      color: colors.white,
+      textTransform: 'uppercase',
+      letterSpacing: 0.5,
+    },
+
+    // Stats Grid
+    statsGrid: {
       flexDirection: 'row',
-      gap: spacing.sm,
-      marginBottom: spacing.lg,
+      gap: 12,
+      paddingHorizontal: 16,
+      marginTop: -30,
     },
     statCard: {
       flex: 1,
       alignItems: 'center',
-      padding: spacing.md,
+      padding: 16,
       backgroundColor: colors.surface,
-      borderRadius: borderRadius.lg,
+      borderRadius: 20,
+      shadowColor: colors.black,
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.1,
+      shadowRadius: 12,
+      elevation: 4,
     },
     statValue: {
-      ...typography.h3,
-      color: colors.textPrimary,
-      marginTop: spacing.xs,
-    },
-    statLabel: {
-      ...typography.bodySmall,
-      color: colors.textSecondary,
-    },
-
-    // Section
-    section: {
-      marginBottom: spacing.lg,
-    },
-    sectionHeader: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      marginBottom: spacing.sm,
-    },
-    sectionTitle: {
-      ...typography.h4,
-      color: colors.textPrimary,
-      marginBottom: spacing.sm,
-    },
-    editLink: {
-      ...typography.body,
+      fontFamily: 'Barlow-Bold',
+      fontSize: 24,
       color: colors.primary,
     },
-    bio: {
+    statLabel: {
+      fontFamily: 'Barlow-Medium',
+      fontSize: 11,
+      color: colors.textSecondary,
+      textTransform: 'uppercase',
+      letterSpacing: 0.5,
+      marginTop: 4,
+    },
+
+    // Bio Card
+    bioCard: {
+      backgroundColor: colors.surface,
+      borderRadius: 20,
+      marginHorizontal: 16,
+      marginTop: 16,
+      padding: 20,
+    },
+    bioTitle: {
+      ...typography.h4,
+      color: colors.textPrimary,
+      marginBottom: 12,
+    },
+    bioText: {
       ...typography.body,
       color: colors.textSecondary,
       lineHeight: 22,
     },
-
-    // Photos
-    photoRow: {
+    tagsRow: {
       flexDirection: 'row',
-      gap: spacing.sm,
+      flexWrap: 'wrap',
+      gap: 8,
+      marginTop: 12,
     },
-    photo: {
-      width: 100,
-      height: 100,
-      borderRadius: borderRadius.md,
+    tagPill: {
+      paddingHorizontal: 12,
+      paddingVertical: 6,
+      borderRadius: 9999,
+      backgroundColor: '#EFF6FF',
+    },
+    tagPillText: {
+      fontFamily: 'Barlow-Medium',
+      fontSize: 12,
+      color: colors.primary,
     },
 
-    // Actions
-    actions: {
-      gap: spacing.md,
-      marginTop: spacing.md,
+    // Edit Button
+    editButtonContainer: {
+      marginHorizontal: 16,
+      marginTop: 16,
+      borderRadius: 16,
+      overflow: 'hidden',
+    },
+    editButtonGradient: {
+      paddingVertical: 16,
+      alignItems: 'center',
+    },
+    editButtonText: {
+      fontFamily: 'Barlow-SemiBold',
+      fontSize: 16,
+      color: colors.white,
+      textTransform: 'uppercase',
+      letterSpacing: 0.5,
     },
   });

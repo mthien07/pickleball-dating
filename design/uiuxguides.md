@@ -1,50 +1,58 @@
 # PickleBall Dating App - UI/UX Design Guidelines
 
-**Version**: 1.0
-**Last Updated**: 2026-01-02
-**Design Philosophy**: Modern, Playful, Sports-Forward Dating Experience
+**Version**: 2.0
+**Last Updated**: 2026-03-18
+**Design Philosophy**: Tinder-Inspired Swipe-First Dating for Pickleball Players
+**Reference**: Tinder UI/UX Patterns (swipe mechanics, match flow, tab hierarchy)
 
 ---
 
 ## 1. Visual Style
 
 ### Design Language
-**Neo-Minimalist with Playful Sports Energy**
-- Clean, uncluttered layouts with strategic pops of vibrant color
-- Card-based design for content modularity
-- Soft shadows and subtle gradients for depth
-- Rounded corners for approachability
+**Tinder-Style Swipe UI + Vibrant Sport Energy**
+- Card-based swipe interface as primary discovery mechanic
+- Clean layouts with strategic brand gradient highlights (CTAs, match celebrations)
+- Soft shadows and depth via elevation system
+- Rounded corners (20-28px cards) for approachability
+- Bottom-anchored actions for one-handed thumb-zone use
 
 ### Color Palette
 
 | Token | Hex | Usage |
 |-------|-----|-------|
-| **Primary** | `#5B9FE3` | Blue Gradient Start, Main CTAs, brand identity |
-| **Primary Gradient End** | `#7CB8F0` | Blue Gradient End, Accents |
-| **Primary Dark** | `#4A85C0` | Hover states, pressed buttons |
-| **Secondary** | `#A8C8E8` | Soft Blue, Category pills, secondary elements |
-| **Secondary Dark** | `#86A6C6` | Hover states for secondary elements |
-| **Accent** | `#FFD700` | Golden Yellow, Ratings, highlights |
-| **Background** | `#B8D4F0` | Sky Blue, Main app background |
-| **Background Dark** | `#121212` | App background (dark mode) |
-| **Surface** | `#FFFFFF` | Cards, input fields, modals |
-| **Surface Glass** | `#FFFFFF` (90% opacity) | Glassmorphic surfaces |
-| **Surface Dark** | `#1E1E1E` | Cards in dark mode |
-| **Text Primary** | `#1A1A1A` | Dark Gray, Headings, body text |
-| **Text Secondary** | `#666666` | Medium Gray, Subtitles, descriptions |
-| **Text Tertiary** | `#999999` | Light Gray, Placeholders, disabled |
-| **Text Inverse** | `#FFFFFF` | Text on dark backgrounds |
-| **Border** | `#E0E0E0` | Dividers, input borders |
-| **Success** | `#4CAF50` | Green, Success states, confirmations |
-| **Error** | `#F44336` | Errors, destructive actions |
-| **Warning** | `#FF9800` | Warnings, alerts |
-| **Info** | `#2196F3` | Informational messages |
+| **Primary** | `#2563EB` | Electric Blue - Brand, headers, main CTAs |
+| **Primary Light** | `#60A5FA` | Gradient end, hover accents |
+| **Primary Dark** | `#1D4ED8` | Active/pressed states |
+| **Secondary** | `#10B981` | Emerald - Courts, success, nature |
+| **Accent/CTA** | `#F43F5E` | Rose - Like/match button, hearts, notifications (Tinder-style) |
+| **Accent Light** | `#FB7185` | Hover states for accent |
+| **Warning** | `#F59E0B` | Amber - Skill level indicators |
+| **Background** | `#F8FAFC` | Slate-50, clean app background |
+| **Background Dark** | `#0F172A` | Slate-900, dark mode |
+| **Surface** | `#FFFFFF` | Cards, modals, input fields |
+| **Surface Dark** | `#1E293B` | Slate-800, dark mode cards |
+| **Text Primary** | `#0F172A` | Slate-900, headings |
+| **Text Secondary** | `#475569` | Slate-600, descriptions |
+| **Text Tertiary** | `#94A3B8` | Slate-400, placeholders |
+| **Text Inverse** | `#F8FAFC` | On dark/gradient backgrounds |
+| **Border** | `#E2E8F0` | Slate-200, dividers |
+| **Success** | `#10B981` | Emerald, confirmations |
+| **Error** | `#EF4444` | Red, destructive actions |
+| **Info** | `#38BDF8` | Sky-400, informational |
+
+**Brand Gradients** (Tinder-inspired):
+- Primary: `linear-gradient(135deg, #2563EB, #60A5FA)` — headers, hero
+- Match/Like: `linear-gradient(135deg, #F43F5E, #FB7185)` — like button, match celebrations
+- Sport Energy: `linear-gradient(135deg, #2563EB, #10B981)` — court/sport features
 
 ### Typography
 
-**Font Family**:
-- Primary: **Inter** (sans-serif, excellent for UI)
-- Fallback: System default (`-apple-system, BlinkMacSystemFont, "Segoe UI"`)
+**Font Family** (Athletic, energetic):
+- Display/Headlines: **Barlow Condensed** Bold (impact for large titles, sport feel)
+- Headings: **Barlow** Bold/SemiBold
+- Body: **Barlow** Regular/Medium
+- Fallback: `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`
 
 **Type Scale**:
 
@@ -109,7 +117,50 @@
 
 ---
 
-## 3. Responsive Strategy
+## 3. Tinder-Style UX Flows
+
+### Discovery (Swipe-First)
+- **Primary screen**: Card stack with swipeable profiles
+- Cards show: photo stack, name/age, distance, skill level badge, bio preview
+- Three actions below card: Nope (X), Super Like (star), Like (heart)
+- Keyboard shortcuts on desktop: ← Nope, → Like, ↑ Super Like
+- Empty state: "All caught up! Check again later" with reload option
+
+### Match Flow
+1. User swipes right (Like) on a profile
+2. If mutual like → **"It's a Match!"** celebration screen
+3. Celebration: confetti animation, both avatars, "Send a message" CTA
+4. Match auto-saved to Matches tab with unread indicator
+5. Dismiss: tap anywhere or swipe down
+
+### Tab Hierarchy (Tinder-proven)
+1. **Home** (heart icon) — Swipe discovery, primary engagement
+2. **Matches** (chat icon) — Chat list, match history, unread badges
+3. **Courts** (location icon) — Court discovery, booking
+4. **Profile** (person icon) — Settings, edit profile, preferences
+
+### Profile Card Content Priority
+1. **Photo** (60% of card height, full bleed with bottom gradient overlay)
+2. **Name + Age** (bold, white on gradient)
+3. **Distance + Skill Level** (badges)
+4. **Bio** (2-3 lines, expandable on tap)
+5. **Play Style Tags** (pills below bio)
+
+### Chat Patterns
+- Sent bubbles: right-aligned, accent/primary color
+- Received bubbles: left-aligned, surface/gray
+- Typing indicator: three bouncing dots
+- GIF/media support
+- Match context header showing shared interests
+
+### Profile Completeness
+- Progress bar nudge for incomplete profiles
+- "Add more photos" prompt
+- Skill level verification flow
+
+---
+
+## 4. Responsive Strategy
 
 ### Breakpoints
 
@@ -132,10 +183,12 @@
 - Sidebar navigation (optional)
 - Modal dialogs expand to 80% width
 
-**Desktop** (Out of scope for MVP):
-- Fixed 1200px max-width container
-- Centered layout
-- Persistent sidebar navigation
+**Desktop** (Tinder Desktop-Style):
+- Left sidebar navigation (240px), bottom tabs hidden
+- Content area: max 900px centered (swipe card stays 500px max)
+- Auth screens: split layout (brand panel left 45% + form right 55%)
+- Hover effects on interactive elements (scale 1.02, opacity, cursor pointer)
+- Keyboard shortcuts for swipe actions
 
 ### Media Scaling
 - **Profile images**: 1:1 aspect ratio, progressive loading
@@ -150,7 +203,7 @@
 
 ---
 
-## 4. Component Library
+## 5. Component Library
 
 ### Button
 
@@ -159,71 +212,82 @@
 **Primary Button**:
 ```
 Default:
-  - Background: #5B9FE3
-  - Text: #FFFFFF, 16px Semibold
-  - Border Radius: 12px
+  - Background: #2563EB (Electric Blue)
+  - Text: #FFFFFF, 16px Barlow SemiBold
+  - Border Radius: 16px
   - Padding: 16px 24px
-  - Shadow: 0px 4px 12px rgba(255, 107, 53, 0.25)
+  - Shadow: 0px 4px 12px rgba(37, 99, 235, 0.25)
 
-Hover:
-  - Background: #4A85C0
-  - Shadow: 0px 6px 16px rgba(255, 107, 53, 0.35)
+Hover (web):
+  - Background: #1D4ED8
+  - Shadow: 0px 6px 16px rgba(37, 99, 235, 0.35)
+  - Scale: 1.02
 
 Pressed:
-  - Background: #D44F21
+  - Background: #1D4ED8
   - Scale: 0.98
-  - Shadow: 0px 2px 8px rgba(255, 107, 53, 0.2)
-
-Focused:
-  - Background: #5B9FE3
-  - Border: 2px solid #FFD700
-  - Shadow: 0px 0px 0px 4px rgba(255, 107, 53, 0.1)
+  - Shadow: 0px 2px 8px rgba(37, 99, 235, 0.2)
 
 Disabled:
-  - Background: #E0E0E0
-  - Text: #9E9E9E
+  - Background: #E2E8F0
+  - Text: #94A3B8
   - Shadow: None
 
 Loading:
-  - Background: #5B9FE3
-  - Text: #FFFFFF (50% opacity)
+  - Background: #2563EB (50% opacity)
   - Spinner: White, centered
+```
+
+**Like/CTA Button** (Tinder-style accent):
+```
+Default:
+  - Background: gradient(135deg, #F43F5E, #FB7185)
+  - Text/Icon: #FFFFFF
+  - Border Radius: full (circular)
+  - Shadow: 0px 4px 14px rgba(244, 63, 94, 0.4)
+
+Hover (web):
+  - Scale: 1.1
+  - Shadow: 0px 6px 20px rgba(244, 63, 94, 0.5)
+
+Pressed:
+  - Scale: 0.9
 ```
 
 **Secondary Button**:
 ```
 Default:
   - Background: Transparent
-  - Border: 2px solid #A8C8E8
-  - Text: #A8C8E8, 16px Semibold
-  - Border Radius: 12px
-  - Padding: 14px 24px (accounts for border)
+  - Border: 2px solid #2563EB
+  - Text: #2563EB, 16px Barlow SemiBold
+  - Border Radius: 16px
+  - Padding: 14px 24px
 
-Hover:
-  - Background: rgba(78, 205, 196, 0.08)
-  - Border: 2px solid #3DB8AF
+Hover (web):
+  - Background: rgba(37, 99, 235, 0.08)
+  - Scale: 1.02
 
 Pressed:
-  - Background: rgba(78, 205, 196, 0.16)
+  - Background: rgba(37, 99, 235, 0.16)
   - Scale: 0.98
 
 Disabled:
-  - Border: 2px solid #E0E0E0
-  - Text: #9E9E9E
+  - Border: 2px solid #E2E8F0
+  - Text: #94A3B8
 ```
 
 **Text Button** (Tertiary):
 ```
 Default:
   - Background: Transparent
-  - Text: #5B9FE3, 16px Semibold
+  - Text: #2563EB, 16px Barlow SemiBold
   - Padding: 8px 16px
 
-Hover:
-  - Background: rgba(255, 107, 53, 0.08)
+Hover (web):
+  - Background: rgba(37, 99, 235, 0.08)
 
 Pressed:
-  - Background: rgba(255, 107, 53, 0.16)
+  - Background: rgba(37, 99, 235, 0.16)
 ```
 
 **Icon Button**:
@@ -255,8 +319,8 @@ Default:
   - Placeholder: 16px Regular, #9E9E9E
 
 Focused:
-  - Border: 2px solid #5B9FE3
-  - Shadow: 0px 0px 0px 4px rgba(255, 107, 53, 0.08)
+  - Border: 2px solid #2563EB
+  - Shadow: 0px 0px 0px 4px rgba(37, 99, 235, 0.08)
 
 Filled (valid):
   - Border: 1px solid #4CAF50
@@ -407,19 +471,19 @@ Tab Item:
   - Spacing: Equal distribution
 
 Tab Active:
-  - Icon: #5B9FE3
-  - Label: #5B9FE3
-  - Background: rgba(255, 107, 53, 0.08), 24px border radius
+  - Icon: #F43F5E (accent, Tinder-style)
+  - Label: #F43F5E
+  - Scale: 1.1 (animated spring)
 
 Tab Inactive:
-  - Icon: #9E9E9E
-  - Label: #9E9E9E
-  - Background: Transparent
+  - Icon: #94A3B8
+  - Label: #94A3B8
+  - Scale: 0.9, opacity: 0.6
 ```
 
 ---
 
-## 5. Interaction & Motion
+## 6. Interaction & Motion
 
 ### Animation Principles
 - **Duration**: 200-300ms for micro-interactions, 400-500ms for transitions
@@ -492,14 +556,18 @@ Tab Inactive:
 
 ### Swipe Interactions
 
-**Card Swipe**:
+**Card Swipe** (Tinder-style):
 ```
-  - Drag resistance: 1.0 (no friction)
-  - Rotation: ±15° max based on horizontal drag
-  - Threshold: 40% of card width
-  - Auto-complete: Animate to final position, 300ms ease-out
-  - Dismiss: Fade out while moving, 250ms
-  - Next card: Scale from 0.95 → 1.0 and fade 0.5 → 1.0, 200ms
+  - Drag resistance: 1.0 (no friction, follows finger exactly)
+  - Rotation: ±45° max based on horizontal drag (deltaX/20 degrees)
+  - Threshold: 50% of screen width to auto-complete
+  - Auto-complete: 500ms ease-out to final position
+  - Dismiss: Fade out + fly off screen direction
+  - Next card: Scale 0.95 → 1.0, opacity 0.5 → 1.0, 200ms
+  - Visual feedback:
+    - Swipe right: Green tint overlay + heart icon (top-right)
+    - Swipe left: Red tint overlay + X icon (top-left)
+    - Swipe up: Blue tint + star icon (super like)
 ```
 
 **Pull to Refresh**:
@@ -540,12 +608,15 @@ Tab Inactive:
   - Direction: Left to right
 ```
 
-**Match Notification**:
+**Match Celebration** (Tinder "It's a Match!"):
 ```
-  - Confetti animation: 2 seconds, particles fall from top
-  - Modal scale: 0.8 → 1.1 → 1.0 (bounce), 400ms
-  - Background blur: Backdrop filter blur(8px)
-  - Dismiss: Tap anywhere or swipe down
+  - Full-screen modal with backdrop blur(8px)
+  - "It's a Match!" title: scale 0 → 1.1 → 1.0 (bounce), 400ms
+  - Both user avatars slide in from sides, meet in center
+  - Confetti: 2 seconds, particles fall from top
+  - CTA: "Send a Message" primary button + "Keep Swiping" text button
+  - Auto-dismiss: 5 seconds or tap anywhere
+  - Background: gradient overlay (primary → accent)
 ```
 
 **Empty States**:
@@ -570,7 +641,7 @@ Tab Inactive:
 
 ---
 
-## 6. Accessibility
+## 7. Accessibility
 
 ### Color Contrast
 - **Text on Background**: Minimum 4.5:1 (WCAG AA)
@@ -594,7 +665,7 @@ Tab Inactive:
 
 ---
 
-## 7. Dark Mode (Future)
+## 8. Dark Mode
 
 **Color Mappings**:
 
@@ -627,9 +698,10 @@ Tab Inactive:
 **Design Tokens File** (`src/theme/tokens.ts`):
 ```typescript
 export const colors = {
-  primary: '#5B9FE3',
-  primaryDark: '#4A85C0',
-  // ... (map all color tokens)
+  primary: '#2563EB',
+  primaryDark: '#1D4ED8',
+  accent: '#F43F5E',
+  // ... (see src/theme/tokens.ts for full palette)
 };
 
 export const spacing = {
