@@ -142,4 +142,18 @@ export const createStyles = (colors: ThemeColors) =>
       color: colors.primary,
       fontFamily: fontFamily.bodySemiBold,
     },
+    // Desktop split layout styles
+    desktopWrapper: {
+      flexDirection: 'row' as const,
+      flex: 1,
+      ...(typeof window !== 'undefined' ? { minHeight: '100vh' as any } : {}),
+    },
+    brandPanel: {
+      flex: 0.45,
+    },
+    formPanel: {
+      flex: 0.55,
+      justifyContent: 'center' as const,
+      backgroundColor: colors.background,
+    },
   });

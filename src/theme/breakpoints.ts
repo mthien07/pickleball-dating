@@ -15,9 +15,12 @@ export const BREAKPOINTS = {
 export const MAX_CONTENT_WIDTH = {
   mobile: '100%',
   tablet: 600,
-  desktop: 500, // Tinder-style centered content
-  wide: 500,
+  desktop: 900, // Wider content for list/form screens
+  wide: 900,
 } as const;
+
+/** Swipe card screen keeps narrow Tinder-style width */
+export const SWIPE_CONTENT_WIDTH = 500;
 
 export const CONTAINER_PADDING = {
   mobile: 16,

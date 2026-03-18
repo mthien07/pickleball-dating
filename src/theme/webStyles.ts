@@ -9,7 +9,7 @@ import { StyleSheet, ViewStyle } from 'react-native';
 import { MAX_CONTENT_WIDTH } from './breakpoints';
 
 export const webStyles = StyleSheet.create({
-  // Centered container (Tinder-style)
+  // Centered container
   centeredContainer: {
     alignSelf: 'center',
     width: '100%',
@@ -44,6 +44,29 @@ export const webStyles = StyleSheet.create({
   mainContent: {
     flex: 1,
     maxWidth: MAX_CONTENT_WIDTH.desktop,
+  } as ViewStyle,
+
+  // Hover utilities
+  hoverScale: {
+    transform: [{ scale: 1.02 }],
+  } as ViewStyle,
+
+  hoverOpacity: {
+    opacity: 0.85,
+  } as ViewStyle,
+
+  // Transition utilities (web-only CSS properties)
+  transitionFast: {
+    transition: 'all 0.15s ease' as any,
+  } as ViewStyle,
+
+  transitionMedium: {
+    transition: 'all 0.25s ease' as any,
+  } as ViewStyle,
+
+  // Cursor utility
+  cursorPointer: {
+    cursor: 'pointer' as any,
   } as ViewStyle,
 
   // Sidebar

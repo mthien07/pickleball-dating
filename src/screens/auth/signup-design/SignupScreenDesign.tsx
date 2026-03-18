@@ -23,6 +23,8 @@ import { supabase } from '../../../services/supabase';
 import { showSuccess, showError } from '../../../services/toast';
 import { useThemeColors } from '../../../contexts/ThemeContext';
 import { useThemedStyles } from '../../../hooks/useThemedStyles';
+import { useResponsive } from '../../../hooks/useResponsive';
+import { WelcomeBrandPanel } from '../welcome/welcome-brand-panel';
 import { RoleCard, Checkbox } from './signup-design-components';
 import { createStyles } from './signup-design-styles';
 
@@ -31,6 +33,8 @@ type SignupRole = 'owner' | 'player' | 'coach';
 export default function SignupScreenDesign({ navigation }: { navigation?: any }) {
   const colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
+  const { isDesktop } = useResponsive();
+  const showSplit = Platform.OS === 'web' && isDesktop;
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -137,8 +141,8 @@ export default function SignupScreenDesign({ navigation }: { navigation?: any })
     }
   };
 
-  return (
-    <SafeAreaView style={styles.container}>
+  const formContent = (
+    <SafeAreaView style={[styles.container, showSplit && { flex: 1 }]}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
 
       <View style={styles.header}>
@@ -237,4 +241,15 @@ export default function SignupScreenDesign({ navigation }: { navigation?: any })
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
+
+  if (showSplit) {
+    return (
+      <View style={styles.desktopWrapper}>
+        <WelcomeBrandPanel style={styles.brandPanel} />
+        <View style={styles.formPanel}>{formContent}</View>
+      </View>
+    );
+  }
+
+  return formContent;
 }

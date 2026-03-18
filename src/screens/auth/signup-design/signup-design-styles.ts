@@ -121,4 +121,17 @@ export const createStyles = (colors: ThemeColors) =>
       fontSize: 14,
       color: colors.textSecondary,
     },
+    // Desktop split layout styles
+    desktopWrapper: {
+      flexDirection: 'row' as const,
+      flex: 1,
+      ...(typeof window !== 'undefined' ? { minHeight: '100vh' as any } : {}),
+    },
+    brandPanel: {
+      flex: 0.45,
+    },
+    formPanel: {
+      flex: 0.55,
+      backgroundColor: colors.background,
+    },
   });
