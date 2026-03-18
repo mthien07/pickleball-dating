@@ -2,11 +2,12 @@
  * MatchesListScreen - Tinder Style
  *
  * Tinder-inspired messaging UI with new matches horizontal strip
- * and clean conversation list with unread indicators
+ * and clean conversation list with unread indicators.
+ * Uses useMatches hook for real Supabase data with mock fallback.
  */
 
-import React, { useState, useCallback, useMemo } from 'react';
-import { View, Text, FlatList, Pressable, RefreshControl, StatusBar } from 'react-native';
+import React, { useCallback } from 'react';
+import { View, Text, FlatList, Pressable, StatusBar } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
@@ -14,7 +15,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { EmptyState } from '../../../components/EmptyState';
 import { useThemeColors } from '../../../contexts/ThemeContext';
 import { useThemedStyles } from '../../../hooks/useThemedStyles';
-import { MOCK_MATCHES, Match } from '@data/mockData';
+import { useMatches } from '../../../hooks/use-matches';
 import { createStyles } from './matches-list-styles';
 import { NewMatchItem, ConversationItem } from './matches-list-items';
 import { SkeletonList } from '../../../components/SkeletonLoaders';
@@ -23,38 +24,27 @@ export const MatchesListScreen = () => {
   const navigation = useNavigation<any>();
   const colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
-  const [refreshing, setRefreshing] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-
-  React.useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 800);
-    return () => clearTimeout(timer);
-  }, []);
-
-  const newMatches = useMemo(() => MOCK_MATCHES.filter((m) => !m.last_message), []);
-  const conversations = useMemo(() => MOCK_MATCHES.filter((m) => m.last_message), []);
-
-  const onRefresh = useCallback(() => {
-    setRefreshing(true);
-    setTimeout(() => setRefreshing(false), 800);
-  }, []);
+  const { matches, newMatches, conversations, isLoading, refresh } = useMatches();
 
   const handleMatchPress = useCallback(
-    (match: Match) => {
-      navigation.navigate('ChatScreen', { matchId: match.id, userId: match.matched_user_id });
+    (match: any) => {
+      navigation.navigate('ChatScreen', {
+        matchId: match.id,
+        userId: match.matched_user?.id || match.matched_user_id,
+      });
     },
     [navigation]
   );
 
   const renderNewMatchItem = useCallback(
-    ({ item, index }: { item: Match; index: number }) => (
+    ({ item, index }: { item: any; index: number }) => (
       <NewMatchItem match={item} index={index} onPress={() => handleMatchPress(item)} />
     ),
     [handleMatchPress]
   );
 
   const renderConversationItem = useCallback(
-    ({ item, index }: { item: Match; index: number }) => (
+    ({ item, index }: { item: any; index: number }) => (
       <ConversationItem match={item} index={index} onPress={() => handleMatchPress(item)} />
     ),
     [handleMatchPress]
@@ -84,10 +74,10 @@ export const MatchesListScreen = () => {
         </View>
       </>
     ),
-    [newMatches, renderNewMatchItem]
+    [newMatches, renderNewMatchItem, styles]
   );
 
-  if (MOCK_MATCHES.length === 0) {
+  if (!isLoading && matches.length === 0) {
     return (
       <View style={styles.container}>
         <StatusBar barStyle="dark-content" />
@@ -131,14 +121,8 @@ export const MatchesListScreen = () => {
             ListHeaderComponent={renderHeader}
             contentContainerStyle={styles.listContent}
             showsVerticalScrollIndicator={false}
-            refreshControl={
-              <RefreshControl
-                refreshing={refreshing}
-                onRefresh={onRefresh}
-                colors={[colors.primary]}
-                tintColor={colors.primary}
-              />
-            }
+            onRefresh={refresh}
+            refreshing={isLoading}
           />
         )}
       </SafeAreaView>

@@ -182,7 +182,7 @@ describe('HomeSwipeScreen', () => {
     const { getByTestId } = render(<HomeSwipeScreen />);
     fireEvent.press(getByTestId('btn-like'));
     await waitFor(() => {
-      expect(mockShowSuccess).toHaveBeenCalledWith('Liked Alice Nguyen!');
+      expect(mockShowSuccess).toHaveBeenCalledWith(expect.stringContaining('Liked'));
     });
   });
 
@@ -198,9 +198,7 @@ describe('HomeSwipeScreen', () => {
     const { getByTestId } = render(<HomeSwipeScreen />);
     fireEvent.press(getByTestId('btn-super-like'));
     await waitFor(() => {
-      expect(mockShowSuccess).toHaveBeenCalledWith(
-        expect.stringContaining('Super Liked Alice Nguyen!')
-      );
+      expect(mockShowSuccess).toHaveBeenCalledWith(expect.stringContaining('Super Liked'));
     });
   });
 

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, useEffect, useMemo } from 'react';
+import React, { useRef, useCallback, useEffect, useMemo } from 'react';
 import { View, Text, Pressable, StatusBar, Dimensions, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -8,13 +8,13 @@ import { Ionicons } from '@expo/vector-icons';
 import { SwipeCard, SwipeCardRef } from '../../../components/SwipeCard';
 import { EmptyState } from '../../../components/EmptyState';
 import { CARD_WIDTH, CARD_MAX_WIDTH } from '../../../theme/breakpoints';
-import { MOCK_USERS } from '@data/mockData';
 import { showSuccess, showInfo } from '../../../services/toast';
 import { useThemeColors } from '../../../contexts/ThemeContext';
 import { useThemedStyles } from '../../../hooks/useThemedStyles';
 import { useResponsive } from '../../../hooks/useResponsive';
 import { useWebUtils } from '../../../hooks/useWebUtils';
 import { webStyles } from '../../../theme/webStyles';
+import { useDiscoveryProfiles } from '../../../hooks/use-discovery-profiles';
 import { createStyles } from './styles';
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -22,17 +22,16 @@ const { width: screenWidth } = Dimensions.get('window');
 export const HomeSwipeScreen = () => {
   const themeColors = useThemeColors();
   const styles = useThemedStyles(createStyles);
-  const [currentIndex, setCurrentIndex] = useState(0);
   const swipeCardRef = useRef<SwipeCardRef>(null);
 
   const { isDesktop, isWeb, maxContentWidth, containerPadding } = useResponsive();
   const { shouldEnableKeyboard } = useWebUtils();
 
-  const currentUser = MOCK_USERS[currentIndex];
-  const nextUser = MOCK_USERS[currentIndex + 1];
+  const { currentProfile, nextProfile, hasMore, handleSwipe, reload } = useDiscoveryProfiles();
 
-  const currentUserRef = useRef(currentUser);
-  currentUserRef.current = currentUser;
+  // Keep a ref so keyboard handlers always see the latest profile name
+  const currentProfileRef = useRef(currentProfile);
+  currentProfileRef.current = currentProfile;
 
   const cardWidth = useMemo(
     () =>
@@ -42,23 +41,28 @@ export const HomeSwipeScreen = () => {
     [isDesktop, isWeb]
   );
 
-  const handleSwipeLeft = useCallback(() => {
-    setCurrentIndex((prev) => prev + 1);
-  }, []);
+  const handleSwipeLeft = useCallback(async () => {
+    await handleSwipe('pass');
+  }, [handleSwipe]);
 
-  const handleSwipeRight = useCallback(() => {
-    showSuccess(`Liked ${currentUserRef.current.display_name}!`);
-    setCurrentIndex((prev) => prev + 1);
-  }, []);
+  const handleSwipeRight = useCallback(async () => {
+    const result = await handleSwipe('like');
+    if (result.isMatch) {
+      showSuccess("It's a Match! 🎉");
+    } else {
+      showSuccess(`Liked ${currentProfileRef.current?.display_name}!`);
+    }
+  }, [handleSwipe]);
 
-  const handleSuperLike = useCallback(() => {
-    showSuccess(`Super Liked ${currentUserRef.current.display_name}! ⚡`);
+  const handleSuperLike = useCallback(async () => {
+    const result = await handleSwipe('super_like');
+    if (result.isMatch) {
+      showSuccess("It's a Match! 🎉");
+    } else {
+      showSuccess(`Super Liked ${currentProfileRef.current?.display_name}! ⚡`);
+    }
     swipeCardRef.current?.swipe('up');
-  }, []);
-
-  const handleReload = () => {
-    setCurrentIndex(0);
-  };
+  }, [handleSwipe]);
 
   useEffect(() => {
     if (!shouldEnableKeyboard || !isWeb) {
@@ -88,7 +92,7 @@ export const HomeSwipeScreen = () => {
     }
   }, [shouldEnableKeyboard, isWeb, handleSuperLike]);
 
-  if (currentIndex >= MOCK_USERS.length) {
+  if (!hasMore) {
     return (
       <View style={styles.container}>
         <StatusBar barStyle="dark-content" />
@@ -98,7 +102,7 @@ export const HomeSwipeScreen = () => {
             message="Hết rồi! Quay lại sau nhé"
             icon={<Ionicons name="tennisball" size={48} color={themeColors.accent} />}
             actionLabel="Tải lại"
-            onAction={handleReload}
+            onAction={reload}
           />
         </SafeAreaView>
       </View>
@@ -162,16 +166,16 @@ export const HomeSwipeScreen = () => {
               style={styles.bgCircle}
             />
 
-            {nextUser && (
+            {nextProfile && (
               <View style={[styles.cardWrapper, styles.nextCard]}>
-                <SwipeCard user={nextUser} cardWidth={cardWidth} />
+                <SwipeCard user={nextProfile} cardWidth={cardWidth} />
               </View>
             )}
 
             <View style={styles.cardWrapper}>
               <SwipeCard
                 ref={swipeCardRef}
-                user={currentUser}
+                user={currentProfile}
                 onLike={handleSwipeRight}
                 onPass={handleSwipeLeft}
                 cardWidth={cardWidth}
