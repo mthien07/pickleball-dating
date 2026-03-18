@@ -3,10 +3,10 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { RootNavigator } from './src/navigation/RootNavigator';
 import Toast from 'react-native-toast-message';
-import { toastConfig } from './src/config/toastConfig';
+import { createToastConfig } from './src/config/toastConfig';
 import { StatusBar } from 'expo-status-bar';
 import { AuthProvider } from './src/contexts/AuthContext';
-import { ThemeProvider, useTheme } from './src/contexts/ThemeContext';
+import { ThemeProvider, useTheme, useThemeColors } from './src/contexts/ThemeContext';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import Animated from 'react-native-reanimated';
 import { useAnimation } from './src/hooks/useAnimation';
@@ -19,8 +19,8 @@ import {
 import { OfflineIndicator, OnlineIndicator } from './src/components/OfflineIndicator';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
-import { View, ActivityIndicator } from 'react-native';
-import { colors } from './src/theme/tokens';
+import { View, ActivityIndicator, useColorScheme } from 'react-native';
+import { lightColors, darkColors } from './src/contexts/ThemeContext';
 
 // Keep splash screen visible while loading fonts
 SplashScreen.preventAutoHideAsync();
@@ -31,6 +31,8 @@ invalidateAllOnReconnect();
 // Inner component that uses theme context
 const AppContent = () => {
   const { isDark } = useTheme();
+  const colors = useThemeColors();
+  const toastConfig = createToastConfig(colors);
   const { animatedStyle, fadeIn, scaleIn } = useAnimation({
     initialOpacity: 0,
     initialScale: 0.98,
@@ -56,6 +58,10 @@ const AppContent = () => {
 };
 
 export default function App() {
+  // Detect system color scheme for loading screen (before ThemeProvider)
+  const systemScheme = useColorScheme();
+  const loadingColors = systemScheme === 'dark' ? darkColors : lightColors;
+
   // Load Barlow fonts for Vibrant Sport style
   const [fontsLoaded] = useFonts({
     'Barlow-Regular': require('./assets/fonts/Barlow-Regular.ttf'),
@@ -80,10 +86,10 @@ export default function App() {
           flex: 1,
           justifyContent: 'center',
           alignItems: 'center',
-          backgroundColor: colors.background,
+          backgroundColor: loadingColors.background,
         }}
       >
-        <ActivityIndicator size="large" color={colors.primary} />
+        <ActivityIndicator size="large" color={loadingColors.primary} />
       </View>
     );
   }

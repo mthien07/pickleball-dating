@@ -24,6 +24,16 @@
 
     <!-- Accessibility & SEO -->
     <link rel="canonical" href="https://pickleball-dating.vercel.app" />
+
+    <!-- Dark mode support: prevent flash of wrong color -->
+    <style>
+      body { margin: 0; background-color: #F8FAFC; transition: background-color 0.2s; }
+      @media (prefers-color-scheme: dark) {
+        body { background-color: #0F172A; }
+        meta[name="theme-color"] { content: #0F172A; }
+      }
+      #root { min-height: 100vh; }
+    </style>
   </head>
 
   <body>
