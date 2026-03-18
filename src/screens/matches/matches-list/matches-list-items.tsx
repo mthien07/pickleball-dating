@@ -1,58 +1,43 @@
 import React from 'react';
 import { View, Text, Pressable, Alert } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 import { Image } from 'expo-image';
 import Animated, { FadeInDown, FadeInRight } from 'react-native-reanimated';
 
-import { useThemeColors } from '../../../contexts/ThemeContext';
-import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { useThemedStyles } from '../../../hooks/useThemedStyles';
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { Match } from '@data/mockData';
 import { createStyles } from './matches-list-styles';
 
 // ============================================
-// STORY-STYLE MATCH ITEM (Instagram Stories)
+// NEW MATCH ITEM - Tinder circular avatar strip
 // ============================================
 
-interface StoryMatchItemProps {
+interface NewMatchItemProps {
   match: Match;
   index: number;
   onPress: () => void;
 }
 
-export const StoryMatchItem = React.memo<StoryMatchItemProps>(({ match, index, onPress }) => {
-  const colors = useThemeColors();
+export const NewMatchItem = React.memo<NewMatchItemProps>(({ match, index, onPress }) => {
   const styles = useThemedStyles(createStyles);
   const { getEntering } = useReducedMotion();
+
   return (
     <Animated.View entering={getEntering(FadeInRight.delay(index * 80).duration(250))}>
       <Pressable
-        style={({ pressed }) => [styles.storyItem, pressed && { opacity: 0.7 }]}
+        style={({ pressed }) => [styles.newMatchItem, pressed && { opacity: 0.7 }]}
         onPress={onPress}
-        android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
       >
-        <LinearGradient
-          colors={
-            match.is_new
-              ? [colors.accent, colors.primary, colors.primaryLight]
-              : [colors.border, colors.border]
-          }
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={styles.storyRing}
-        >
-          <View style={styles.storyAvatarWrapper}>
-            <Image
-              source={{ uri: match.matched_user.avatar_urls[0] }}
-              style={styles.storyAvatar}
-              contentFit="cover"
-              transition={150}
-            />
-          </View>
-        </LinearGradient>
-        {match.matched_user.is_online && <View style={styles.storyOnline} />}
-        <Text style={styles.storyName} numberOfLines={1}>
+        <View style={styles.newMatchAvatarWrapper}>
+          <Image
+            source={{ uri: match.matched_user.avatar_urls[0] }}
+            style={styles.newMatchAvatar}
+            contentFit="cover"
+            transition={150}
+          />
+          {match.matched_user.is_online && <View style={styles.onlineDot} />}
+        </View>
+        <Text style={styles.newMatchName} numberOfLines={1}>
           {match.matched_user.display_name.split(' ')[0]}
         </Text>
       </Pressable>
@@ -60,10 +45,10 @@ export const StoryMatchItem = React.memo<StoryMatchItemProps>(({ match, index, o
   );
 });
 
-StoryMatchItem.displayName = 'StoryMatchItem';
+NewMatchItem.displayName = 'NewMatchItem';
 
 // ============================================
-// CONVERSATION ITEM (Instagram DM Style)
+// CONVERSATION ITEM - Tinder messages style
 // ============================================
 
 interface ConversationItemProps {
@@ -72,15 +57,14 @@ interface ConversationItemProps {
   onPress: () => void;
 }
 
-const formatTime = (isoString: string) => {
+const formatTime = (isoString: string): string => {
   const date = new Date(isoString);
   const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
-  const diffHours = Math.floor(diffMs / 3600000);
-  const diffDays = Math.floor(diffMs / 86400000);
+  const diffHours = Math.floor((now.getTime() - date.getTime()) / 3600000);
+  const diffDays = Math.floor(diffHours / 24);
 
   if (diffHours < 1) {
-    return 'vừa xong';
+    return 'just now';
   }
   if (diffHours < 24) {
     return `${diffHours}h`;
@@ -88,17 +72,16 @@ const formatTime = (isoString: string) => {
   return `${diffDays}d`;
 };
 
-const handleConversationLongPress = (match: Match) => {
+const handleLongPress = (match: Match) => {
   Alert.alert(match.matched_user.display_name, undefined, [
-    { text: 'Lưu trữ', onPress: () => {} },
-    { text: 'Xóa', style: 'destructive', onPress: () => {} },
-    { text: 'Chặn', style: 'destructive', onPress: () => {} },
-    { text: 'Hủy', style: 'cancel' },
+    { text: 'Archive', onPress: () => {} },
+    { text: 'Delete', style: 'destructive', onPress: () => {} },
+    { text: 'Block', style: 'destructive', onPress: () => {} },
+    { text: 'Cancel', style: 'cancel' },
   ]);
 };
 
 export const ConversationItem = React.memo<ConversationItemProps>(({ match, index, onPress }) => {
-  const colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
   const { getEntering } = useReducedMotion();
   const hasUnread = match.unread_count > 0;
@@ -108,8 +91,8 @@ export const ConversationItem = React.memo<ConversationItemProps>(({ match, inde
       <Pressable
         style={({ pressed }) => [styles.conversationItem, pressed && { opacity: 0.6 }]}
         onPress={onPress}
-        onLongPress={() => handleConversationLongPress(match)}
-        android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+        onLongPress={() => handleLongPress(match)}
+        android_ripple={{ color: 'rgba(37, 99, 235, 0.1)' }}
       >
         {/* Avatar */}
         <View style={styles.conversationAvatarContainer}>
@@ -119,14 +102,14 @@ export const ConversationItem = React.memo<ConversationItemProps>(({ match, inde
             contentFit="cover"
             transition={150}
           />
-          {match.matched_user.is_online && <View style={styles.conversationOnline} />}
+          {match.matched_user.is_online && <View style={styles.conversationOnlineDot} />}
         </View>
 
-        {/* Content */}
+        {/* Text content */}
         <View style={styles.conversationContent}>
-          <View style={styles.conversationHeader}>
+          <View style={styles.conversationRow}>
             <Text
-              style={[styles.conversationName, hasUnread && styles.conversationNameBold]}
+              style={[styles.conversationName, hasUnread && styles.conversationNameUnread]}
               numberOfLines={1}
             >
               {match.matched_user.display_name}
@@ -135,25 +118,16 @@ export const ConversationItem = React.memo<ConversationItemProps>(({ match, inde
               {match.last_message ? formatTime(match.last_message.sent_at) : ''}
             </Text>
           </View>
-          <View style={styles.conversationPreview}>
+          <View style={styles.conversationPreviewRow}>
             <Text
-              style={[styles.conversationMessage, hasUnread && styles.conversationMessageBold]}
+              style={[styles.conversationMessage, hasUnread && styles.conversationMessageUnread]}
               numberOfLines={1}
             >
-              {match.last_message?.content || 'Nhấn để bắt đầu trò chuyện'}
+              {match.last_message?.content ?? 'Tap to start chatting'}
             </Text>
-            {hasUnread && <View style={styles.unreadDot} />}
+            {hasUnread && <View style={styles.unreadBadge} />}
           </View>
         </View>
-
-        {/* Camera icon like Instagram */}
-        <Pressable
-          style={({ pressed }) => [styles.cameraButton, pressed && { opacity: 0.6 }]}
-          android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
-          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-        >
-          <Ionicons name="camera-outline" size={24} color={colors.textTertiary} />
-        </Pressable>
       </Pressable>
     </Animated.View>
   );

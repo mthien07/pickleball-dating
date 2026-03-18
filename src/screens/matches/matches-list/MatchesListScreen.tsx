@@ -1,20 +1,12 @@
 /**
- * MatchesListScreen - Instagram DM Style
+ * MatchesListScreen - Tinder Style
  *
- * Clean messaging interface with stories-like horizontal scroll
- * and minimal conversation list design
+ * Tinder-inspired messaging UI with new matches horizontal strip
+ * and clean conversation list with unread indicators
  */
 
 import React, { useState, useCallback, useMemo } from 'react';
-import {
-  View,
-  Text,
-  FlatList,
-  Pressable,
-  RefreshControl,
-  StatusBar,
-  TextInput,
-} from 'react-native';
+import { View, Text, FlatList, Pressable, RefreshControl, StatusBar } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
@@ -24,7 +16,7 @@ import { useThemeColors } from '../../../contexts/ThemeContext';
 import { useThemedStyles } from '../../../hooks/useThemedStyles';
 import { MOCK_MATCHES, Match } from '@data/mockData';
 import { createStyles } from './matches-list-styles';
-import { StoryMatchItem, ConversationItem } from './matches-list-items';
+import { NewMatchItem, ConversationItem } from './matches-list-items';
 import { SkeletonList } from '../../../components/SkeletonLoaders';
 
 export const MatchesListScreen = () => {
@@ -33,15 +25,12 @@ export const MatchesListScreen = () => {
   const styles = useThemedStyles(createStyles);
   const [refreshing, setRefreshing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState('');
 
-  // Simulate initial load
   React.useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 800);
     return () => clearTimeout(timer);
   }, []);
 
-  // Memoize derived lists - avoids re-filtering every render
   const newMatches = useMemo(() => MOCK_MATCHES.filter((m) => !m.last_message), []);
   const conversations = useMemo(() => MOCK_MATCHES.filter((m) => m.last_message), []);
 
@@ -57,10 +46,9 @@ export const MatchesListScreen = () => {
     [navigation]
   );
 
-  // Stable renderItem callbacks so memoized list items don't re-render
-  const renderStoryItem = useCallback(
+  const renderNewMatchItem = useCallback(
     ({ item, index }: { item: Match; index: number }) => (
-      <StoryMatchItem match={item} index={index} onPress={() => handleMatchPress(item)} />
+      <NewMatchItem match={item} index={index} onPress={() => handleMatchPress(item)} />
     ),
     [handleMatchPress]
   );
@@ -72,46 +60,31 @@ export const MatchesListScreen = () => {
     [handleMatchPress]
   );
 
-  // Stable ListHeaderComponent - avoids FlatList header remounting on every render
   const renderHeader = useCallback(
     () => (
       <>
-        {/* Search Bar - Instagram style */}
-        <View style={styles.searchContainer}>
-          <View style={styles.searchBar}>
-            <Ionicons name="search" size={16} color={colors.textTertiary} />
-            <TextInput
-              style={styles.searchInput}
-              placeholder="Tìm kiếm"
-              placeholderTextColor={colors.textTertiary}
-              value={searchQuery}
-              onChangeText={setSearchQuery}
-            />
-          </View>
-        </View>
-
-        {/* Stories/New Matches Section */}
+        {/* New Matches horizontal strip */}
         {newMatches.length > 0 && (
-          <View style={styles.storiesSection}>
+          <View style={styles.newMatchesSection}>
+            <Text style={styles.sectionTitle}>New Matches</Text>
             <FlatList
               horizontal
               data={newMatches}
               keyExtractor={(item) => item.id}
-              renderItem={renderStoryItem}
+              renderItem={renderNewMatchItem}
               showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.storiesList}
+              contentContainerStyle={styles.newMatchesList}
             />
           </View>
         )}
 
-        {/* Tin Nhắn header */}
+        {/* Messages section label */}
         <View style={styles.messagesHeader}>
-          <Text style={styles.messagesTitle}>Tin nhắn</Text>
-          <Text style={styles.requestsLink}>Yêu cầu</Text>
+          <Text style={styles.messagesTitle}>Messages</Text>
         </View>
       </>
     ),
-    [searchQuery, newMatches, renderStoryItem]
+    [newMatches, renderNewMatchItem]
   );
 
   if (MOCK_MATCHES.length === 0) {
@@ -120,12 +93,12 @@ export const MatchesListScreen = () => {
         <StatusBar barStyle="dark-content" />
         <SafeAreaView style={styles.safeArea}>
           <View style={styles.header}>
-            <Text style={styles.headerTitle}>Tin Nhắn</Text>
+            <Text style={styles.headerTitle}>Messages</Text>
           </View>
           <EmptyState
-            title="Chưa Có Tin Nhắn"
-            message="Ghép đôi với người chơi để bắt đầu trò chuyện!"
-            actionLabel="Tìm Người Chơi"
+            title="No Messages Yet"
+            message="Match with players to start chatting!"
+            actionLabel="Find Players"
             onAction={() => navigation.navigate('HomeTab')}
           />
         </SafeAreaView>
@@ -137,31 +110,17 @@ export const MatchesListScreen = () => {
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView style={styles.safeArea}>
-        {/* Header - Instagram style */}
+        {/* Header - Tinder style */}
         <View style={styles.header}>
-          <View style={styles.headerLeft}>
-            <Text style={styles.headerTitle}>Tin Nhắn</Text>
-            <Ionicons name="chevron-down" size={20} color={colors.textPrimary} />
-          </View>
-          <View style={styles.headerRight}>
-            <Pressable
-              style={({ pressed }) => [styles.headerButton, pressed && { opacity: 0.7 }]}
-              android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
-              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-            >
-              <Ionicons name="videocam-outline" size={26} color={colors.textPrimary} />
-            </Pressable>
-            <Pressable
-              style={({ pressed }) => [styles.headerButton, pressed && { opacity: 0.7 }]}
-              android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
-              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-            >
-              <Ionicons name="create-outline" size={26} color={colors.textPrimary} />
-            </Pressable>
-          </View>
+          <Text style={styles.headerTitle}>Messages</Text>
+          <Pressable
+            style={({ pressed }) => [styles.headerButton, pressed && { opacity: 0.7 }]}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
+            <Ionicons name="search" size={24} color={colors.textPrimary} />
+          </Pressable>
         </View>
 
-        {/* Conversations List */}
         {isLoading ? (
           <SkeletonList type="match" count={6} />
         ) : (

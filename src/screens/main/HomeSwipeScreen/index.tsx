@@ -3,6 +3,7 @@ import { View, Text, Pressable, StatusBar, Dimensions, Platform } from 'react-na
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { X, Star, Heart, User } from 'lucide-react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 import { SwipeCard, SwipeCardRef } from '../../../components/SwipeCard';
 import { EmptyState } from '../../../components/EmptyState';
@@ -93,10 +94,10 @@ export const HomeSwipeScreen = () => {
         <StatusBar barStyle="dark-content" />
         <SafeAreaView style={styles.safeArea}>
           <EmptyState
-            title="All Caught Up!"
-            message="You've seen everyone in your area."
-            icon="🎾"
-            actionLabel="Check Again Later"
+            title="Hết rồi!"
+            message="Hết rồi! Quay lại sau nhé"
+            icon={<Ionicons name="tennisball" size={48} color={themeColors.accent} />}
+            actionLabel="Tải lại"
             onAction={handleReload}
           />
         </SafeAreaView>
@@ -121,14 +122,34 @@ export const HomeSwipeScreen = () => {
                 <Text style={styles.logoAccent}>MATCH</Text>
               </Text>
             </View>
-            <Pressable
-              style={({ pressed }) => [styles.profileButton, pressed && { opacity: 0.7 }]}
-              onPress={() => showInfo('View profile')}
-              android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
-              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-            >
-              <User size={24} color={themeColors.textPrimary} strokeWidth={2} />
-            </Pressable>
+            <View style={styles.headerActions}>
+              <Pressable
+                style={({ pressed }) => [styles.headerIconButton, pressed && { opacity: 0.7 }]}
+                onPress={() => showInfo('Filters coming soon')}
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+              >
+                <Ionicons name="options-outline" size={20} color={themeColors.textSecondary} />
+              </Pressable>
+              <Pressable
+                style={({ pressed }) => [styles.headerIconButton, pressed && { opacity: 0.7 }]}
+                onPress={() => showInfo('Notifications coming soon')}
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+              >
+                <Ionicons
+                  name="notifications-outline"
+                  size={20}
+                  color={themeColors.textSecondary}
+                />
+              </Pressable>
+              <Pressable
+                style={({ pressed }) => [styles.profileButton, pressed && { opacity: 0.7 }]}
+                onPress={() => showInfo('View profile')}
+                android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+              >
+                <User size={24} color={themeColors.textPrimary} strokeWidth={2} />
+              </Pressable>
+            </View>
           </View>
 
           {/* Card Stack */}
@@ -161,74 +182,84 @@ export const HomeSwipeScreen = () => {
 
           {/* Action Controls */}
           <View style={styles.controlsContainer}>
-            <Pressable
-              testID="btn-pass"
-              style={({ pressed }) => [
-                styles.controlButton,
-                styles.passButton,
-                pressed && { opacity: 0.85 },
-              ]}
-              onPress={() => swipeCardRef.current?.swipe('left')}
-              android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
-            >
-              <X size={32} color={themeColors.textSecondary} strokeWidth={2.5} />
-            </Pressable>
-
-            <Pressable
-              testID="btn-super-like"
-              style={({ pressed }) => [
-                styles.controlButton,
-                styles.superLikeButton,
-                pressed && { opacity: 0.85 },
-              ]}
-              onPress={handleSuperLike}
-              android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
-            >
-              <LinearGradient
-                colors={[themeColors.primary, themeColors.primaryLight]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={styles.superLikeGradient}
+            {/* Nope */}
+            <View style={styles.buttonGroup}>
+              <Pressable
+                testID="btn-pass"
+                style={({ pressed }) => [
+                  styles.controlButton,
+                  styles.passButton,
+                  pressed && { opacity: 0.85 },
+                ]}
+                onPress={() => swipeCardRef.current?.swipe('left')}
+                android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
               >
-                <Star
-                  size={26}
-                  color={themeColors.white}
-                  fill={themeColors.white}
-                  strokeWidth={0}
-                />
-              </LinearGradient>
-            </Pressable>
+                <X size={32} color={themeColors.textSecondary} strokeWidth={2.5} />
+              </Pressable>
+              <Text style={styles.buttonLabel}>Nope</Text>
+            </View>
 
-            <Pressable
-              testID="btn-like"
-              style={({ pressed }) => [
-                styles.controlButton,
-                styles.likeButton,
-                pressed && { opacity: 0.85 },
-              ]}
-              onPress={() => swipeCardRef.current?.swipe('right')}
-              android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
-            >
-              <LinearGradient
-                colors={[themeColors.accent, themeColors.accentLight]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={styles.likeGradient}
+            {/* Super Like */}
+            <View style={styles.buttonGroup}>
+              <Pressable
+                testID="btn-super-like"
+                style={({ pressed }) => [
+                  styles.controlButton,
+                  styles.superLikeButton,
+                  pressed && { opacity: 0.85 },
+                ]}
+                onPress={handleSuperLike}
+                android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
               >
-                <Heart
-                  size={30}
-                  color={themeColors.white}
-                  fill={themeColors.white}
-                  strokeWidth={0}
-                />
-              </LinearGradient>
-            </Pressable>
+                <LinearGradient
+                  colors={[themeColors.primary, themeColors.primaryLight]}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={styles.superLikeGradient}
+                >
+                  <Star
+                    size={26}
+                    color={themeColors.white}
+                    fill={themeColors.white}
+                    strokeWidth={0}
+                  />
+                </LinearGradient>
+              </Pressable>
+              <Text style={styles.buttonLabel}>Super</Text>
+            </View>
+
+            {/* Like */}
+            <View style={styles.buttonGroup}>
+              <Pressable
+                testID="btn-like"
+                style={({ pressed }) => [
+                  styles.controlButton,
+                  styles.likeButton,
+                  pressed && { opacity: 0.85 },
+                ]}
+                onPress={() => swipeCardRef.current?.swipe('right')}
+                android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+              >
+                <LinearGradient
+                  colors={[themeColors.accent, themeColors.accentLight]}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={styles.likeGradient}
+                >
+                  <Heart
+                    size={30}
+                    color={themeColors.white}
+                    fill={themeColors.white}
+                    strokeWidth={0}
+                  />
+                </LinearGradient>
+              </Pressable>
+              <Text style={styles.buttonLabel}>Like</Text>
+            </View>
           </View>
 
           {isDesktop && isWeb && (
-            <Text style={styles.keyboardHint}>
-              Use ← → arrows to swipe, ↑ or space for super like
-            </Text>
+            <Text style={styles.keyboardHint}>← → to swipe · ↑ space for super like</Text>
           )}
         </View>
       </SafeAreaView>

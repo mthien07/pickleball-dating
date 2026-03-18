@@ -17,7 +17,7 @@ export const createStyles = (colors: ThemeColors) =>
       flex: 1,
     },
 
-    // Header - Vibrant Sport style
+    // Header
     header: {
       flexDirection: 'row',
       justifyContent: 'space-between',
@@ -42,6 +42,21 @@ export const createStyles = (colors: ThemeColors) =>
     logoAccent: {
       color: colors.accent,
     },
+    headerActions: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.sm,
+    },
+    headerIconButton: {
+      width: 40,
+      height: 40,
+      borderRadius: borderRadius.full,
+      backgroundColor: colors.surface,
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderWidth: 1,
+      borderColor: colors.border,
+    },
     profileButton: {
       width: 48,
       height: 48,
@@ -61,6 +76,7 @@ export const createStyles = (colors: ThemeColors) =>
       alignItems: 'center',
       position: 'relative',
       marginTop: -spacing.xl,
+      paddingTop: spacing.sm,
     },
     bgCircle: {
       position: 'absolute',
@@ -69,7 +85,7 @@ export const createStyles = (colors: ThemeColors) =>
       borderRadius: screenWidth,
       top: '-5%',
       zIndex: -2,
-      opacity: 0.15,
+      opacity: 0.08,
     },
     cardWrapper: {
       position: 'absolute',
@@ -83,50 +99,70 @@ export const createStyles = (colors: ThemeColors) =>
       zIndex: -1,
     },
 
-    // Action Controls - Vibrant Sport style
+    // Action Controls
     controlsContainer: {
       flexDirection: 'row',
       justifyContent: 'center',
-      alignItems: 'center',
+      alignItems: 'flex-end',
       paddingBottom: spacing['2xl'],
       gap: spacing.lg,
     },
+    // Wrapper for button + label
+    buttonGroup: {
+      alignItems: 'center',
+      gap: 6,
+    },
+    buttonLabel: {
+      fontFamily: fontFamily.bodyMedium,
+      fontSize: 10,
+      letterSpacing: 1,
+      textTransform: 'uppercase',
+      color: colors.textTertiary,
+    },
     controlButton: {
-      width: 64,
-      height: 64,
-      borderRadius: 32,
+      borderRadius: borderRadius.full,
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: colors.surface,
     },
 
-    // Pass button
+    // Pass button — 68px
     passButton: {
+      width: 68,
+      height: 68,
+      borderRadius: 34,
       borderWidth: 2,
       borderColor: colors.border,
-      ...shadows.card,
+      ...shadows.md,
     },
 
-    // Like button
+    // Like button — 72px with stronger glow
     likeButton: {
+      width: 72,
+      height: 72,
+      borderRadius: 36,
       padding: 0,
       overflow: 'hidden',
-      ...shadows.accentButton,
+      shadowColor: '#F43F5E',
+      shadowOffset: { width: 0, height: 8 },
+      shadowOpacity: 0.55,
+      shadowRadius: 20,
+      elevation: 8,
     },
     likeGradient: {
       width: '100%',
       height: '100%',
-      borderRadius: 32,
+      borderRadius: 36,
       justifyContent: 'center',
       alignItems: 'center',
     },
 
-    // Super Like button
+    // Super Like button — 56px
     superLikeButton: {
       width: 56,
       height: 56,
       borderRadius: 28,
-      marginTop: spacing.lg,
+      marginBottom: 6,
       padding: 0,
       overflow: 'hidden',
       ...shadows.button,
@@ -139,15 +175,15 @@ export const createStyles = (colors: ThemeColors) =>
       alignItems: 'center',
     },
 
-    // Web desktop keyboard hint
+    // Web desktop keyboard hint — more subtle
     keyboardHint: {
       textAlign: 'center',
       fontFamily: fontFamily.body,
-      fontSize: typography.bodySmall.fontSize,
+      fontSize: 10,
       color: colors.textTertiary,
-      marginTop: spacing.md,
-      paddingBottom: spacing.lg,
-      textTransform: 'uppercase',
-      letterSpacing: 0.5,
+      marginTop: spacing.sm,
+      paddingBottom: spacing.md,
+      letterSpacing: 0.8,
+      opacity: 0.6,
     },
   });

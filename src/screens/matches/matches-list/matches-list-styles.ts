@@ -12,7 +12,7 @@ export const createStyles = (colors: ThemeColors) =>
       flex: 1,
     },
 
-    // Header - Instagram style
+    // ── Header ────────────────────────────────────────────────
     header: {
       flexDirection: 'row',
       justifyContent: 'space-between',
@@ -22,21 +22,12 @@ export const createStyles = (colors: ThemeColors) =>
       borderBottomWidth: 0.5,
       borderBottomColor: colors.border,
     },
-    headerLeft: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: spacing.xs,
-    },
     headerTitle: {
       fontSize: 22,
       fontWeight: '700',
       color: colors.textPrimary,
       letterSpacing: -0.3,
-    },
-    headerRight: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: spacing.xs,
+      fontFamily: 'Barlow-Bold',
     },
     headerButton: {
       width: 44,
@@ -45,121 +36,103 @@ export const createStyles = (colors: ThemeColors) =>
       alignItems: 'center',
     },
 
-    // Search Bar
-    searchContainer: {
-      paddingHorizontal: spacing.md,
-      paddingVertical: spacing.sm,
-    },
-    searchBar: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      backgroundColor: colors.background,
-      borderRadius: 10,
-      paddingHorizontal: spacing.sm,
-      paddingVertical: spacing.sm,
-      gap: spacing.sm,
-    },
-    searchInput: {
-      flex: 1,
-      fontSize: 16,
-      color: colors.textPrimary,
-      padding: 0,
-    },
-
-    // Stories Section (New Matches)
-    storiesSection: {
+    // ── New Matches Strip ──────────────────────────────────────
+    newMatchesSection: {
       borderBottomWidth: 0.5,
       borderBottomColor: colors.border,
       paddingBottom: spacing.md,
+      paddingTop: spacing.sm,
     },
-    storiesList: {
+    sectionTitle: {
+      fontSize: 13,
+      fontWeight: '600',
+      color: colors.textTertiary,
+      letterSpacing: 0.5,
+      textTransform: 'uppercase',
       paddingHorizontal: spacing.md,
-      gap: spacing.md,
+      marginBottom: spacing.sm,
+      fontFamily: 'Barlow-SemiBold',
     },
-    storyItem: {
+    newMatchesList: {
+      paddingHorizontal: spacing.md,
+      gap: 16,
+    },
+    newMatchItem: {
       alignItems: 'center',
-      width: 76,
+      width: 72,
     },
-    storyRing: {
-      width: 68,
-      height: 68,
-      borderRadius: 34,
-      padding: 3,
-      justifyContent: 'center',
-      alignItems: 'center',
+    newMatchAvatarWrapper: {
+      position: 'relative',
+      width: 64,
+      height: 64,
     },
-    storyAvatarWrapper: {
-      width: 62,
-      height: 62,
-      borderRadius: 31,
-      backgroundColor: colors.surface,
-      padding: 2,
+    newMatchAvatar: {
+      width: 64,
+      height: 64,
+      borderRadius: 32,
+      backgroundColor: colors.border,
     },
-    storyAvatar: {
-      width: '100%',
-      height: '100%',
-      borderRadius: 30,
-    },
-    storyOnline: {
+    onlineDot: {
       position: 'absolute',
-      bottom: 18,
-      right: 4,
-      width: 16,
-      height: 16,
-      borderRadius: 8,
+      bottom: 2,
+      right: 2,
+      width: 12,
+      height: 12,
+      borderRadius: 6,
       backgroundColor: colors.success,
-      borderWidth: 3,
+      borderWidth: 2,
       borderColor: colors.surface,
     },
-    storyName: {
+    newMatchName: {
       fontSize: 12,
       color: colors.textPrimary,
       marginTop: 6,
       textAlign: 'center',
+      fontFamily: 'Barlow-Regular',
     },
 
-    // Tin Nhắn Header
+    // ── Messages Section Label ─────────────────────────────────
     messagesHeader: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
       paddingHorizontal: spacing.md,
       paddingTop: spacing.md,
       paddingBottom: spacing.sm,
     },
     messagesTitle: {
-      fontSize: 16,
-      fontWeight: '700',
-      color: colors.textPrimary,
-    },
-    requestsLink: {
-      fontSize: 14,
+      fontSize: 13,
       fontWeight: '600',
-      color: colors.primary,
+      color: colors.textTertiary,
+      letterSpacing: 0.5,
+      textTransform: 'uppercase',
+      fontFamily: 'Barlow-SemiBold',
     },
 
-    // Conversation Item
+    // ── Conversation Item ──────────────────────────────────────
     conversationItem: {
       flexDirection: 'row',
       alignItems: 'center',
       paddingHorizontal: spacing.md,
       paddingVertical: 12,
+      borderBottomWidth: 1,
+      borderBottomColor: colors.border,
     },
     conversationAvatarContainer: {
       position: 'relative',
+      width: 56,
+      height: 56,
     },
     conversationAvatar: {
       width: 56,
       height: 56,
       borderRadius: 28,
+      backgroundColor: colors.border,
     },
-    conversationOnline: {
+    conversationOnlineDot: {
       position: 'absolute',
       bottom: 2,
       right: 2,
-      width: 14,
-      height: 14,
-      borderRadius: 7,
+      width: 12,
+      height: 12,
+      borderRadius: 6,
       backgroundColor: colors.success,
       borderWidth: 2,
       borderColor: colors.surface,
@@ -168,7 +141,7 @@ export const createStyles = (colors: ThemeColors) =>
       flex: 1,
       marginLeft: 12,
     },
-    conversationHeader: {
+    conversationRow: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
@@ -176,18 +149,21 @@ export const createStyles = (colors: ThemeColors) =>
     },
     conversationName: {
       fontSize: 15,
+      fontWeight: '400',
       color: colors.textPrimary,
       flex: 1,
+      fontFamily: 'Barlow-Regular',
     },
-    conversationNameBold: {
-      fontWeight: '600',
+    conversationNameUnread: {
+      fontWeight: '700',
+      fontFamily: 'Barlow-Bold',
     },
     conversationTime: {
-      fontSize: 14,
+      fontSize: 12,
       color: colors.textTertiary,
       marginLeft: spacing.sm,
     },
-    conversationPreview: {
+    conversationPreviewRow: {
       flexDirection: 'row',
       alignItems: 'center',
     },
@@ -196,25 +172,19 @@ export const createStyles = (colors: ThemeColors) =>
       color: colors.textTertiary,
       flex: 1,
     },
-    conversationMessageBold: {
+    conversationMessageUnread: {
       color: colors.textPrimary,
       fontWeight: '500',
     },
-    unreadDot: {
+    unreadBadge: {
       width: 8,
       height: 8,
       borderRadius: 4,
       backgroundColor: colors.primary,
       marginLeft: spacing.sm,
     },
-    cameraButton: {
-      width: 44,
-      height: 44,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
 
-    // List
+    // ── List ───────────────────────────────────────────────────
     listContent: {
       paddingBottom: spacing['2xl'],
     },
