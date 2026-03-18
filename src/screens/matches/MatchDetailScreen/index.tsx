@@ -46,12 +46,15 @@ export const MatchDetailScreen = () => {
 
   const handleChat = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    navigation.navigate('Chat', { matchId });
+    navigation.navigate('ChatScreen', {
+      matchId,
+      userId: match?.matched_user?.id || match?.matched_user_id,
+    });
   };
 
   const handleRate = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    navigation.navigate('Rating', { userId: user.id, userName: user.display_name });
+    navigation.navigate('RatingScreen', { userId: user.id, userName: user.display_name });
   };
 
   const handleUnmatch = () => {

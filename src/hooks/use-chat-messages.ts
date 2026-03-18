@@ -150,8 +150,8 @@ export const useChatMessages = (
         setMessages((prev) => prev.map((m) => (m.id === tempId ? toUIMessage(sent) : m)));
       } catch (error) {
         console.error('[useChatMessages] sendMessage failed:', error);
-        // Mark as failed — keep 'sending' status so UI can indicate error
-        setMessages((prev) => prev.map((m) => (m.id === tempId ? { ...m, status: 'sending' } : m)));
+        // Remove failed message so user can retry without stale 'sending' state
+        setMessages((prev) => prev.filter((m) => m.id !== tempId));
       }
     },
     [conversationId, currentUserId]
@@ -176,7 +176,8 @@ export const useChatMessages = (
         setMessages((prev) => prev.map((m) => (m.id === tempId ? toUIMessage(sent) : m)));
       } catch (error) {
         console.error('[useChatMessages] sendImage failed:', error);
-        setMessages((prev) => prev.map((m) => (m.id === tempId ? { ...m, status: 'sending' } : m)));
+        // Remove failed message so user can retry without stale 'sending' state
+        setMessages((prev) => prev.filter((m) => m.id !== tempId));
       }
     },
     [conversationId, currentUserId]

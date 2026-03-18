@@ -84,13 +84,22 @@ export const getMyBookings = async (): Promise<BookingWithCourt[]> => {
 };
 
 /**
- * Cancel a booking by setting its status to 'cancelled'
+ * Cancel a booking by setting its status to 'cancelled'.
+ * Filters by user_id to ensure only the booking owner can cancel.
  */
 export const cancelBooking = async (bookingId: string): Promise<void> => {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) {
+    throw new Error('Not authenticated');
+  }
+
   const { error } = await supabase
     .from('bookings')
     .update({ status: 'cancelled' })
-    .eq('id', bookingId);
+    .eq('id', bookingId)
+    .eq('user_id', user.id); // Only cancel own bookings
   if (error) {
     throw error;
   }

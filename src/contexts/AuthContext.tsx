@@ -12,6 +12,7 @@ import React, {
   useState,
   useContext,
   useEffect,
+  useRef,
   ReactNode,
   useCallback,
 } from 'react';
@@ -33,6 +34,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [profileLoading, setProfileLoading] = useState(false);
   const [profileError, setProfileError] = useState<Error | null>(null);
+  const profileLoadedRef = useRef(false);
 
   const loadProfile = useCallback(async () => {
     try {
@@ -103,6 +105,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           if (__DEV__) {
             console.log('[AuthContext] Profile loading started in background');
           }
+          profileLoadedRef.current = true;
           loadProfile().catch((err) => {
             console.error('[AuthContext] Background profile load failed:', err);
           });
@@ -126,9 +129,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         'user:',
         newSession?.user?.email
       );
+      // INITIAL_SESSION fires right after checkSession which already loaded the profile
+      if (event === 'INITIAL_SESSION') {
+        return;
+      }
       setAuthState(newSession);
       if (newSession) {
         console.log('[AuthContext] User authenticated, loading profile in background...');
+        profileLoadedRef.current = true;
         loadProfile().catch((err) => {
           console.error('[AuthContext] Background profile load failed:', err);
         });

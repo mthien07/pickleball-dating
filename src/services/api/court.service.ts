@@ -62,7 +62,9 @@ export const getCourtTimeSlots = async (
   courtId: string,
   date: string
 ): Promise<CourtTimeSlot[]> => {
-  const dayOfWeek = new Date(date).getDay();
+  // Parse date parts explicitly to avoid UTC offset shifting the day of week
+  const [year, month, day] = date.split('-').map(Number);
+  const dayOfWeek = new Date(year, month - 1, day).getDay();
   const { data, error } = await supabase
     .from('court_time_slots')
     .select('*')

@@ -134,7 +134,12 @@ const useMockChat = (
     loadMessages();
   }, [matchId, storageKey]);
 
-  // Periodic simulated messages
+  // Periodic simulated messages — side effects run outside setMessages updater
+  const messagesRef = useRef<Message[]>([]);
+  useEffect(() => {
+    messagesRef.current = messages;
+  }, [messages]);
+
   useEffect(() => {
     let autoMsgCount = 0;
     const interval = setInterval(
@@ -142,26 +147,24 @@ const useMockChat = (
         if (autoMsgCount >= MAX_AUTO_MESSAGES) {
           return;
         }
-        setMessages((prev) => {
-          if (prev.length === 0 || prev[0].sender_id !== CURRENT_USER_ID) {
-            return prev;
-          }
-          setIsTyping(true);
-          setTimeout(() => {
-            setIsTyping(false);
-            const msg: Message = {
-              id: `auto-${Date.now()}`,
-              content: getRandomReply(),
-              type: 'text',
-              sender_id: userId ?? 'other',
-              status: 'read',
-              created_at: new Date().toISOString(),
-            };
-            setMessages((innerPrev) => [msg, ...innerPrev]);
-            autoMsgCount += 1;
-          }, TYPING_DURATION);
-          return prev;
-        });
+        const prev = messagesRef.current;
+        if (prev.length === 0 || prev[0].sender_id !== CURRENT_USER_ID) {
+          return;
+        }
+        setIsTyping(true);
+        setTimeout(() => {
+          setIsTyping(false);
+          const msg: Message = {
+            id: `auto-${Date.now()}`,
+            content: getRandomReply(),
+            type: 'text',
+            sender_id: userId ?? 'other',
+            status: 'read',
+            created_at: new Date().toISOString(),
+          };
+          setMessages((innerPrev) => [msg, ...innerPrev]);
+          autoMsgCount += 1;
+        }, TYPING_DURATION);
       },
       AUTO_MSG_INTERVAL_MIN + Math.random() * AUTO_MSG_INTERVAL_RANGE
     );

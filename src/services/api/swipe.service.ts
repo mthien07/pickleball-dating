@@ -94,11 +94,15 @@ export const recordSwipe = async (
     return { isMatch: false };
   }
 
-  const { error: matchError } = await supabase.from('matches').insert({
-    user_id_1: user.id,
-    user_id_2: targetUserId,
-    matched_at: new Date().toISOString(),
-  });
+  // Use upsert to prevent duplicate matches from simultaneous swipes
+  const { error: matchError } = await supabase.from('matches').upsert(
+    {
+      user_id_1: [user.id, targetUserId].sort()[0], // Always order IDs consistently
+      user_id_2: [user.id, targetUserId].sort()[1],
+      matched_at: new Date().toISOString(),
+    },
+    { onConflict: 'user_id_1,user_id_2', ignoreDuplicates: true }
+  );
 
   return { isMatch: !matchError };
 };
