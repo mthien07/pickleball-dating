@@ -1,14 +1,18 @@
 /**
  * ChatScreen
  *
- * Real-time chat conversation screen with simulated messaging features:
- * - Diverse auto-replies (10 contextual Vietnamese messages)
- * - Periodic background messages simulating real-time activity
+ * Dual-mode chat:
+ * - Real mode: Supabase real-time via useChatMessages hook (when authenticated + conversationId present)
+ * - Mock mode: AsyncStorage + simulated replies for prototype testing
+ *
+ * Features:
+ * - Typing indicators (broadcast to Supabase in real mode, simulated in mock mode)
  * - Message status progression: sending → sent → delivered → read
- * - Online/offline status simulation
+ * - Online/offline status display
+ * - Image/camera attachment
  */
 
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+import React, { useState, useRef, useCallback, useEffect, useContext } from 'react';
 import {
   View,
   Text,
@@ -30,6 +34,9 @@ import { MessageBubble, TypingIndicator, Message } from '../../../components/Mes
 import { MessageInput } from '../../../components/MessageInput';
 import { useThemeColors } from '../../../contexts/ThemeContext';
 import { useThemedStyles } from '../../../hooks/useThemedStyles';
+import { AuthContext } from '../../../contexts/AuthContext';
+import { useChatMessages } from '../../../hooks/use-chat-messages';
+import { sendTypingIndicator } from '../../../services/realtime';
 import { MOCK_MATCHES, MOCK_MESSAGES, getUserById } from '@data/mockData';
 import { createStyles } from './chat-screen-styles';
 import { getRandomReply } from './chat-mock-replies';
@@ -42,6 +49,7 @@ type ChatRouteParams = {
   Chat: {
     matchId: string;
     userId: string;
+    conversationId?: string;
   };
 };
 
@@ -61,72 +69,24 @@ const TYPING_DURATION = 2000;
 const ONLINE_CHECK_INTERVAL = 60000;
 const OFFLINE_DURATION_MIN = 10000;
 const OFFLINE_DURATION_RANGE = 10000;
+const TYPING_STOP_DEBOUNCE = 2000;
 
 // ============================================
-// SCREEN COMPONENT
+// MOCK MODE HOOK (extracted for clarity)
 // ============================================
 
-export const ChatScreen = () => {
-  const navigation = useNavigation<any>();
-  const route = useRoute<RouteProp<ChatRouteParams, 'Chat'>>();
-  const colors = useThemeColors();
-  const styles = useThemedStyles(createStyles);
-  const { matchId, userId } = route.params || {};
-
-  const flatListRef = useRef<FlatList>(null);
+const useMockChat = (
+  matchId: string | undefined,
+  userId: string | undefined,
+  storageKey: string
+) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isTyping, setIsTyping] = useState(false);
-  const [isOtherUserOnline, setIsOtherUserOnline] = useState(true);
 
-  // Get match and user data
-  const match = MOCK_MATCHES.find((m) => m.id === matchId);
-  const otherUser = match?.matched_user || getUserById(userId);
-
-  const storageKey = `chat_messages_${matchId || userId}`;
-
-  // ---- Message status update helper ----
   const updateMessageStatus = useCallback((id: string, status: Message['status']) => {
     setMessages((prev) => prev.map((m) => (m.id === id ? { ...m, status } : m)));
   }, []);
 
-  // ---- Load persisted + mock messages on mount ----
-  useEffect(() => {
-    const loadMessages = async () => {
-      try {
-        const stored = await AsyncStorage.getItem(storageKey);
-        const persisted: Message[] = stored ? JSON.parse(stored) : [];
-
-        const mockMessages = match?.conversation_id
-          ? MOCK_MESSAGES.filter((m) => m.conversation_id === match.conversation_id).sort(
-              (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-            )
-          : [];
-
-        const merged = [...persisted];
-        for (const m of mockMessages) {
-          if (!merged.find((p) => p.id === m.id)) {
-            merged.push(m);
-          }
-        }
-        merged.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-        setMessages(merged);
-
-        if (match && match.unread_count > 0) {
-          match.unread_count = 0;
-        }
-      } catch {
-        if (match?.conversation_id) {
-          const conversationMessages = MOCK_MESSAGES.filter(
-            (m) => m.conversation_id === match.conversation_id
-          ).sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-          setMessages(conversationMessages);
-        }
-      }
-    };
-    loadMessages();
-  }, [matchId, userId]);
-
-  // ---- Persist user-sent messages ----
   const persistMessages = useCallback(
     async (msgs: Message[]) => {
       try {
@@ -139,66 +99,76 @@ export const ChatScreen = () => {
     [storageKey]
   );
 
-  // ---- Periodic simulated messages (mock real-time) ----
+  // Load persisted + mock messages on mount
+  useEffect(() => {
+    const match = MOCK_MATCHES.find((m) => m.id === matchId);
+    const loadMessages = async () => {
+      try {
+        const stored = await AsyncStorage.getItem(storageKey);
+        const persisted: Message[] = stored ? JSON.parse(stored) : [];
+        const mockMessages = match?.conversation_id
+          ? MOCK_MESSAGES.filter((m) => m.conversation_id === match.conversation_id).sort(
+              (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+            )
+          : [];
+        const merged = [...persisted];
+        for (const m of mockMessages) {
+          if (!merged.find((p) => p.id === m.id)) {
+            merged.push(m);
+          }
+        }
+        merged.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+        setMessages(merged);
+        if (match && match.unread_count > 0) {
+          match.unread_count = 0;
+        }
+      } catch {
+        if (match?.conversation_id) {
+          const fallback = MOCK_MESSAGES.filter(
+            (m) => m.conversation_id === match.conversation_id
+          ).sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+          setMessages(fallback);
+        }
+      }
+    };
+    loadMessages();
+  }, [matchId, storageKey]);
+
+  // Periodic simulated messages
   useEffect(() => {
     let autoMsgCount = 0;
-
     const interval = setInterval(
       () => {
         if (autoMsgCount >= MAX_AUTO_MESSAGES) {
           return;
         }
-
         setMessages((prev) => {
-          // Only auto-message if the current user sent the last message
           if (prev.length === 0 || prev[0].sender_id !== CURRENT_USER_ID) {
             return prev;
           }
-
           setIsTyping(true);
           setTimeout(() => {
             setIsTyping(false);
-            const reply = getRandomReply();
             const msg: Message = {
               id: `auto-${Date.now()}`,
-              content: reply,
+              content: getRandomReply(),
               type: 'text',
-              sender_id: userId,
+              sender_id: userId ?? 'other',
               status: 'read',
               created_at: new Date().toISOString(),
             };
             setMessages((innerPrev) => [msg, ...innerPrev]);
             autoMsgCount += 1;
           }, TYPING_DURATION);
-
           return prev;
         });
       },
       AUTO_MSG_INTERVAL_MIN + Math.random() * AUTO_MSG_INTERVAL_RANGE
     );
-
     return () => clearInterval(interval);
   }, [userId]);
 
-  // ---- Online status simulation ----
-  useEffect(() => {
-    const interval = setInterval(() => {
-      // Randomly go offline for 10-20s then come back
-      const goOffline = Math.random() < 0.5;
-      if (!goOffline) {
-        return;
-      }
-
-      setIsOtherUserOnline(false);
-      const offlineDuration = OFFLINE_DURATION_MIN + Math.random() * OFFLINE_DURATION_RANGE;
-      setTimeout(() => setIsOtherUserOnline(true), offlineDuration);
-    }, ONLINE_CHECK_INTERVAL);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  // ---- Send message with status progression ----
-  const handleSendMessage = useCallback(
+  const sendMessage = useCallback(
     (text: string) => {
       const id = `msg-${Date.now()}`;
       const newMessage: Message = {
@@ -209,88 +179,189 @@ export const ChatScreen = () => {
         status: 'sending',
         created_at: new Date().toISOString(),
       };
-
       setMessages((prev) => {
         const updated = [newMessage, ...prev];
         persistMessages(updated);
         return updated;
       });
-
-      // Status progression: sending → sent → delivered → read
       setTimeout(() => updateMessageStatus(id, 'sent'), STATUS_SENT_DELAY);
       setTimeout(() => updateMessageStatus(id, 'delivered'), STATUS_DELIVERED_DELAY);
       setTimeout(() => updateMessageStatus(id, 'read'), STATUS_READ_DELAY);
-
       // Auto-reply
       setTimeout(() => setIsTyping(true), TYPING_BEFORE_REPLY);
       setTimeout(() => {
         setIsTyping(false);
-        const replyMessage: Message = {
+        const reply: Message = {
           id: `msg-${Date.now()}-reply`,
           content: getRandomReply(),
           type: 'text',
-          sender_id: userId,
+          sender_id: userId ?? 'other',
           status: 'read',
           created_at: new Date().toISOString(),
         };
-        setMessages((prev) => [replyMessage, ...prev]);
+        setMessages((prev) => [reply, ...prev]);
       }, TYPING_BEFORE_REPLY + TYPING_DURATION);
     },
     [userId, updateMessageStatus, persistMessages]
   );
 
-  // ---- Image attachment ----
+  const sendImage = useCallback(
+    (imageUrl: string) => {
+      const id = `msg-${Date.now()}`;
+      const newMessage: Message = {
+        id,
+        type: 'image',
+        image_url: imageUrl,
+        sender_id: CURRENT_USER_ID,
+        status: 'sending',
+        created_at: new Date().toISOString(),
+      };
+      setMessages((prev) => [newMessage, ...prev]);
+      setTimeout(() => updateMessageStatus(id, 'sent'), STATUS_DELIVERED_DELAY);
+    },
+    [updateMessageStatus]
+  );
+
+  return { messages, isTyping, sendMessage, sendImage };
+};
+
+// ============================================
+// SCREEN COMPONENT
+// ============================================
+
+export const ChatScreen = () => {
+  const navigation = useNavigation<any>();
+  const route = useRoute<RouteProp<ChatRouteParams, 'Chat'>>();
+  const colors = useThemeColors();
+  const styles = useThemedStyles(createStyles);
+  const { matchId, userId, conversationId: routeConversationId } = route.params || {};
+  // Use context directly to avoid throw when AuthProvider is absent (e.g. tests)
+  const authContext = useContext(AuthContext);
+  const authUser = authContext?.user ?? null;
+
+  const flatListRef = useRef<FlatList>(null);
+  const typingStopTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [isOtherUserOnline, setIsOtherUserOnline] = useState(true);
+
+  // Determine mode: real Supabase when user is authenticated + conversationId present
+  const match = MOCK_MATCHES.find((m) => m.id === matchId);
+  const otherUser = match?.matched_user || getUserById(userId);
+  const storageKey = `chat_messages_${matchId || userId}`;
+
+  // Use match's conversation_id or route param
+  const conversationId = routeConversationId ?? match?.conversation_id ?? '';
+  const isRealMode = !!authUser?.id && !!conversationId;
+
+  // Real mode: Supabase hook
+  const supaChat = useChatMessages(
+    isRealMode ? conversationId : '',
+    isRealMode ? authUser!.id! : '',
+    isRealMode
+  );
+
+  // Mock mode: local state hook
+  const mockChat = useMockChat(matchId, userId, storageKey);
+
+  // Unified interface
+  const messages = isRealMode ? supaChat.messages : mockChat.messages;
+  const isTyping = isRealMode ? supaChat.isTyping : mockChat.isTyping;
+
+  const handleSendMessage = useCallback(
+    async (text: string) => {
+      if (isRealMode) {
+        await supaChat.sendMessage(text);
+      } else {
+        mockChat.sendMessage(text);
+      }
+    },
+    [isRealMode, supaChat, mockChat]
+  );
+
+  // Typing indicator broadcast in real mode
+  const handleTypingChange = useCallback(
+    (hasText: boolean) => {
+      if (!isRealMode || !authUser?.id) {
+        return;
+      }
+      sendTypingIndicator(conversationId, authUser!.id!, hasText);
+      if (hasText) {
+        // Auto-stop typing after debounce
+        if (typingStopTimer.current) {
+          clearTimeout(typingStopTimer.current);
+        }
+        typingStopTimer.current = setTimeout(() => {
+          sendTypingIndicator(conversationId, authUser!.id!, false);
+        }, TYPING_STOP_DEBOUNCE);
+      }
+    },
+    [isRealMode, conversationId, authUser?.id]
+  );
+
+  // Cleanup typing timer on unmount
+  useEffect(() => {
+    return () => {
+      if (typingStopTimer.current) {
+        clearTimeout(typingStopTimer.current);
+      }
+    };
+  }, []);
+
+  // Online status simulation (mock mode only)
+  useEffect(() => {
+    if (isRealMode) {
+      return;
+    }
+    const interval = setInterval(() => {
+      const goOffline = Math.random() < 0.5;
+      if (!goOffline) {
+        return;
+      }
+      setIsOtherUserOnline(false);
+      const offlineDuration = OFFLINE_DURATION_MIN + Math.random() * OFFLINE_DURATION_RANGE;
+      setTimeout(() => setIsOtherUserOnline(true), offlineDuration);
+    }, ONLINE_CHECK_INTERVAL);
+    return () => clearInterval(interval);
+  }, [isRealMode]);
+
+  // Image attachment
   const handleAttachment = useCallback(async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       quality: 0.8,
     });
-
     if (!result.canceled && result.assets[0]) {
-      const id = `msg-${Date.now()}`;
-      const newMessage: Message = {
-        id,
-        type: 'image',
-        image_url: result.assets[0].uri,
-        sender_id: CURRENT_USER_ID,
-        status: 'sending',
-        created_at: new Date().toISOString(),
-      };
-      setMessages((prev) => [newMessage, ...prev]);
-      setTimeout(() => updateMessageStatus(id, 'sent'), STATUS_DELIVERED_DELAY);
+      const uri = result.assets[0].uri;
+      if (isRealMode) {
+        await supaChat.sendImage(uri);
+      } else {
+        mockChat.sendImage(uri);
+      }
     }
-  }, [updateMessageStatus]);
+  }, [isRealMode, supaChat, mockChat]);
 
-  // ---- Camera ----
+  // Camera
   const handleCamera = useCallback(async () => {
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
     if (status !== 'granted') {
       return;
     }
-
     const result = await ImagePicker.launchCameraAsync({ quality: 0.8 });
-
     if (!result.canceled && result.assets[0]) {
-      const id = `msg-${Date.now()}`;
-      const newMessage: Message = {
-        id,
-        type: 'image',
-        image_url: result.assets[0].uri,
-        sender_id: CURRENT_USER_ID,
-        status: 'sending',
-        created_at: new Date().toISOString(),
-      };
-      setMessages((prev) => [newMessage, ...prev]);
-      setTimeout(() => updateMessageStatus(id, 'sent'), STATUS_DELIVERED_DELAY);
+      const uri = result.assets[0].uri;
+      if (isRealMode) {
+        await supaChat.sendImage(uri);
+      } else {
+        mockChat.sendImage(uri);
+      }
     }
-  }, [updateMessageStatus]);
+  }, [isRealMode, supaChat, mockChat]);
 
   const renderMessage = ({ item, index }: { item: Message; index: number }) => (
     <MessageBubble
       message={item}
-      isMe={item.sender_id === CURRENT_USER_ID}
+      isMe={item.sender_id === (isRealMode ? authUser!.id : CURRENT_USER_ID)}
       showTimestamp={index === 0 || index % 5 === 0}
-      showStatus={item.sender_id === CURRENT_USER_ID}
+      showStatus={item.sender_id === (isRealMode ? authUser!.id : CURRENT_USER_ID)}
       animationDelay={0}
     />
   );
@@ -375,6 +446,7 @@ export const ChatScreen = () => {
             onSend={handleSendMessage}
             onAttachment={handleAttachment}
             onCamera={handleCamera}
+            onChangeText={handleTypingChange}
           />
         </KeyboardAvoidingView>
       </SafeAreaView>
