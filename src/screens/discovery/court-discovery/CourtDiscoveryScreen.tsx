@@ -2,14 +2,22 @@
  * Court Discovery Screen - Find and book pickleball courts
  */
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { View, FlatList, Pressable, Text, TextInput, StatusBar } from 'react-native';
+import React, { useState, useCallback, useMemo } from 'react';
+import {
+  View,
+  FlatList,
+  Pressable,
+  Text,
+  TextInput,
+  StatusBar,
+  RefreshControl,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
 
-import { MOCK_COURTS } from '@data/mockData';
+import { useCourts } from '../../../hooks/use-courts';
 import { CourtsStackParamList } from '../../../navigation/types';
 import { useThemeColors } from '../../../contexts/ThemeContext';
 import { useThemedStyles } from '../../../hooks/useThemedStyles';
@@ -28,18 +36,10 @@ export const CourtDiscoveryScreen = () => {
   const styles = useThemedStyles(createStyles);
   const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
   const [query, setQuery] = useState('');
-  const [courts, setCourts] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [showFilter, setShowFilter] = useState(false);
   const [filter, setFilter] = useState<FilterState>(DEFAULT_FILTER);
 
-  useEffect(() => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setCourts(MOCK_COURTS);
-      setIsLoading(false);
-    }, 1000);
-  }, []);
+  const { courts, isLoading, refresh } = useCourts();
 
   // Memoize filtered list - avoids re-running filter on every render
   const filteredCourts = useMemo(
@@ -48,12 +48,14 @@ export const CourtDiscoveryScreen = () => {
         const matchQuery =
           court.name.toLowerCase().includes(query.toLowerCase()) ||
           (court.address && court.address.toLowerCase().includes(query.toLowerCase()));
-        const matchPrice = filter.maxPrice == null || court.price_per_hour <= filter.maxPrice;
+        const courtAny = court as any;
+        const courtPrice = court.price_min ?? courtAny.price_per_hour ?? 0;
+        const matchPrice = filter.maxPrice == null || courtPrice <= filter.maxPrice;
         const matchDistance =
           filter.maxDistance == null ||
-          !court.distance_km ||
-          court.distance_km <= filter.maxDistance;
-        const matchRating = filter.minRating == null || court.rating >= filter.minRating;
+          !courtAny.distance_km ||
+          courtAny.distance_km <= filter.maxDistance;
+        const matchRating = filter.minRating == null || (courtAny.rating ?? 0) >= filter.minRating;
         return matchQuery && matchPrice && matchDistance && matchRating;
       }),
     [courts, query, filter]
@@ -184,6 +186,7 @@ export const CourtDiscoveryScreen = () => {
               contentContainerStyle={styles.listContent}
               showsVerticalScrollIndicator={false}
               ListEmptyComponent={<EmptyState />}
+              refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refresh} />}
             />
           ) : (
             <CourtMapList courts={filteredCourts} onPress={handleCourtPress} onBook={handleBook} />

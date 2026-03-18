@@ -2,7 +2,7 @@
  * BookingScreen - Court booking flow with calendar and time slot selection
  */
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useContext } from 'react';
 import { View, Text, ScrollView, StatusBar, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
@@ -17,6 +17,9 @@ import { useThemeColors } from '../../../contexts/ThemeContext';
 import { useThemedStyles } from '../../../hooks/useThemedStyles';
 import { MOCK_COURTS } from '@data/mockData';
 import { createStyles } from './booking-screen-styles';
+import { AuthContext } from '../../../contexts/AuthContext';
+import { createBooking } from '../../../services/api/booking.service';
+import { ToastMessages } from '../../../services/toast';
 
 type BookingRouteParams = {
   Booking: { courtId: string };
@@ -48,6 +51,8 @@ export const BookingScreen = () => {
   const colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
   const { getEntering } = useReducedMotion();
+  const authContext = useContext(AuthContext);
+  const isAuthenticated = !!authContext?.user?.id;
   const { courtId } = route.params || {};
 
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
@@ -70,7 +75,27 @@ export const BookingScreen = () => {
     );
   };
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
+    if (isAuthenticated && selectedDate && selectedSlots.length > 0) {
+      try {
+        const sortedSlots = [...selectedSlots].sort((a, b) =>
+          a.startTime.localeCompare(b.startTime)
+        );
+        await createBooking({
+          courtId: court.id,
+          date: selectedDate.toISOString().split('T')[0],
+          startTime: sortedSlots[0].startTime,
+          endTime: sortedSlots[sortedSlots.length - 1].endTime,
+          totalAmount: totalPrice,
+          paymentMethod: 'pending',
+        });
+        ToastMessages.bookingSuccess();
+      } catch (e) {
+        console.error('[BookingScreen] createBooking failed:', e);
+        // Continue to payment regardless - backend may not be ready
+      }
+    }
+
     navigation.navigate('PaymentMethod', {
       courtId: court.id,
       date: selectedDate?.toISOString(),

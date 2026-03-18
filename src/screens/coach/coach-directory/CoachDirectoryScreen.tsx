@@ -1,32 +1,34 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { View, FlatList, Pressable, Text, TextInput, StatusBar } from 'react-native';
+import React, { useState, useCallback, useMemo } from 'react';
+import {
+  View,
+  FlatList,
+  Pressable,
+  Text,
+  TextInput,
+  StatusBar,
+  RefreshControl,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 
-import { MOCK_COACHES, Coach } from '@data/mockData';
 import { showInfo } from '../../../services/toast';
 import { useThemeColors } from '../../../contexts/ThemeContext';
 import { useThemedStyles } from '../../../hooks/useThemedStyles';
 import { createStyles } from './coach-directory-styles';
 import { CoachCard, EmptyState } from './coach-directory-components';
 import { SkeletonList } from '../../../components/SkeletonLoaders';
+import { useCoaches } from '../../../hooks/use-coaches';
 
 export const CoachDirectoryScreen = () => {
   const navigation = useNavigation();
   const themeColors = useThemeColors();
   const styles = useThemedStyles(createStyles);
   const [query, setQuery] = useState('');
-  const [coaches, setCoaches] = useState<Coach[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { coaches, isLoading, refresh } = useCoaches();
 
-  useEffect(() => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setCoaches(MOCK_COACHES);
-      setIsLoading(false);
-    }, 500);
-  }, []);
+  // Normalize address: mock uses location.address, Supabase uses flat address field
+  const getAddress = (coach: any): string => coach.address ?? coach.location?.address ?? '';
 
   // Memoize filtered list - avoids re-running filter on every render
   const filteredCoaches = useMemo(
@@ -34,7 +36,7 @@ export const CoachDirectoryScreen = () => {
       coaches.filter(
         (coach) =>
           coach.display_name.toLowerCase().includes(query.toLowerCase()) ||
-          coach.location.address.toLowerCase().includes(query.toLowerCase())
+          getAddress(coach).toLowerCase().includes(query.toLowerCase())
       ),
     [coaches, query]
   );
@@ -45,7 +47,7 @@ export const CoachDirectoryScreen = () => {
 
   // Stable renderItem - prevents CoachCard memo from being defeated by inline arrows
   const renderItem = useCallback(
-    ({ item }: { item: Coach }) => (
+    ({ item }: { item: any }) => (
       <CoachCard coach={item} onPress={() => {}} onBook={() => handleBook(item.id)} />
     ),
     [handleBook]
@@ -99,6 +101,13 @@ export const CoachDirectoryScreen = () => {
             contentContainerStyle={styles.listContent}
             showsVerticalScrollIndicator={false}
             ListEmptyComponent={<EmptyState />}
+            refreshControl={
+              <RefreshControl
+                refreshing={false}
+                onRefresh={refresh}
+                tintColor={themeColors.primary}
+              />
+            }
           />
         )}
       </SafeAreaView>

@@ -11,7 +11,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { spacing } from '../../../theme/tokens';
 import { useThemeColors } from '../../../contexts/ThemeContext';
 import { useThemedStyles } from '../../../hooks/useThemedStyles';
-import { MOCK_BOOKINGS } from '@data/mockData';
+import { useBookings } from '../../../hooks/use-bookings';
 import { createStyles } from './booking-history-styles';
 import { TabBar, BookingCard, EmptyState } from './booking-history-components';
 import { SkeletonList } from '../../../components/SkeletonLoaders';
@@ -40,24 +40,20 @@ export const BookingHistoryScreen = () => {
   const styles = useThemedStyles(createStyles);
   const [activeTab, setActiveTab] = useState('upcoming');
   const [refreshing, setRefreshing] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
 
-  React.useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 800);
-    return () => clearTimeout(timer);
-  }, []);
+  const { bookings, isLoading, refresh } = useBookings();
 
   // Memoize filtered list - avoids re-filtering on every render
   const filteredBookings = useMemo(
-    () => MOCK_BOOKINGS.filter((booking) => booking.status === STATUS_MAP[activeTab]),
-    [activeTab]
+    () => bookings.filter((booking) => booking.status === STATUS_MAP[activeTab]),
+    [bookings, activeTab]
   );
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await refresh();
     setRefreshing(false);
-  }, []);
+  }, [refresh]);
 
   return (
     <View style={styles.container}>
