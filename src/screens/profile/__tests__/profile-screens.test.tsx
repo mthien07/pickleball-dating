@@ -140,8 +140,10 @@ jest.mock('../../../hooks/useImagePicker', () => ({
 
 // PhotoGrid stub
 jest.mock('../edit-profile/edit-profile-photo-grid', () => ({
-  PhotoGrid: ({ photos, onAdd, onRemove }: any) => {
+  PhotoGrid: ({ photos, onAddPhoto, onRemovePhoto, onAdd, onRemove }: any) => {
     const { View, Text, Pressable } = require('react-native');
+    const addHandler = onAddPhoto || onAdd;
+    const removeHandler = onRemovePhoto || onRemove;
     return (
       <View testID="photo-grid">
         {photos.map((p: string, i: number) => (
@@ -149,10 +151,10 @@ jest.mock('../edit-profile/edit-profile-photo-grid', () => ({
             {p}
           </Text>
         ))}
-        <Pressable testID="add-photo-btn" onPress={onAdd}>
+        <Pressable testID="add-photo-btn" onPress={() => addHandler && addHandler(0)}>
           <Text>Add Photo</Text>
         </Pressable>
-        <Pressable testID="remove-photo-0" onPress={() => onRemove(0)}>
+        <Pressable testID="remove-photo-0" onPress={() => removeHandler && removeHandler(0)}>
           <Text>Remove</Text>
         </Pressable>
       </View>
@@ -224,15 +226,15 @@ jest.mock('../edit-profile/EditProfileScreen', () => {
   };
 
   const SKILL_LEVELS = [
-    { id: 'beginner', label: 'Moi bat dau' },
-    { id: 'intermediate', label: 'Trung binh' },
-    { id: 'advanced', label: 'Nang cao' },
-    { id: 'pro', label: 'Chuyen nghiep' },
+    { id: 'beginner', label: 'Beginner' },
+    { id: 'intermediate', label: 'Mid' },
+    { id: 'advanced', label: 'Advanced' },
+    { id: 'pro', label: 'Pro' },
   ];
   const PLAY_STYLES = [
-    { id: 'competitive', label: 'Canh tranh' },
-    { id: 'casual', label: 'Thu gian' },
-    { id: 'social', label: 'Giao luu' },
+    { id: 'competitive', label: 'Competitive' },
+    { id: 'casual', label: 'Casual' },
+    { id: 'social', label: 'Social' },
   ];
 
   const EditProfileScreen = () => {
@@ -363,17 +365,17 @@ describe('EditProfileScreen', () => {
 
   it('renders all four skill level options', () => {
     const { getByText } = render(<EditProfileScreen />);
-    expect(getByText('Moi bat dau')).toBeTruthy();
-    expect(getByText('Trung binh')).toBeTruthy();
-    expect(getByText('Nang cao')).toBeTruthy();
-    expect(getByText('Chuyen nghiep')).toBeTruthy();
+    expect(getByText('Beginner')).toBeTruthy();
+    expect(getByText('Mid')).toBeTruthy();
+    expect(getByText('Advanced')).toBeTruthy();
+    expect(getByText('Pro')).toBeTruthy();
   });
 
   it('renders all three play style options', () => {
     const { getByText } = render(<EditProfileScreen />);
-    expect(getByText('Canh tranh')).toBeTruthy();
-    expect(getByText('Thu gian')).toBeTruthy();
-    expect(getByText('Giao luu')).toBeTruthy();
+    expect(getByText('Competitive')).toBeTruthy();
+    expect(getByText('Casual')).toBeTruthy();
+    expect(getByText('Social')).toBeTruthy();
   });
 
   it('does not call updateProfile when name is too short', async () => {

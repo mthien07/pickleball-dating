@@ -18,6 +18,7 @@ export interface MessageInputProps {
   onSend: (text: string) => void;
   onAttachment?: () => void;
   onCamera?: () => void;
+  onChangeText?: (hasText: boolean) => void;
   placeholder?: string;
   disabled?: boolean;
 }
@@ -26,6 +27,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({
   onSend,
   onAttachment,
   onCamera,
+  onChangeText,
   placeholder = 'Nhắn tin...',
   disabled = false,
 }) => {
@@ -90,7 +92,10 @@ export const MessageInput: React.FC<MessageInputProps> = ({
           ref={inputRef}
           style={styles.input}
           value={text}
-          onChangeText={setText}
+          onChangeText={(val) => {
+            setText(val);
+            onChangeText?.(val.length > 0);
+          }}
           placeholder={placeholder}
           placeholderTextColor={colors.textTertiary}
           multiline
