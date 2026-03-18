@@ -19,7 +19,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 import { useCourts } from '../../../hooks/use-courts';
 import { CourtsStackParamList } from '../../../navigation/types';
-import { useThemeColors } from '../../../contexts/ThemeContext';
+import { useTheme, useThemeColors } from '../../../contexts/ThemeContext';
 import { useThemedStyles } from '../../../hooks/useThemedStyles';
 import { createStyles } from './court-discovery-styles';
 import { CourtCard, CourtMapList, EmptyState } from './court-discovery-components';
@@ -32,6 +32,7 @@ const DEFAULT_FILTER: FilterState = { maxPrice: null, maxDistance: null, minRati
 
 export const CourtDiscoveryScreen = () => {
   const navigation = useNavigation<CourtDiscoveryNavigationProp>();
+  const { isDark } = useTheme();
   const colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
   const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
@@ -171,7 +172,7 @@ export const CourtDiscoveryScreen = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
       <SafeAreaView edges={['top']} style={styles.safeArea}>
         {renderHeader()}
 

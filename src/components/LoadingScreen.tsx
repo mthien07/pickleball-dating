@@ -14,6 +14,7 @@ import { View, Text, StyleSheet, ActivityIndicator, Modal } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { spacing, typography } from '../theme/tokens';
 import { useThemeColors } from '../contexts/ThemeContext';
+import type { ThemeColors } from '../contexts/theme-colors';
 
 interface LoadingScreenProps {
   visible?: boolean;
@@ -27,6 +28,8 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({
   overlay = false,
 }) => {
   const colors = useThemeColors();
+  const styles = createStyles(colors);
+
   if (!visible) {
     return null;
   }
@@ -41,7 +44,7 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({
   if (overlay) {
     return (
       <Modal transparent animationType="fade" visible={visible}>
-        {/* BlurView only works on iOS/Android if native module linked, 
+        {/* BlurView only works on iOS/Android if native module linked,
             but expo-blur is standard in Expo.
             On Android it might fallback or need config.
         */}
@@ -60,45 +63,46 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({
   return Content;
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F8FAFC',
-  },
-  overlayContainer: {
-    backgroundColor: 'transparent',
-  },
-  modalBackground: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.3)',
-  },
-  card: {
-    padding: spacing.xl,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    alignItems: 'center',
-    minWidth: 150,
-    shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 12,
-    elevation: 5,
-  },
-  message: {
-    ...typography.body,
-    color: '#64748B',
-    marginTop: spacing.md,
-  },
-  cardMessage: {
-    ...typography.body,
-    color: '#1E293B',
-    marginTop: spacing.md,
-    textAlign: 'center',
-  },
-});
+const createStyles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: colors.background,
+    },
+    overlayContainer: {
+      backgroundColor: 'transparent',
+    },
+    modalBackground: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: 'rgba(0,0,0,0.3)',
+    },
+    card: {
+      padding: spacing.xl,
+      backgroundColor: colors.surface,
+      borderRadius: 16,
+      alignItems: 'center',
+      minWidth: 150,
+      shadowColor: colors.black,
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.1,
+      shadowRadius: 12,
+      elevation: 5,
+    },
+    message: {
+      ...typography.body,
+      color: colors.textSecondary,
+      marginTop: spacing.md,
+    },
+    cardMessage: {
+      ...typography.body,
+      color: colors.textPrimary,
+      marginTop: spacing.md,
+      textAlign: 'center',
+    },
+  });
 
 export default LoadingScreen;

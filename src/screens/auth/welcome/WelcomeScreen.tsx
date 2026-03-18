@@ -10,7 +10,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { Mail, Phone } from 'lucide-react-native';
-import { useThemeColors } from '../../../contexts/ThemeContext';
+import { useTheme, useThemeColors } from '../../../contexts/ThemeContext';
 import { useThemedStyles } from '../../../hooks/useThemedStyles';
 import { useResponsive } from '../../../hooks/useResponsive';
 import { WelcomeBrandPanel } from './welcome-brand-panel';
@@ -64,6 +64,7 @@ const WelcomeButton = ({
 
 export const WelcomeScreen = () => {
   const navigation = useNavigation<any>();
+  const { isDark } = useTheme();
   const colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
   const { isDesktop } = useResponsive();
@@ -157,7 +158,7 @@ export const WelcomeScreen = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
       {formContent}
     </View>
   );

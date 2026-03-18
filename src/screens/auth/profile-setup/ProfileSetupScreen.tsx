@@ -14,7 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Button } from '../../../components/Button';
 import { ProgressBar } from '../../../components/ProgressBar';
 import { spacing } from '../../../theme/tokens';
-import { useThemeColors } from '../../../contexts/ThemeContext';
+import { useTheme, useThemeColors } from '../../../contexts/ThemeContext';
 import { useThemedStyles } from '../../../hooks/useThemedStyles';
 import type { ThemeColors } from '../../../contexts/theme-colors';
 
@@ -27,6 +27,7 @@ import { ProfileSetupBioStep } from './profile-setup-bio-step';
 
 export const ProfileSetupScreen = () => {
   const navigation = useNavigation<any>();
+  const { isDark } = useTheme();
   const colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
   const [currentStep, setCurrentStep] = useState(0);
@@ -98,7 +99,7 @@ export const ProfileSetupScreen = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
       <SafeAreaView style={styles.safeArea}>
         {/* Header */}
         <View style={styles.header}>

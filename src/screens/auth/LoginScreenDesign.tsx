@@ -12,7 +12,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { ChevronLeft } from 'lucide-react-native';
 import { fontFamily, spacing } from '../../theme/tokens';
 import { shadows } from '../../theme/shadows';
-import { useThemeColors } from '../../contexts/ThemeContext';
+import { useTheme, useThemeColors } from '../../contexts/ThemeContext';
 import { useThemedStyles } from '../../hooks/useThemedStyles';
 import type { ThemeColors } from '../../contexts/theme-colors';
 import { Input, PasswordInput } from '../../components/Input';
@@ -21,6 +21,7 @@ import { supabase } from '../../services/supabase';
 import { showSuccess, showError } from '../../services/toast';
 
 export default function LoginScreenDesign({ navigation }: { navigation?: any }) {
+  const { isDark } = useTheme();
   const colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
   const [email, setEmail] = useState('');
@@ -59,7 +60,10 @@ export default function LoginScreenDesign({ navigation }: { navigation?: any }) 
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
+      <StatusBar
+        barStyle={isDark ? 'light-content' : 'dark-content'}
+        backgroundColor={colors.background}
+      />
 
       {/* Header */}
       <View style={styles.header}>

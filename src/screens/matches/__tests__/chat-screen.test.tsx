@@ -19,6 +19,14 @@ jest.mock('@react-navigation/native', () => ({
 }));
 
 jest.mock('../../../contexts/ThemeContext', () => ({
+  useTheme: () => ({
+    isDark: false,
+    theme: { colors: {} },
+    themeMode: 'light',
+    setThemeMode: jest.fn(),
+    toggleTheme: jest.fn(),
+  }),
+  AuthContext: { Provider: ({ children }: any) => children, Consumer: () => null },
   useThemeColors: () => ({
     primary: '#2563EB',
     background: '#F8FAFC',

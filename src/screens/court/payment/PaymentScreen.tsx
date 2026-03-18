@@ -27,7 +27,7 @@ export const PaymentScreen = () => {
   const navigation = useNavigation<any>();
   const route = useRoute<RouteProp<PaymentRouteParams, 'Payment'>>();
   const { courtId, date, slots = [], totalPrice = 0 } = route.params || {};
-  const { theme } = useTheme();
+  const { theme, isDark } = useTheme();
   const themeColors = useThemeColors();
   const styles = useThemedStyles(createStyles);
 
@@ -67,7 +67,7 @@ export const PaymentScreen = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.header}>
           <Pressable

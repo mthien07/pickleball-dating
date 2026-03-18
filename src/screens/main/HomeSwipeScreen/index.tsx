@@ -9,7 +9,7 @@ import { SwipeCard, SwipeCardRef } from '../../../components/SwipeCard';
 import { EmptyState } from '../../../components/EmptyState';
 import { CARD_WIDTH, CARD_MAX_WIDTH } from '../../../theme/breakpoints';
 import { showSuccess, showInfo } from '../../../services/toast';
-import { useThemeColors } from '../../../contexts/ThemeContext';
+import { useTheme, useThemeColors } from '../../../contexts/ThemeContext';
 import { useThemedStyles } from '../../../hooks/useThemedStyles';
 import { useResponsive } from '../../../hooks/useResponsive';
 import { useWebUtils } from '../../../hooks/useWebUtils';
@@ -20,6 +20,7 @@ import { createStyles } from './styles';
 const { width: screenWidth } = Dimensions.get('window');
 
 export const HomeSwipeScreen = () => {
+  const { isDark } = useTheme();
   const themeColors = useThemeColors();
   const styles = useThemedStyles(createStyles);
   const swipeCardRef = useRef<SwipeCardRef>(null);
@@ -95,7 +96,7 @@ export const HomeSwipeScreen = () => {
   if (!hasMore) {
     return (
       <View style={styles.container}>
-        <StatusBar barStyle="dark-content" />
+        <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
         <SafeAreaView style={styles.safeArea}>
           <EmptyState
             title="Hết rồi!"
@@ -115,7 +116,7 @@ export const HomeSwipeScreen = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
       <SafeAreaView style={styles.safeArea}>
         <View style={containerStyle}>
           {/* Header */}

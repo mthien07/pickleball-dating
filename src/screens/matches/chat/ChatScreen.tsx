@@ -32,7 +32,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { Avatar } from '../../../components/Avatar';
 import { MessageBubble, TypingIndicator, Message } from '../../../components/MessageBubble';
 import { MessageInput } from '../../../components/MessageInput';
-import { useThemeColors } from '../../../contexts/ThemeContext';
+import { useTheme, useThemeColors } from '../../../contexts/ThemeContext';
 import { useThemedStyles } from '../../../hooks/useThemedStyles';
 import { AuthContext } from '../../../contexts/AuthContext';
 import { useChatMessages } from '../../../hooks/use-chat-messages';
@@ -232,6 +232,7 @@ const useMockChat = (
 export const ChatScreen = () => {
   const navigation = useNavigation<any>();
   const route = useRoute<RouteProp<ChatRouteParams, 'Chat'>>();
+  const { isDark } = useTheme();
   const colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
   const { matchId, userId, conversationId: routeConversationId } = route.params || {};
@@ -379,7 +380,7 @@ export const ChatScreen = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
       <SafeAreaView style={styles.safeArea} edges={['top']}>
         {/* Header */}
         <View style={styles.header}>

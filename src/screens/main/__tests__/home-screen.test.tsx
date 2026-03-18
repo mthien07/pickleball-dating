@@ -31,6 +31,13 @@ jest.mock('lucide-react-native', () => ({
 
 // Theme
 jest.mock('../../../contexts/ThemeContext', () => ({
+  useTheme: () => ({
+    isDark: false,
+    theme: { colors: {} },
+    themeMode: 'light',
+    setThemeMode: jest.fn(),
+    toggleTheme: jest.fn(),
+  }),
   useThemeColors: () => ({
     primary: '#2563EB',
     primaryLight: '#60A5FA',

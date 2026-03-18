@@ -43,21 +43,21 @@ export const getPlayStyleLabel = (style: string) => {
 
 // ---- SkillBadge ----
 
-const SKILL_COLORS: Record<string, string> = {
-  beginner: '#10B981',
-  intermediate: '#F59E0B',
-  advanced: '#2563EB',
-  pro: '#F43F5E',
-};
-
 interface SkillBadgeProps {
   skillLevel: string;
   label: string;
 }
 
 const SkillBadge = React.memo<SkillBadgeProps>(({ skillLevel, label }) => {
+  const colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
-  const bgColor = SKILL_COLORS[skillLevel] || '#94A3B8';
+  const SKILL_COLORS: Record<string, string> = {
+    beginner: colors.skillBeginner,
+    intermediate: colors.skillIntermediate,
+    advanced: colors.skillAdvanced,
+    pro: colors.skillPro,
+  };
+  const bgColor = SKILL_COLORS[skillLevel] || colors.textSecondary;
   return (
     <View style={[styles.skillBadge, { backgroundColor: bgColor }]}>
       <Text style={styles.skillBadgeText}>{label}</Text>

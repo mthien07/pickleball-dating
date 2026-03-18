@@ -21,7 +21,7 @@ import { Input, PasswordInput } from '../../../components/Input';
 import { Button } from '../../../components/Button';
 import { supabase } from '../../../services/supabase';
 import { showSuccess, showError } from '../../../services/toast';
-import { useThemeColors } from '../../../contexts/ThemeContext';
+import { useTheme, useThemeColors } from '../../../contexts/ThemeContext';
 import { useThemedStyles } from '../../../hooks/useThemedStyles';
 import { useResponsive } from '../../../hooks/useResponsive';
 import { WelcomeBrandPanel } from '../welcome/welcome-brand-panel';
@@ -31,6 +31,7 @@ import { createStyles } from './signup-design-styles';
 type SignupRole = 'owner' | 'player' | 'coach';
 
 export default function SignupScreenDesign({ navigation }: { navigation?: any }) {
+  const { isDark } = useTheme();
   const colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
   const { isDesktop } = useResponsive();
@@ -143,7 +144,10 @@ export default function SignupScreenDesign({ navigation }: { navigation?: any })
 
   const formContent = (
     <SafeAreaView style={[styles.container, showSplit && { flex: 1 }]}>
-      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
+      <StatusBar
+        barStyle={isDark ? 'light-content' : 'dark-content'}
+        backgroundColor={colors.background}
+      />
 
       <View style={styles.header}>
         <Pressable

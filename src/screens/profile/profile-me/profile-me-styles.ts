@@ -180,7 +180,7 @@ export const createStyles = (colors: ThemeColors) =>
       paddingHorizontal: 12,
       paddingVertical: 6,
       borderRadius: 9999,
-      backgroundColor: '#EFF6FF',
+      backgroundColor: colors.backgroundCircle,
     },
     tagPillText: {
       fontFamily: 'Barlow-Medium',

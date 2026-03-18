@@ -13,7 +13,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 
 import { EmptyState } from '../../../components/EmptyState';
-import { useThemeColors } from '../../../contexts/ThemeContext';
+import { useTheme, useThemeColors } from '../../../contexts/ThemeContext';
 import { useThemedStyles } from '../../../hooks/useThemedStyles';
 import { useMatches } from '../../../hooks/use-matches';
 import { createStyles } from './matches-list-styles';
@@ -22,6 +22,7 @@ import { SkeletonList } from '../../../components/SkeletonLoaders';
 
 export const MatchesListScreen = () => {
   const navigation = useNavigation<any>();
+  const { isDark } = useTheme();
   const colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
   const { matches, newMatches, conversations, isLoading, refresh } = useMatches();
@@ -80,7 +81,7 @@ export const MatchesListScreen = () => {
   if (!isLoading && matches.length === 0) {
     return (
       <View style={styles.container}>
-        <StatusBar barStyle="dark-content" />
+        <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
         <SafeAreaView style={styles.safeArea}>
           <View style={styles.header}>
             <Text style={styles.headerTitle}>Messages</Text>
@@ -98,7 +99,7 @@ export const MatchesListScreen = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
       <SafeAreaView style={styles.safeArea}>
         {/* Header - Tinder style */}
         <View style={styles.header}>

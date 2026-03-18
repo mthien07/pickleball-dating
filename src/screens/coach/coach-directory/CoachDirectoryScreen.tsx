@@ -13,7 +13,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 
 import { showInfo } from '../../../services/toast';
-import { useThemeColors } from '../../../contexts/ThemeContext';
+import { useTheme, useThemeColors } from '../../../contexts/ThemeContext';
 import { useThemedStyles } from '../../../hooks/useThemedStyles';
 import { createStyles } from './coach-directory-styles';
 import { CoachCard, EmptyState } from './coach-directory-components';
@@ -22,6 +22,7 @@ import { useCoaches } from '../../../hooks/use-coaches';
 
 export const CoachDirectoryScreen = () => {
   const navigation = useNavigation();
+  const { isDark } = useTheme();
   const themeColors = useThemeColors();
   const styles = useThemedStyles(createStyles);
   const [query, setQuery] = useState('');
@@ -87,7 +88,7 @@ export const CoachDirectoryScreen = () => {
 
   return (
     <View style={[styles.container, { backgroundColor: themeColors.background }]}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
       <SafeAreaView edges={['top']} style={styles.safeArea}>
         {renderHeader()}
 

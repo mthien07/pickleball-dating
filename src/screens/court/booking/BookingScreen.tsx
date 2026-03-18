@@ -13,7 +13,7 @@ import { CalendarPicker } from '../../../components/CalendarPicker';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { TimeSlotPicker, TimeSlot } from '../../../components/TimeSlotPicker';
 import { Button } from '../../../components/Button';
-import { useThemeColors } from '../../../contexts/ThemeContext';
+import { useTheme, useThemeColors } from '../../../contexts/ThemeContext';
 import { useThemedStyles } from '../../../hooks/useThemedStyles';
 import { MOCK_COURTS } from '@data/mockData';
 import { createStyles } from './booking-screen-styles';
@@ -48,6 +48,7 @@ const generateTimeSlots = (date: Date): TimeSlot[] => {
 export const BookingScreen = () => {
   const navigation = useNavigation<any>();
   const route = useRoute<RouteProp<BookingRouteParams, 'Booking'>>();
+  const { isDark } = useTheme();
   const colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
   const { getEntering } = useReducedMotion();
@@ -109,7 +110,7 @@ export const BookingScreen = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.header}>
           <Pressable
