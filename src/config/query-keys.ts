@@ -35,4 +35,11 @@ export const queryKeys = {
     list: (filters?: Record<string, any>) => ['coaches', 'list', filters] as const,
     detail: (id: string) => ['coaches', id] as const,
   },
+  discovery: {
+    all: ['discovery'] as const,
+    profiles: () => ['discovery', 'profiles'] as const,
+  },
+  swipes: {
+    all: ['swipes'] as const,
+  },
 };

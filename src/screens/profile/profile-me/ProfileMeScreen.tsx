@@ -11,7 +11,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import { useThemeColors } from '../../../contexts/ThemeContext';
 import { useThemedStyles } from '../../../hooks/useThemedStyles';
-import { useAuth } from '../../../contexts/AuthContext';
+import { useAuthStore } from '../../../stores/auth-store';
 import {
   ProfileHeroSection,
   StatCard,
@@ -26,7 +26,9 @@ export const ProfileMeScreen = () => {
   const navigation = useNavigation<any>();
   const colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
-  const { profile, profileLoading, user } = useAuth();
+  const profile = useAuthStore((s) => s.profile);
+  const profileLoading = useAuthStore((s) => s.profileLoading);
+  const user = useAuthStore((s) => s.user);
 
   if (profileLoading) {
     return <LoadingState />;

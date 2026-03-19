@@ -5,7 +5,8 @@ import { RootNavigator } from './src/navigation/RootNavigator';
 import Toast from 'react-native-toast-message';
 import { createToastConfig } from './src/config/toastConfig';
 import { StatusBar } from 'expo-status-bar';
-import { AuthProvider } from './src/contexts/AuthContext';
+import { initAuthListener } from './src/stores/auth-store';
+import { initSentry } from './src/config/sentry';
 import { ThemeProvider, useTheme, useThemeColors } from './src/contexts/ThemeContext';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import Animated from 'react-native-reanimated';
@@ -22,13 +23,11 @@ import * as SplashScreen from 'expo-splash-screen';
 import { View, ActivityIndicator, useColorScheme } from 'react-native';
 import { lightColors, darkColors } from './src/contexts/ThemeContext';
 
-// Keep splash screen visible while loading fonts
+initSentry();
 SplashScreen.preventAutoHideAsync();
-
-// Setup auto-invalidation on reconnect
 invalidateAllOnReconnect();
+initAuthListener();
 
-// Inner component that uses theme context
 const AppContent = () => {
   const { isDark } = useTheme();
   const colors = useThemeColors();
@@ -39,7 +38,6 @@ const AppContent = () => {
   });
 
   useEffect(() => {
-    // Animate app entry
     fadeIn(800);
     scaleIn();
   }, []);
@@ -58,11 +56,9 @@ const AppContent = () => {
 };
 
 export default function App() {
-  // Detect system color scheme for loading screen (before ThemeProvider)
   const systemScheme = useColorScheme();
   const loadingColors = systemScheme === 'dark' ? darkColors : lightColors;
 
-  // Load Barlow fonts for Vibrant Sport style
   const [fontsLoaded] = useFonts({
     'Barlow-Regular': require('./assets/fonts/Barlow-Regular.ttf'),
     'Barlow-Medium': require('./assets/fonts/Barlow-Medium.ttf'),
@@ -78,7 +74,6 @@ export default function App() {
     }
   }, [fontsLoaded]);
 
-  // Show loading while fonts are loading
   if (!fontsLoaded) {
     return (
       <View
@@ -103,9 +98,7 @@ export default function App() {
             persistOptions={{ persister: asyncStoragePersister }}
           >
             <ThemeProvider>
-              <AuthProvider>
-                <AppContent />
-              </AuthProvider>
+              <AppContent />
             </ThemeProvider>
           </PersistQueryClientProvider>
         </SafeAreaProvider>

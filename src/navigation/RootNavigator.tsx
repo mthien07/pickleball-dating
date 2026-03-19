@@ -8,7 +8,7 @@ import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import { useThemeColors } from '../contexts/ThemeContext';
 import { useThemedStyles } from '../hooks/useThemedStyles';
 import type { ThemeColors } from '../contexts/theme-colors';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuthStore } from '../stores/auth-store';
 
 // Simple Splash Screen
 const SplashScreen = () => {
@@ -40,7 +40,8 @@ const createStyles = (colors: ThemeColors) =>
 const RootStack = createStackNavigator<RootStackParamList>();
 
 export const RootNavigator = () => {
-  const { isAuthenticated, isLoading } = useAuth();
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const isLoading = useAuthStore((s) => s.isLoading);
 
   // Always log for debugging navigation issues
   console.log('[RootNavigator] State:', { isLoading, isAuthenticated });

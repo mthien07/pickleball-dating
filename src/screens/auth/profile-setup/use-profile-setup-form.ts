@@ -11,7 +11,7 @@ import * as Haptics from 'expo-haptics';
 import { useImagePicker } from '../../../hooks/useImagePicker';
 import { uploadProfileImage } from '../../../services/storage.service';
 import { showSuccess, showError } from '../../../services/toast';
-import { useAuth } from '../../../contexts/AuthContext';
+import { useAuthStore } from '../../../stores/auth-store';
 import { createProfile } from '../../../services/api/profile.service';
 
 export const TOTAL_STEPS = 5;
@@ -55,7 +55,8 @@ export function useProfileSetupForm(): ProfileSetupFormState & ProfileSetupFormH
   const [isUploading, setIsUploading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
-  const { user, refreshProfile } = useAuth();
+  const user = useAuthStore((s) => s.user);
+  const refreshProfile = useAuthStore((s) => s.refreshProfile);
   const { pickImage } = useImagePicker({ allowsEditing: true, aspect: [1, 1] });
 
   const handleAddPhoto = async () => {

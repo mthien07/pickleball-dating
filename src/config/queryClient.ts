@@ -1,29 +1,12 @@
-/**
- * React Query Client Configuration with Offline Support
- *
- * Features:
- * - Offline data persistence with AsyncStorage
- * - Network-aware retry logic
- * - Optimized cache and stale times
- */
+/** React Query Client with offline persistence, network-aware retry, and optimized caching */
 
 import { QueryClient } from '@tanstack/react-query';
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NetInfo from '@react-native-community/netinfo';
-
-// ============================================
-// PREFETCH HELPERS
-// ============================================
-
 import { queryKeys as _queryKeys } from './query-keys';
 
-// Re-export query keys
 export { queryKeys } from './query-keys';
-
-// ============================================
-// NETWORK STATUS
-// ============================================
 
 let isOnline = true;
 
@@ -33,19 +16,11 @@ NetInfo.addEventListener((state) => {
 
 export const getNetworkStatus = () => isOnline;
 
-// ============================================
-// ASYNC STORAGE PERSISTER
-// ============================================
-
 export const asyncStoragePersister = createAsyncStoragePersister({
   storage: AsyncStorage,
   key: 'REACT_QUERY_OFFLINE_CACHE',
   throttleTime: 1000,
 });
-
-// ============================================
-// QUERY CLIENT CONFIGURATION
-// ============================================
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -82,10 +57,6 @@ export const queryClient = new QueryClient({
     },
   },
 });
-
-// ============================================
-// OFFLINE HELPERS
-// ============================================
 
 export const shouldUseCachedData = () => !isOnline;
 

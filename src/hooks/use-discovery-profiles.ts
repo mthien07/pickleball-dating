@@ -1,50 +1,43 @@
-/**
- * useDiscoveryProfiles - Hook for swipe card discovery feed
- *
- * Dual-mode operation:
- * - Authenticated: fetches real profiles from Supabase, records swipes
- * - Unauthenticated: falls back to MOCK_USERS for UI preview
- */
+/** useDiscoveryProfiles - TanStack Query hook for swipe card discovery feed */
 
-import { useState, useEffect, useCallback, useContext } from 'react';
-import { AuthContext } from '../contexts/AuthContext';
+import { useState, useCallback } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useAuthStore } from '../stores/auth-store';
 import {
   getDiscoveryProfiles,
   recordSwipe,
-  DiscoveryProfile,
   SwipeDirection,
   SwipeResult,
 } from '../services/api/swipe.service';
+import { queryKeys } from '../config/query-keys';
 import { MOCK_USERS } from '@data/mockData';
 
 export const useDiscoveryProfiles = () => {
-  const authContext = useContext(AuthContext);
-  const isRealMode = !!authContext?.user?.id;
-
-  const [profiles, setProfiles] = useState<any[]>([]);
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const queryClient = useQueryClient();
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
 
-  const loadProfiles = useCallback(async () => {
-    setIsLoading(true);
-    if (isRealMode) {
-      try {
-        const data = await getDiscoveryProfiles();
-        setProfiles(data);
-      } catch (e) {
-        console.error('[useDiscoveryProfiles] Supabase fetch failed, falling back to mock:', e);
-        setProfiles(MOCK_USERS);
+  const {
+    data: profiles = [],
+    isLoading,
+    refetch,
+  } = useQuery<any[]>({
+    queryKey: queryKeys.discovery.profiles(),
+    queryFn: () => getDiscoveryProfiles(),
+    enabled: isAuthenticated,
+    placeholderData: __DEV__ ? MOCK_USERS : undefined,
+  });
+
+  const swipeMutation = useMutation({
+    mutationFn: ({ targetId, direction }: { targetId: string; direction: SwipeDirection }) =>
+      recordSwipe(targetId, direction),
+    onSuccess: (result) => {
+      if (result.isMatch) {
+        // Invalidate matches to show new match
+        queryClient.invalidateQueries({ queryKey: queryKeys.matches.all });
       }
-    } else {
-      setProfiles(MOCK_USERS);
-    }
-    setCurrentIndex(0);
-    setIsLoading(false);
-  }, [isRealMode]);
-
-  useEffect(() => {
-    loadProfiles();
-  }, [loadProfiles]);
+    },
+  });
 
   const handleSwipe = useCallback(
     async (direction: SwipeDirection): Promise<SwipeResult> => {
@@ -55,9 +48,12 @@ export const useDiscoveryProfiles = () => {
 
       setCurrentIndex((prev) => prev + 1);
 
-      if (isRealMode) {
+      if (isAuthenticated) {
         try {
-          return await recordSwipe(profile.id, direction);
+          return await swipeMutation.mutateAsync({
+            targetId: profile.id,
+            direction,
+          });
         } catch (e) {
           console.error('[useDiscoveryProfiles] recordSwipe failed:', e);
         }
@@ -65,10 +61,13 @@ export const useDiscoveryProfiles = () => {
 
       return { isMatch: false };
     },
-    [profiles, currentIndex, isRealMode]
+    [profiles, currentIndex, isAuthenticated, swipeMutation]
   );
 
-  const reload = useCallback(() => loadProfiles(), [loadProfiles]);
+  const reload = useCallback(() => {
+    setCurrentIndex(0);
+    refetch();
+  }, [refetch]);
 
   return {
     currentProfile: profiles[currentIndex],

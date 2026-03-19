@@ -12,7 +12,7 @@ import { useImagePicker } from '../../../hooks/useImagePicker';
 import { uploadProfileImage } from '../../../services/storage.service';
 import { updateProfile } from '../../../services/api/profile.service';
 import { showSuccess, showError } from '../../../services/toast';
-import { useAuth } from '../../../contexts/AuthContext';
+import { useAuthStore } from '../../../stores/auth-store';
 import { createStyles } from './edit-profile-styles';
 import { PhotoGrid } from './edit-profile-photo-grid';
 
@@ -49,7 +49,9 @@ export const EditProfileScreen = () => {
   const navigation = useNavigation<any>();
   const colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
-  const { profile, user, refreshProfile } = useAuth();
+  const profile = useAuthStore((s) => s.profile);
+  const user = useAuthStore((s) => s.user);
+  const refreshProfile = useAuthStore((s) => s.refreshProfile);
 
   const [photos, setPhotos] = useState<string[]>([]);
   const [name, setName] = useState('');

@@ -2,7 +2,7 @@
  * BookingScreen - Court booking flow with calendar and time slot selection
  */
 
-import React, { useState, useMemo, useContext } from 'react';
+import React, { useState, useMemo } from 'react';
 import { View, Text, ScrollView, StatusBar, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
@@ -17,7 +17,7 @@ import { useTheme, useThemeColors } from '../../../contexts/ThemeContext';
 import { useThemedStyles } from '../../../hooks/useThemedStyles';
 import { MOCK_COURTS } from '@data/mockData';
 import { createStyles } from './booking-screen-styles';
-import { AuthContext } from '../../../contexts/AuthContext';
+import { useAuthStore } from '../../../stores/auth-store';
 import { createBooking } from '../../../services/api/booking.service';
 import { ToastMessages } from '../../../services/toast';
 
@@ -52,8 +52,7 @@ export const BookingScreen = () => {
   const colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
   const { getEntering } = useReducedMotion();
-  const authContext = useContext(AuthContext);
-  const isAuthenticated = !!authContext?.user?.id;
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const { courtId } = route.params || {};
 
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);

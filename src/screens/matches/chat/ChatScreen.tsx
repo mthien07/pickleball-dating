@@ -12,7 +12,7 @@
  * - Image/camera attachment
  */
 
-import React, { useState, useRef, useCallback, useEffect, useContext } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import {
   View,
   Text,
@@ -34,7 +34,7 @@ import { MessageBubble, TypingIndicator, Message } from '../../../components/Mes
 import { MessageInput } from '../../../components/MessageInput';
 import { useTheme, useThemeColors } from '../../../contexts/ThemeContext';
 import { useThemedStyles } from '../../../hooks/useThemedStyles';
-import { AuthContext } from '../../../contexts/AuthContext';
+import { useAuthStore } from '../../../stores/auth-store';
 import { useChatMessages } from '../../../hooks/use-chat-messages';
 import { sendTypingIndicator } from '../../../services/realtime';
 import { MOCK_MATCHES, MOCK_MESSAGES, getUserById } from '@data/mockData';
@@ -239,9 +239,8 @@ export const ChatScreen = () => {
   const colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
   const { matchId, userId, conversationId: routeConversationId } = route.params || {};
-  // Use context directly to avoid throw when AuthProvider is absent (e.g. tests)
-  const authContext = useContext(AuthContext);
-  const authUser = authContext?.user ?? null;
+  // Use Zustand store directly - no provider needed, safe in tests
+  const authUser = useAuthStore((s) => s.user);
 
   const flatListRef = useRef<FlatList>(null);
   const typingStopTimer = useRef<ReturnType<typeof setTimeout> | null>(null);

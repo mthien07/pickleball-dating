@@ -11,6 +11,7 @@ import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeIn, SlideInDown } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
 import { spacing, typography, borderRadius } from '../theme/tokens';
+import { captureException } from '../config/sentry';
 import { useThemeColors } from '../contexts/ThemeContext';
 import type { ThemeColors } from '../contexts/theme-colors';
 
@@ -85,6 +86,7 @@ export class ErrorBoundary extends Component<Props, State> {
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     console.error('ErrorBoundary caught an error:', error, errorInfo);
+    captureException(error, { componentStack: errorInfo.componentStack });
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
   }
 
