@@ -3,20 +3,16 @@
  * New code should use useAuthStore() directly for selective subscriptions.
  */
 
-import React, { createContext, useContext, useEffect, ReactNode } from 'react';
-import { useAuthStore, initAuthListener } from '../stores/auth-store';
+import React, { createContext, useContext, ReactNode } from 'react';
+import { useAuthStore } from '../stores/auth-store';
 import type { AuthContextType } from './auth-context.types';
 
 export type { AuthContextType };
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+/** Backward-compat wrapper. initAuthListener() is called once in App.tsx at module level. */
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  useEffect(() => {
-    const unsubscribe = initAuthListener();
-    return unsubscribe;
-  }, []);
-
   const {
     isAuthenticated,
     isLoading,

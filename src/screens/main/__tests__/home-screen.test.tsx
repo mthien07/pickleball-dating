@@ -142,6 +142,34 @@ jest.mock('@data/mockData', () => ({
   ],
 }));
 
+// Mock useDiscoveryProfiles to avoid TanStack Query dependency
+const mockHandleSwipe = jest.fn().mockResolvedValue({ isMatch: false });
+const mockReload = jest.fn();
+jest.mock('../../../hooks/use-discovery-profiles', () => ({
+  useDiscoveryProfiles: () => ({
+    currentProfile: {
+      id: 'user-1',
+      display_name: 'Alice Nguyen',
+      avatar_urls: ['https://example.com/alice.jpg'],
+      skill_level: 'intermediate',
+      play_style: 'casual',
+      bio: 'Love pickleball!',
+    },
+    nextProfile: {
+      id: 'user-2',
+      display_name: 'Bob Tran',
+      avatar_urls: ['https://example.com/bob.jpg'],
+      skill_level: 'advanced',
+      play_style: 'competitive',
+      bio: 'Competitive player.',
+    },
+    hasMore: true,
+    isLoading: false,
+    handleSwipe: mockHandleSwipe,
+    reload: mockReload,
+  }),
+}));
+
 const mockShowSuccess = showSuccess as jest.Mock;
 
 beforeEach(() => {

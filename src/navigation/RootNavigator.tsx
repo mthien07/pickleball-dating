@@ -43,15 +43,13 @@ export const RootNavigator = () => {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const isLoading = useAuthStore((s) => s.isLoading);
 
-  // Always log for debugging navigation issues
-  console.log('[RootNavigator] State:', { isLoading, isAuthenticated });
-
-  if (isLoading) {
-    console.log('[RootNavigator] Showing splash screen...');
-    return <SplashScreen />;
+  if (__DEV__) {
+    console.log('[RootNavigator] State:', { isLoading, isAuthenticated });
   }
 
-  console.log('[RootNavigator] Rendering:', isAuthenticated ? 'MainNavigator' : 'AuthNavigator');
+  if (isLoading) {
+    return <SplashScreen />;
+  }
 
   return (
     <NavigationContainer>

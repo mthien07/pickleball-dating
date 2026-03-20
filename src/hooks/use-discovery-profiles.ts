@@ -1,6 +1,6 @@
 /** useDiscoveryProfiles - TanStack Query hook for swipe card discovery feed */
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuthStore } from '../stores/auth-store';
 import {
@@ -27,6 +27,13 @@ export const useDiscoveryProfiles = () => {
     enabled: isAuthenticated,
     placeholderData: __DEV__ ? MOCK_USERS : undefined,
   });
+
+  // Reset index when profile list shrinks (e.g. background refetch)
+  useEffect(() => {
+    if (currentIndex > 0 && currentIndex >= profiles.length) {
+      setCurrentIndex(0);
+    }
+  }, [profiles.length, currentIndex]);
 
   const swipeMutation = useMutation({
     mutationFn: ({ targetId, direction }: { targetId: string; direction: SwipeDirection }) =>

@@ -95,14 +95,15 @@ export const recordSwipe = async (
   }
 
   // Use upsert to prevent duplicate matches from simultaneous swipes
-  const { error: matchError } = await supabase.from('matches').upsert(
-    {
-      user_id_1: [user.id, targetUserId].sort()[0], // Always order IDs consistently
-      user_id_2: [user.id, targetUserId].sort()[1],
-      matched_at: new Date().toISOString(),
-    },
-    { onConflict: 'user_id_1,user_id_2', ignoreDuplicates: true }
-  );
+  const [id1, id2] = [user.id, targetUserId].sort();
+  const { data: upsertData, error: matchError } = await supabase
+    .from('matches')
+    .upsert(
+      { user_id_1: id1, user_id_2: id2, matched_at: new Date().toISOString() },
+      { onConflict: 'user_id_1,user_id_2', ignoreDuplicates: true }
+    )
+    .select('id');
 
-  return { isMatch: !matchError };
+  // ignoreDuplicates returns empty array (not error) for existing rows
+  return { isMatch: !matchError && Array.isArray(upsertData) && upsertData.length > 0 };
 };

@@ -9,6 +9,7 @@ import { renderHook, act, waitFor } from '@testing-library/react-native';
 import React from 'react';
 import { AuthProvider, useAuth } from '../../contexts/AuthContext';
 import { supabase } from '../supabase';
+import { initAuthListener, useAuthStore } from '../../stores/auth-store';
 
 import { getMyProfile } from '../api/profile.service';
 
@@ -20,9 +21,15 @@ jest.mock('../api/profile.service', () => ({
 const mockSupabaseAuth = supabase.auth as jest.Mocked<typeof supabase.auth>;
 const mockGetMyProfile = getMyProfile as jest.Mock;
 
-// Wrapper providing AuthProvider context
-const wrapper = ({ children }: { children: React.ReactNode }) =>
-  React.createElement(AuthProvider, null, children);
+// Wrapper that initializes auth listener (previously done inside AuthProvider)
+const Wrapper = ({ children }: { children: React.ReactNode }) => {
+  React.useEffect(() => {
+    const unsub = initAuthListener();
+    return unsub;
+  }, []);
+  return React.createElement(AuthProvider, null, children);
+};
+const wrapper = Wrapper;
 
 const MOCK_SESSION = {
   user: { id: 'user-1', email: 'test@example.com' },
@@ -33,8 +40,12 @@ const MOCK_SESSION = {
 } as any;
 
 describe('AuthContext', () => {
+  let unsubscribe: (() => void) | undefined;
+
   beforeEach(() => {
     jest.clearAllMocks();
+    // Reset Zustand store between tests
+    useAuthStore.getState().reset();
     // Default: no existing session
     mockSupabaseAuth.getSession.mockResolvedValue({
       data: { session: null },
@@ -43,7 +54,12 @@ describe('AuthContext', () => {
     mockSupabaseAuth.onAuthStateChange.mockReturnValue({
       data: { subscription: { unsubscribe: jest.fn() } },
     } as any);
-    mockGetMyProfile.mockResolvedValue({ id: 'user-1', full_name: 'Test User' });
+    mockGetMyProfile.mockResolvedValue({ id: 'user-1', display_name: 'Test User' });
+  });
+
+  afterEach(() => {
+    unsubscribe?.();
+    unsubscribe = undefined;
   });
 
   // ─── Initial state ────────────────────────────────────────────────────────
@@ -109,7 +125,7 @@ describe('AuthContext', () => {
       });
 
       await waitFor(() => {
-        expect(result.current.profile).toEqual({ id: 'user-1', full_name: 'Test User' });
+        expect(result.current.profile).toEqual({ id: 'user-1', display_name: 'Test User' });
       });
     });
   });
@@ -118,7 +134,7 @@ describe('AuthContext', () => {
 
   describe('auth state changes', () => {
     it('becomes authenticated when onAuthStateChange fires SIGNED_IN', async () => {
-      let authCallback: ((event: string, session: any) => void) | null = null;
+      let authCallback: ((event: any, session: any) => void) | null = null;
 
       mockSupabaseAuth.onAuthStateChange.mockImplementation((cb) => {
         authCallback = cb;
@@ -142,7 +158,7 @@ describe('AuthContext', () => {
     });
 
     it('clears state when onAuthStateChange fires SIGNED_OUT', async () => {
-      let authCallback: ((event: string, session: any) => void) | null = null;
+      let authCallback: ((event: any, session: any) => void) | null = null;
 
       mockSupabaseAuth.getSession.mockResolvedValue({
         data: { session: MOCK_SESSION },
@@ -238,20 +254,20 @@ describe('AuthContext', () => {
         error: null,
       } as any);
       mockGetMyProfile
-        .mockResolvedValueOnce({ id: 'user-1', full_name: 'Old Name' })
-        .mockResolvedValueOnce({ id: 'user-1', full_name: 'New Name' });
+        .mockResolvedValueOnce({ id: 'user-1', display_name: 'Old Name' })
+        .mockResolvedValueOnce({ id: 'user-1', display_name: 'New Name' });
 
       const { result } = renderHook(() => useAuth(), { wrapper });
 
       await waitFor(() => {
-        expect(result.current.profile?.full_name).toBe('Old Name');
+        expect(result.current.profile?.display_name).toBe('Old Name');
       });
 
       await act(async () => {
         await result.current.refreshProfile();
       });
 
-      expect(result.current.profile?.full_name).toBe('New Name');
+      expect(result.current.profile?.display_name).toBe('New Name');
     });
 
     it('sets profileError when profile load fails', async () => {

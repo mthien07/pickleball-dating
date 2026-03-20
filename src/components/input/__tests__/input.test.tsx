@@ -118,7 +118,7 @@ describe('Input', () => {
     expect(input.props.secureTextEntry).toBe(true);
 
     // Eye icon pressable renders as accessible View — find by the Eye icon child
-    const eyeIcon = rendered.UNSAFE_getByType('Eye');
+    const eyeIcon = rendered.UNSAFE_getByType('Eye' as any);
     fireEvent.press(eyeIcon.parent);
 
     expect(rendered.getByPlaceholderText('Password').props.secureTextEntry).toBe(false);

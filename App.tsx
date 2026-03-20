@@ -7,6 +7,7 @@ import { createToastConfig } from './src/config/toastConfig';
 import { StatusBar } from 'expo-status-bar';
 import { initAuthListener } from './src/stores/auth-store';
 import { initSentry } from './src/config/sentry';
+import { initAnalytics } from './src/config/analytics';
 import { ThemeProvider, useTheme, useThemeColors } from './src/contexts/ThemeContext';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import Animated from 'react-native-reanimated';
@@ -24,6 +25,7 @@ import { View, ActivityIndicator, useColorScheme } from 'react-native';
 import { lightColors, darkColors } from './src/contexts/ThemeContext';
 
 initSentry();
+initAnalytics();
 SplashScreen.preventAutoHideAsync();
 invalidateAllOnReconnect();
 initAuthListener();
