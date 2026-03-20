@@ -55,7 +55,7 @@
       [
         "@sentry/react-native/expo",
         {
-          "organization": "sentry",
+          "organization": "minhthiendeptrai",
           "project": "pickleball-dating",
           "uploadSourceMaps": false
         }
