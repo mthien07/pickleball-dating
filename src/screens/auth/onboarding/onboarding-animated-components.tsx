@@ -133,6 +133,7 @@ PulsingHeartLogo.displayName = 'PulsingHeartLogo';
 export const FloatingCard = React.memo(
   ({
     imageUrl,
+    altText,
     name,
     age,
     rotation,
@@ -142,6 +143,7 @@ export const FloatingCard = React.memo(
     iconColor,
   }: {
     imageUrl: string;
+    altText?: string;
     name?: string;
     age?: number;
     rotation: number;
@@ -176,6 +178,7 @@ export const FloatingCard = React.memo(
           style={styles.cardImage}
           contentFit="cover"
           transition={200}
+          accessibilityLabel={altText || (name ? `Profile photo of ${name}` : 'Profile photo')}
         />
         <LinearGradient colors={['transparent', 'rgba(0,0,0,0.7)']} style={styles.cardGradient} />
         {name && (

@@ -166,4 +166,49 @@ export const createStyles = (colors: ThemeColors) =>
       color: colors.textTertiary,
       paddingHorizontal: spacing.lg,
     },
+    loginLinkContainer: {
+      marginTop: spacing.md,
+      alignItems: 'center',
+    },
+    loginLinkText: {
+      fontFamily: fontFamily.body,
+      fontSize: 14,
+      color: colors.textSecondary,
+    },
+    loginLinkAccent: {
+      fontFamily: fontFamily.bodySemiBold,
+      color: colors.primary,
+    },
+    webTopBar: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      paddingHorizontal: spacing.xl,
+      paddingVertical: spacing.md,
+    },
+    webTopBarLogo: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.sm,
+    },
+    webTopBarBrand: {
+      fontFamily: fontFamily.headingCondensed,
+      fontSize: 16,
+      fontWeight: '800',
+      color: colors.accent,
+      letterSpacing: 1.5,
+    },
+    webLoginButton: {
+      paddingHorizontal: spacing.lg,
+      paddingVertical: spacing.sm,
+      borderRadius: 8,
+      borderWidth: 1,
+      borderColor: colors.border,
+      backgroundColor: 'rgba(255,255,255,0.05)',
+    },
+    webLoginText: {
+      fontFamily: fontFamily.bodySemiBold,
+      fontSize: 14,
+      color: colors.textPrimary,
+    },
   });
