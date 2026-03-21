@@ -22,7 +22,7 @@ type CourtDetailRouteParams = {
   CourtDetail: { courtId: string };
 };
 
-export const CourtDetailScreen = () => {
+const CourtDetailScreenComponent = () => {
   const navigation = useNavigation<any>();
   const route = useRoute<RouteProp<CourtDetailRouteParams, 'CourtDetail'>>();
   const { courtId } = route.params || {};
@@ -105,4 +105,5 @@ export const CourtDetailScreen = () => {
   );
 };
 
+export const CourtDetailScreen = React.memo(CourtDetailScreenComponent);
 export default CourtDetailScreen;

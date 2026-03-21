@@ -14,21 +14,11 @@ import {
   withTiming,
   Easing,
 } from 'react-native-reanimated';
+import { HOOK_SPRING_CONFIG, HOOK_TIMING_EASE } from '../animations/animation-utils';
 
-// ============================================
-// ANIMATION CONFIGS
-// ============================================
-
-export const SPRING_CONFIG = {
-  damping: 15,
-  stiffness: 150,
-  mass: 0.5,
-};
-
-export const TIMING_CONFIG = {
-  duration: 300,
-  easing: Easing.bezier(0.25, 0.1, 0.25, 1),
-};
+// Re-export as the public API names callers expect
+export const SPRING_CONFIG = HOOK_SPRING_CONFIG;
+export const TIMING_CONFIG = HOOK_TIMING_EASE;
 
 // ============================================
 // PRESS ANIMATION HOOK

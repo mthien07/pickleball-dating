@@ -7,14 +7,11 @@
  * - Slide in/out
  */
 
-import {
-  useSharedValue,
-  useAnimatedStyle,
-  withSpring,
-  withTiming,
-  Easing,
-} from 'react-native-reanimated';
-import { SPRING_CONFIG } from './use-press-elevation-fade-animations';
+import { useSharedValue, useAnimatedStyle, withSpring, withTiming } from 'react-native-reanimated';
+import { HOOK_SPRING_CONFIG, RIPPLE_TIMING, SHIMMER_TIMING } from '../animations/animation-utils';
+
+// Local alias for readability
+const SPRING_CONFIG = HOOK_SPRING_CONFIG;
 
 // ============================================
 // RIPPLE EFFECT
@@ -35,8 +32,8 @@ export const useRippleAnimation = () => {
   const triggerRipple = () => {
     scale.value = 0;
     opacity.value = 0.5;
-    scale.value = withTiming(1, { duration: 600, easing: Easing.out(Easing.ease) });
-    opacity.value = withTiming(0, { duration: 600, easing: Easing.out(Easing.ease) });
+    scale.value = withTiming(1, RIPPLE_TIMING);
+    opacity.value = withTiming(0, RIPPLE_TIMING);
   };
 
   return { animatedStyle, triggerRipple };
@@ -80,7 +77,7 @@ export const useShimmerAnimation = () => {
   }));
 
   const startShimmer = () => {
-    translateX.value = withTiming(300, { duration: 1500, easing: Easing.linear }, () => {
+    translateX.value = withTiming(300, SHIMMER_TIMING, () => {
       translateX.value = -300;
     });
   };

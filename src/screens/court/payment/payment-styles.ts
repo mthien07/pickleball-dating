@@ -1,53 +1,25 @@
 import { StyleSheet } from 'react-native';
 import { spacing, typography, borderRadius } from '../../../theme/tokens';
-import { shadows } from '../../../theme/shadows';
 import type { ThemeColors } from '../../../contexts/theme-colors';
+import { createBaseStyles } from '../../../theme/style-utils';
 
-export const createStyles = (colors: ThemeColors) =>
-  StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: colors.background,
-    },
-    safeArea: {
-      flex: 1,
-    },
-    header: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      paddingHorizontal: spacing.md,
-      paddingVertical: spacing.sm,
-      borderBottomWidth: 1,
-      borderBottomColor: colors.border,
-    },
-    backButton: {
-      width: 44,
-      height: 44,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
+export const createStyles = (colors: ThemeColors) => {
+  const base = createBaseStyles(colors);
+  return StyleSheet.create({
+    container: base.screenContainer,
+    safeArea: base.flex1,
+    header: base.navHeader,
+    backButton: base.touchTarget,
     headerTitle: {
       ...typography.h4,
       color: colors.textPrimary,
     },
-    content: {
-      flex: 1,
-      paddingHorizontal: spacing.lg,
-    },
+    content: base.contentPadded,
     summaryCard: {
-      backgroundColor: colors.surface,
-      borderRadius: borderRadius.lg,
-      padding: spacing.md,
+      ...base.surfaceCard,
       marginTop: spacing.lg,
-      borderWidth: 1,
-      borderColor: colors.border,
     },
-    sectionTitle: {
-      ...typography.h4,
-      color: colors.textPrimary,
-      marginBottom: spacing.md,
-    },
+    sectionTitle: base.sectionTitle,
     summaryRow: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -81,14 +53,10 @@ export const createStyles = (colors: ThemeColors) =>
       marginTop: spacing.xl,
     },
     methodCard: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      backgroundColor: colors.surface,
+      ...base.surfaceCard,
+      ...base.rowCenter,
       borderRadius: borderRadius.md,
-      padding: spacing.md,
       marginBottom: spacing.sm,
-      borderWidth: 1,
-      borderColor: colors.border,
     },
     methodCardSelected: {
       borderColor: colors.primary,
@@ -181,16 +149,7 @@ export const createStyles = (colors: ThemeColors) =>
       color: colors.textSecondary,
       marginBottom: spacing.xs,
     },
-    input: {
-      backgroundColor: colors.surface,
-      borderRadius: borderRadius.md,
-      borderWidth: 1,
-      borderColor: colors.border,
-      paddingHorizontal: spacing.md,
-      paddingVertical: spacing.sm + 2,
-      ...typography.body,
-      color: colors.textPrimary,
-    },
+    input: base.textInput,
     walletInfo: {
       flexDirection: 'row',
       alignItems: 'flex-start',
@@ -205,17 +164,6 @@ export const createStyles = (colors: ThemeColors) =>
       color: colors.textSecondary,
       flex: 1,
     },
-    footer: {
-      position: 'absolute',
-      bottom: 0,
-      left: 0,
-      right: 0,
-      paddingHorizontal: spacing.lg,
-      paddingVertical: spacing.md,
-      paddingBottom: spacing.xl,
-      backgroundColor: colors.background,
-      borderTopWidth: 1,
-      borderTopColor: colors.border,
-      ...shadows.lg,
-    },
+    footer: base.stickyFooter,
   });
+};

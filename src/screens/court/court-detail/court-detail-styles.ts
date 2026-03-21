@@ -2,15 +2,14 @@ import { StyleSheet, Dimensions } from 'react-native';
 import { spacing, typography, borderRadius } from '../../../theme/tokens';
 import { shadows } from '../../../theme/shadows';
 import type { ThemeColors } from '../../../contexts/theme-colors';
+import { createBaseStyles } from '../../../theme/style-utils';
 
 export const SCREEN_WIDTH = Dimensions.get('window').width;
 
-export const createStyles = (colors: ThemeColors) =>
-  StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: colors.background,
-    },
+export const createStyles = (colors: ThemeColors) => {
+  const base = createBaseStyles(colors);
+  return StyleSheet.create({
+    container: base.screenContainer,
 
     // Image Carousel
     imageContainer: {
@@ -136,18 +135,8 @@ export const createStyles = (colors: ThemeColors) =>
     },
 
     // Sections
-    section: {
-      marginBottom: spacing.lg,
-      paddingBottom: spacing.lg,
-      borderBottomWidth: 1,
-      borderBottomColor: colors.border,
-    },
-    sectionHeader: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: spacing.xs,
-      marginBottom: spacing.sm,
-    },
+    section: base.sectionDivider,
+    sectionHeader: base.sectionHeader,
     sectionTitle: {
       ...typography.h4,
       color: colors.textPrimary,
@@ -205,8 +194,7 @@ export const createStyles = (colors: ThemeColors) =>
 
     // Reviews
     reviewCard: {
-      backgroundColor: colors.surface,
-      padding: spacing.md,
+      ...base.surfaceCard,
       borderRadius: borderRadius.md,
       marginBottom: spacing.sm,
     },
@@ -237,20 +225,10 @@ export const createStyles = (colors: ThemeColors) =>
 
     // Footer
     footer: {
-      position: 'absolute',
-      bottom: 0,
-      left: 0,
-      right: 0,
+      ...base.stickyFooter,
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      paddingHorizontal: spacing.lg,
-      paddingVertical: spacing.md,
-      paddingBottom: spacing.xl,
-      backgroundColor: colors.background,
-      borderTopWidth: 1,
-      borderTopColor: colors.border,
-      ...shadows.lg,
     },
     priceContainer: {
       flex: 1,
@@ -273,3 +251,4 @@ export const createStyles = (colors: ThemeColors) =>
       marginLeft: spacing.md,
     },
   });
+};

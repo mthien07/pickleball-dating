@@ -1,14 +1,21 @@
-import React, { useRef, useCallback, useEffect, useMemo } from 'react';
-import { View, Text, Pressable, StatusBar, Dimensions, Platform } from 'react-native';
+/**
+ * HomeSwipeScreen
+ *
+ * Orchestrator: header, swipe card stack, action controls.
+ * Gesture / keyboard logic → useSwipeGestureHandler
+ * Card rendering → SwipeCardList
+ */
+
+import React, { useRef, useMemo } from 'react';
+import { View, Text, Pressable, StatusBar, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { LinearGradient } from 'expo-linear-gradient';
-import { X, Star, Heart, User } from 'lucide-react-native';
+import { User } from 'lucide-react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-import { SwipeCard, SwipeCardRef } from '../../../components/SwipeCard';
+import { SwipeCardRef } from '../../../components/SwipeCard';
 import { EmptyState } from '../../../components/EmptyState';
 import { CARD_WIDTH, CARD_MAX_WIDTH } from '../../../theme/breakpoints';
-import { showSuccess, showInfo } from '../../../services/toast';
+import { showInfo } from '../../../services/toast';
 import { useTheme, useThemeColors } from '../../../contexts/ThemeContext';
 import { useThemedStyles } from '../../../hooks/useThemedStyles';
 import { useResponsive } from '../../../hooks/useResponsive';
@@ -16,6 +23,8 @@ import { useWebUtils } from '../../../hooks/useWebUtils';
 import { webStyles } from '../../../theme/webStyles';
 import { useDiscoveryProfiles } from '../../../hooks/use-discovery-profiles';
 import { createStyles } from './styles';
+import { useSwipeGestureHandler } from './swipe-gesture-handler';
+import { SwipeCardList } from './swipe-card-list';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -30,10 +39,6 @@ export const HomeSwipeScreen = () => {
 
   const { currentProfile, nextProfile, hasMore, handleSwipe, reload } = useDiscoveryProfiles();
 
-  // Keep a ref so keyboard handlers always see the latest profile name
-  const currentProfileRef = useRef(currentProfile);
-  currentProfileRef.current = currentProfile;
-
   const cardWidth = useMemo(
     () =>
       isDesktop || isWeb
@@ -42,56 +47,13 @@ export const HomeSwipeScreen = () => {
     [isDesktop, isWeb]
   );
 
-  const handleSwipeLeft = useCallback(async () => {
-    await handleSwipe('pass');
-  }, [handleSwipe]);
-
-  const handleSwipeRight = useCallback(async () => {
-    const result = await handleSwipe('like');
-    if (result.isMatch) {
-      showSuccess("It's a Match! 🎉");
-    } else {
-      showSuccess(`Liked ${currentProfileRef.current?.display_name}!`);
-    }
-  }, [handleSwipe]);
-
-  const handleSuperLike = useCallback(async () => {
-    const result = await handleSwipe('super_like');
-    if (result.isMatch) {
-      showSuccess("It's a Match! 🎉");
-    } else {
-      showSuccess(`Super Liked ${currentProfileRef.current?.display_name}! ⚡`);
-    }
-    swipeCardRef.current?.swipe('up');
-  }, [handleSwipe]);
-
-  useEffect(() => {
-    if (!shouldEnableKeyboard || !isWeb) {
-      return;
-    }
-
-    const handleKeyPress = (event: KeyboardEvent) => {
-      switch (event.key) {
-        case 'ArrowLeft':
-          swipeCardRef.current?.swipe('left');
-          break;
-        case 'ArrowRight':
-          swipeCardRef.current?.swipe('right');
-          break;
-        case 'ArrowUp':
-        case ' ':
-          handleSuperLike();
-          break;
-        default:
-          break;
-      }
-    };
-
-    if (Platform.OS === 'web') {
-      window.addEventListener('keydown', handleKeyPress);
-      return () => window.removeEventListener('keydown', handleKeyPress);
-    }
-  }, [shouldEnableKeyboard, isWeb, handleSuperLike]);
+  const { handleSwipeLeft, handleSwipeRight, handleSuperLike } = useSwipeGestureHandler({
+    handleSwipe,
+    currentProfile,
+    swipeCardRef,
+    shouldEnableKeyboard,
+    isWeb,
+  });
 
   if (!hasMore) {
     return (
@@ -157,115 +119,17 @@ export const HomeSwipeScreen = () => {
             </View>
           </View>
 
-          {/* Card Stack */}
-          <View style={styles.cardContainer}>
-            <LinearGradient
-              colors={[themeColors.secondary, themeColors.primary, themeColors.accent]}
-              locations={[0, 0.5, 1]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={styles.bgCircle}
-            />
-
-            {nextProfile && (
-              <View style={[styles.cardWrapper, styles.nextCard]}>
-                <SwipeCard user={nextProfile} cardWidth={cardWidth} />
-              </View>
-            )}
-
-            <View style={styles.cardWrapper}>
-              <SwipeCard
-                ref={swipeCardRef}
-                user={currentProfile}
-                onLike={handleSwipeRight}
-                onPass={handleSwipeLeft}
-                cardWidth={cardWidth}
-                showActionButtons={false}
-              />
-            </View>
-          </View>
-
-          {/* Action Controls */}
-          <View style={styles.controlsContainer}>
-            {/* Nope */}
-            <View style={styles.buttonGroup}>
-              <Pressable
-                testID="btn-pass"
-                style={({ pressed }) => [
-                  styles.controlButton,
-                  styles.passButton,
-                  pressed && { opacity: 0.85 },
-                ]}
-                onPress={() => swipeCardRef.current?.swipe('left')}
-                android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
-              >
-                <X size={32} color={themeColors.textSecondary} strokeWidth={2.5} />
-              </Pressable>
-              <Text style={styles.buttonLabel}>Nope</Text>
-            </View>
-
-            {/* Super Like */}
-            <View style={styles.buttonGroup}>
-              <Pressable
-                testID="btn-super-like"
-                style={({ pressed }) => [
-                  styles.controlButton,
-                  styles.superLikeButton,
-                  pressed && { opacity: 0.85 },
-                ]}
-                onPress={handleSuperLike}
-                android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
-              >
-                <LinearGradient
-                  colors={[themeColors.primary, themeColors.primaryLight]}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 1 }}
-                  style={styles.superLikeGradient}
-                >
-                  <Star
-                    size={26}
-                    color={themeColors.white}
-                    fill={themeColors.white}
-                    strokeWidth={0}
-                  />
-                </LinearGradient>
-              </Pressable>
-              <Text style={styles.buttonLabel}>Super</Text>
-            </View>
-
-            {/* Like */}
-            <View style={styles.buttonGroup}>
-              <Pressable
-                testID="btn-like"
-                style={({ pressed }) => [
-                  styles.controlButton,
-                  styles.likeButton,
-                  pressed && { opacity: 0.85 },
-                ]}
-                onPress={() => swipeCardRef.current?.swipe('right')}
-                android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
-              >
-                <LinearGradient
-                  colors={[themeColors.accent, themeColors.accentLight]}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 1 }}
-                  style={styles.likeGradient}
-                >
-                  <Heart
-                    size={30}
-                    color={themeColors.white}
-                    fill={themeColors.white}
-                    strokeWidth={0}
-                  />
-                </LinearGradient>
-              </Pressable>
-              <Text style={styles.buttonLabel}>Like</Text>
-            </View>
-          </View>
-
-          {isDesktop && isWeb && (
-            <Text style={styles.keyboardHint}>← → to swipe · ↑ space for super like</Text>
-          )}
+          <SwipeCardList
+            currentProfile={currentProfile}
+            nextProfile={nextProfile}
+            cardWidth={cardWidth}
+            swipeCardRef={swipeCardRef}
+            onSwipeLeft={handleSwipeLeft}
+            onSwipeRight={handleSwipeRight}
+            onSuperLike={handleSuperLike}
+            isDesktop={isDesktop}
+            isWeb={isWeb}
+          />
         </View>
       </SafeAreaView>
     </View>

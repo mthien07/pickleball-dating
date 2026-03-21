@@ -232,7 +232,7 @@ const useMockChat = (
 // SCREEN COMPONENT
 // ============================================
 
-export const ChatScreen = () => {
+const ChatScreenComponent = () => {
   const navigation = useNavigation<any>();
   const route = useRoute<RouteProp<ChatRouteParams, 'Chat'>>();
   const { isDark } = useTheme();
@@ -457,4 +457,5 @@ export const ChatScreen = () => {
   );
 };
 
+export const ChatScreen = React.memo(ChatScreenComponent);
 export default ChatScreen;

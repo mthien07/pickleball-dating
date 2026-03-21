@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, Pressable, TextInput, Alert } from 'react-native';
+import { View, Text, ScrollView, Pressable, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
@@ -15,35 +15,7 @@ import { showSuccess, showError } from '../../../services/toast';
 import { useAuthStore } from '../../../stores/auth-store';
 import { createStyles } from './edit-profile-styles';
 import { PhotoGrid } from './edit-profile-photo-grid';
-
-/** Strip HTML tags and SQL-like injection patterns from profile text fields */
-const sanitizeInput = (text: string): string => {
-  // Remove HTML/script tags
-  let sanitized = text.replace(/<[^>]*>/g, '');
-  // Remove semicolons used in SQL statement termination
-  sanitized = sanitized.replace(/;/g, '');
-  // Remove SQL DML/DDL keywords when combined with SQL syntax patterns
-  sanitized = sanitized.replace(
-    /\b(DROP|DELETE|INSERT|UPDATE|SELECT|TRUNCATE|ALTER|CREATE)\b\s+\b(TABLE|FROM|INTO|DATABASE|INDEX)\b/gi,
-    ''
-  );
-  // Remove SQL comment sequences
-  sanitized = sanitized.replace(/--/g, '').replace(/\/\*[\s\S]*?\*\//g, '');
-  return sanitized;
-};
-
-const SKILL_LEVELS = [
-  { id: 'beginner', label: 'Beginner' },
-  { id: 'intermediate', label: 'Mid' },
-  { id: 'advanced', label: 'Advanced' },
-  { id: 'pro', label: 'Pro' },
-];
-
-const PLAY_STYLES = [
-  { id: 'competitive', label: 'Competitive' },
-  { id: 'casual', label: 'Casual' },
-  { id: 'social', label: 'Social' },
-];
+import { FormSection, sanitizeInput } from './edit-profile-form-section';
 
 export const EditProfileScreen = () => {
   const navigation = useNavigation<any>();
@@ -145,9 +117,6 @@ export const EditProfileScreen = () => {
     }
   };
 
-  const bioLength = bio.length;
-  const isNearLimit = bioLength >= 270;
-
   return (
     <SafeAreaView style={styles.container}>
       {/* Header */}
@@ -183,78 +152,22 @@ export const EditProfileScreen = () => {
           />
         </View>
 
-        {/* About Section */}
-        <View style={styles.sectionCard}>
-          <Text style={styles.sectionTitle}>About</Text>
-          <Text style={styles.inputLabel}>Display Name</Text>
-          <TextInput
-            style={[styles.inputField, nameFocused && styles.inputFieldFocused]}
-            value={name}
-            onChangeText={(t) => setName(sanitizeInput(t))}
-            placeholder="Your name"
-            placeholderTextColor={colors.textTertiary}
-            onFocus={() => setNameFocused(true)}
-            onBlur={() => setNameFocused(false)}
-          />
-        </View>
-
-        {/* Bio Section */}
-        <View style={styles.sectionCard}>
-          <Text style={styles.sectionTitle}>Bio</Text>
-          <TextInput
-            style={[styles.inputField, styles.bioInput, bioFocused && styles.inputFieldFocused]}
-            value={bio}
-            onChangeText={(t) => setBio(sanitizeInput(t))}
-            placeholder="Tell others about yourself..."
-            placeholderTextColor={colors.textTertiary}
-            multiline
-            maxLength={300}
-            textAlignVertical="top"
-            onFocus={() => setBioFocused(true)}
-            onBlur={() => setBioFocused(false)}
-          />
-          <Text style={[styles.charCounter, isNearLimit && styles.charCounterWarning]}>
-            {bioLength}/300
-          </Text>
-        </View>
-
-        {/* Skill Level */}
-        <View style={styles.sectionCard}>
-          <Text style={styles.sectionTitle}>Skill Level</Text>
-          <View style={styles.segmentedControl}>
-            {SKILL_LEVELS.map((level) => (
-              <Pressable
-                key={level.id}
-                style={[styles.segmentItem, skillLevel === level.id && styles.segmentItemActive]}
-                onPress={() => setSkillLevel(level.id)}
-              >
-                <Text
-                  style={[styles.segmentText, skillLevel === level.id && styles.segmentTextActive]}
-                >
-                  {level.label}
-                </Text>
-              </Pressable>
-            ))}
-          </View>
-        </View>
-
-        {/* Play Style */}
-        <View style={styles.sectionCard}>
-          <Text style={styles.sectionTitle}>Play Style</Text>
-          <View style={styles.pillRow}>
-            {PLAY_STYLES.map((s) => (
-              <Pressable
-                key={s.id}
-                style={[styles.pill, playStyle === s.id && styles.pillActive]}
-                onPress={() => setPlayStyle(s.id)}
-              >
-                <Text style={[styles.pillText, playStyle === s.id && styles.pillTextActive]}>
-                  {s.label}
-                </Text>
-              </Pressable>
-            ))}
-          </View>
-        </View>
+        <FormSection
+          name={name}
+          onNameChange={(t) => setName(sanitizeInput(t))}
+          nameFocused={nameFocused}
+          onNameFocus={() => setNameFocused(true)}
+          onNameBlur={() => setNameFocused(false)}
+          bio={bio}
+          onBioChange={(t) => setBio(sanitizeInput(t))}
+          bioFocused={bioFocused}
+          onBioFocus={() => setBioFocused(true)}
+          onBioBlur={() => setBioFocused(false)}
+          skillLevel={skillLevel}
+          onSkillLevelChange={setSkillLevel}
+          playStyle={playStyle}
+          onPlayStyleChange={setPlayStyle}
+        />
 
         {/* Save Button */}
         <View style={styles.saveButtonContainer}>

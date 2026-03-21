@@ -17,8 +17,10 @@ import { spacing } from '../../../theme/tokens';
 import { useTheme, ThemeMode } from '../../../contexts/ThemeContext';
 import { useThemedStyles } from '../../../hooks/useThemedStyles';
 import { RootStackParamList, ProfileStackParamList } from '../../../navigation/types';
-import { SettingsRow, SettingsSection } from './settings-components';
 import { createStyles } from './settings-styles';
+import { AppearanceSection } from './settings-appearance-section';
+import { AccountSection } from './settings-account-section';
+import { DangerZoneSection } from './settings-danger-zone-section';
 
 const PRIVACY_STORAGE_KEY = '@privacy_settings';
 
@@ -27,13 +29,27 @@ type SettingsNav = CompositeNavigationProp<
   StackNavigationProp<RootStackParamList>
 >;
 
+type NotificationState = {
+  newMatches: boolean;
+  messages: boolean;
+  likes: boolean;
+  bookingReminders: boolean;
+  promotions: boolean;
+};
+
+type PrivacyState = {
+  showOnlineStatus: boolean;
+  showDistance: boolean;
+  showAge: boolean;
+};
+
 export const SettingsScreen = () => {
   const navigation = useNavigation<SettingsNav>();
   const { theme, themeMode, setThemeMode } = useTheme();
   const colors = theme.colors;
   const styles = useThemedStyles(createStyles);
 
-  const [notifications, setNotifications] = useState({
+  const [notifications, setNotifications] = useState<NotificationState>({
     newMatches: true,
     messages: true,
     likes: true,
@@ -41,13 +57,12 @@ export const SettingsScreen = () => {
     promotions: false,
   });
 
-  const [privacy, setPrivacy] = useState({
+  const [privacy, setPrivacy] = useState<PrivacyState>({
     showOnlineStatus: true,
     showDistance: true,
     showAge: true,
   });
 
-  // Load persisted privacy settings on mount
   useEffect(() => {
     AsyncStorage.getItem(PRIVACY_STORAGE_KEY)
       .then((stored) => {
@@ -58,8 +73,7 @@ export const SettingsScreen = () => {
       .catch(() => {});
   }, []);
 
-  // Persist privacy settings on change
-  const updatePrivacy = (update: Partial<typeof privacy>) => {
+  const updatePrivacy = (update: Partial<PrivacyState>) => {
     setPrivacy((prev) => {
       const next = { ...prev, ...update };
       AsyncStorage.setItem(PRIVACY_STORAGE_KEY, JSON.stringify(next)).catch(() => {});
@@ -67,16 +81,13 @@ export const SettingsScreen = () => {
     });
   };
 
-  const themeModeLabels: Record<ThemeMode, string> = {
-    system: 'Hệ thống',
-    light: 'Sáng',
-    dark: 'Tối',
-  };
-
   const handleThemeChange = () => {
     const modes: ThemeMode[] = ['system', 'light', 'dark'];
-    const currentIndex = modes.indexOf(themeMode);
-    setThemeMode(modes[(currentIndex + 1) % modes.length]);
+    setThemeMode(modes[(modes.indexOf(themeMode) + 1) % modes.length]);
+  };
+
+  const handleNotificationToggle = (key: keyof NotificationState, value: boolean) => {
+    setNotifications((prev) => ({ ...prev, [key]: value }));
   };
 
   const handleLogout = () => {
@@ -85,10 +96,8 @@ export const SettingsScreen = () => {
       {
         text: 'Đăng xuất',
         style: 'destructive',
-        onPress: () => {
-          // @ts-expect-error: Navigation routing complex union types
-          navigation.navigate('Auth');
-        },
+        // @ts-expect-error: Navigation routing complex union types
+        onPress: () => navigation.navigate('Auth'),
       },
     ]);
   };
@@ -121,196 +130,24 @@ export const SettingsScreen = () => {
         </View>
 
         <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-          <SettingsSection title="Hiển thị" delay={0} colors={colors}>
-            <SettingsRow
-              icon="moon-outline"
-              label="Giao diện"
-              type="value"
-              value={themeModeLabels[themeMode]}
-              onPress={handleThemeChange}
-              colors={colors}
-            />
-          </SettingsSection>
-
-          <SettingsSection title="Tài khoản" delay={100} colors={colors}>
-            <SettingsRow
-              icon="person-outline"
-              label="Chỉnh sửa hồ sơ"
-              onPress={() => navigation.navigate('EditProfile')}
-              colors={colors}
-            />
-            <SettingsRow
-              icon="mail-outline"
-              label="Email"
-              type="value"
-              value="user@example.com"
-              colors={colors}
-            />
-            <SettingsRow
-              icon="call-outline"
-              label="Số điện thoại"
-              type="value"
-              value="+84 *** *** 789"
-              colors={colors}
-            />
-            <SettingsRow
-              icon="lock-closed-outline"
-              label="Đổi mật khẩu"
-              onPress={() => {}}
-              colors={colors}
-            />
-          </SettingsSection>
-
-          <SettingsSection title="Khám phá" delay={200} colors={colors}>
-            <SettingsRow
-              icon="location-outline"
-              label="Khoảng cách tối đa"
-              type="value"
-              value="50 km"
-              onPress={() => {}}
-              colors={colors}
-            />
-            <SettingsRow
-              icon="people-outline"
-              label="Độ tuổi"
-              type="value"
-              value="18 - 45"
-              onPress={() => {}}
-              colors={colors}
-            />
-            <SettingsRow
-              icon="fitness-outline"
-              label="Trình độ"
-              type="value"
-              value="Tất cả"
-              onPress={() => {}}
-              colors={colors}
-            />
-            <SettingsRow
-              icon="search-outline"
-              label="Tìm kiếm"
-              type="value"
-              value="Tất cả"
-              onPress={() => {}}
-              colors={colors}
-            />
-          </SettingsSection>
-
-          <SettingsSection title="Thông báo" delay={300} colors={colors}>
-            <SettingsRow
-              icon="heart-outline"
-              label="Match mới"
-              type="toggle"
-              isToggled={notifications.newMatches}
-              onToggle={(v) => setNotifications((p) => ({ ...p, newMatches: v }))}
-              colors={colors}
-            />
-            <SettingsRow
-              icon="chatbubble-outline"
-              label="Tin nhắn mới"
-              type="toggle"
-              isToggled={notifications.messages}
-              onToggle={(v) => setNotifications((p) => ({ ...p, messages: v }))}
-              colors={colors}
-            />
-            <SettingsRow
-              icon="star-outline"
-              label="Lượt thích mới"
-              type="toggle"
-              isToggled={notifications.likes}
-              onToggle={(v) => setNotifications((p) => ({ ...p, likes: v }))}
-              colors={colors}
-            />
-            <SettingsRow
-              icon="calendar-outline"
-              label="Nhắc đặt sân"
-              type="toggle"
-              isToggled={notifications.bookingReminders}
-              onToggle={(v) => setNotifications((p) => ({ ...p, bookingReminders: v }))}
-              colors={colors}
-            />
-            <SettingsRow
-              icon="megaphone-outline"
-              label="Khuyến mãi"
-              type="toggle"
-              isToggled={notifications.promotions}
-              onToggle={(v) => setNotifications((p) => ({ ...p, promotions: v }))}
-              colors={colors}
-            />
-          </SettingsSection>
-
-          <SettingsSection title="Quyền riêng tư" delay={400} colors={colors}>
-            <SettingsRow
-              icon="ellipse-outline"
-              label="Hiện trạng thái online"
-              type="toggle"
-              isToggled={privacy.showOnlineStatus}
-              onToggle={(v) => updatePrivacy({ showOnlineStatus: v })}
-              colors={colors}
-            />
-            <SettingsRow
-              icon="navigate-outline"
-              label="Hiện khoảng cách"
-              type="toggle"
-              isToggled={privacy.showDistance}
-              onToggle={(v) => updatePrivacy({ showDistance: v })}
-              colors={colors}
-            />
-            <SettingsRow
-              icon="calendar-number-outline"
-              label="Hiện tuổi"
-              type="toggle"
-              isToggled={privacy.showAge}
-              onToggle={(v) => updatePrivacy({ showAge: v })}
-              colors={colors}
-            />
-          </SettingsSection>
-
-          <SettingsSection title="Hỗ trợ" delay={500} colors={colors}>
-            <SettingsRow
-              icon="help-circle-outline"
-              label="Trung tâm hỗ trợ"
-              onPress={() => {}}
-              colors={colors}
-            />
-            <SettingsRow
-              icon="document-text-outline"
-              label="Điều khoản sử dụng"
-              onPress={() => {}}
-              colors={colors}
-            />
-            <SettingsRow
-              icon="shield-outline"
-              label="Chính sách bảo mật"
-              onPress={() => {}}
-              colors={colors}
-            />
-            <SettingsRow
-              icon="information-circle-outline"
-              label="Về ứng dụng"
-              type="value"
-              value="v1.0.0"
-              colors={colors}
-            />
-          </SettingsSection>
-
-          <SettingsSection title="Tài khoản" delay={600} colors={colors}>
-            <SettingsRow
-              icon="log-out-outline"
-              label="Đăng xuất"
-              danger
-              onPress={handleLogout}
-              colors={colors}
-            />
-            <SettingsRow
-              icon="trash-outline"
-              label="Xóa tài khoản"
-              danger
-              onPress={handleDeleteAccount}
-              colors={colors}
-            />
-          </SettingsSection>
-
+          <AppearanceSection
+            themeMode={themeMode}
+            onThemeChange={handleThemeChange}
+            colors={colors}
+          />
+          <AccountSection
+            colors={colors}
+            onEditProfile={() => navigation.navigate('EditProfile')}
+            notifications={notifications}
+            onNotificationToggle={handleNotificationToggle}
+            privacy={privacy}
+            onPrivacyToggle={updatePrivacy}
+          />
+          <DangerZoneSection
+            colors={colors}
+            onLogout={handleLogout}
+            onDeleteAccount={handleDeleteAccount}
+          />
           <View style={{ height: spacing['2xl'] }} />
         </ScrollView>
       </SafeAreaView>

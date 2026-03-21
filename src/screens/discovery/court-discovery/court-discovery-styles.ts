@@ -2,16 +2,13 @@ import { StyleSheet } from 'react-native';
 import { spacing, typography, borderRadius } from '../../../theme/tokens';
 import { shadows } from '../../../theme/shadows';
 import type { ThemeColors } from '../../../contexts/theme-colors';
+import { createBaseStyles } from '../../../theme/style-utils';
 
-export const createStyles = (colors: ThemeColors) =>
-  StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: colors.background,
-    },
-    safeArea: {
-      flex: 1,
-    },
+export const createStyles = (colors: ThemeColors) => {
+  const base = createBaseStyles(colors);
+  return StyleSheet.create({
+    container: base.screenContainer,
+    safeArea: base.flex1,
     headerContainer: {
       paddingHorizontal: spacing.lg,
       paddingBottom: spacing.md,
@@ -92,10 +89,7 @@ export const createStyles = (colors: ThemeColors) =>
       gap: spacing.md,
     },
     card: {
-      backgroundColor: colors.surface,
-      borderRadius: borderRadius.xl,
-      overflow: 'hidden',
-      ...shadows.md,
+      ...base.elevatedCard,
       marginBottom: spacing.sm,
     },
     cardImageContainer: {
@@ -221,14 +215,11 @@ export const createStyles = (colors: ThemeColors) =>
       color: colors.textSecondary,
       marginTop: spacing.xs,
     },
-    emptyState: {
-      alignItems: 'center',
-      justifyContent: 'center',
-      paddingVertical: spacing['2xl'],
-    },
+    emptyState: base.emptyState,
     emptyText: {
       ...typography.h4,
       color: colors.textTertiary,
       marginTop: spacing.md,
     },
   });
+};
