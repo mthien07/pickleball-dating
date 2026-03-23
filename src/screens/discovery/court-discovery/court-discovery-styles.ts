@@ -56,7 +56,7 @@ export const createStyles = (colors: ThemeColors) => {
       flex: 1,
       flexDirection: 'row',
       alignItems: 'center',
-      backgroundColor: colors.surface,
+      backgroundColor: colors.surfaceSecondary,
       borderRadius: borderRadius.lg,
       paddingHorizontal: spacing.md,
       height: 48,

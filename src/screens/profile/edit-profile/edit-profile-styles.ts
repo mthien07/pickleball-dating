@@ -39,8 +39,8 @@ export const createStyles = (colors: ThemeColors) =>
       padding: 20,
     },
     sectionTitle: {
-      fontFamily: 'Barlow-SemiBold',
-      fontSize: 16,
+      fontFamily: 'PlayfairDisplay-Regular',
+      fontSize: 18,
       color: colors.textPrimary,
       marginBottom: 12,
     },
@@ -148,7 +148,6 @@ export const createStyles = (colors: ThemeColors) =>
       fontFamily: 'Barlow-SemiBold',
       fontSize: 16,
       color: colors.white,
-      textTransform: 'uppercase',
       letterSpacing: 0.5,
     },
   });

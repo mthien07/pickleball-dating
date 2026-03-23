@@ -32,7 +32,7 @@ const createStyles = (colors: ThemeColors) =>
       backgroundColor: colors.surface,
     },
     emptySlot: {
-      borderWidth: 2,
+      borderWidth: 1,
       borderStyle: 'dashed',
       borderColor: colors.border,
       justifyContent: 'center',
@@ -91,7 +91,7 @@ export const PhotoGrid = React.memo(
                 pressed && { opacity: 0.8 },
               ]}
               onPress={() => (hasPhoto ? onRemovePhoto(index) : onAddPhoto(index))}
-              android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+              android_ripple={{ color: 'rgba(59, 89, 152, 0.15)' }}
             >
               {hasPhoto ? (
                 <>

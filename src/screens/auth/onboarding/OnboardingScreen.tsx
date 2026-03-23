@@ -88,7 +88,7 @@ export const OnboardingScreen = () => {
               <Pressable
                 onPress={() => navigation.navigate('SignupDesign')}
                 style={({ pressed }) => [styles.buttonContainer, pressed && { opacity: 0.9 }]}
-                android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+                android_ripple={{ color: 'rgba(59, 89, 152, 0.15)' }}
                 accessibilityRole="button"
                 accessibilityLabel="Get started - create your account"
               >

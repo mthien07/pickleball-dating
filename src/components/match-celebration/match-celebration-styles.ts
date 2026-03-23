@@ -29,7 +29,8 @@ export const createStyles = (colors: ThemeColors) =>
       ...typography.h2,
       color: colors.white,
       fontWeight: '800',
-      letterSpacing: 2,
+      letterSpacing: 0.5,
+      fontFamily: 'PlayfairDisplay-Bold',
     },
     avatarsContainer: {
       flexDirection: 'row',
@@ -77,7 +78,8 @@ export const createStyles = (colors: ThemeColors) =>
       ...typography.button,
       color: colors.white,
       fontWeight: '700',
-      letterSpacing: 1,
+      letterSpacing: 0.3,
+      fontFamily: 'PlayfairDisplay-Bold',
     },
     closeButton: {
       paddingVertical: spacing.md,

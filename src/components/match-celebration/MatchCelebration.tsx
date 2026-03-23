@@ -27,7 +27,7 @@ export interface MatchCelebrationProps {
   onSendMessage?: () => void;
 }
 
-const CONFETTI_COUNT = 50;
+const CONFETTI_COUNT = 25;
 
 export const MatchCelebration: React.FC<MatchCelebrationProps> = ({
   visible,
@@ -39,7 +39,14 @@ export const MatchCelebration: React.FC<MatchCelebrationProps> = ({
 }) => {
   const colors = useThemeColors();
   const styles = useThemedStyles(createStyles);
-  const CONFETTI_COLORS = [colors.primary, '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899'];
+  const CONFETTI_COLORS = [
+    colors.primary,
+    colors.secondary,
+    colors.starColor,
+    colors.accent,
+    colors.info,
+    colors.accentLight,
+  ];
   const scale = useSharedValue(0);
   const avatarScale = useSharedValue(0);
   const heartScale = useSharedValue(0);
@@ -110,7 +117,7 @@ export const MatchCelebration: React.FC<MatchCelebrationProps> = ({
             end={{ x: 1, y: 1 }}
             style={styles.titleBadge}
           >
-            <Text style={styles.titleText}>IT'S A MATCH!</Text>
+            <Text style={styles.titleText}>It's a Match!</Text>
           </LinearGradient>
 
           <View style={styles.avatarsContainer}>
@@ -125,7 +132,10 @@ export const MatchCelebration: React.FC<MatchCelebrationProps> = ({
             </Animated.View>
 
             <Animated.View style={[styles.heartIcon, heartStyle]}>
-              <LinearGradient colors={['#EC4899', '#EF4444']} style={styles.heartGradient}>
+              <LinearGradient
+                colors={[colors.accent, colors.accentDark]}
+                style={styles.heartGradient}
+              >
                 <Text style={styles.heartEmoji}>💗</Text>
               </LinearGradient>
             </Animated.View>
@@ -158,7 +168,7 @@ export const MatchCelebration: React.FC<MatchCelebrationProps> = ({
                 end={{ x: 1, y: 1 }}
                 style={styles.buttonGradient}
               >
-                <Text style={styles.sendMessageText}>SEND MESSAGE</Text>
+                <Text style={styles.sendMessageText}>Send Message</Text>
               </LinearGradient>
             </Pressable>
 
@@ -170,7 +180,7 @@ export const MatchCelebration: React.FC<MatchCelebrationProps> = ({
               }}
               android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
             >
-              <Text style={styles.closeText}>KEEP SWIPING</Text>
+              <Text style={styles.closeText}>Keep Swiping</Text>
             </Pressable>
           </View>
         </Animated.View>

@@ -1,5 +1,6 @@
 /**
  * Theme color definitions for light and dark modes
+ * Style: Hinge Editorial — 90% neutral, 10% accent
  */
 
 export interface ThemeColors {
@@ -25,6 +26,8 @@ export interface ThemeColors {
   background: string;
   surface: string;
   surfaceGlass: string;
+  surfaceSecondary: string;
+  surfaceTertiary: string;
 
   // Text
   textPrimary: string;
@@ -72,94 +75,132 @@ export interface ThemeColors {
 }
 
 export const lightColors: ThemeColors = {
-  primary: '#2563EB',
-  primaryGradientStart: '#2563EB',
-  primaryGradientEnd: '#60A5FA',
-  primaryDark: '#1D4ED8',
-  primaryLight: '#60A5FA',
-  secondary: '#10B981',
-  secondaryDark: '#059669',
-  accent: '#F43F5E',
-  accentLight: '#FB7185',
-  accentDark: '#E11D48',
-  lime: '#84CC16',
-  sportGreen: '#10B981',
-  background: '#F8FAFC',
+  // Muted Slate Blue — sophisticated, trustworthy
+  primary: '#3B5998',
+  primaryGradientStart: '#3B5998',
+  primaryGradientEnd: '#7B9FD4',
+  primaryDark: '#2D4373',
+  primaryLight: '#7B9FD4',
+
+  // Sage Green — courts, nature
+  secondary: '#5B8C6A',
+  secondaryDark: '#4A7358',
+
+  // Soft Rose — dating/match, elegant
+  accent: '#E5627D',
+  accentLight: '#F0899D',
+  accentDark: '#C94A63',
+  lime: '#8FA85E',
+  sportGreen: '#5B8C6A',
+
+  // Warm off-white backgrounds
+  background: '#FAF9F7',
   surface: '#FFFFFF',
   surfaceGlass: 'rgba(255, 255, 255, 0.72)',
-  textPrimary: '#0F172A',
-  textSecondary: '#475569',
-  textTertiary: '#94A3B8',
-  textInverse: '#F8FAFC',
-  border: '#E2E8F0',
-  success: '#10B981',
-  error: '#EF4444',
-  warning: '#F59E0B',
-  info: '#38BDF8',
-  skillBeginner: '#10B981',
-  skillIntermediate: '#F59E0B',
-  skillAdvanced: '#2563EB',
-  skillPro: '#F43F5E',
-  starColor: '#F59E0B',
-  goldAccent: '#FCD34D',
-  redAccent: '#F43F5E',
-  overlayGradientStart: 'rgba(37, 99, 235, 0.2)',
-  overlayGradientEnd: 'rgba(16, 185, 129, 0.2)',
-  backgroundCircle: '#EFF6FF',
-  searchBackground: '#F1F5F9',
-  disabledBackground: '#F8FAFC',
-  disabledGradientStart: '#CBD5E1',
-  disabledGradientEnd: '#94A3B8',
+  surfaceSecondary: '#F5F3F0',
+  surfaceTertiary: '#EDEBE8',
+
+  // Warmer text tones
+  textPrimary: '#1A1A2E',
+  textSecondary: '#6B7280',
+  textTertiary: '#9CA3AF',
+  textInverse: '#FAF9F7',
+
+  // Warm gray border
+  border: '#E8E6E1',
+
+  // Muted status colors
+  success: '#5B8C6A',
+  error: '#D9534F',
+  warning: '#D4A054',
+  info: '#7B9FD4',
+
+  // Skill levels
+  skillBeginner: '#5B8C6A',
+  skillIntermediate: '#D4A054',
+  skillAdvanced: '#3B5998',
+  skillPro: '#E5627D',
+
+  // Additional tokens
+  starColor: '#D4A054',
+  goldAccent: '#D4B85A',
+  redAccent: '#E5627D',
+  overlayGradientStart: 'rgba(59, 89, 152, 0.15)',
+  overlayGradientEnd: 'rgba(91, 140, 106, 0.15)',
+  backgroundCircle: '#F5F3F0',
+  searchBackground: '#F5F3F0',
+  disabledBackground: '#FAF9F7',
+  disabledGradientStart: '#C4C1BC',
+  disabledGradientEnd: '#9CA3AF',
   onboardingOverlay: 'rgba(255, 255, 255, 0.15)',
-  borderGlass: 'rgba(226, 232, 240, 0.5)',
+  borderGlass: 'rgba(232, 230, 225, 0.5)',
   black: '#000000',
   white: '#FFFFFF',
-  overlay: 'rgba(15, 23, 42, 0.4)',
-  overlayLight: 'rgba(15, 23, 42, 0.2)',
-  overlayDark: 'rgba(15, 23, 42, 0.6)',
+  overlay: 'rgba(26, 26, 46, 0.4)',
+  overlayLight: 'rgba(26, 26, 46, 0.2)',
+  overlayDark: 'rgba(26, 26, 46, 0.6)',
 };
 
 export const darkColors: ThemeColors = {
-  primary: '#60A5FA',
-  primaryGradientStart: '#60A5FA',
-  primaryGradientEnd: '#93C5FD',
-  primaryDark: '#2563EB',
-  primaryLight: '#93C5FD',
-  secondary: '#34D399',
-  secondaryDark: '#10B981',
-  accent: '#FB7185',
-  accentLight: '#FDA4AF',
-  accentDark: '#F43F5E',
-  lime: '#A3E635',
-  sportGreen: '#34D399',
-  background: '#0F172A',
-  surface: '#1E293B',
-  surfaceGlass: 'rgba(30, 41, 59, 0.72)',
-  textPrimary: '#F8FAFC',
-  textSecondary: '#CBD5E1',
-  textTertiary: '#64748B',
-  textInverse: '#0F172A',
-  border: '#334155',
-  success: '#34D399',
-  error: '#F87171',
-  warning: '#FCD34D',
-  info: '#7DD3FC',
-  skillBeginner: '#34D399',
-  skillIntermediate: '#FCD34D',
-  skillAdvanced: '#60A5FA',
-  skillPro: '#FB7185',
-  starColor: '#FCD34D',
-  goldAccent: '#FDE68A',
-  redAccent: '#FB7185',
-  overlayGradientStart: 'rgba(96, 165, 250, 0.25)',
-  overlayGradientEnd: 'rgba(52, 211, 153, 0.25)',
-  backgroundCircle: '#1E293B',
-  searchBackground: '#1E293B',
-  disabledBackground: '#1E293B',
-  disabledGradientStart: '#475569',
-  disabledGradientEnd: '#334155',
+  // Muted blue for dark mode
+  primary: '#7B9FD4',
+  primaryGradientStart: '#7B9FD4',
+  primaryGradientEnd: '#A3BFE5',
+  primaryDark: '#3B5998',
+  primaryLight: '#A3BFE5',
+
+  // Lighter sage for dark
+  secondary: '#7DAE8B',
+  secondaryDark: '#5B8C6A',
+
+  // Softer rose for dark
+  accent: '#F0899D',
+  accentLight: '#F5ADB9',
+  accentDark: '#E5627D',
+  lime: '#B0C87A',
+  sportGreen: '#7DAE8B',
+
+  // True dark backgrounds
+  background: '#121212',
+  surface: '#1E1E1E',
+  surfaceGlass: 'rgba(30, 30, 30, 0.72)',
+  surfaceSecondary: '#252525',
+  surfaceTertiary: '#2C2C2C',
+
+  // Light text on dark
+  textPrimary: '#F5F3F0',
+  textSecondary: '#B0ADA8',
+  textTertiary: '#6B6966',
+  textInverse: '#1A1A2E',
+
+  // Dark border
+  border: '#2C2C2C',
+
+  // Brighter status for dark
+  success: '#7DAE8B',
+  error: '#E87B78',
+  warning: '#E0B86E',
+  info: '#A3BFE5',
+
+  // Skill levels for dark
+  skillBeginner: '#7DAE8B',
+  skillIntermediate: '#E0B86E',
+  skillAdvanced: '#7B9FD4',
+  skillPro: '#F0899D',
+
+  // Additional tokens
+  starColor: '#E0B86E',
+  goldAccent: '#E0C87A',
+  redAccent: '#F0899D',
+  overlayGradientStart: 'rgba(123, 159, 212, 0.2)',
+  overlayGradientEnd: 'rgba(125, 174, 139, 0.2)',
+  backgroundCircle: '#252525',
+  searchBackground: '#252525',
+  disabledBackground: '#1E1E1E',
+  disabledGradientStart: '#4A4A4A',
+  disabledGradientEnd: '#3A3A3A',
   onboardingOverlay: 'rgba(0, 0, 0, 0.4)',
-  borderGlass: 'rgba(51, 65, 85, 0.5)',
+  borderGlass: 'rgba(44, 44, 44, 0.5)',
   black: '#000000',
   white: '#FFFFFF',
   overlay: 'rgba(0, 0, 0, 0.5)',

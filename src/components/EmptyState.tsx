@@ -197,6 +197,7 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
     textAlign: 'center',
     marginBottom: spacing.sm,
+    fontFamily: 'PlayfairDisplay-Bold',
   },
   message: {
     ...typography.body,

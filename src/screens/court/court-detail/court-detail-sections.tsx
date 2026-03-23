@@ -134,7 +134,7 @@ export const LocationSection = React.memo(({ address }: { address: string }) => 
       <Text style={styles.address}>{address}</Text>
       <Pressable
         style={({ pressed }) => [styles.mapButton, pressed && { opacity: 0.7 }]}
-        android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+        android_ripple={{ color: 'rgba(59, 89, 152, 0.15)' }}
       >
         <Ionicons name="navigate-outline" size={16} color={colors.primary} />
         <Text style={styles.mapButtonText}>Xem bản đồ</Text>

@@ -45,7 +45,7 @@ export const CoachCard = React.memo(({ coach, onPress, onBook }: CoachCardProps)
     <Pressable
       style={({ pressed }) => [styles.card, pressed && { opacity: 0.95 }]}
       onPress={onPress}
-      android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+      android_ripple={{ color: 'rgba(59, 89, 152, 0.15)' }}
     >
       <View style={styles.cardContent}>
         <View style={styles.cardHeader}>
@@ -92,7 +92,7 @@ export const CoachCard = React.memo(({ coach, onPress, onBook }: CoachCardProps)
           <Pressable
             style={({ pressed }) => [styles.bookButton, pressed && { opacity: 0.7 }]}
             onPress={onBook}
-            android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+            android_ripple={{ color: 'rgba(59, 89, 152, 0.15)' }}
           >
             <Text style={styles.bookButtonText}>Book Now</Text>
           </Pressable>

@@ -10,86 +10,88 @@
  */
 
 // ============================================
-// COLOR PALETTE - SPORTS DATING BLUE + ROSE
-// Primary: Electric Blue (energetic, sporty, trustworthy)
-// Accent: Rose (dating/match, romantic, engaging)
-// Style: Vibrant & Block-based + Motion-Driven
-// Based on: design/design-system.md
+// COLOR PALETTE - HINGE EDITORIAL STYLE
+// Primary: Muted Slate Blue (sophisticated, trustworthy)
+// Accent: Soft Rose (dating/match, elegant)
+// Style: Editorial, 90% neutral + 10% accent
+// Ref: Hinge design language
 // ============================================
 
 export const colors = {
-  // Primary Colors (Electric Blue - energetic, sporty)
-  primary: '#2563EB', // Blue-600
-  primaryGradientStart: '#2563EB',
-  primaryGradientEnd: '#60A5FA', // Blue-400
-  primaryDark: '#1D4ED8', // Blue-700
-  primaryLight: '#60A5FA', // Blue-400
+  // Primary Colors (Muted Slate Blue - sophisticated)
+  primary: '#3B5998',
+  primaryGradientStart: '#3B5998',
+  primaryGradientEnd: '#7B9FD4',
+  primaryDark: '#2D4373',
+  primaryLight: '#7B9FD4',
 
-  // Secondary Colors (Emerald Green - courts, nature, success)
-  secondary: '#10B981', // Emerald-500
-  secondaryDark: '#059669', // Emerald-600
-  secondaryLight: '#34D399', // Emerald-400
+  // Secondary Colors (Sage Green - courts, nature)
+  secondary: '#5B8C6A',
+  secondaryDark: '#4A7358',
+  secondaryLight: '#7DAE8B',
 
-  // Accent Colors (Rose - dating/match feel, CTA)
-  accent: '#F43F5E', // Rose-500 - CTA color
-  accentLight: '#FB7185', // Rose-400
-  accentDark: '#E11D48', // Rose-600
+  // Accent Colors (Soft Rose - dating/match, elegant)
+  accent: '#E5627D',
+  accentLight: '#F0899D',
+  accentDark: '#C94A63',
 
-  // Vibrant Sport Colors
-  lime: '#84CC16', // Lime-500 - Energy, vitality
-  sportGreen: '#10B981', // Emerald-500 - Courts, success
-  electric: '#8B5CF6', // Violet-500 - Premium, special
-  energyOrange: '#F97316', // Orange-500 - Energy, excitement
-  neonYellow: '#FACC15', // Yellow-400 - Highlight, attention
+  // Muted Sport Colors
+  lime: '#8FA85E',
+  sportGreen: '#5B8C6A',
+  electric: '#7C6FAE',
+  energyOrange: '#D4845A',
+  neonYellow: '#D4B85A',
 
-  // Background Colors - Clean, modern
-  background: '#F8FAFC', // Slate-50
-  backgroundDark: '#0F172A', // Slate-900
-  surface: '#FFFFFF', // Pure White
-  surfaceGlass: 'rgba(255, 255, 255, 0.72)', // Glass effect
-  surfaceGlassDark: 'rgba(15, 23, 42, 0.72)', // Dark glass
-  surfaceDark: '#1E293B', // Slate-800
+  // Background Colors - Warm, editorial
+  background: '#FAF9F7',
+  backgroundDark: '#121212',
+  surface: '#FFFFFF',
+  surfaceGlass: 'rgba(255, 255, 255, 0.72)',
+  surfaceGlassDark: 'rgba(18, 18, 18, 0.72)',
+  surfaceDark: '#1E1E1E',
 
-  // Bento card backgrounds
-  bentoLight: '#EFF6FF', // Blue-50
-  bentoDark: '#1E3A8A', // Blue-900
+  // Secondary surfaces
+  surfaceSecondary: '#F5F3F0',
+  surfaceTertiary: '#EDEBE8',
+  bentoLight: '#F5F3F0',
+  bentoDark: '#2A2A2A',
 
-  // Text Colors
-  textPrimary: '#0F172A', // Slate-900
-  textSecondary: '#475569', // Slate-600
-  textTertiary: '#94A3B8', // Slate-400
-  textInverse: '#F8FAFC', // Slate-50
+  // Text Colors - Warmer tones
+  textPrimary: '#1A1A2E',
+  textSecondary: '#6B7280',
+  textTertiary: '#9CA3AF',
+  textInverse: '#FAF9F7',
 
-  // Border Colors
-  border: '#E2E8F0', // Slate-200
-  borderDark: '#334155', // Slate-700
-  borderGlass: 'rgba(226, 232, 240, 0.5)', // Slate-200/50
+  // Border Colors - Warm gray
+  border: '#E8E6E1',
+  borderDark: '#2C2C2C',
+  borderGlass: 'rgba(232, 230, 225, 0.5)',
 
   // Status Colors
-  success: '#10B981', // Emerald-500
-  error: '#EF4444', // Red-500
-  warning: '#F59E0B', // Amber-500
-  info: '#38BDF8', // Sky-400
+  success: '#5B8C6A',
+  error: '#D9534F',
+  warning: '#D4A054',
+  info: '#7B9FD4',
 
   // Skill Level Colors
-  skillBeginner: '#10B981', // Emerald-500
-  skillIntermediate: '#F59E0B', // Amber-500
-  skillAdvanced: '#2563EB', // Blue-600
-  skillPro: '#F43F5E', // Rose-500
+  skillBeginner: '#5B8C6A',
+  skillIntermediate: '#D4A054',
+  skillAdvanced: '#3B5998',
+  skillPro: '#E5627D',
 
   // Utility Colors
   black: '#000000',
   white: '#FFFFFF',
 
   // Transparent overlays
-  overlay: 'rgba(15, 23, 42, 0.4)', // Slate-900
-  overlayLight: 'rgba(15, 23, 42, 0.2)',
-  overlayDark: 'rgba(15, 23, 42, 0.6)',
+  overlay: 'rgba(26, 26, 46, 0.4)',
+  overlayLight: 'rgba(26, 26, 46, 0.2)',
+  overlayDark: 'rgba(26, 26, 46, 0.6)',
 
   // Glassmorphism specific
   glassBg: 'rgba(255, 255, 255, 0.6)',
-  glassBorder: 'rgba(226, 232, 240, 0.5)', // Slate-200/50
-  glassShadow: 'rgba(37, 99, 235, 0.15)', // Blue-600/15
+  glassBorder: 'rgba(232, 230, 225, 0.5)',
+  glassShadow: 'rgba(59, 89, 152, 0.1)',
 } as const;
 
 // ============================================
@@ -110,7 +112,7 @@ export const spacing = {
 // ============================================
 
 export const typography = {
-  // Headings - Large type for Vibrant Sport style (32px+)
+  // Headings - Barlow sans-serif for structured headings
   hero: {
     fontSize: 48,
     fontWeight: '700' as const,
@@ -145,6 +147,36 @@ export const typography = {
     lineHeight: 24,
     letterSpacing: -0.2,
     fontFamily: 'Barlow-SemiBold',
+  },
+
+  // Editorial serif headings - Hinge-style prompts & headlines
+  editorialHero: {
+    fontSize: 42,
+    fontWeight: '700' as const,
+    lineHeight: 48,
+    letterSpacing: -0.5,
+    fontFamily: 'PlayfairDisplay-Bold',
+  },
+  editorialH1: {
+    fontSize: 32,
+    fontWeight: '700' as const,
+    lineHeight: 38,
+    letterSpacing: -0.3,
+    fontFamily: 'PlayfairDisplay-Bold',
+  },
+  editorialH2: {
+    fontSize: 24,
+    fontWeight: '400' as const,
+    lineHeight: 32,
+    letterSpacing: 0,
+    fontFamily: 'PlayfairDisplay-Regular',
+  },
+  prompt: {
+    fontSize: 20,
+    fontWeight: '400' as const,
+    lineHeight: 28,
+    letterSpacing: 0,
+    fontFamily: 'PlayfairDisplay-Italic',
   },
 
   // Body Text
@@ -203,15 +235,19 @@ export const typography = {
   },
 } as const;
 
-// Font Families (Barlow - athletic, energetic, sports)
-// Google Fonts: https://fonts.google.com/share?selection.family=Barlow+Condensed:wght@400;500;600;700|Barlow:wght@300;400;500;600;700
+// Font Families - Serif + Sans-Serif pairing (Hinge editorial style)
 export const fontFamily = {
-  heading: 'Barlow-Bold', // Athletic condensed headings
-  headingCondensed: 'BarlowCondensed-Bold', // Extra impact for large titles
-  body: 'Barlow-Regular', // Clean body text
-  bodyMedium: 'Barlow-Medium', // Emphasis
-  bodySemiBold: 'Barlow-SemiBold', // Strong emphasis
-  primary: 'Barlow-Regular', // Default
+  // Sans-serif (Barlow) — body, metadata, UI
+  heading: 'Barlow-Bold',
+  headingCondensed: 'BarlowCondensed-Bold',
+  body: 'Barlow-Regular',
+  bodyMedium: 'Barlow-Medium',
+  bodySemiBold: 'Barlow-SemiBold',
+  primary: 'Barlow-Regular',
+  // Serif (PlayfairDisplay) — editorial headlines, prompts
+  serif: 'PlayfairDisplay-Regular',
+  serifBold: 'PlayfairDisplay-Bold',
+  serifItalic: 'PlayfairDisplay-Italic',
   fallback: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
 } as const;
 

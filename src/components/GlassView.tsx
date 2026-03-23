@@ -59,7 +59,7 @@ export interface GlassViewProps extends React.PropsWithChildren {
 
 export const GlassView: React.FC<GlassViewProps> = ({
   children,
-  intensity = 50,
+  intensity = 35,
   tint = 'light',
   style,
   borderRadius: radius = borderRadius.md,

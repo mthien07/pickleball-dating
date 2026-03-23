@@ -8,7 +8,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TextInput } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 
-import { spacing, typography, borderRadius } from '../../../theme/tokens';
+import { spacing, typography, borderRadius, fontFamily } from '../../../theme/tokens';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { useThemeColors } from '../../../contexts/ThemeContext';
 import { useThemedStyles } from '../../../hooks/useThemedStyles';
@@ -54,6 +54,7 @@ const createStyles = (colors: ThemeColors) =>
     },
     stepTitle: {
       ...typography.h2,
+      fontFamily: fontFamily.serifItalic,
       color: colors.textPrimary,
       marginBottom: spacing.xs,
     },

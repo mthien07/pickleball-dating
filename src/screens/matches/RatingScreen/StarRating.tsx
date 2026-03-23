@@ -32,13 +32,13 @@ const StarButton = React.memo(
       <Pressable
         onPress={() => onPress(star)}
         style={({ pressed }) => pressed && { opacity: 0.7 }}
-        android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+        android_ripple={{ color: 'rgba(59, 89, 152, 0.15)' }}
         hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
       >
         <Ionicons
           name={isSelected ? 'star' : 'star-outline'}
           size={size}
-          color={isSelected ? colors.warning : colors.border}
+          color={isSelected ? colors.starColor : colors.border}
         />
       </Pressable>
     );

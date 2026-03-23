@@ -71,7 +71,7 @@ export const WebSidebarNavigation = ({ activeTab, unreadCount }: WebSidebarNavig
                 <Ionicons
                   name={isActive ? item.icon : item.iconOutline}
                   size={iconSizes.md}
-                  color={isActive ? colors.accent : colors.textTertiary}
+                  color={isActive ? colors.primary : colors.textTertiary}
                 />
                 {showBadge && (
                   <View style={styles.badge}>
@@ -109,8 +109,9 @@ const createStyles = (colors: ThemeColors) =>
     },
     logoText: {
       fontSize: 16,
+      fontFamily: 'PlayfairDisplay-Bold',
       fontWeight: '800',
-      color: colors.accent,
+      color: colors.primary,
       letterSpacing: 1.5,
     },
     navItems: {
@@ -125,11 +126,13 @@ const createStyles = (colors: ThemeColors) =>
       borderRadius: 10,
     },
     navItemActive: {
-      backgroundColor: colors.backgroundCircle,
+      backgroundColor: colors.surfaceSecondary,
+      borderLeftWidth: 3,
+      borderLeftColor: colors.primary,
+      paddingLeft: spacing.sm - 3,
     },
     navItemHovered: {
-      backgroundColor: colors.searchBackground,
-      opacity: 0.7,
+      backgroundColor: colors.surfaceSecondary,
     },
     iconWrapper: {
       position: 'relative',
@@ -153,11 +156,13 @@ const createStyles = (colors: ThemeColors) =>
     },
     navLabel: {
       fontSize: 14,
+      fontFamily: 'Barlow-Regular',
       fontWeight: '500',
       color: colors.textTertiary,
     },
     navLabelActive: {
-      color: colors.accent,
+      color: colors.primary,
+      fontFamily: 'Barlow-Medium',
       fontWeight: '600',
     },
   });

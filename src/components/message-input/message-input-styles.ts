@@ -24,7 +24,7 @@ export const createStyles = (colors: ThemeColors) =>
       flex: 1,
       flexDirection: 'row',
       alignItems: 'flex-end',
-      backgroundColor: colors.surface,
+      backgroundColor: colors.surfaceSecondary,
       borderRadius: borderRadius.xl,
       borderWidth: 1,
       borderColor: colors.border,

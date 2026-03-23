@@ -100,7 +100,7 @@ export const CourtDiscoveryScreen = () => {
             pressed && { opacity: 0.7 },
           ]}
           onPress={() => setViewMode('list')}
-          android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+          android_ripple={{ color: 'rgba(59, 89, 152, 0.15)' }}
         >
           <Text style={[styles.toggleText, viewMode === 'list' && styles.toggleTextActive]}>
             Danh sách
@@ -113,7 +113,7 @@ export const CourtDiscoveryScreen = () => {
             pressed && { opacity: 0.7 },
           ]}
           onPress={() => setViewMode('map')}
-          android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+          android_ripple={{ color: 'rgba(59, 89, 152, 0.15)' }}
         >
           <Text style={[styles.toggleText, viewMode === 'map' && styles.toggleTextActive]}>
             Bản đồ
@@ -144,7 +144,7 @@ export const CourtDiscoveryScreen = () => {
             pressed && { opacity: 0.7 },
           ]}
           onPress={() => setShowFilter(true)}
-          android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+          android_ripple={{ color: 'rgba(59, 89, 152, 0.15)' }}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
           <Ionicons

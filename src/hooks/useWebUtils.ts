@@ -27,10 +27,10 @@ export const useWebUtils = () => {
   const getCardAspectRatio = () => {
     if (!isWeb) {
       return 0.67;
-    } // Mobile ratio (similar to Tinder)
+    } // Mobile ratio — editorial portrait
     if (isDesktop) {
       return 0.75;
-    } // Desktop: slightly taller
+    } // Desktop: slightly taller editorial card
     return 0.67;
   };
 

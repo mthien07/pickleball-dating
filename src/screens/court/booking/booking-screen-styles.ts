@@ -31,7 +31,8 @@ export const createStyles = (colors: ThemeColors) =>
       alignItems: 'center',
     },
     headerTitle: {
-      ...typography.h4,
+      fontFamily: 'PlayfairDisplay-Bold',
+      fontSize: 20,
       color: colors.textPrimary,
     },
     headerSubtitle: {
@@ -65,7 +66,8 @@ export const createStyles = (colors: ThemeColors) =>
       color: colors.white,
     },
     sectionTitle: {
-      ...typography.h3,
+      fontFamily: 'PlayfairDisplay-Regular',
+      fontSize: 22,
       color: colors.textPrimary,
     },
     selectedDateText: {

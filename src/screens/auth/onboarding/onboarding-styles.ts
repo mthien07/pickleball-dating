@@ -54,16 +54,16 @@ export const createStyles = (colors: ThemeColors) =>
       marginBottom: spacing.lg,
     },
     titleLine: {
-      fontFamily: fontFamily.headingCondensed,
+      fontFamily: fontFamily.serifBold,
       fontSize: 48,
       lineHeight: 52,
       textAlign: 'center',
       color: colors.textPrimary,
-      letterSpacing: -1,
+      letterSpacing: -0.5,
     },
     titleAccent: { color: colors.primary },
     subtitle: {
-      fontFamily: fontFamily.body,
+      fontFamily: fontFamily.serif,
       fontSize: 16,
       textAlign: 'center',
       lineHeight: 24,
@@ -156,7 +156,6 @@ export const createStyles = (colors: ThemeColors) =>
       fontSize: 16,
       color: colors.white,
       letterSpacing: 0.5,
-      textTransform: 'uppercase',
     },
     termsText: {
       fontFamily: fontFamily.body,
@@ -192,11 +191,10 @@ export const createStyles = (colors: ThemeColors) =>
       gap: spacing.sm,
     },
     webTopBarBrand: {
-      fontFamily: fontFamily.headingCondensed,
+      fontFamily: fontFamily.serifBold,
       fontSize: 16,
-      fontWeight: '800',
       color: colors.accent,
-      letterSpacing: 1.5,
+      letterSpacing: 0.5,
     },
     webLoginButton: {
       paddingHorizontal: spacing.lg,

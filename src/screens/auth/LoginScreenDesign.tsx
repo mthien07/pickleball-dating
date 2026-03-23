@@ -162,11 +162,10 @@ const createStyles = (colors: ThemeColors) =>
       ...shadows.sm,
     },
     headerTitle: {
-      fontFamily: 'Barlow-Bold',
+      fontFamily: 'PlayfairDisplay-Bold',
       fontSize: 22,
       color: colors.textPrimary,
-      letterSpacing: 0.5,
-      textTransform: 'uppercase',
+      letterSpacing: -0.3,
     },
     keyboardView: {
       flex: 1,

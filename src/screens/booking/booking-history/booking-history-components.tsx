@@ -72,7 +72,7 @@ export const TabBar: React.FC<TabBarProps> = React.memo(({ tabs, activeTab, onTa
             pressed && { opacity: 0.7 },
           ]}
           onPress={() => onTabChange(tab.id)}
-          android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+          android_ripple={{ color: 'rgba(59, 89, 152, 0.15)' }}
         >
           <Text style={[styles.tabText, activeTab === tab.id && styles.tabTextActive]}>
             {tab.label}
@@ -104,7 +104,7 @@ export const BookingCard: React.FC<BookingCardProps> = React.memo(({ booking, in
       <Pressable
         style={({ pressed }) => [styles.bookingCard, pressed && { opacity: 0.8 }]}
         onPress={onPress}
-        android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+        android_ripple={{ color: 'rgba(59, 89, 152, 0.15)' }}
       >
         <Image source={{ uri: booking.court.images[0] }} style={styles.courtImage} />
         <View style={styles.bookingInfo}>

@@ -1,7 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { View, TextInput, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -80,7 +79,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({
           onPress={onAttachment}
           style={({ pressed }) => [styles.iconButton, pressed && { opacity: 0.7 }]}
           disabled={disabled}
-          android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+          android_ripple={{ color: 'rgba(59, 89, 152, 0.15)' }}
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
         >
           <Ionicons name="add-circle" size={28} color={colors.primary} />
@@ -109,7 +108,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({
           <Pressable
             onPress={onCamera}
             style={({ pressed }) => [styles.cameraButton, pressed && { opacity: 0.7 }]}
-            android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+            android_ripple={{ color: 'rgba(59, 89, 152, 0.15)' }}
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
           >
             <Ionicons name="camera" size={22} color={colors.textTertiary} />
@@ -124,9 +123,9 @@ export const MessageInput: React.FC<MessageInputProps> = ({
           disabled={disabled || text.trim().length === 0}
           android_ripple={{ color: 'rgba(255, 255, 255, 0.3)' }}
         >
-          <LinearGradient colors={[colors.primary, colors.primaryDark]} style={styles.sendButton}>
+          <View style={[styles.sendButton, { backgroundColor: colors.primary }]}>
             <Ionicons name="send" size={18} color={colors.white} />
-          </LinearGradient>
+          </View>
         </Pressable>
       </Animated.View>
     </View>

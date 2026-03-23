@@ -1,59 +1,34 @@
 /**
  * HomeSwipeScreen
  *
- * Orchestrator: header, swipe card stack, action controls.
- * Gesture / keyboard logic → useSwipeGestureHandler
- * Card rendering → SwipeCardList
+ * Hinge-style editorial vertical feed.
+ * Orchestrator: header + EditorialProfileFeed.
  */
 
-import React, { useRef, useMemo } from 'react';
-import { View, Text, Pressable, StatusBar, Dimensions } from 'react-native';
+import React from 'react';
+import { View, Text, Pressable, StatusBar } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { User } from 'lucide-react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-import { SwipeCardRef } from '../../../components/SwipeCard';
 import { EmptyState } from '../../../components/EmptyState';
-import { CARD_WIDTH, CARD_MAX_WIDTH } from '../../../theme/breakpoints';
 import { showInfo } from '../../../services/toast';
 import { useTheme, useThemeColors } from '../../../contexts/ThemeContext';
 import { useThemedStyles } from '../../../hooks/useThemedStyles';
 import { useResponsive } from '../../../hooks/useResponsive';
-import { useWebUtils } from '../../../hooks/useWebUtils';
 import { webStyles } from '../../../theme/webStyles';
 import { useDiscoveryProfiles } from '../../../hooks/use-discovery-profiles';
 import { createStyles } from './styles';
-import { useSwipeGestureHandler } from './swipe-gesture-handler';
-import { SwipeCardList } from './swipe-card-list';
-
-const { width: screenWidth } = Dimensions.get('window');
+import { EditorialProfileFeed } from './editorial-profile-feed';
 
 export const HomeSwipeScreen = () => {
   const { isDark } = useTheme();
   const themeColors = useThemeColors();
   const styles = useThemedStyles(createStyles);
-  const swipeCardRef = useRef<SwipeCardRef>(null);
 
-  const { isDesktop, isWeb, maxContentWidth, containerPadding } = useResponsive();
-  const { shouldEnableKeyboard } = useWebUtils();
+  const { isDesktop, containerPadding } = useResponsive();
 
-  const { currentProfile, nextProfile, hasMore, handleSwipe, reload } = useDiscoveryProfiles();
-
-  const cardWidth = useMemo(
-    () =>
-      isDesktop || isWeb
-        ? CARD_WIDTH.desktop
-        : Math.min(screenWidth * CARD_WIDTH.mobile, CARD_MAX_WIDTH),
-    [isDesktop, isWeb]
-  );
-
-  const { handleSwipeLeft, handleSwipeRight, handleSuperLike } = useSwipeGestureHandler({
-    handleSwipe,
-    currentProfile,
-    swipeCardRef,
-    shouldEnableKeyboard,
-    isWeb,
-  });
+  const { currentProfile, hasMore, handleSwipe, reload } = useDiscoveryProfiles();
 
   if (!hasMore) {
     return (
@@ -111,7 +86,6 @@ export const HomeSwipeScreen = () => {
               <Pressable
                 style={({ pressed }) => [styles.profileButton, pressed && { opacity: 0.7 }]}
                 onPress={() => showInfo('View profile')}
-                android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
                 hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
               >
                 <User size={24} color={themeColors.textPrimary} strokeWidth={2} />
@@ -119,16 +93,10 @@ export const HomeSwipeScreen = () => {
             </View>
           </View>
 
-          <SwipeCardList
-            currentProfile={currentProfile}
-            nextProfile={nextProfile}
-            cardWidth={cardWidth}
-            swipeCardRef={swipeCardRef}
-            onSwipeLeft={handleSwipeLeft}
-            onSwipeRight={handleSwipeRight}
-            onSuperLike={handleSuperLike}
-            isDesktop={isDesktop}
-            isWeb={isWeb}
+          <EditorialProfileFeed
+            profile={currentProfile}
+            onPass={() => handleSwipe('pass')}
+            onLike={() => handleSwipe('like')}
           />
         </View>
       </SafeAreaView>

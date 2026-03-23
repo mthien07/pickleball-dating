@@ -34,6 +34,7 @@ export const createStyles = (colors: ThemeColors) =>
     headerTitle: {
       ...typography.h4,
       color: colors.textPrimary,
+      fontFamily: 'PlayfairDisplay-Bold',
     },
 
     // Content
@@ -51,6 +52,7 @@ export const createStyles = (colors: ThemeColors) =>
       ...typography.h3,
       color: colors.textPrimary,
       marginTop: spacing.md,
+      fontFamily: 'PlayfairDisplay-Bold',
     },
     ratingPrompt: {
       ...typography.body,
@@ -67,7 +69,7 @@ export const createStyles = (colors: ThemeColors) =>
       ...typography.label,
       color: colors.textSecondary,
       marginBottom: spacing.md,
-      textTransform: 'uppercase',
+      fontFamily: 'PlayfairDisplay-Italic',
     },
     starRow: {
       flexDirection: 'row',
@@ -100,6 +102,7 @@ export const createStyles = (colors: ThemeColors) =>
     categoryLabel: {
       ...typography.body,
       color: colors.textPrimary,
+      fontFamily: 'PlayfairDisplay-Italic',
     },
 
     // Comment
@@ -110,7 +113,7 @@ export const createStyles = (colors: ThemeColors) =>
       ...typography.label,
       color: colors.textSecondary,
       marginBottom: spacing.sm,
-      textTransform: 'uppercase',
+      fontFamily: 'PlayfairDisplay-Italic',
     },
     commentInput: {
       backgroundColor: colors.surface,

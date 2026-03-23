@@ -126,7 +126,7 @@ export const WelcomeBrandPanel = ({ style }: WelcomeBrandPanelProps) => {
 
   return (
     <LinearGradient
-      colors={[colors.primary, colors.accent]}
+      colors={['#3B5998', '#7B9FD4']}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
       style={[styles.container, style]}
@@ -178,9 +178,9 @@ const styles = StyleSheet.create({
   content: { alignItems: 'center', gap: 16, zIndex: 2 },
   title: {
     fontSize: 40,
-    fontFamily: fontFamily.headingCondensed,
+    fontFamily: fontFamily.serifBold,
     color: '#FFFFFF',
-    letterSpacing: 3,
+    letterSpacing: 1,
   },
   taglineWrap: { alignItems: 'center', gap: 4 },
   tagline: {

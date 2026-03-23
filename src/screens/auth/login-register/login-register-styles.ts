@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { spacing, typography } from '../../../theme/tokens';
+import { spacing, typography, fontFamily } from '../../../theme/tokens';
 import type { ThemeColors } from '../../../contexts/theme-colors';
 
 export const createStyles = (colors: ThemeColors) =>
@@ -19,18 +19,21 @@ export const createStyles = (colors: ThemeColors) =>
     },
     logo: {
       ...typography.h1,
+      fontFamily: fontFamily.serifBold,
       fontSize: 32,
       color: colors.primary,
       marginBottom: spacing.md,
     },
     headline: {
       ...typography.h2,
+      fontFamily: fontFamily.serifBold,
       textAlign: 'center',
       marginBottom: spacing.xs,
       color: colors.textPrimary,
     },
     subheadline: {
       ...typography.bodyLarge,
+      fontFamily: fontFamily.body,
       color: colors.textSecondary,
       textAlign: 'center',
     },

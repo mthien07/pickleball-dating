@@ -73,7 +73,7 @@ export const PaymentScreen = () => {
           <Pressable
             onPress={() => navigation.goBack()}
             style={({ pressed }) => [styles.backButton, pressed && { opacity: 0.7 }]}
-            android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+            android_ripple={{ color: 'rgba(59, 89, 152, 0.15)' }}
             hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           >
             <Ionicons name="chevron-back" size={28} color={themeColors.textPrimary} />

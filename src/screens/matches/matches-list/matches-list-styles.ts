@@ -27,7 +27,7 @@ export const createStyles = (colors: ThemeColors) =>
       fontWeight: '700',
       color: colors.textPrimary,
       letterSpacing: -0.3,
-      fontFamily: 'Barlow-Bold',
+      fontFamily: 'PlayfairDisplay-Bold',
     },
     headerButton: {
       width: 44,
@@ -47,11 +47,10 @@ export const createStyles = (colors: ThemeColors) =>
       fontSize: 13,
       fontWeight: '600',
       color: colors.textTertiary,
-      letterSpacing: 0.5,
-      textTransform: 'uppercase',
+      letterSpacing: 0.3,
       paddingHorizontal: spacing.md,
       marginBottom: spacing.sm,
-      fontFamily: 'Barlow-SemiBold',
+      fontFamily: 'PlayfairDisplay-Regular',
     },
     newMatchesList: {
       paddingHorizontal: spacing.md,
@@ -88,7 +87,7 @@ export const createStyles = (colors: ThemeColors) =>
       color: colors.textPrimary,
       marginTop: 6,
       textAlign: 'center',
-      fontFamily: 'Barlow-Regular',
+      fontFamily: 'PlayfairDisplay-Regular',
     },
 
     // ── Messages Section Label ─────────────────────────────────
@@ -101,9 +100,8 @@ export const createStyles = (colors: ThemeColors) =>
       fontSize: 13,
       fontWeight: '600',
       color: colors.textTertiary,
-      letterSpacing: 0.5,
-      textTransform: 'uppercase',
-      fontFamily: 'Barlow-SemiBold',
+      letterSpacing: 0.3,
+      fontFamily: 'PlayfairDisplay-Regular',
     },
 
     // ── Conversation Item ──────────────────────────────────────
@@ -152,11 +150,11 @@ export const createStyles = (colors: ThemeColors) =>
       fontWeight: '400',
       color: colors.textPrimary,
       flex: 1,
-      fontFamily: 'Barlow-Regular',
+      fontFamily: 'PlayfairDisplay-Regular',
     },
     conversationNameUnread: {
       fontWeight: '700',
-      fontFamily: 'Barlow-Bold',
+      fontFamily: 'PlayfairDisplay-Bold',
     },
     conversationTime: {
       fontSize: 12,

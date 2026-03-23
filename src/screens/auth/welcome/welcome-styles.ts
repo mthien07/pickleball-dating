@@ -25,7 +25,7 @@ export const createStyles = (colors: ThemeColors) =>
     },
     appName: {
       fontSize: 24,
-      fontFamily: fontFamily.heading,
+      fontFamily: fontFamily.serifBold,
       color: colors.textPrimary,
       letterSpacing: -0.5,
     },
@@ -40,7 +40,7 @@ export const createStyles = (colors: ThemeColors) =>
     },
     headline: {
       fontSize: 36,
-      fontFamily: fontFamily.headingCondensed,
+      fontFamily: fontFamily.serifBold,
       color: colors.textPrimary,
       textAlign: 'center',
       marginBottom: spacing.xs,
@@ -49,7 +49,7 @@ export const createStyles = (colors: ThemeColors) =>
     },
     subheading: {
       fontSize: 18,
-      fontFamily: fontFamily.bodyMedium,
+      fontFamily: fontFamily.body,
       color: colors.textSecondary,
       textAlign: 'center',
     },

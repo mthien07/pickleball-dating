@@ -8,7 +8,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 
-import { spacing, typography, borderRadius } from '../../../theme/tokens';
+import { spacing, typography, borderRadius, fontFamily } from '../../../theme/tokens';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { useThemeColors } from '../../../contexts/ThemeContext';
 import { useThemedStyles } from '../../../hooks/useThemedStyles';
@@ -61,7 +61,7 @@ export const ProfileSetupPlayStyleStep = React.memo<PlayStyleStepProps>(
                   pressed && { opacity: 0.8 },
                 ]}
                 onPress={() => onPlayStyleChange(option.id)}
-                android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+                android_ripple={{ color: 'rgba(59, 89, 152, 0.15)' }}
               >
                 <Text style={styles.styleEmoji}>{option.emoji}</Text>
                 <Text
@@ -86,7 +86,7 @@ export const ProfileSetupPlayStyleStep = React.memo<PlayStyleStepProps>(
                   pressed && { opacity: 0.8 },
                 ]}
                 onPress={() => toggleLookingFor(option.id)}
-                android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+                android_ripple={{ color: 'rgba(59, 89, 152, 0.15)' }}
               >
                 <Text
                   style={[
@@ -114,6 +114,7 @@ const createStyles = (colors: ThemeColors) =>
     },
     stepTitle: {
       ...typography.h2,
+      fontFamily: fontFamily.serifItalic,
       color: colors.textPrimary,
       marginBottom: spacing.xs,
     },
@@ -140,7 +141,7 @@ const createStyles = (colors: ThemeColors) =>
     },
     styleCardSelected: {
       borderColor: colors.primary,
-      backgroundColor: `${colors.primary}10`,
+      backgroundColor: colors.surfaceSecondary,
     },
     styleEmoji: {
       fontSize: 24,

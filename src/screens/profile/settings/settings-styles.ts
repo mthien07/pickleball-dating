@@ -29,7 +29,8 @@ export const createStyles = (colors: ThemeColors) =>
       alignItems: 'center',
     },
     headerTitle: {
-      ...typography.h4,
+      fontFamily: 'PlayfairDisplay-Bold',
+      fontSize: 20,
       color: colors.textPrimary,
     },
 
@@ -44,11 +45,12 @@ export const createStyles = (colors: ThemeColors) =>
       marginTop: spacing.lg,
     },
     sectionTitle: {
-      ...typography.label,
+      fontFamily: 'Barlow-SemiBold',
+      fontSize: 12,
       color: colors.textSecondary,
       marginBottom: spacing.sm,
       marginLeft: spacing.xs,
-      textTransform: 'uppercase',
+      letterSpacing: 0.3,
     },
     sectionContent: {
       borderRadius: borderRadius.lg,

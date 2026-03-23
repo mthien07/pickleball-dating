@@ -25,7 +25,8 @@ export const createStyles = (colors: ThemeColors) =>
       alignItems: 'center',
     },
     headerTitle: {
-      ...typography.h4,
+      fontFamily: 'PlayfairDisplay-Bold',
+      fontSize: 20,
       color: colors.textPrimary,
     },
     tabBar: {
@@ -45,12 +46,14 @@ export const createStyles = (colors: ThemeColors) =>
       borderBottomColor: colors.primary,
     },
     tabText: {
-      ...typography.body,
+      fontFamily: 'Barlow-Regular',
+      fontSize: 15,
       color: colors.textSecondary,
     },
     tabTextActive: {
+      fontFamily: 'Barlow-SemiBold',
+      fontSize: 15,
       color: colors.primary,
-      fontWeight: '600',
     },
     content: {
       flex: 1,

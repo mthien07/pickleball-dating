@@ -8,7 +8,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Pressable, TextInput } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 
-import { spacing, typography, borderRadius } from '../../../theme/tokens';
+import { spacing, typography, borderRadius, fontFamily } from '../../../theme/tokens';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { useThemeColors } from '../../../contexts/ThemeContext';
 import { useThemedStyles } from '../../../hooks/useThemedStyles';
@@ -85,7 +85,7 @@ export const ProfileSetupBasicInfoStep = React.memo<BasicInfoStepProps>(
                   pressed && { opacity: 0.8 },
                 ]}
                 onPress={() => onGenderChange(option)}
-                android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+                android_ripple={{ color: 'rgba(59, 89, 152, 0.15)' }}
               >
                 <Text style={[styles.optionText, gender === option && styles.optionTextSelected]}>
                   {option}
@@ -108,6 +108,7 @@ const createStyles = (colors: ThemeColors) =>
     },
     stepTitle: {
       ...typography.h2,
+      fontFamily: fontFamily.serifItalic,
       color: colors.textPrimary,
       marginBottom: spacing.xs,
     },
@@ -148,7 +149,7 @@ const createStyles = (colors: ThemeColors) =>
       alignItems: 'center',
     },
     optionButtonSelected: {
-      backgroundColor: colors.primary,
+      backgroundColor: colors.surfaceSecondary,
       borderColor: colors.primary,
     },
     optionText: {
@@ -157,6 +158,6 @@ const createStyles = (colors: ThemeColors) =>
       color: colors.textPrimary,
     },
     optionTextSelected: {
-      color: colors.white,
+      color: colors.primary,
     },
   });

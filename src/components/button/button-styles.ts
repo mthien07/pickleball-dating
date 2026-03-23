@@ -24,20 +24,18 @@ export const createStyles = (colors: ThemeColors) =>
     },
     primaryText: {
       color: colors.white,
-      textTransform: 'uppercase',
     },
 
     // Variant: Secondary
     secondaryContainer: {
       backgroundColor: 'transparent',
-      borderWidth: 2,
+      borderWidth: 1.5,
       borderColor: colors.secondary,
       ...shadows.buttonSecondary,
     },
     secondaryText: {
       color: colors.secondary,
       fontWeight: '600',
-      textTransform: 'uppercase',
     },
 
     // Variant: Text
@@ -66,14 +64,13 @@ export const createStyles = (colors: ThemeColors) =>
     gradientContainer: {
       alignItems: 'center',
       justifyContent: 'center',
-      borderRadius: 20,
+      borderRadius: borderRadius.button,
       ...shadows.button,
     },
     gradientText: {
       color: colors.white,
       fontWeight: '700',
-      textTransform: 'uppercase',
-      fontFamily: 'Barlow-Bold',
+      fontFamily: 'Barlow-SemiBold',
     },
 
     // Variant: Elevated

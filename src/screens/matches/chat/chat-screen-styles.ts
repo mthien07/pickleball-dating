@@ -51,6 +51,7 @@ export const createStyles = (colors: ThemeColors) =>
     headerName: {
       ...typography.h4,
       color: colors.textPrimary,
+      fontFamily: 'PlayfairDisplay-Bold',
     },
     headerStatus: {
       ...typography.bodySmall,

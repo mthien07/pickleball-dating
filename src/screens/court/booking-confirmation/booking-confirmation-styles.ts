@@ -28,7 +28,8 @@ export const createStyles = (colors: ThemeColors) =>
       alignItems: 'center',
     },
     title: {
-      ...typography.h1,
+      fontFamily: 'PlayfairDisplay-Bold',
+      fontSize: 32,
       color: colors.white,
       textAlign: 'center',
       marginBottom: spacing.xs,

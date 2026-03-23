@@ -103,7 +103,7 @@ export const createStyles = (colors: ThemeColors) => {
       color: colors.white,
     },
     courtName: {
-      ...typography.h1,
+      ...typography.editorialH1,
       color: colors.textPrimary,
       marginBottom: spacing.xs,
     },

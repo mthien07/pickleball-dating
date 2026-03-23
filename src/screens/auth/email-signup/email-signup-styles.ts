@@ -34,11 +34,10 @@ export const createStyles = (colors: ThemeColors) =>
       ...shadows.sm,
     },
     headerTitle: {
-      fontFamily: 'Barlow-Bold',
+      fontFamily: 'PlayfairDisplay-Bold',
       fontSize: 24,
       color: colors.textPrimary,
-      letterSpacing: 0.5,
-      textTransform: 'uppercase',
+      letterSpacing: -0.3,
     },
 
     // Form
@@ -52,20 +51,17 @@ export const createStyles = (colors: ThemeColors) =>
       fontFamily: 'Barlow-SemiBold',
       fontSize: 12,
       color: colors.textSecondary,
-      letterSpacing: 0.8,
+      letterSpacing: 0.5,
       marginBottom: spacing.xs,
-      textTransform: 'uppercase',
     },
 
     // Role Selection
     sectionLabel: {
-      fontFamily: 'Barlow-SemiBold',
-      fontSize: 12,
+      fontFamily: 'PlayfairDisplay-Regular',
+      fontSize: 14,
       color: colors.textSecondary,
-      letterSpacing: 0.8,
       marginTop: spacing.md,
       marginBottom: spacing.sm,
-      textTransform: 'uppercase',
     },
     rolesContainer: {
       flexDirection: 'row',
@@ -148,7 +144,6 @@ export const createStyles = (colors: ThemeColors) =>
       fontSize: 16,
       color: colors.white,
       letterSpacing: 0.5,
-      textTransform: 'uppercase',
     },
     footer: {
       flexDirection: 'row',

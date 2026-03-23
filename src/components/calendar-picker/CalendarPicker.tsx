@@ -69,7 +69,7 @@ export const CalendarPicker: React.FC<CalendarPickerProps> = ({
             pressed && canGoPrev() && { opacity: 0.7 },
           ]}
           disabled={!canGoPrev()}
-          android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+          android_ripple={{ color: 'rgba(59, 89, 152, 0.15)' }}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
           <Ionicons
@@ -90,7 +90,7 @@ export const CalendarPicker: React.FC<CalendarPickerProps> = ({
         <Pressable
           onPress={goToNextMonth}
           style={({ pressed }) => [styles.navButton, pressed && { opacity: 0.7 }]}
-          android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+          android_ripple={{ color: 'rgba(59, 89, 152, 0.15)' }}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
           <Ionicons name="chevron-forward" size={24} color={colors.textPrimary} />

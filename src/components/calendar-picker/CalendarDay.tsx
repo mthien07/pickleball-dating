@@ -1,6 +1,5 @@
 import React from 'react';
-import { Pressable, Text } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
+import { Pressable, Text, View } from 'react-native';
 import { useThemeColors } from '../../contexts/ThemeContext';
 import { useThemedStyles } from '../../hooks/useThemedStyles';
 import { createStyles } from './calendar-styles';
@@ -25,9 +24,9 @@ export const CalendarDay: React.FC<DayProps> = React.memo(
           style={({ pressed }) => pressed && { opacity: 0.8 }}
           android_ripple={{ color: 'rgba(255, 255, 255, 0.3)' }}
         >
-          <LinearGradient colors={[colors.primary, colors.primaryDark]} style={styles.daySelected}>
+          <View style={[styles.daySelected, { backgroundColor: colors.primary }]}>
             <Text style={styles.dayTextSelected}>{date.getDate()}</Text>
-          </LinearGradient>
+          </View>
         </Pressable>
       );
     }
@@ -41,7 +40,7 @@ export const CalendarDay: React.FC<DayProps> = React.memo(
           isDisabled && styles.dayDisabled,
           !isDisabled && pressed && { opacity: 0.7 },
         ]}
-        android_ripple={!isDisabled ? { color: 'rgba(37, 99, 235, 0.15)' } : undefined}
+        android_ripple={!isDisabled ? { color: 'rgba(59, 89, 152, 0.15)' } : undefined}
       >
         <Text
           style={[

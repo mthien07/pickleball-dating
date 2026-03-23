@@ -92,7 +92,7 @@ export const ConversationItem = React.memo<ConversationItemProps>(({ match, inde
         style={({ pressed }) => [styles.conversationItem, pressed && { opacity: 0.6 }]}
         onPress={onPress}
         onLongPress={() => handleLongPress(match)}
-        android_ripple={{ color: 'rgba(37, 99, 235, 0.1)' }}
+        android_ripple={{ color: 'rgba(59, 89, 152, 0.1)' }}
       >
         {/* Avatar */}
         <View style={styles.conversationAvatarContainer}>

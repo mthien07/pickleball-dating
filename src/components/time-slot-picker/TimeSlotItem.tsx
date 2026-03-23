@@ -1,6 +1,5 @@
 import React from 'react';
-import { Pressable, Text } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
+import { Pressable, Text, View } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import { useThemeColors } from '../../contexts/ThemeContext';
 import { useThemedStyles } from '../../hooks/useThemedStyles';
@@ -41,13 +40,10 @@ export const TimeSlotItem: React.FC<SlotProps> = React.memo(
             style={({ pressed }) => pressed && { opacity: 0.8 }}
             android_ripple={{ color: 'rgba(255, 255, 255, 0.3)' }}
           >
-            <LinearGradient
-              colors={[colors.primary, colors.primaryDark]}
-              style={[styles.slot, styles.slotSelected]}
-            >
+            <View style={[styles.slot, styles.slotSelected, { backgroundColor: colors.primary }]}>
               <Text style={styles.slotTimeSelected}>{slot.startTime}</Text>
               <Text style={styles.slotPriceSelected}>{formatPrice(slot.price)}</Text>
-            </LinearGradient>
+            </View>
           </Pressable>
         </Animated.View>
       );
@@ -58,7 +54,7 @@ export const TimeSlotItem: React.FC<SlotProps> = React.memo(
         <Pressable
           onPress={onPress}
           style={({ pressed }) => [styles.slot, styles.slotAvailable, pressed && { opacity: 0.7 }]}
-          android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+          android_ripple={{ color: 'rgba(59, 89, 152, 0.15)' }}
         >
           <Text style={styles.slotTimeAvailable}>{slot.startTime}</Text>
           <Text style={styles.slotPriceAvailable}>{formatPrice(slot.price)}</Text>

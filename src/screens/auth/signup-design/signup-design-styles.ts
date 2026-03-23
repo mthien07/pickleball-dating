@@ -26,11 +26,10 @@ export const createStyles = (colors: ThemeColors) =>
       ...shadows.sm,
     },
     headerTitle: {
-      fontFamily: 'Barlow-Bold',
+      fontFamily: 'PlayfairDisplay-Bold',
       fontSize: 22,
       color: colors.textPrimary,
-      letterSpacing: 0.5,
-      textTransform: 'uppercase',
+      letterSpacing: -0.3,
     },
     content: {
       padding: spacing.lg,
@@ -43,12 +42,10 @@ export const createStyles = (colors: ThemeColors) =>
       marginBottom: spacing.lg,
     },
     sectionTitle: {
-      fontFamily: 'Barlow-SemiBold',
-      fontSize: 12,
+      fontFamily: 'PlayfairDisplay-Regular',
+      fontSize: 14,
       color: colors.textSecondary,
       marginBottom: spacing.sm,
-      letterSpacing: 0.8,
-      textTransform: 'uppercase',
     },
     roleContainer: {
       flexDirection: 'row',

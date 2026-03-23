@@ -12,7 +12,7 @@ import { AuthStackParamList } from '../../navigation/types';
 import { Button } from '../../components/Button';
 import { Input } from '../../components/Input';
 import { KeyboardView } from '../../components/KeyboardView';
-import { spacing, typography } from '../../theme/tokens';
+import { spacing, typography, fontFamily } from '../../theme/tokens';
 import { useThemeColors } from '../../contexts/ThemeContext';
 import { useThemedStyles } from '../../hooks/useThemedStyles';
 import type { ThemeColors } from '../../contexts/theme-colors';
@@ -66,7 +66,7 @@ export const PhoneSignupScreen = () => {
         <Pressable
           onPress={() => (step === 'phone' ? navigation.goBack() : setStep('phone'))}
           style={({ pressed }) => [styles.backButton, pressed && { opacity: 0.7 }]}
-          android_ripple={{ color: 'rgba(37, 99, 235, 0.1)' }}
+          android_ripple={{ color: 'rgba(59, 89, 152, 0.1)' }}
         >
           <Text style={styles.backButtonText}>← Back</Text>
         </Pressable>
@@ -133,6 +133,7 @@ const createStyles = (colors: ThemeColors) =>
     },
     title: {
       ...typography.h2,
+      fontFamily: fontFamily.serifBold,
       color: colors.textPrimary,
       marginBottom: spacing.xs,
     },

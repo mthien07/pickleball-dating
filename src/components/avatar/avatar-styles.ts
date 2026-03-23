@@ -26,13 +26,13 @@ export const createStyles = (colors: ThemeColors) =>
     },
   });
 
-/** Consistent avatar colors — blue + rose palette */
+/** Consistent avatar colors — Hinge muted palette */
 export const AVATAR_COLORS = [
-  '#2563EB', // Blue-600 (primary)
-  '#60A5FA', // Blue-400 (primaryLight)
-  '#F43F5E', // Rose-500 (accent)
-  '#FB7185', // Rose-400 (accentLight)
-  '#1D4ED8', // Blue-700 (primaryDark)
-  '#3B82F6', // Blue-500
-  '#E11D48', // Rose-600 (accentDark)
+  '#3B5998', // Muted Blue (primary)
+  '#7B9FD4', // Light Blue (primaryLight)
+  '#E5627D', // Soft Rose (accent)
+  '#F0899D', // Light Rose (accentLight)
+  '#2D4373', // Dark Blue (primaryDark)
+  '#5B8C6A', // Sage Green (secondary)
+  '#7C6FAE', // Muted Violet
 ];

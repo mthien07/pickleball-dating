@@ -2,7 +2,6 @@ import React from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import { useThemeColors } from '../../contexts/ThemeContext';
 import { useThemedStyles } from '../../hooks/useThemedStyles';
@@ -62,7 +61,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
         <Pressable
           onPress={() => onImagePress?.(message.image_url!)}
           style={({ pressed }) => pressed && { opacity: 0.9 }}
-          android_ripple={{ color: 'rgba(37, 99, 235, 0.1)' }}
+          android_ripple={{ color: 'rgba(59, 89, 152, 0.1)' }}
         >
           <Image
             source={{ uri: message.image_url }}
@@ -84,14 +83,11 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
       style={[styles.container, isMe ? styles.containerMe : styles.containerOther]}
     >
       {isMe ? (
-        <LinearGradient
-          colors={[colors.primary, colors.primaryDark]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
+        <View
           style={[styles.bubble, styles.bubbleMe, message.type === 'image' && styles.imageBubble]}
         >
           {renderContent()}
-        </LinearGradient>
+        </View>
       ) : (
         <View
           style={[

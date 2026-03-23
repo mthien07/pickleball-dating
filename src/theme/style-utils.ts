@@ -1,5 +1,5 @@
 /**
- * Shared base style factories.
+ * Shared base style factories — Hinge editorial style.
  * Usage: const base = createBaseStyles(colors);
  *        StyleSheet.create({ card: { ...base.surfaceCard, padding: 20 } });
  */
@@ -92,5 +92,29 @@ export const createBaseStyles = (colors: ThemeColors) => ({
     alignItems: 'center' as const,
     justifyContent: 'center' as const,
     paddingVertical: spacing['2xl'],
+  },
+
+  // Editorial-specific styles (Hinge)
+  editorialContainer: {
+    flex: 1,
+    backgroundColor: colors.background,
+    paddingHorizontal: spacing.md,
+  },
+  promptCard: {
+    backgroundColor: colors.surfaceSecondary,
+    borderRadius: borderRadius.xl,
+    padding: spacing.lg,
+    marginBottom: spacing.md,
+  },
+  sectionLikeButton: {
+    width: 40,
+    height: 40,
+    borderRadius: borderRadius.full,
+    backgroundColor: colors.surface,
+    justifyContent: 'center' as const,
+    alignItems: 'center' as const,
+    ...shadows.sm,
+    borderWidth: 1,
+    borderColor: colors.border,
   },
 });

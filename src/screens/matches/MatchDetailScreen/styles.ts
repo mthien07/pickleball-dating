@@ -74,6 +74,7 @@ export const createStyles = (colors: ThemeColors) =>
       ...typography.h2,
       color: colors.textPrimary,
       flex: 1,
+      fontFamily: 'PlayfairDisplay-Bold',
     },
     onlineBadge: {
       flexDirection: 'row',
@@ -154,7 +155,7 @@ export const createStyles = (colors: ThemeColors) =>
       ...typography.label,
       color: colors.textSecondary,
       marginBottom: spacing.sm,
-      textTransform: 'uppercase',
+      fontFamily: 'PlayfairDisplay-Regular',
     },
     bio: {
       ...typography.body,

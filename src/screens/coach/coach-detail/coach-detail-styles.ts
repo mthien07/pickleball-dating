@@ -50,7 +50,8 @@ export const createStyles = (colors: ThemeColors) =>
       marginTop: -50,
     },
     coachName: {
-      ...typography.h3,
+      fontFamily: 'PlayfairDisplay-Bold',
+      fontSize: 24,
       color: colors.textPrimary,
       marginTop: spacing.sm,
     },
@@ -91,10 +92,11 @@ export const createStyles = (colors: ThemeColors) =>
       marginTop: spacing.xl,
     },
     sectionTitle: {
-      ...typography.label,
+      fontFamily: 'Barlow-SemiBold',
+      fontSize: 12,
       color: colors.textSecondary,
       marginBottom: spacing.sm,
-      textTransform: 'uppercase',
+      letterSpacing: 0.3,
     },
     bio: {
       ...typography.body,

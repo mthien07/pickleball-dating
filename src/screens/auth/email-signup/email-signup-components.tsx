@@ -36,7 +36,7 @@ export const RoleCard = React.memo(({ value, label, Icon, selected, onSelect }: 
     <Pressable
       onPress={() => onSelect(value)}
       style={({ pressed }) => [styles.roleCardTouchable, pressed && { opacity: 0.8 }]}
-      android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+      android_ripple={{ color: 'rgba(59, 89, 152, 0.15)' }}
     >
       {selected ? (
         <LinearGradient
@@ -66,7 +66,7 @@ export const TermsCheckbox = React.memo(({ agreed, onToggle }: TermsCheckboxProp
     <Pressable
       style={({ pressed }) => [styles.termsContainer, pressed && { opacity: 0.8 }]}
       onPress={onToggle}
-      android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+      android_ripple={{ color: 'rgba(59, 89, 152, 0.15)' }}
     >
       <View style={[styles.checkbox, agreed && styles.checkboxChecked]}>
         {agreed && <Check size={14} color={colors.white} strokeWidth={3} />}

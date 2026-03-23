@@ -49,7 +49,7 @@ export const PaymentMethodCard = React.memo(
           pressed && { opacity: 0.8 },
         ]}
         onPress={onSelect}
-        android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+        android_ripple={{ color: 'rgba(59, 89, 152, 0.15)' }}
       >
         <View style={[styles.methodIcon, isSelected && styles.methodIconSelected]}>
           <Ionicons

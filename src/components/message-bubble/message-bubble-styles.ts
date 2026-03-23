@@ -24,10 +24,11 @@ export const createStyles = (colors: ThemeColors) =>
       borderRadius: borderRadius.lg,
     },
     bubbleMe: {
+      backgroundColor: colors.primary,
       borderBottomRightRadius: 4,
     },
     bubbleOther: {
-      backgroundColor: colors.surface,
+      backgroundColor: colors.surfaceSecondary,
       borderBottomLeftRadius: 4,
       borderWidth: 1,
       borderColor: colors.border,

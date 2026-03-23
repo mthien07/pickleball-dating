@@ -2,7 +2,7 @@
 /**
  * Web-Specific Styles
  *
- * Reusable styles for web platform, following Tinder's desktop design
+ * Reusable styles for web platform, following Hinge's editorial desktop design
  */
 
 import { StyleSheet, ViewStyle } from 'react-native';
@@ -46,9 +46,9 @@ export const webStyles = StyleSheet.create({
     maxWidth: MAX_CONTENT_WIDTH.desktop,
   } as ViewStyle,
 
-  // Hover utilities
+  // Hover utilities — subtle, editorial
   hoverScale: {
-    transform: [{ scale: 1.02 }],
+    transform: [{ scale: 1.01 }],
   } as ViewStyle,
 
   hoverOpacity: {
@@ -80,10 +80,10 @@ export const webStyles = StyleSheet.create({
     scrollBehavior: 'smooth' as any,
   } as ViewStyle,
 
-  // Hover effect
+  // Hover effect — subtle 200ms ease, no bounce
   hoverable: {
     cursor: 'pointer' as any,
-    transition: 'transform 0.2s ease, opacity 0.2s ease' as any,
+    transition: 'transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease' as any,
   } as ViewStyle,
 
   // Prevent text selection (for interactive elements)

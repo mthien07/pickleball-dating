@@ -69,7 +69,7 @@ export const createStyles = (colors: ThemeColors) =>
       padding: 24,
     },
     heroNameText: {
-      fontFamily: 'Barlow-Bold',
+      fontFamily: 'PlayfairDisplay-Bold',
       fontSize: 28,
       color: colors.white,
     },
@@ -115,7 +115,6 @@ export const createStyles = (colors: ThemeColors) =>
       fontFamily: 'Barlow-SemiBold',
       fontSize: 12,
       color: colors.white,
-      textTransform: 'uppercase',
       letterSpacing: 0.5,
     },
 
@@ -147,7 +146,6 @@ export const createStyles = (colors: ThemeColors) =>
       fontFamily: 'Barlow-Medium',
       fontSize: 11,
       color: colors.textSecondary,
-      textTransform: 'uppercase',
       letterSpacing: 0.5,
       marginTop: 4,
     },
@@ -203,7 +201,6 @@ export const createStyles = (colors: ThemeColors) =>
       fontFamily: 'Barlow-SemiBold',
       fontSize: 16,
       color: colors.white,
-      textTransform: 'uppercase',
       letterSpacing: 0.5,
     },
   });

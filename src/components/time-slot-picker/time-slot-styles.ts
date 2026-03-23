@@ -21,10 +21,9 @@ export const createStyles = (colors: ThemeColors) =>
       gap: spacing.sm,
     },
     slot: {
-      width: 80,
       paddingVertical: spacing.sm,
-      paddingHorizontal: spacing.sm,
-      borderRadius: borderRadius.md,
+      paddingHorizontal: spacing.md,
+      borderRadius: borderRadius.full,
       alignItems: 'center',
       justifyContent: 'center',
     },

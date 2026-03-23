@@ -9,7 +9,7 @@ import { View, Text, StyleSheet, Pressable, Dimensions, ActivityIndicator } from
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeInUp, FadeIn } from 'react-native-reanimated';
 
-import { spacing, typography, borderRadius } from '../../../theme/tokens';
+import { spacing, typography, borderRadius, fontFamily } from '../../../theme/tokens';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { useThemeColors } from '../../../contexts/ThemeContext';
 import { useThemedStyles } from '../../../hooks/useThemedStyles';
@@ -46,7 +46,7 @@ export const ProfileSetupPhotoStep = React.memo<PhotoStepProps>(
                 pressed && { opacity: 0.8 },
               ]}
               onPress={() => (photos[index] ? onRemovePhoto(index) : onAddPhoto())}
-              android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+              android_ripple={{ color: 'rgba(59, 89, 152, 0.15)' }}
               disabled={isUploading}
             >
               {photos[index] ? (
@@ -87,6 +87,7 @@ const createStyles = (colors: ThemeColors) =>
     },
     stepTitle: {
       ...typography.h2,
+      fontFamily: fontFamily.serifItalic,
       color: colors.textPrimary,
       marginBottom: spacing.xs,
     },

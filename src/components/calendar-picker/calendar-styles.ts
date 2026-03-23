@@ -30,7 +30,8 @@ export const createStyles = (colors: ThemeColors) =>
       opacity: 0.5,
     },
     monthTitle: {
-      ...typography.h3,
+      fontFamily: 'Barlow-SemiBold',
+      fontSize: 18,
       color: colors.textPrimary,
     },
     weekdaysRow: {
@@ -42,7 +43,8 @@ export const createStyles = (colors: ThemeColors) =>
       alignItems: 'center',
     },
     weekdayText: {
-      ...typography.label,
+      fontFamily: 'Barlow-Regular',
+      fontSize: 12,
       color: colors.textSecondary,
     },
     daysGrid: {
@@ -64,7 +66,7 @@ export const createStyles = (colors: ThemeColors) =>
       borderRadius: borderRadius.full,
     },
     dayToday: {
-      borderWidth: 2,
+      borderWidth: 1.5,
       borderColor: colors.primary,
     },
     dayDisabled: {

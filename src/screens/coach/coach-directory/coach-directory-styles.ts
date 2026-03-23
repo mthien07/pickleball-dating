@@ -23,7 +23,8 @@ export const createStyles = (colors: ThemeColors) =>
       marginBottom: spacing.md,
     },
     screenTitle: {
-      ...typography.h1,
+      fontFamily: 'PlayfairDisplay-Bold',
+      fontSize: 32,
       color: colors.textPrimary,
     },
     filterButton: {
@@ -89,7 +90,8 @@ export const createStyles = (colors: ThemeColors) =>
       gap: spacing.xs,
     },
     name: {
-      ...typography.h3,
+      fontFamily: 'PlayfairDisplay-Bold',
+      fontSize: 18,
       color: colors.textPrimary,
       flex: 1,
     },

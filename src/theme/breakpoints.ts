@@ -1,8 +1,7 @@
 /**
  * Responsive Breakpoints
  *
- * Following Tinder's responsive design approach
- * Ensures consistency between mobile and web
+ * Hinge-style editorial layout — wider content for vertical profile feeds
  */
 
 export const BREAKPOINTS = {
@@ -15,11 +14,19 @@ export const BREAKPOINTS = {
 export const MAX_CONTENT_WIDTH = {
   mobile: '100%',
   tablet: 600,
-  desktop: 900, // Wider content for list/form screens
-  wide: 900,
+  desktop: 600,
+  wide: 600,
 } as const;
 
-/** Swipe card screen keeps narrow Tinder-style width */
+/** Editorial feed width — wider than swipe cards for vertical scroll */
+export const EDITORIAL_FEED_WIDTH = {
+  mobile: '100%',
+  tablet: 520,
+  desktop: 520,
+  wide: 520,
+} as const;
+
+/** Legacy swipe card width (kept for fallback) */
 export const SWIPE_CONTENT_WIDTH = 500;
 
 export const CONTAINER_PADDING = {
@@ -29,18 +36,15 @@ export const CONTAINER_PADDING = {
   wide: 40,
 } as const;
 
-/**
- * Swipe Card Width - Unified across platforms
- * Mobile: 90% of screen width, max 380px
- * Tablet: Fixed 380px
- * Desktop/Web: Fixed 380px (Tinder-style)
- */
+/** Editorial card width — full-width on mobile, constrained on desktop */
 export const CARD_WIDTH = {
-  mobile: 0.9, // Multiplier for screen width
-  tablet: 380,
-  desktop: 380,
-  wide: 380,
+  mobile: 0.92,
+  tablet: 480,
+  desktop: 480,
+  wide: 480,
 } as const;
 
-export const CARD_MAX_WIDTH = 380; // Maximum width on mobile
-export const CARD_ASPECT_RATIO = 4 / 5; // 4:5 ratio (less tall, focus on face)
+export const CARD_MAX_WIDTH = 480;
+
+/** Legacy aspect ratio for swipe cards (kept for backward compat) */
+export const CARD_ASPECT_RATIO = 4 / 5;

@@ -9,7 +9,7 @@ import { View, Text, StyleSheet, Pressable } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
 
-import { spacing, typography, borderRadius } from '../../../theme/tokens';
+import { spacing, typography, borderRadius, fontFamily } from '../../../theme/tokens';
 import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { useThemeColors } from '../../../contexts/ThemeContext';
 import { useThemedStyles } from '../../../hooks/useThemedStyles';
@@ -49,7 +49,7 @@ export const ProfileSetupSkillLevelStep = React.memo<SkillLevelStepProps>(
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                 onSkillLevelChange(level.id);
               }}
-              android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
+              android_ripple={{ color: 'rgba(59, 89, 152, 0.15)' }}
             >
               <Text style={styles.skillEmoji}>{level.emoji}</Text>
               <Text
@@ -75,6 +75,7 @@ const createStyles = (colors: ThemeColors) =>
     },
     stepTitle: {
       ...typography.h2,
+      fontFamily: fontFamily.serifItalic,
       color: colors.textPrimary,
       marginBottom: spacing.xs,
     },
@@ -97,7 +98,7 @@ const createStyles = (colors: ThemeColors) =>
     },
     skillCardSelected: {
       borderColor: colors.primary,
-      backgroundColor: `${colors.primary}10`,
+      backgroundColor: colors.surfaceSecondary,
     },
     skillEmoji: {
       fontSize: 32,

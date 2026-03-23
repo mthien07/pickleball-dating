@@ -17,7 +17,6 @@ export const createStyles = (colors: ThemeColors) =>
       ...typography.label,
       color: colors.textPrimary,
       marginBottom: spacing.xs,
-      textTransform: 'uppercase',
     },
     errorLabel: {
       color: colors.error,
@@ -40,7 +39,7 @@ export const createStyles = (colors: ThemeColors) =>
     searchContainer: {
       flexDirection: 'row',
       alignItems: 'center',
-      backgroundColor: '#F5F5F5',
+      backgroundColor: colors.surfaceSecondary,
       borderWidth: 0,
       borderRadius: 24,
       paddingHorizontal: spacing.md,
@@ -55,7 +54,7 @@ export const createStyles = (colors: ThemeColors) =>
 
     // Focused state
     focusedContainer: {
-      borderColor: colors.primary,
+      borderColor: colors.primaryLight,
       backgroundColor: colors.white,
     },
 
@@ -67,7 +66,7 @@ export const createStyles = (colors: ThemeColors) =>
 
     // Disabled state
     disabledContainer: {
-      backgroundColor: '#FAFAFA',
+      backgroundColor: colors.surfaceSecondary,
       borderColor: colors.border,
     },
 
