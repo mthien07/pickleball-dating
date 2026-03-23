@@ -59,7 +59,8 @@ export const EmailSignupScreen = () => {
         </View>
       </View>
 
-      <View style={styles.form}>
+      {/* accessibilityRole="form" renders as <form> on web, enabling password managers */}
+      <View style={styles.form} accessibilityRole={'form' as any}>
         <View style={styles.inputContainer}>
           <Text style={styles.labelSecondary}>EMAIL</Text>
           <EmailInput value={email} onChangeText={setEmail} />

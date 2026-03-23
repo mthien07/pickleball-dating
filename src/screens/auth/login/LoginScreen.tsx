@@ -6,7 +6,7 @@
  */
 
 import React, { useState } from 'react';
-import { View, Text, Pressable, Alert } from 'react-native';
+import { View, Text, Pressable, Alert, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { ArrowLeft } from 'lucide-react-native';
@@ -67,6 +67,18 @@ export const LoginScreen = () => {
   };
 
   const handleForgotPassword = () => {
+    if (Platform.OS === 'web') {
+      // Alert.prompt is iOS-only — use window.prompt on web
+      const target =
+        email || window.prompt('Nhập email của bạn để nhận link đặt lại mật khẩu:') || '';
+      if (!target) {
+        showError('Vui lòng nhập email');
+        return;
+      }
+      sendResetEmail(target);
+      return;
+    }
+
     if (!email) {
       Alert.prompt(
         'Quên mật khẩu',
@@ -115,7 +127,8 @@ export const LoginScreen = () => {
         </View>
       </View>
 
-      <View style={styles.form}>
+      {/* accessibilityRole="form" renders as <form> on web, enabling password managers */}
+      <View style={styles.form} accessibilityRole={'form' as any}>
         <View style={styles.inputContainer}>
           <Text style={styles.labelAccent}>EMAIL HOẶC SỐ ĐIỆN THOẠI</Text>
           <EmailInput

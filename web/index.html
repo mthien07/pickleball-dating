@@ -34,6 +34,18 @@
       }
       #root { min-height: 100vh; }
     </style>
+
+    <!-- Fix font preload crossorigin mismatch (Expo-generated preload tags may lack crossorigin) -->
+    <script>
+      // Remove font preload links that lack crossorigin to prevent CORS warnings
+      document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('link[rel="preload"][as="font"]').forEach(function (link) {
+          if (!link.getAttribute('crossorigin')) {
+            link.setAttribute('crossorigin', 'anonymous');
+          }
+        });
+      });
+    </script>
   </head>
 
   <body>
