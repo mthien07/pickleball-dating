@@ -28,7 +28,7 @@
       "bundler": "metro",
       "name": "PickleBall Dating — Find Your Perfect Match on the Court",
       "description": "Connect with pickleball players for matches, friendships, and more. Discover nearby courts and find opponents at your skill level.",
-      "themeColor": "#2563EB",
+      "themeColor": "#3B5998",
       "lang": "en"
     },
     "plugins": [
