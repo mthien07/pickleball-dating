@@ -9,11 +9,13 @@
 
 **Dating app kết nối người chơi pickleball tại Việt Nam** - Tìm đối thủ phù hợp, đặt sân trực tuyến, và kết bạn với cộng đồng pickleball.
 
+> **Design:** Hinge-style editorial UI — serif + sans-serif typography, vertical scrollable profiles with section-level likes, sophisticated muted color palette.
+
 ---
 
 ## ✨ Features
 
-- 🎾 **Swipe Matching** - Tìm đối thủ theo skill level, lịch rảnh, và sở thích
+- 🎾 **Editorial Profile Matching** - Duyệt profile kiểu Hinge: cuộn dọc, like từng ảnh/prompt cụ thể
 - 💬 **Chat Realtime** - Nhắn tin trực tiếp với người đã match
 - 🏟️ **Đặt Sân Trực Tuyến** - Tìm và đặt sân pickleball gần bạn
 - 👨‍🏫 **Tìm HLV** - Kết nối với HLV pickleball chuyên nghiệp
@@ -38,6 +40,7 @@
 | **State** | Zustand + TanStack Query | Latest |
 | **Navigation** | React Navigation | v6 |
 | **Animation** | React Native Reanimated | v4 |
+| **Typography** | PlayfairDisplay (serif) + Barlow (sans) | Google Fonts |
 | **Forms** | React Hook Form + Zod | Latest |
 
 ---
@@ -63,8 +66,9 @@ pickleball-dating/
 │   ├── MOBILE_DEPLOYMENT.md
 │   └── references/            # 11 Tech Docs
 ├── src/
-│   ├── theme/tokens.ts        # Design Tokens
-│   ├── components/            # 4 Components
+│   ├── theme/tokens.ts        # Design Tokens (Hinge palette)
+│   ├── theme/animation-presets.ts # Spring animation configs
+│   ├── components/            # 30+ Components (inc. EditorialProfileCard)
 │   └── services/              # API Services
 └── supabase/
     ├── migrations/            # 4 SQL Files
@@ -173,14 +177,15 @@ F01: Auth • F02: Profile • F03: Swipe Matching • F04: Match Management •
 
 | Metric | Value |
 |--------|-------|
-| Files | 90+ |
-| Code Lines | ~15,000+ |
+| Files | 100+ |
+| Code Lines | ~16,000+ |
 | Features | 12 |
 | Screens | 22 |
 | Tables | 14 |
 | Endpoints | 50+ |
-| Components | 4 |
+| Components | 30+ |
 | Docs | 10+ |
+| Design Style | Hinge Editorial |
 
 ---
 
@@ -190,9 +195,9 @@ F01: Auth • F02: Profile • F03: Swipe Matching • F04: Match Management •
 ✅ **Phase 2:** Design (Flows + Screens)
 ✅ **Phase 3:** Frontend Prototype
 ✅ **Phase 4:** Backend Development
-🔜 **Phase 5:** Implementation & Deployment
+✅ **Phase 5:** Hinge-Style UI Redesign (March 2026)
 
-**Current:** Ready for full implementation
+**Current:** Full Hinge-style editorial redesign deployed — serif typography, vertical profile feed, muted palette, dark mode
 
 ---
 

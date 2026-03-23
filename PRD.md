@@ -1,8 +1,8 @@
 # Product Requirements Document (PRD)
 ## PickleBall Dating App
 
-**Version**: 2.0
-**Last Updated**: 2025-12-30
+**Version**: 3.0
+**Last Updated**: 2026-03-23
 **Author**: Agent-BA
 
 ---
@@ -19,7 +19,7 @@
 ## Executive Summary
 
 ### Vision
-PickleBall Dating App là ứng dụng mobile kết hợp hai nhu cầu của người chơi pickleball: **tìm partner chơi thể thao** và **hẹn hò lãng mạn**. App sử dụng cơ chế swipe-based matching để kết nối những người chơi có cùng skill level, lịch trình và sở thích.
+PickleBall Dating App là ứng dụng mobile kết hợp hai nhu cầu của người chơi pickleball: **tìm partner chơi thể thao** và **hẹn hò lãng mạn**. App sử dụng giao diện **Hinge-style editorial** — profile cuộn dọc với ảnh và prompts xen kẽ, cho phép like từng section cụ thể để tạo kết nối có ý nghĩa hơn.
 
 ### Goals
 1. **Primary**: Giúp người chơi pickleball tìm được đối thủ/partner phù hợp một cách nhanh chóng và thú vị
@@ -48,7 +48,7 @@ PickleBall Dating App là ứng dụng mobile kết hợp hai nhu cầu của ng
 |----|--------------|----------|-------------|--------------|
 | F01 | User Registration & Authentication | Must Have | Đăng ký/đăng nhập qua email, phone hoặc social login (Google, Facebook, Apple) | None |
 | F02 | User Profile (Player) | Must Have | Profile người chơi với thông tin cá nhân, skill level, phong cách chơi, lịch rảnh, ảnh | F01 |
-| F03 | Swipe-based Matching | Must Have | Tìm và match với người chơi khác bằng cơ chế swipe (like Tinder) | F01, F02 |
+| F03 | Editorial Profile Matching | Must Have | Duyệt profile kiểu Hinge: cuộn dọc qua ảnh + prompts, like từng section cụ thể | F01, F02 |
 | F04 | Match Management | Must Have | Quản lý danh sách matches, unmatch, xem thông tin người đã match | F03 |
 | F05 | Chat/Messaging | Must Have | Nhắn tin 1-1 với người đã match | F03, F04 |
 | F06 | Court Discovery | Must Have | Hiển thị danh sách sân pickleball gần vị trí người dùng | F01 |
