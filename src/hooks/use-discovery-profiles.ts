@@ -9,11 +9,13 @@ import {
   SwipeDirection,
   SwipeResult,
 } from '../services/api/swipe.service';
+import { showError } from '../services/toast';
 import { queryKeys } from '../config/query-keys';
 import { MOCK_USERS } from '@data/mockData';
 
 export const useDiscoveryProfiles = () => {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const profile = useAuthStore((s) => s.profile);
   const queryClient = useQueryClient();
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -48,8 +50,21 @@ export const useDiscoveryProfiles = () => {
 
   const handleSwipe = useCallback(
     async (direction: SwipeDirection): Promise<SwipeResult> => {
-      const profile = profiles[currentIndex];
-      if (!profile) {
+      const currentCard = profiles[currentIndex];
+      if (!currentCard) {
+        return { isMatch: false };
+      }
+
+      // Bug 2: Guard against swipe insert violating check constraint for incomplete profiles.
+      // A profile is considered complete when it has bio and at least one avatar.
+      const isProfileComplete =
+        profile?.bio &&
+        profile?.bio.length > 0 &&
+        Array.isArray(profile?.avatar_urls) &&
+        profile.avatar_urls.length > 0;
+
+      if (isAuthenticated && !isProfileComplete) {
+        showError('Hoàn thiện hồ sơ trước khi thích người khác nhé!');
         return { isMatch: false };
       }
 
@@ -58,7 +73,7 @@ export const useDiscoveryProfiles = () => {
       if (isAuthenticated) {
         try {
           return await swipeMutation.mutateAsync({
-            targetId: profile.id,
+            targetId: currentCard.id,
             direction,
           });
         } catch (e) {
@@ -68,7 +83,7 @@ export const useDiscoveryProfiles = () => {
 
       return { isMatch: false };
     },
-    [profiles, currentIndex, isAuthenticated, swipeMutation]
+    [profiles, currentIndex, isAuthenticated, profile, swipeMutation]
   );
 
   const reload = useCallback(() => {

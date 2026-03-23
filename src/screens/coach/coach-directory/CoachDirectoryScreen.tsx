@@ -56,16 +56,9 @@ export const CoachDirectoryScreen = () => {
 
   const renderHeader = () => (
     <View style={[styles.headerContainer, { backgroundColor: themeColors.background }]}>
+      {/* Bug 10: removed non-functional filter button — no filter modal for coaches yet */}
       <View style={styles.titleRow}>
         <Text style={styles.screenTitle}>Find a Coach 🧢</Text>
-        <Pressable
-          style={({ pressed }) => [styles.filterButton, pressed && { opacity: 0.7 }]}
-          onPress={() => showInfo('Filters coming soon')}
-          android_ripple={{ color: 'rgba(37, 99, 235, 0.15)' }}
-          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-        >
-          <Ionicons name="options-outline" size={24} color={themeColors.textPrimary} />
-        </Pressable>
       </View>
 
       <View style={styles.searchContainer}>

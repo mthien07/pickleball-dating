@@ -87,12 +87,11 @@ export default function SignupScreenDesign({ navigation }: { navigation?: any })
       }
 
       console.log('[SignupDesign] Creating profile for:', user.id);
+      // Bug 1: removed full_name and role — columns don't exist in users table
       const { error: profileError } = await supabase.from('users').insert([
         {
           id: user.id,
           email,
-          role: selectedRole,
-          full_name: '',
           display_name: email.split('@')[0],
           date_of_birth: '2000-01-01',
           gender: 'other',

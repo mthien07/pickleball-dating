@@ -73,7 +73,16 @@ export const EmailSignupScreen = () => {
 
         <View style={styles.inputContainer}>
           <Text style={styles.labelSecondary}>XÁC NHẬN MẬT KHẨU</Text>
-          <PasswordInput value={confirmPassword} onChangeText={setConfirmPassword} />
+          {/* Bug 9: show mismatch error as user types in confirm password field */}
+          <PasswordInput
+            value={confirmPassword}
+            onChangeText={setConfirmPassword}
+            error={
+              confirmPassword.length > 0 && password !== confirmPassword
+                ? 'Mật khẩu không khớp'
+                : undefined
+            }
+          />
         </View>
 
         <Text style={styles.sectionLabel}>BẠN LÀ:</Text>

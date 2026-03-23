@@ -65,24 +65,7 @@ export const HomeSwipeScreen = () => {
               </Text>
             </View>
             <View style={styles.headerActions}>
-              <Pressable
-                style={({ pressed }) => [styles.headerIconButton, pressed && { opacity: 0.7 }]}
-                onPress={() => showInfo('Filters coming soon')}
-                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-              >
-                <Ionicons name="options-outline" size={20} color={themeColors.textSecondary} />
-              </Pressable>
-              <Pressable
-                style={({ pressed }) => [styles.headerIconButton, pressed && { opacity: 0.7 }]}
-                onPress={() => showInfo('Notifications coming soon')}
-                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-              >
-                <Ionicons
-                  name="notifications-outline"
-                  size={20}
-                  color={themeColors.textSecondary}
-                />
-              </Pressable>
+              {/* Bug 10: removed non-functional filter/notifications buttons */}
               <Pressable
                 style={({ pressed }) => [styles.profileButton, pressed && { opacity: 0.7 }]}
                 onPress={() => showInfo('View profile')}
