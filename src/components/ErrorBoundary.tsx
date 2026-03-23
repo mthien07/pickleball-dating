@@ -10,6 +10,7 @@ import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeIn, SlideInDown } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
+import { Platform } from 'react-native';
 import { spacing, typography, borderRadius } from '../theme/tokens';
 import { captureException } from '../config/sentry';
 import { useThemeColors } from '../contexts/ThemeContext';
@@ -87,11 +88,15 @@ export class ErrorBoundary extends Component<Props, State> {
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     console.error('ErrorBoundary caught an error:', error, errorInfo);
     captureException(error, { componentStack: errorInfo.componentStack });
-    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+    if (Platform.OS !== 'web') {
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+    }
   }
 
   handleReset = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    if (Platform.OS !== 'web') {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    }
     this.setState({ hasError: false, error: null });
   };
 

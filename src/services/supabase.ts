@@ -16,10 +16,10 @@ import type { Database } from '../types/database.types';
 const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
 
-// Validate environment variables
+// Warn if env vars missing (don't throw — prevents white screen on web)
 if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error(
-    'Missing Supabase environment variables. Please check your .env file.\n' +
+  console.warn(
+    'Missing Supabase environment variables. App will run with limited functionality.\n' +
       'Required: EXPO_PUBLIC_SUPABASE_URL, EXPO_PUBLIC_SUPABASE_ANON_KEY'
   );
 }
@@ -32,7 +32,7 @@ if (!supabaseUrl || !supabaseAnonKey) {
  * - Auto-refresh: Automatically refreshes expired tokens
  * - Realtime: Rate-limited to 10 events/second
  */
-export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
+export const supabase = createClient<Database>(supabaseUrl || '', supabaseAnonKey || '', {
   auth: {
     // Use React Native's AsyncStorage for session persistence
     storage: AsyncStorage,
