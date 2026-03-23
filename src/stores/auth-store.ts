@@ -6,6 +6,7 @@
 import { create } from 'zustand';
 import { devtools, persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AppState, Platform } from 'react-native';
 import { supabase } from '../services/supabase';
 import { getMyProfile } from '../services/api/profile.service';
 import { queryClient } from '../config/queryClient';
@@ -91,18 +92,14 @@ export const useAuthStore = create<AuthStore>()(
         },
 
         logout: async () => {
+          set({ isLoading: true });
           try {
-            set({ isLoading: true });
-            const { error } = await supabase.auth.signOut();
-            if (error) {
-              throw error;
-            }
-            get().reset();
+            await supabase.auth.signOut();
           } catch (error) {
-            console.error('[AuthStore] Logout error:', error);
-            set({ isLoading: false });
-            throw error;
+            // Log but do not block logout — always reset local state
+            console.error('[AuthStore] Logout error (ignored):', error);
           }
+          get().reset();
         },
 
         reset: () => {
@@ -161,5 +158,41 @@ export const initAuthListener = (): (() => void) => {
     }
   });
 
-  return () => subscription.unsubscribe();
+  /**
+   * Re-validate session when app regains focus (mobile) or tab becomes visible (web).
+   * Guards against token being removed directly from storage while app is backgrounded.
+   */
+  const checkSession = () => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      const { isAuthenticated } = useAuthStore.getState();
+      if (isAuthenticated && !session) {
+        setAuthState(null);
+      }
+    });
+  };
+
+  let unsubscribeFocus: (() => void) | undefined;
+
+  if (Platform.OS === 'web') {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        checkSession();
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    unsubscribeFocus = () =>
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+  } else {
+    const appStateSub = AppState.addEventListener('change', (nextState) => {
+      if (nextState === 'active') {
+        checkSession();
+      }
+    });
+    unsubscribeFocus = () => appStateSub.remove();
+  }
+
+  return () => {
+    subscription.unsubscribe();
+    unsubscribeFocus?.();
+  };
 };

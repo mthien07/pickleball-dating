@@ -86,6 +86,7 @@ export const FormSection = React.memo(
             onChangeText={onNameChange}
             placeholder="Your name"
             placeholderTextColor={colors.textTertiary}
+            maxLength={50}
             onFocus={onNameFocus}
             onBlur={onNameBlur}
           />

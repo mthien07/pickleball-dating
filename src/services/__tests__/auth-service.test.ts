@@ -226,7 +226,9 @@ describe('AuthContext', () => {
       expect(mockSupabaseAuth.signOut).toHaveBeenCalled();
     });
 
-    it('throws when signOut returns an error', async () => {
+    it('still clears local state even when signOut returns an error', async () => {
+      // Logout should always succeed from the UI perspective — signOut errors are swallowed
+      // so the user is never stuck in a logged-in state due to a network issue.
       mockSupabaseAuth.signOut.mockResolvedValue({
         error: { message: 'Sign out failed' },
       } as any);
@@ -237,11 +239,12 @@ describe('AuthContext', () => {
         expect(result.current.isLoading).toBe(false);
       });
 
-      await expect(
-        act(async () => {
-          await result.current.logout();
-        })
-      ).rejects.toBeDefined();
+      // Should resolve (not throw), and local state should be cleared
+      await act(async () => {
+        await result.current.logout();
+      });
+
+      expect(result.current.isAuthenticated).toBe(false);
     });
   });
 

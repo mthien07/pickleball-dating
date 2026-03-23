@@ -17,6 +17,10 @@ import { createStyles } from './edit-profile-styles';
 import { PhotoGrid } from './edit-profile-photo-grid';
 import { FormSection, sanitizeInput } from './edit-profile-form-section';
 
+// Eagerly update local profile state before navigating back, so ProfileMe
+// shows fresh values without waiting for a background refetch.
+const updateLocalProfile = useAuthStore.getState().setProfile;
+
 export const EditProfileScreen = () => {
   const navigation = useNavigation<any>();
   const colors = useThemeColors();
@@ -95,14 +99,17 @@ export const EditProfileScreen = () => {
     setIsSaving(true);
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     try {
-      await updateProfile({
+      const updatedProfile = await updateProfile({
         displayName: name.trim(),
         bio: bio.trim(),
         avatarUrls: photos,
         skillLevel: skillLevel as any,
         playStyle: playStyle as any,
       });
-      await refreshProfile();
+      // Immediately update the store so ProfileMe reflects changes without waiting for refetch
+      updateLocalProfile(updatedProfile);
+      // Background refresh to sync any server-side derived fields
+      refreshProfile().catch(() => {});
       showSuccess('Da luu thay doi!');
       navigation.goBack();
     } catch (error: any) {
