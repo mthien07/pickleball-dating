@@ -20,6 +20,7 @@ import {
 } from './src/config/queryClient';
 import { OfflineIndicator, OnlineIndicator } from './src/components/OfflineIndicator';
 import { useFonts } from 'expo-font';
+import { Ionicons } from '@expo/vector-icons';
 import * as SplashScreen from 'expo-splash-screen';
 import { View, ActivityIndicator, useColorScheme } from 'react-native';
 import { lightColors, darkColors } from './src/contexts/ThemeContext';
@@ -72,6 +73,7 @@ export default function App() {
     'PlayfairDisplay-Regular': require('./assets/fonts/PlayfairDisplay-Regular.ttf'),
     'PlayfairDisplay-Bold': require('./assets/fonts/PlayfairDisplay-Bold.ttf'),
     'PlayfairDisplay-Italic': require('./assets/fonts/PlayfairDisplay-Italic.ttf'),
+    Ionicons: require('./assets/fonts/Ionicons.ttf'),
   });
 
   const onLayoutRootView = useCallback(async () => {
