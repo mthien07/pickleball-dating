@@ -42,7 +42,13 @@ export const ImageCarousel = React.memo(
           onMomentumScrollEnd={onScrollEnd}
         >
           {court.images.map((image, index) => (
-            <Image key={index} source={{ uri: image }} style={styles.image} contentFit="cover" />
+            <Image
+              key={index}
+              source={{ uri: image }}
+              style={styles.image}
+              contentFit="cover"
+              accessibilityLabel={`Court photo ${index + 1}`}
+            />
           ))}
         </ScrollView>
 
