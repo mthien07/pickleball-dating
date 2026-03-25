@@ -41,10 +41,16 @@ export const EmailInput: React.FC<Omit<InputProps, 'type'>> = (props) => (
 
 /**
  * Password Input
- * Pre-configured for password entry with show/hide toggle
+ * Pre-configured for password entry with show/hide toggle.
+ * Enforces 128-char max (Bug 8) — prevents unbounded inputs.
  */
 export const PasswordInput: React.FC<Omit<InputProps, 'type'>> = (props) => (
-  <Input {...props} type="password" placeholder={props.placeholder ?? 'Enter password'} />
+  <Input
+    maxLength={128}
+    {...props}
+    type="password"
+    placeholder={props.placeholder ?? 'Enter password'}
+  />
 );
 
 /**

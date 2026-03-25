@@ -7,13 +7,13 @@ import { spacing } from '../theme/tokens';
 import { shadows } from '../theme/shadows';
 import { useThemeColors } from '../contexts/ThemeContext';
 import { useResponsive } from '../hooks/useResponsive';
+import { useMatches } from '../hooks/use-matches';
 import type { MainTabParamList } from './types';
 
 import { HomeSwipeScreen } from '../screens/main/HomeSwipeScreen';
 import { TabIcon } from './components/TabIcon';
 import { MatchesNavigator, CourtsNavigator, ProfileNavigator } from './components/stack-navigators';
 import { WebSidebarNavigation } from './components/web-sidebar-navigation';
-import { MOCK_MATCHES } from '@data/mockData';
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
 
@@ -113,9 +113,11 @@ export const MainNavigator = () => {
   const { isDesktop } = useResponsive();
   const showSidebar = Platform.OS === 'web' && isDesktop;
 
+  // Use real matches data so badge reflects actual unread messages (Bug 4)
+  const { matches } = useMatches();
   const unreadCount = useMemo(
-    () => MOCK_MATCHES.reduce((sum, m) => sum + (m.unread_count ?? 0), 0),
-    []
+    () => matches.reduce((sum: number, m: any) => sum + (m.unread_count ?? 0), 0),
+    [matches]
   );
 
   // Track active tab index reactively for sidebar highlighting

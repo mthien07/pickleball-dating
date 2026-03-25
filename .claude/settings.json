@@ -1,6 +1,12 @@
 {
   "permissions": {
+<<<<<<< Updated upstream
     "allow": ["Cac lenh echo de log lai he thong duoc phep chay ma khong phai hoi"]
+=======
+    "allow": [
+      "Cac lenh echo de log lai he thong duoc phep chay ma khong phai hoi"
+    ]
+>>>>>>> Stashed changes
   },
   "hooks": {
     "SessionStart": [

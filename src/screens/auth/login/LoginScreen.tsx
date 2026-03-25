@@ -36,6 +36,13 @@ export const LoginScreen = () => {
       return;
     }
 
+    // Client-side email format validation (Bug 7)
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email.trim())) {
+      showError('Email không hợp lệ. Vui lòng nhập email đúng định dạng.');
+      return;
+    }
+
     setLoading(true);
     try {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
@@ -52,9 +59,26 @@ export const LoginScreen = () => {
   };
 
   const sendResetEmail = async (resetEmail: string) => {
+    // Validate email format before sending (Bug 3 + Bug 7)
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(resetEmail.trim())) {
+      showError('Email không hợp lệ. Vui lòng nhập email đúng định dạng.');
+      return;
+    }
+
     try {
+      // On web redirect to current origin; on native omit redirectTo (Bug 3)
+      const redirectTo =
+        Platform.OS === 'web'
+          ? `${window.location.origin}/auth/reset-password`
+          : undefined;
+
       const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
+<<<<<<< Updated upstream
         redirectTo: 'pickleball-dating://auth/reset-password',
+=======
+        ...(redirectTo ? { redirectTo } : {}),
+>>>>>>> Stashed changes
       });
       if (error) {
         showError(error.message);

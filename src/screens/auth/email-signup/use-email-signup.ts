@@ -30,18 +30,10 @@ export const useEmailSignup = ({ onNavigateLogin }: UseEmailSignupOptions) => {
       return;
     }
 
-    const phoneRegex = /^[0-9+]{9,15}$/;
-    if (phoneRegex.test(email.replace(/\s/g, ''))) {
-      const msg = 'Đây là màn hình đăng ký bằng Email. Vui lòng sử dụng Email hợp lệ.';
-      if (Platform.OS === 'web') {
-        window.alert(msg);
-      }
-      showError(msg);
-      return;
-    }
-
-    if (!email.includes('@') || !email.includes('.')) {
-      const msg = 'Email không hợp lệ (thiếu @ hoặc .)';
+    // Strict email regex validation (Bug 7)
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email.trim())) {
+      const msg = 'Email không hợp lệ. Vui lòng nhập email đúng định dạng.';
       if (Platform.OS === 'web') {
         window.alert(msg);
       }
@@ -79,13 +71,12 @@ export const useEmailSignup = ({ onNavigateLogin }: UseEmailSignupOptions) => {
         return;
       }
 
-      // Create profile record
+      // Create minimal profile record — full profile completed in profile-setup flow.
+      // Only include columns that exist in the 'users' table (Bug 1: removed full_name, role).
       const { error: profileError } = await supabase.from('users').insert([
         {
           id: user.id,
           email,
-          role,
-          full_name: '',
           display_name: email.split('@')[0],
           date_of_birth: '2000-01-01',
           gender: 'other',

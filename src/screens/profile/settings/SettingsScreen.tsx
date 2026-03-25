@@ -16,6 +16,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { spacing } from '../../../theme/tokens';
 import { useTheme, ThemeMode } from '../../../contexts/ThemeContext';
 import { useThemedStyles } from '../../../hooks/useThemedStyles';
+import { useAuthStore } from '../../../stores/auth-store';
 import { RootStackParamList, ProfileStackParamList } from '../../../navigation/types';
 import { createStyles } from './settings-styles';
 import { AppearanceSection } from './settings-appearance-section';
@@ -48,6 +49,7 @@ export const SettingsScreen = () => {
   const { theme, themeMode, setThemeMode } = useTheme();
   const colors = theme.colors;
   const styles = useThemedStyles(createStyles);
+  const logout = useAuthStore((s) => s.logout);
 
   const [notifications, setNotifications] = useState<NotificationState>({
     newMatches: true,
@@ -96,8 +98,13 @@ export const SettingsScreen = () => {
       {
         text: 'Đăng xuất',
         style: 'destructive',
-        // @ts-expect-error: Navigation routing complex union types
-        onPress: () => navigation.navigate('Auth'),
+        onPress: async () => {
+          try {
+            await logout();
+          } catch {
+            // Auth state listener will handle navigation regardless
+          }
+        },
       },
     ]);
   };
