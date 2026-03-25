@@ -59,7 +59,9 @@ export const useEmailSignup = ({ onNavigateLogin }: UseEmailSignupOptions) => {
 
     setLoading(true);
     try {
-      console.log('[EmailSignup] Starting signup for:', email, 'role:', role);
+      if (__DEV__) {
+        console.log('[EmailSignup] Starting signup for:', email, 'role:', role);
+      }
 
       const { data, error: signUpError } = await supabase.auth.signUp({
         email,

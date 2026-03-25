@@ -12,7 +12,7 @@ import type { User } from '@supabase/supabase-js';
  */
 export const resetPasswordForEmail = async (email: string): Promise<void> => {
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: 'myapp://auth/reset-password',
+    redirectTo: 'pickleball-dating://auth/reset-password',
   });
   if (error) {
     throw error;

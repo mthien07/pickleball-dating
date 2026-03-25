@@ -50,7 +50,11 @@ export const BookingDetailScreen = () => {
   const { getEntering } = useReducedMotion();
   const { bookingId } = route.params || {};
 
-  const booking = MOCK_BOOKINGS.find((b) => b.id === bookingId) || MOCK_BOOKINGS[0];
+  const booking =
+    MOCK_BOOKINGS.find((b) => b.id === bookingId) || (__DEV__ ? MOCK_BOOKINGS[0] : null);
+  if (!booking) {
+    return null;
+  }
   const statusInfo = getStatusInfo(booking.status, colors);
 
   const handleCancel = () => {

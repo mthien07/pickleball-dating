@@ -68,7 +68,9 @@ export default function SignupScreenDesign({ navigation }: { navigation?: any })
 
     setLoading(true);
     try {
-      console.log('[SignupDesign] Starting signup for:', email);
+      if (__DEV__) {
+        console.log('[SignupDesign] Starting signup for:', email);
+      }
 
       const { data, error: signUpError } = await supabase.auth.signUp({
         email,
@@ -86,7 +88,9 @@ export default function SignupScreenDesign({ navigation }: { navigation?: any })
         return;
       }
 
-      console.log('[SignupDesign] Creating profile for:', user.id);
+      if (__DEV__) {
+        console.log('[SignupDesign] Creating profile for:', user.id);
+      }
       // Bug 1: removed full_name and role — columns don't exist in users table
       const { error: profileError } = await supabase.from('users').insert([
         {

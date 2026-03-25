@@ -52,7 +52,7 @@ export const BookingConfirmationScreen = () => {
   const styles = useThemedStyles(createStyles);
   const { courtId, date, slots = [], totalPrice = 0, bookingId } = route.params || {};
 
-  const court = MOCK_COURTS.find((c) => c.id === courtId) || MOCK_COURTS[0];
+  const court = MOCK_COURTS.find((c) => c.id === courtId) || (__DEV__ ? MOCK_COURTS[0] : null);
   const bookingDate = date ? new Date(date) : new Date();
 
   const { getEntering } = useReducedMotion();
@@ -70,6 +70,10 @@ export const BookingConfirmationScreen = () => {
   const pulseStyle = useAnimatedStyle(() => ({
     transform: [{ scale: pulse.value }],
   }));
+
+  if (!court) {
+    return null;
+  }
 
   return (
     <View style={styles.container}>

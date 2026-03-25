@@ -8,6 +8,7 @@ import {
   recordSwipe,
   SwipeDirection,
   SwipeResult,
+  DiscoveryProfile,
 } from '../services/api/swipe.service';
 import { showError } from '../services/toast';
 import { queryKeys } from '../config/query-keys';
@@ -23,7 +24,7 @@ export const useDiscoveryProfiles = () => {
     data: profiles = [],
     isLoading,
     refetch,
-  } = useQuery<any[]>({
+  } = useQuery<DiscoveryProfile[]>({
     queryKey: queryKeys.discovery.profiles(),
     queryFn: () => getDiscoveryProfiles(),
     enabled: isAuthenticated,

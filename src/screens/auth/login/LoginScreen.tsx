@@ -54,7 +54,7 @@ export const LoginScreen = () => {
   const sendResetEmail = async (resetEmail: string) => {
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
-        redirectTo: 'myapp://auth/reset-password',
+        redirectTo: 'pickleball-dating://auth/reset-password',
       });
       if (error) {
         showError(error.message);

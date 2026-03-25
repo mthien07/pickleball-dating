@@ -36,7 +36,10 @@ export const PaymentScreen = () => {
   const [cardData, setCardData] = useState<CardData | null>(null);
   const [processing, setProcessing] = useState(false);
 
-  const court = MOCK_COURTS.find((c) => c.id === courtId) || MOCK_COURTS[0];
+  const court = MOCK_COURTS.find((c) => c.id === courtId) || (__DEV__ ? MOCK_COURTS[0] : null);
+  if (!court) {
+    return null;
+  }
   const bookingDate = date ? new Date(date) : new Date();
 
   const handlePayment = async () => {

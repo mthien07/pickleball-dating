@@ -33,7 +33,10 @@ const CourtDetailScreenComponent = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const scrollRef = useRef<ScrollView>(null);
 
-  const court = MOCK_COURTS.find((c) => c.id === courtId) || MOCK_COURTS[0];
+  const court = MOCK_COURTS.find((c) => c.id === courtId) || (__DEV__ ? MOCK_COURTS[0] : null);
+  if (!court) {
+    return null;
+  }
   const reviews = MOCK_REVIEWS.filter((r) => r.court_id === court.id);
 
   const handleScrollEnd = (event: any) => {

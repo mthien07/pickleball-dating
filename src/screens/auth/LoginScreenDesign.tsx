@@ -37,14 +37,18 @@ export default function LoginScreenDesign({ navigation }: { navigation?: any }) 
 
     setLoading(true);
     try {
-      console.log('[LoginDesign] Logging in:', email);
+      if (__DEV__) {
+        console.log('[LoginDesign] Logging in:', email);
+      }
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
       if (error) {
         throw error;
       }
 
-      console.log('[LoginDesign] Login successful:', data.user?.email);
+      if (__DEV__) {
+        console.log('[LoginDesign] Login successful:', data.user?.email);
+      }
       showSuccess('Đăng nhập thành công!');
       // AuthContext will detect session change and navigate to Main
     } catch (error: any) {

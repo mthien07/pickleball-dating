@@ -2,6 +2,7 @@
   "expo": {
     "name": "PickleBall Dating",
     "slug": "pickleball-dating",
+    "scheme": "pickleball-dating",
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",

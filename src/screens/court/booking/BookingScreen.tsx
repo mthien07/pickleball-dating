@@ -58,7 +58,7 @@ export const BookingScreen = () => {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [selectedSlotIds, setSelectedSlotIds] = useState<string[]>([]);
 
-  const court = MOCK_COURTS.find((c) => c.id === courtId) || MOCK_COURTS[0];
+  const court = MOCK_COURTS.find((c) => c.id === courtId) || (__DEV__ ? MOCK_COURTS[0] : null);
 
   const timeSlots = useMemo(
     () => (selectedDate ? generateTimeSlots(selectedDate) : []),
@@ -106,6 +106,10 @@ export const BookingScreen = () => {
 
   const formatDate = (date: Date): string =>
     date.toLocaleDateString('vi-VN', { weekday: 'long', day: 'numeric', month: 'long' });
+
+  if (!court) {
+    return null;
+  }
 
   return (
     <View style={styles.container}>

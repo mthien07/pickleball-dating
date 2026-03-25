@@ -82,6 +82,22 @@ const useMockChat = (
 ) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isTyping, setIsTyping] = useState(false);
+  const pendingTimersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
+
+  // Register a timeout so it can be cleared on unmount
+  const scheduleTimeout = useCallback((fn: () => void, delay: number) => {
+    const id = setTimeout(fn, delay);
+    pendingTimersRef.current.push(id);
+    return id;
+  }, []);
+
+  // Clear all pending timers on unmount
+  useEffect(() => {
+    return () => {
+      pendingTimersRef.current.forEach(clearTimeout);
+      pendingTimersRef.current = [];
+    };
+  }, []);
 
   const updateMessageStatus = useCallback((id: string, status: Message['status']) => {
     setMessages((prev) => prev.map((m) => (m.id === id ? { ...m, status } : m)));
@@ -152,7 +168,7 @@ const useMockChat = (
           return;
         }
         setIsTyping(true);
-        setTimeout(() => {
+        scheduleTimeout(() => {
           setIsTyping(false);
           const msg: Message = {
             id: `auto-${Date.now()}`,
@@ -169,7 +185,7 @@ const useMockChat = (
       AUTO_MSG_INTERVAL_MIN + Math.random() * AUTO_MSG_INTERVAL_RANGE
     );
     return () => clearInterval(interval);
-  }, [userId]);
+  }, [userId, scheduleTimeout]);
 
   const sendMessage = useCallback(
     (text: string) => {
@@ -187,12 +203,12 @@ const useMockChat = (
         persistMessages(updated);
         return updated;
       });
-      setTimeout(() => updateMessageStatus(id, 'sent'), STATUS_SENT_DELAY);
-      setTimeout(() => updateMessageStatus(id, 'delivered'), STATUS_DELIVERED_DELAY);
-      setTimeout(() => updateMessageStatus(id, 'read'), STATUS_READ_DELAY);
+      scheduleTimeout(() => updateMessageStatus(id, 'sent'), STATUS_SENT_DELAY);
+      scheduleTimeout(() => updateMessageStatus(id, 'delivered'), STATUS_DELIVERED_DELAY);
+      scheduleTimeout(() => updateMessageStatus(id, 'read'), STATUS_READ_DELAY);
       // Auto-reply
-      setTimeout(() => setIsTyping(true), TYPING_BEFORE_REPLY);
-      setTimeout(() => {
+      scheduleTimeout(() => setIsTyping(true), TYPING_BEFORE_REPLY);
+      scheduleTimeout(() => {
         setIsTyping(false);
         const reply: Message = {
           id: `msg-${Date.now()}-reply`,
@@ -205,7 +221,7 @@ const useMockChat = (
         setMessages((prev) => [reply, ...prev]);
       }, TYPING_BEFORE_REPLY + TYPING_DURATION);
     },
-    [userId, updateMessageStatus, persistMessages]
+    [userId, updateMessageStatus, persistMessages, scheduleTimeout]
   );
 
   const sendImage = useCallback(
@@ -220,9 +236,9 @@ const useMockChat = (
         created_at: new Date().toISOString(),
       };
       setMessages((prev) => [newMessage, ...prev]);
-      setTimeout(() => updateMessageStatus(id, 'sent'), STATUS_DELIVERED_DELAY);
+      scheduleTimeout(() => updateMessageStatus(id, 'sent'), STATUS_DELIVERED_DELAY);
     },
-    [updateMessageStatus]
+    [updateMessageStatus, scheduleTimeout]
   );
 
   return { messages, isTyping, sendMessage, sendImage };
