@@ -70,6 +70,7 @@ export const CourtCard = React.memo(({ court, onPress, onBook }: CourtCardProps)
           style={styles.cardImage}
           cachePolicy="memory-disk"
           contentFit="cover"
+          accessibilityLabel="Court photo"
         />
         <View style={styles.priceBadge}>
           <Text style={styles.priceText}>{priceDisplay}</Text>

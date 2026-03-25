@@ -34,6 +34,7 @@ export const NewMatchItem = React.memo<NewMatchItemProps>(({ match, index, onPre
             style={styles.newMatchAvatar}
             contentFit="cover"
             transition={150}
+            accessibilityLabel={`${match.matched_user.display_name} profile photo`}
           />
           {match.matched_user.is_online && <View style={styles.onlineDot} />}
         </View>
@@ -101,6 +102,7 @@ export const ConversationItem = React.memo<ConversationItemProps>(({ match, inde
             style={styles.conversationAvatar}
             contentFit="cover"
             transition={150}
+            accessibilityLabel={`${match.matched_user.display_name} profile photo`}
           />
           {match.matched_user.is_online && <View style={styles.conversationOnlineDot} />}
         </View>

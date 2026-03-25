@@ -85,7 +85,12 @@ export const ProfileHeroSection = React.memo<ProfileHeroSectionProps>(
 
     return (
       <View style={styles.heroContainer}>
-        <Image source={{ uri: avatarUrl }} style={styles.heroImage} contentFit="cover" />
+        <Image
+          source={{ uri: avatarUrl }}
+          style={styles.heroImage}
+          contentFit="cover"
+          accessibilityLabel="Profile photo"
+        />
         <LinearGradient colors={['transparent', 'rgba(0,0,0,0.7)']} style={styles.heroGradient} />
         <View style={styles.heroContent}>
           <Text style={styles.heroNameText}>{nameDisplay}</Text>

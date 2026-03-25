@@ -16,14 +16,41 @@
     <meta property="og:description" content="Match by skill level. Book courts nearby. Chat with players. Never play alone again." />
     <meta property="og:site_name" content="PickleBall Dating" />
     <meta property="og:url" content="https://pickleball-dating.vercel.app" />
+    <meta property="og:image" content="https://pickleball-dating.vercel.app/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="PickleMatch — Find Your Perfect Pickleball Partner" />
     <meta name="twitter:description" content="Match by skill level. Book courts nearby. Chat with players. Never play alone again." />
+    <meta name="twitter:image" content="https://pickleball-dating.vercel.app/og-image.png" />
 
     <!-- Accessibility & SEO -->
     <link rel="canonical" href="https://pickleball-dating.vercel.app" />
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "PickleBall Dating",
+      "description": "Find pickleball partners matched to your skill level. Book courts nearby, chat with players, and never play alone again.",
+      "applicationCategory": "SocialNetworkingApplication",
+      "operatingSystem": "Android, iOS",
+      "url": "https://pickleball-dating.vercel.app",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+
+    <!-- Preload critical fonts -->
+    <link rel="preload" href="/assets/fonts/Barlow-Regular.ttf" as="font" type="font/ttf" crossorigin="anonymous" />
+    <link rel="preload" href="/assets/fonts/Barlow-SemiBold.ttf" as="font" type="font/ttf" crossorigin="anonymous" />
+    <link rel="preload" href="/assets/fonts/PlayfairDisplay-Bold.ttf" as="font" type="font/ttf" crossorigin="anonymous" />
 
     <!-- Dark mode support: prevent flash of wrong color -->
     <style>
