@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://pickleball-dating.vercel.app/sitemap.xml
