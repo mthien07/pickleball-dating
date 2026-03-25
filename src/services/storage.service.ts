@@ -121,9 +121,16 @@ export async function uploadMultipleImages(
 // ============================================
 
 /**
- * Delete image from storage
+ * Delete image from storage — caller must own the file.
+ * Ownership is enforced by verifying the path starts with `{userId}/`.
  */
-export async function deleteImage(path: string): Promise<boolean> {
+export async function deleteImage(path: string, userId: string): Promise<boolean> {
+  // Prevent deleting files that don't belong to the user
+  if (!path.startsWith(`${userId}/`)) {
+    console.error('deleteImage: path does not belong to user', { path, userId });
+    return false;
+  }
+
   try {
     const { error } = await supabase.storage.from(BUCKET_NAME).remove([path]);
 
